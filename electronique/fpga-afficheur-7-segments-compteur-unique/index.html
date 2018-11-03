@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>FPGA et afficheur 7 segments: compteur à afficheur unique - C. Boyer</title>
+  <meta name="description" content="Implémentation en Verilog d’un compteur sur un afficheur 7 segments." />
+  <meta name="author" content="C. Boyer" />
+  <meta name="dcterms.date" content="2018-04-25T20:00:50-04:00" />
+  <meta name="keywords" content="fpga, afficheur, led, verilog" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="generator" content="pandoc" />
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="links">
+      <a href="../../rechercher.html" class="search" title="Rechercher">
+          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
+            <title id="search-icon">Rechercher</title>
+            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
+          </svg>
+      </a>
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+
+    <h1>cboyer.github.io</h1>
+
+    <ul class="menu">
+      <li class="menu_item"><a href="../../index.html">Publications</a></li>
+      <li class="menu_item"><a href="../../linux.html">Linux</a></li>
+      <li class="menu_item active"><a href="../../electronique.html">Électronique</a></li>
+      <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
+    </ul>
+
+<article>
+<header id="title-block-header">
+<h2 class="title">FPGA et afficheur 7 segments: compteur à afficheur unique</h1>
+ <span class="author">C. Boyer</span>,   <span class="date">2018-04-25 20:00:50 (UTC-04:00)</span><span class="markdown"> - <a href="fpga-afficheur-7-segments-compteur-unique.md">format Markdown</a></span>
+</header>
+<p>[ <a href="../fpga-afficheur-7-segments-introduction/index.html">Partie 1</a> | Partie 2 | <a href="../fpga-afficheur-7-segments-compteurs-multiples/index.html">Partie 3</a> ]</p>
+<h2 id="compteur-à-un-afficheur">Compteur à un afficheur</h2>
+<p>Nous avons vu dans <a href="../fpga-afficheur-7-segments-introduction/index.html">la partie 1</a> comment afficher un chiffre sur l’afficheur le plus à droite. L’objectif de cette seconde partie est d’implémenter un compteur pour afficher les chiffres de 0 à 9. Avant de continuer, rappelons quelques éléments importants de la partie précédente:</p>
+<p>La nomenclature des segments:</p>
+<ul>
+<li>le premier caractère représente l’anode (pôle positif)</li>
+<li>le deuxième caractère représente la cathode (pôle négatif)</li>
+</ul>
+<figure>
+<img src="../fpga-afficheur-7-segments-introduction/7segments_schema_labels.jpg" alt="Schéma annoté" /><figcaption>Schéma annoté</figcaption>
+</figure>
+<p>Les correspondances sorties-registres-segments (forme explicite de la ligne <em>assign DISPLAY_1 = display_1_leds</em>):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">0</span>] = display_<span class="dv">1</span>_leds[<span class="dv">0</span>]; <span class="co">//E (anode commune)</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">1</span>] = display_<span class="dv">1</span>_leds[<span class="dv">1</span>]; <span class="co">//1</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">2</span>] = display_<span class="dv">1</span>_leds[<span class="dv">2</span>]; <span class="co">//C</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">3</span>] = display_<span class="dv">1</span>_leds[<span class="dv">3</span>]; <span class="co">//3</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">4</span>] = display_<span class="dv">1</span>_leds[<span class="dv">4</span>]; <span class="co">//4</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">5</span>] = display_<span class="dv">1</span>_leds[<span class="dv">5</span>]; <span class="co">//5 (le point)</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">6</span>] = display_<span class="dv">1</span>_leds[<span class="dv">6</span>]; <span class="co">//6</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">7</span>] = display_<span class="dv">1</span>_leds[<span class="dv">7</span>]; <span class="co">//7</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">8</span>] = display_<span class="dv">1</span>_leds[<span class="dv">8</span>]; <span class="co">//D</span></a></code></pre></div>
+<p>Attardons nous sur le signal issu de l’horloge. L’ensemble d’un circuit logique implémenté sur un FPGA peut être “asservi” par un signal de référence: l’horloge. Techniquement il s’agit d’un signal carré (le plus souvent de 50 MHz) qui va entrainer l’exécution des instruction dans le bloc <code>always</code> dépendamment de son état (posedge dans notre cas).</p>
+<p>Dans notre circuit, c’est ce signal qui permet d’allumer les segments. En réalité, chaque segment s’allume et s’éteint à raison de 50 MHz ce qui est bien trop rapide pour l’œil humain qui voit les segment allumé en permanence (phénomène de persistance rétinienne).</p>
+<p>Utilisons ce signal afin de compter des intervalles de temps suffisamment conséquents pour en afficher la valeur à une fréquence perceptible par l’œil. Pour cela, nous allons utiliser un registre <code>counter</code> de 26 bits pour incrémenter un second registre <code>display_1_value</code> de 4 bits qui contiendra une valeur comprise entre 0 et 9. Le FPGA va incrémenter ce registre à raison de 50 millions de fois par seconde (50 MHz), nous prendrons donc une valeur suffisamment grande (les 25 premiers bits à 1 par exemple) pour que le FPGA ne soit pas trop rapide pour incrémenter notre compteur dont la valeur sera affichée.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">/* module */</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">module</span> SevenSegment (</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">);</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">    <span class="co">/* reg */</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">    <span class="dt">reg</span> [<span class="dv">8</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_leds = <span class="bn">9&#39;b0</span>;</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_value = <span class="bn">4&#39;b0000</span>;</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">    <span class="dt">reg</span> [<span class="dv">25</span>:<span class="dv">0</span>] counter = {<span class="dv">26</span>{<span class="bn">1&#39;b0</span>}};</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">    <span class="co">/* assign */</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span> = display_<span class="dv">1</span>_leds;</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">    <span class="co">/* always */</span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16">    <span class="kw">always</span> @ (<span class="kw">posedge</span> CLOCK_<span class="dv">50</span>) <span class="kw">begin</span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">        <span class="co">//Incrémente le compteur</span></a>
+<a class="sourceLine" id="cb2-19" data-line-number="19">        counter &lt;= counter + <span class="bn">1&#39;b1</span>;</a>
+<a class="sourceLine" id="cb2-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb2-21" data-line-number="21">        <span class="co">//Incrémente la valeur affichée</span></a>
+<a class="sourceLine" id="cb2-22" data-line-number="22">        <span class="kw">if</span>(counter[<span class="dv">24</span>:<span class="dv">0</span>] == <span class="bn">25&#39;b1</span>) <span class="kw">begin</span></a>
+<a class="sourceLine" id="cb2-23" data-line-number="23">            display_<span class="dv">1</span>_value &lt;= display_<span class="dv">1</span>_value + <span class="bn">1&#39;b1</span>;</a>
+<a class="sourceLine" id="cb2-24" data-line-number="24">        <span class="kw">end</span></a>
+<a class="sourceLine" id="cb2-25" data-line-number="25"></a>
+<a class="sourceLine" id="cb2-26" data-line-number="26">        <span class="co">//Si on atteint 9, on réinitialise</span></a>
+<a class="sourceLine" id="cb2-27" data-line-number="27">        <span class="kw">if</span>(display_<span class="dv">1</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></a>
+<a class="sourceLine" id="cb2-28" data-line-number="28">            display_<span class="dv">1</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</a>
+<a class="sourceLine" id="cb2-29" data-line-number="29">        <span class="kw">end</span></a>
+<a class="sourceLine" id="cb2-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb2-31" data-line-number="31">        <span class="co">//Active les segments selon la valeur affichée</span></a>
+<a class="sourceLine" id="cb2-32" data-line-number="32">        <span class="kw">case</span>(display_<span class="dv">1</span>_value[<span class="dv">3</span>:<span class="dv">0</span>])</a>
+<a class="sourceLine" id="cb2-33" data-line-number="33">            <span class="bn">4&#39;b0000</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111010111</span>; <span class="co">//0</span></a>
+<a class="sourceLine" id="cb2-34" data-line-number="34">            <span class="bn">4&#39;b0001</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b010000101</span>; <span class="co">//1</span></a>
+<a class="sourceLine" id="cb2-35" data-line-number="35">            <span class="bn">4&#39;b0010</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111001011</span>; <span class="co">//2</span></a>
+<a class="sourceLine" id="cb2-36" data-line-number="36">            <span class="bn">4&#39;b0011</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111001101</span>; <span class="co">//3</span></a>
+<a class="sourceLine" id="cb2-37" data-line-number="37">            <span class="bn">4&#39;b0100</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b010011101</span>; <span class="co">//4</span></a>
+<a class="sourceLine" id="cb2-38" data-line-number="38">            <span class="bn">4&#39;b0101</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b101011101</span>; <span class="co">//5</span></a>
+<a class="sourceLine" id="cb2-39" data-line-number="39">            <span class="bn">4&#39;b0110</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b101011111</span>; <span class="co">//6</span></a>
+<a class="sourceLine" id="cb2-40" data-line-number="40">            <span class="bn">4&#39;b0111</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b011000101</span>; <span class="co">//7</span></a>
+<a class="sourceLine" id="cb2-41" data-line-number="41">            <span class="bn">4&#39;b1000</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111011111</span>; <span class="co">//8</span></a>
+<a class="sourceLine" id="cb2-42" data-line-number="42">            <span class="bn">4&#39;b1001</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111011101</span>; <span class="co">//9</span></a>
+<a class="sourceLine" id="cb2-43" data-line-number="43">            <span class="kw">default</span> : display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b000000000</span>; <span class="co">//Rien, anode commune à 0</span></a>
+<a class="sourceLine" id="cb2-44" data-line-number="44">        <span class="kw">endcase</span></a>
+<a class="sourceLine" id="cb2-45" data-line-number="45"></a>
+<a class="sourceLine" id="cb2-46" data-line-number="46">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb2-47" data-line-number="47"></a>
+<a class="sourceLine" id="cb2-48" data-line-number="48"><span class="kw">endmodule</span></a></code></pre></div>
+<p>Pour ne rien afficher, il suffit que <code>display_1_leds[0]</code> qui est l’anode commune (broche E sur le schéma) soit à 0. <code>display_1_leds[5]</code> est toujours à 0 car il s’agit de la cathode du point (segment E5) qui n’est pas utilisé.</p>
+<p>Pour diminuer la fréquence d’incrémentation, il suffit de passer d’une comparaison des 25 premiers bits de <code>counter</code> à l’ensemble des 26 bits. Le FPGA mettra plus de temps à arriver à 26 bits à 1 que 25. Pour cela, il est nécessaire de changer la ligne:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">if</span>(counter[<span class="dv">24</span>:<span class="dv">0</span>] == <span class="bn">25&#39;b1</span>) <span class="kw">begin</span></a></code></pre></div>
+<p>Pour:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">if</span>(counter[<span class="dv">25</span>:<span class="dv">0</span>] == <span class="bn">26&#39;b1</span>) <span class="kw">begin</span></a></code></pre></div>
+<p>Et pour l’augmenter, nous pouvons réduire la comparaison à 24 bits ou moins:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">if</span>(counter[<span class="dv">23</span>:<span class="dv">0</span>] == <span class="bn">24&#39;b1</span>) <span class="kw">begin</span></a></code></pre></div>
+<p>Il est très important de prendre un intervalle de 0 à N bits et non un seul bit en particulier (à l’exception du bit de poids faible) car la condition s’avèrera vraie aussi longtemps qu’incrémenter les bits précédents ne change pas le bit comparé. Ceci aura pour effet d’incrémenter <code>display_1_value</code> à 50 MHz et d’afficher le chiffre correspondant beaucoup trop rapidement (notre oeil percevra le chiffre 8 à cause de la persistance rétinienne).</p>
+<p>Dans <a href="../fpga-afficheur-7-segments-compteurs-multiples/index.html">la partie 3</a>, nous verrons comment utiliser un afficheur supplémentaire afin d’introduire les dizaines dans notre compteur et d’afficher des valeurs de 0 à 99.</p>
+<p>[ <a href="../fpga-afficheur-7-segments-introduction/index.html">Partie 1</a> | Partie 2 | <a href="../fpga-afficheur-7-segments-compteurs-multiples/index.html">Partie 3</a> ]</p>
+</article>
+
+<div id="footer">
+  <hr />
+  <span class="copyrights">© 2018 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+</div>
+
+</div>
+</body>
+</html>

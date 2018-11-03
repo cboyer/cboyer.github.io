@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Ajouter l’authentification LDAP à NGINX - C. Boyer</title>
+  <meta name="description" content="Ajout du support LDAP en compilant le module d’authentification LDAP avec la version open source d’NGINX." />
+  <meta name="author" content="C. Boyer" />
+  <meta name="dcterms.date" content="2018-05-31T19:14:12-04:00" />
+  <meta name="keywords" content="nginx, ldap, authentification, linux" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="generator" content="pandoc" />
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="links">
+      <a href="../../rechercher.html" class="search" title="Rechercher">
+          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
+            <title id="search-icon">Rechercher</title>
+            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
+          </svg>
+      </a>
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+
+    <h1>cboyer.github.io</h1>
+
+    <ul class="menu">
+      <li class="menu_item"><a href="../../index.html">Publications</a></li>
+      <li class="menu_item active"><a href="../../linux.html">Linux</a></li>
+      <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
+      <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
+    </ul>
+
+<article>
+<header id="title-block-header">
+<h2 class="title">Ajouter l’authentification LDAP à NGINX</h1>
+ <span class="author">C. Boyer</span>,   <span class="date">2018-05-31 19:14:12 (UTC-04:00)</span><span class="markdown"> - <a href="nginx-authentification-ldap.md">format Markdown</a></span>
+</header>
+<p>La version gratuite de NGINX n’intègre pas le module d’authentification via LDAP par défaut. Pour y remédier, il faut passer par une compilation des sources avec le module <code>nginx-auth-ldap</code>.</p>
+<p>Récupérer le module:</p>
+<pre class="console"><code>cd /tmp
+git clone https://github.com/kvspb/nginx-auth-ldap
+cd nginx-auth-ldap</code></pre>
+<p>La dernière version comporte un bogue qui empêche l’authentification selon un groupe et provoque l’erreur “<em>Bad search filter</em>” (cf. sources en bas de page). Pour contourner le problème, on rolllback à un commit ultérieur:</p>
+<pre class="console"><code>git checkout 5fd5a40851d8b7c1ba832b893d369a51825ff720</code></pre>
+<p>Téléchargeons les sources pour NGINX, compilons-les et installons le programme:</p>
+<pre class="console"><code>wget http://nginx.org/download/nginx-1.14.0.tar.gz
+tar zxvf nginx-1.14.0.tar.gz
+cd nginx-1.14.0
+./configure --add-module=/tmp/nginx-auth-ldap/ --with-http_ssl_module --with-http_v2_module
+make
+sudo make install</code></pre>
+<p>Après compilation, NGINX s’installe dans <code>/usr/local/nginx</code>.</p>
+<p>Intègrons NGINX à systemd avec le fichier <code>/usr/lib/systemd/system/nginx.service</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ini"><code class="sourceCode ini"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">[Unit]</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="dt">Description</span><span class="ot">=</span><span class="st">nginx - high performance web server</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="dt">Documentation</span><span class="ot">=</span><span class="st">http://nginx.org/en/docs/</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="dt">After</span><span class="ot">=</span><span class="st">network-online.target remote-fs.target nss-lookup.target</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="dt">Wants</span><span class="ot">=</span><span class="st">network-online.target</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw">[Service]</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="dt">Type</span><span class="ot">=</span><span class="st">forking</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="dt">PIDFile</span><span class="ot">=</span><span class="st">/var/run/nginx.pid</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="dt">ExecStart</span><span class="ot">=</span><span class="st">/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="dt">ExecReload</span><span class="ot">=</span><span class="st">/bin/kill -s HUP $MAINPID</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="dt">ExecStop</span><span class="ot">=</span><span class="st">/bin/kill -s TERM $MAINPID</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="kw">[Install]</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="dt">WantedBy</span><span class="ot">=</span><span class="st">multi-user.target</span></a></code></pre></div>
+<p>On recharge les fichiers services:</p>
+<pre class="console"><code>sudo systemctl daemon-reload</code></pre>
+<p>Pour la suite, il suffit de suivre la documentation du module et modifier le fichier <code>/usr/local/nginx/conf/nginx.conf</code>.</p>
+<h3 id="sources">Sources</h3>
+<ul>
+<li><a href="https://github.com/kvspb/nginx-auth-ldap/issues/180" class="uri">https://github.com/kvspb/nginx-auth-ldap/issues/180</a></li>
+<li><a href="https://github.com/kvspb/nginx-auth-ldap" class="uri">https://github.com/kvspb/nginx-auth-ldap</a></li>
+</ul>
+</article>
+
+<div id="footer">
+  <hr />
+  <span class="copyrights">© 2018 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+</div>
+
+</div>
+</body>
+</html>

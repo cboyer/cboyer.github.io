@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Articles, notes techniques et expérimentations - C. Boyer</title>
+    <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
+    <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
+	<updated>2018-11-03T15:49:57-04:00</updated>
+    <author>
+        <name>C. Boyer</name>
+        <uri>https://cboyer.github.io</uri>
+    </author>
+	<id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+	<entry>
+		<title>Automobile, bus CAN et norme OBD2</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/electronique/automobile-bus-can-obd2"/>
+		<category term="Électronique"/>
+		<id>urn:uuid:51d7eac3-665e-5201-9605-43aea61a38f3</id>
+		<published>2018-11-01T18:08:32-04:00</published>
+		<updated>2018-11-01T18:08:32-04:00</updated>
+		<summary>Dialoguer avec l'ordinateur de bord d'un véhicule automobile via OBD2.</summary>
+	</entry>
+	<entry>
+		<title>Ajouter l'authentification LDAP à NGINX</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/linux/nginx-authentification-ldap"/>
+		<category term="Linux"/>
+		<id>urn:uuid:120d7776-422d-5f73-8603-0e25425c6bde</id>
+		<published>2018-05-31T19:14:12-04:00</published>
+		<updated>2018-11-01T18:08:32-04:00</updated>
+		<summary>Ajout du support LDAP en compilant le module d'authentification LDAP avec la version open source d'NGINX.</summary>
+	</entry>
+	<entry>
+		<title>Commander à distance un Dreamscreen: dreamscreen-daemon</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/linux/dreamscreen-daemon"/>
+		<category term="Linux"/>
+		<id>urn:uuid:d6c5fa53-fa1f-5622-9004-47a68cd06a05</id>
+		<published>2018-05-29T19:36:04-04:00</published>
+		<updated>2018-11-01T18:08:32-04:00</updated>
+		<summary>Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen.</summary>
+	</entry>
+	<entry>
+		<title>Page d'authentification personnalisée pour Grafana avec NGINX</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/linux/page-authentification-grafana"/>
+		<category term="Linux"/>
+		<id>urn:uuid:a0f3108b-795b-5cf9-91e2-0a8b245cb977</id>
+		<published>2018-05-06T21:23:46-04:00</published>
+		<updated>2018-11-01T18:08:32-04:00</updated>
+		<summary>Utilisation de NGINX en reverse proxy comme "man in the middle" pour rediriger vers une page d'authentification personnalisée.</summary>
+	</entry>
+	<entry>
+		<title>Filtrer les publicités avec un serveur DNS Unbound</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/linux/filtrer-publicites-dns-unbound"/>
+		<category term="Linux"/>
+		<id>urn:uuid:c790f5b1-24ff-54d2-a68e-346d7e78ff9f</id>
+		<published>2018-05-04T17:56:14-04:00</published>
+		<updated>2018-11-01T18:08:32-04:00</updated>
+		<summary>Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires.</summary>
+	</entry>
+	<entry>
+		<title>FPGA et afficheur 7 segments: compteur à afficheurs multiples</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteurs-multiples"/>
+		<category term="Électronique"/>
+		<id>urn:uuid:39815594-5031-5059-a56c-c38e8d7d931c</id>
+		<published>2018-04-27T20:02:50-04:00</published>
+		<updated>2018-11-01T18:08:32-04:00</updated>
+		<summary>Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments.</summary>
+	</entry>
+	<entry>
+		<title>FPGA et afficheur 7 segments: compteur à afficheur unique</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteur-unique"/>
+		<category term="Électronique"/>
+		<id>urn:uuid:3724657b-6ef8-505d-b337-510117cbf789</id>
+		<published>2018-04-25T20:00:50-04:00</published>
+		<updated>2018-11-01T18:08:32-04:00</updated>
+		<summary>Implémentation en Verilog d'un compteur sur un afficheur 7 segments.</summary>
+	</entry>
+	<entry>
+		<title>Récepteur infrarouge USB avec un ATmega32u4</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/electronique/recepteur-infrarouge-usb-atmega32u4"/>
+		<category term="Électronique"/>
+		<id>urn:uuid:74e08c26-8970-5fe0-b96c-5033173d2ef8</id>
+		<published>2018-04-20T18:45:18-04:00</published>
+		<updated>2018-11-01T18:08:32-04:00</updated>
+		<summary>Utilisation des fonctions HID du microcontrôleur ATmega32u4 et un capteur infrarouge pour contrôler des systèmes/applications avec une télécommande.</summary>
+	</entry>
+	<entry>
+		<title>FPGA et afficheur 7 segments: introduction</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-introduction"/>
+		<category term="Électronique"/>
+		<id>urn:uuid:b274ea6f-eea9-5ca1-8893-718f430463dc</id>
+		<published>2018-04-20T15:32:12-04:00</published>
+		<updated>2018-11-01T18:08:32-04:00</updated>
+		<summary>Pilotage d'un afficheur 7 segments avec un FPGA et Verilog.</summary>
+	</entry>
+</feed>

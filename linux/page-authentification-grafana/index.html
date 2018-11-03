@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Page d’authentification personnalisée pour Grafana avec NGINX - C. Boyer</title>
+  <meta name="description" content="Utilisation de NGINX en reverse proxy comme “man in the middle” pour rediriger vers une page d’authentification personnalisée." />
+  <meta name="author" content="C. Boyer" />
+  <meta name="dcterms.date" content="2018-05-06T21:23:46-04:00" />
+  <meta name="keywords" content="authentification, grafana, nginx, linux" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="generator" content="pandoc" />
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="links">
+      <a href="../../rechercher.html" class="search" title="Rechercher">
+          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
+            <title id="search-icon">Rechercher</title>
+            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
+          </svg>
+      </a>
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+
+    <h1>cboyer.github.io</h1>
+
+    <ul class="menu">
+      <li class="menu_item"><a href="../../index.html">Publications</a></li>
+      <li class="menu_item active"><a href="../../linux.html">Linux</a></li>
+      <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
+      <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
+    </ul>
+
+<article>
+<header id="title-block-header">
+<h2 class="title">Page d’authentification personnalisée pour Grafana avec NGINX</h1>
+ <span class="author">C. Boyer</span>,   <span class="date">2018-05-06 21:23:46 (UTC-04:00)</span><span class="markdown"> - <a href="page-athentification-grafana.md">format Markdown</a></span>
+</header>
+<p>Voici un moyen relativement simple d’avoir une page d’authentification personnalisée pour Grafana sans altérer l’application ce qui va nous permettre de pouvoir la mettre à jour sans problème. L’idée est d’utiliser NGINX comme reverse proxy pour intercepter les requêtes en direction de la page d’authentification de Grafana. NGINX renverra alors une page d’authentification HTML écrite par nos soins. Cette page contiendra un formulaire login/mot de passe dont l’envoie cible la page légitime de Grafana. Ainsi c’est le mécanisme d’authentification de Grafana qui est utilisé (LDAP ou interne). Selon le retours de la page légitime, notre page personnalisée redirigera ou non vers Grafana. En résumé nous utilisons le concept de “man in the middle”.</p>
+<p>Commençons par installer NGINX avec le gestionnaire adapté à la distribution en question (apt, yum, dnf).</p>
+<pre class="console"><code>apt-get install nginx
+yum install nginx
+dnf install nginx</code></pre>
+<p>Passons à la partie configuration <code>/etc/nginx/nginx.conf</code>. Nous utiliserons uniquement HTTPS ici (la procédure pour générer le certificat ne sera pas abordée).</p>
+<pre class="console"><code>
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;
+                      &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;
+                      &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+# Settings for a TLS enabled server.
+
+    server {
+        listen       443 ssl http2 default_server;
+        listen       [::]:443 ssl http2 default_server;
+        server_name  _;
+        root         /usr/share/nginx/html;
+
+        ssl_certificate &quot;/etc/nginx/certs/cert.cert&quot;;
+        ssl_certificate_key &quot;/etc/nginx/certs/cert.key&quot;;
+        ssl_session_cache shared:SSL:1m;
+        ssl_session_timeout  10m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers on;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        location / {
+        }
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+
+}
+</code></pre>
+<p>Jusque là, rien de particulier. Pour la suite nous considérerons Grafana installé sur la même machine et écoutant sur 127.0.0.1:3000 pour que seul NGINX puisse y avoir accès. Également Grafana doit être configuré avec la directive <code>root_url=/grafana</code> dans <code>/etc/grafana/grafana.ini</code> car nous hébergerons la page d’authentification à la racine dans NGINX.</p>
+<p>Ajoutons un fichier de configuration pour Grafana dans <code>/etc/nginx/default.d/grafana.conf</code> :</p>
+<pre class="console"><code>location /grafana/ {
+        proxy_pass http://127.0.0.1:3000/;
+}
+
+#Page personnalisée
+location /grafana/login {
+        proxy_pass https://127.0.0.1/login.html;
+}
+
+#Page légitime
+location /grafana/auth {
+        proxy_pass http://127.0.0.1:3000/login;
+}
+
+#Logo personnalisé
+location /status/public/img/grafana_icon.svg {
+        proxy_pass https://127.0.0.1/mon_logo.png;
+}
+
+#Favicon personnalisé
+location /status/public/img/fav32.png {
+        proxy_pass https://127.0.0.1/favicon.ico;
+}</code></pre>
+<p>Maintenant ajoutons la page d’authentification personnalisée <code>login.html</code> dans <code>/usr/share/nginx/html/</code>. Voici une version minimaliste à étoffer selon vos besoins :</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">&lt;html&gt;</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">&lt;head&gt;</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="kw">&lt;title&gt;</span>Grafana Authentification<span class="kw">&lt;/title&gt;</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw">&lt;/head&gt;</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw">&lt;body&gt;</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="kw">&lt;h1&gt;</span>Grafana Authentification<span class="kw">&lt;/h1&gt;</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">  <span class="kw">&lt;form</span><span class="ot"> onsubmit=</span><span class="st">&quot;return false;&quot;</span><span class="kw">&gt;</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">    <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;text&quot;</span><span class="ot"> id=</span><span class="st">&quot;user&quot;</span><span class="ot"> placeholder=</span><span class="st">&quot;Identifiant&quot;</span><span class="ot"> required</span><span class="kw">&gt;&lt;br&gt;</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">    <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;password&quot;</span><span class="ot"> id=</span><span class="st">&quot;password&quot;</span><span class="ot"> placeholder=</span><span class="st">&quot;Mot de passe&quot;</span><span class="ot"> required</span><span class="kw">&gt;&lt;br&gt;</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">    <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;submit&quot;</span><span class="ot"> value=</span><span class="st">&quot;Connexion&quot;</span><span class="ot"> onClick=</span><span class="st">&quot;login()&quot;</span><span class="kw">&gt;</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="kw">&lt;/form&gt;</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="kw">&lt;/body&gt;</span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="kw">&lt;script&gt;</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="kw">function</span> <span class="at">login</span>()<span class="op">{</span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17">  <span class="kw">var</span> user <span class="op">=</span> <span class="va">document</span>.<span class="at">getElementById</span>(<span class="st">&#39;user&#39;</span>).<span class="at">value</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18">  <span class="kw">var</span> password <span class="op">=</span> <span class="va">document</span>.<span class="at">getElementById</span>(<span class="st">&#39;password&#39;</span>).<span class="at">value</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19">  <span class="cf">if</span>(user <span class="op">==</span> <span class="st">&#39;&#39;</span>)</a>
+<a class="sourceLine" id="cb4-20" data-line-number="20">    <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22">  <span class="cf">if</span>(password <span class="op">==</span> <span class="st">&#39;&#39;</span>)</a>
+<a class="sourceLine" id="cb4-23" data-line-number="23">    <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb4-25" data-line-number="25">  <span class="kw">var</span> http <span class="op">=</span> <span class="kw">new</span> <span class="at">XMLHttpRequest</span>()<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-26" data-line-number="26">  <span class="kw">var</span> url <span class="op">=</span> <span class="st">&quot;/grafana/auth&quot;</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb4-27" data-line-number="27">  <span class="kw">var</span> params <span class="op">=</span> <span class="st">&quot;user=&quot;</span><span class="op">+</span>user<span class="op">+</span><span class="st">&quot;&amp;password=&quot;</span><span class="op">+</span>password<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-28" data-line-number="28">  <span class="va">http</span>.<span class="at">open</span>(<span class="st">&quot;POST&quot;</span><span class="op">,</span> url<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-29" data-line-number="29">  <span class="va">http</span>.<span class="at">setRequestHeader</span>(<span class="st">&quot;Content-type&quot;</span><span class="op">,</span> <span class="st">&quot;application/x-www-form-urlencoded&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb4-31" data-line-number="31">  <span class="va">http</span>.<span class="at">onreadystatechange</span> <span class="op">=</span> <span class="kw">function</span>() <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-32" data-line-number="32">      <span class="cf">if</span>(<span class="va">http</span>.<span class="at">readyState</span> <span class="op">==</span> <span class="dv">4</span> <span class="op">&amp;&amp;</span> <span class="va">http</span>.<span class="at">status</span> <span class="op">==</span> <span class="dv">200</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-33" data-line-number="33">          <span class="co">//console.log(http.responseText);</span></a>
+<a class="sourceLine" id="cb4-34" data-line-number="34">          <span class="va">window</span>.<span class="va">location</span>.<span class="at">replace</span>(<span class="st">&quot;/grafana&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-35" data-line-number="35">      <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-36" data-line-number="36">      <span class="co">//401 Unauthorized</span></a>
+<a class="sourceLine" id="cb4-37" data-line-number="37">      <span class="cf">if</span>(<span class="va">http</span>.<span class="at">readyState</span> <span class="op">==</span> <span class="dv">4</span> <span class="op">&amp;&amp;</span> <span class="va">http</span>.<span class="at">status</span> <span class="op">==</span> <span class="dv">401</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-38" data-line-number="38">          <span class="co">//console.log(http.responseText);</span></a>
+<a class="sourceLine" id="cb4-39" data-line-number="39">          <span class="at">alert</span>(<span class="st">&quot;Login ou mot de passe incorrect.&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-40" data-line-number="40">      <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-41" data-line-number="41">  <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-42" data-line-number="42">  <span class="va">http</span>.<span class="at">send</span>(params)<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-43" data-line-number="43"><span class="op">}</span></a>
+<a class="sourceLine" id="cb4-44" data-line-number="44"><span class="kw">&lt;/script&gt;</span></a>
+<a class="sourceLine" id="cb4-45" data-line-number="45"><span class="kw">&lt;/html&gt;</span></a></code></pre></div>
+<p>Si vous souhaitez personnaliser cette page en ajoutant des images, feuillet de style CSS ou autre, il faut placer les fichiers dans <code>/usr/share/nginx/html/</code> et utiliser des URL dans le code.</p>
+<p>Redémarrons NGINX:</p>
+<pre class="console"><code>systemctl restart nginx</code></pre>
+<p>Ouvrez votre navigateur et accédez au serveur en HTTPS pour tester: https://monserveur.local/grafana</p>
+<h2 id="limites-de-la-solution">Limites de la solution</h2>
+<p>NGINX se fie à l’URI pour fournir les pages demandée: la chaîne de caractères du bloc location. Si cette même chaîne de caractère est utilisée dans un lien par l’application nous aurons une erreur 404 en provenance de Grafana.</p>
+<p>J’ai également pu observer l’affichage d’une erreur 404 de Grafana pendant une fraction de seconde après l’authentification sans en trouver l’origine.</p>
+<h3 id="sources">Sources:</h3>
+<ul>
+<li><a href="http://docs.grafana.org/installation/behind_proxy">Grafana derrière un proxy</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location">NGINX en reverse proxy</a></li>
+</ul>
+</article>
+
+<div id="footer">
+  <hr />
+  <span class="copyrights">© 2018 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+</div>
+
+</div>
+</body>
+</html>

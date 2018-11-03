@@ -1,0 +1,67 @@
+body{ font-family: "Open Sans", arial, sans-serif; color: #2c2c2c; margin: 0; }
+a { text-decoration: none; color: #363690; }
+pre { padding: 10px; }
+code { font-size: 14px; background-color: #f8f8f8; padding: 2px 4px; border-radius: 4px; border: 1px solid #ddd; }
+pre code, code.sourceCode { font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace; border: none; padding: 0; font-size: 14px; }
+a:hover { text-decoration: underline; }
+a.github, a.search, a.rss { fill: #3c3656; text-decoration: none; }
+h2, h3, p.author { margin: 60px 0 0 0; }
+ul.nobullet{ list-style: none; }
+hr { height: 0.25em; padding: 0; margin: 24px 0; background-color: #3c3656; border: 0; }
+div.sourceCode, .console { background-color: #f8f8f8 !important; margin: 1em 0 2.5em 0 !important;  border: 1px solid #dddbcc; border-radius: 4px;}
+figcaption { display: none; }
+figure { margin: 2em 0 3em 0; }
+table { margin: 2em 0 3em 0; border-spacing: 10px; border-collapse: collapse; }
+th, td { border: 1px solid #b6b6b6; padding: 5px; }
+.copyrights { font-size: 13px; }
+.button { width: 30px; }
+.author, .date, .markdown { font-size: 0.8em; }
+#title-block-header { margin: 0 0 50px 0; }
+#links{ float: right; padding-top: 7px; }
+#menu { margin-bottom: 60px; }
+#footer { width: 100%; margin: 160px 0 50px 0; text-align: center; }
+@media print {
+  body { font-size: 13px; }
+  #links, #menu, .menu_item, .markdown { display: none; }
+}
+@media screen {
+  body { font-size: 1.2em; }
+  p { line-height: 1.5; }
+  #container { margin-left: auto; margin-right: auto; width: 60%; }
+}
+
+svg:hover,path:hover{
+    fill: #4CAF50;
+    pointer-events:all;
+}
+
+ul.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #3c3656;
+    width: 100%;
+}
+
+li.menu_item {
+    float: left;
+}
+
+li.active, li.active a:hover {
+    background-color: #4CAF50 !important;
+}
+
+li.menu_item a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li.menu_item a:hover {
+    background-color: #1E1E3E;
+}
+
+li.menu_item a:active { outline-style:none; }
