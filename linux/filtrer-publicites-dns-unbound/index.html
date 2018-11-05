@@ -2,11 +2,17 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Filtrer les publicités avec un serveur DNS Unbound - C. Boyer</title>
   <meta name="description" content="Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires." />
   <meta name="author" content="C. Boyer" />
-  <meta name="dcterms.date" content="2018-05-04T17:56:14-04:00" />
   <meta name="keywords" content="dns, publicité, unbound, linux" />
+  <meta property="og:title" content="Filtrer les publicités avec un serveur DNS Unbound" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires." />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2018-05-04T17:56:14-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="generator" content="pandoc" />
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
@@ -122,10 +128,10 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h2 class="title">Filtrer les publicités avec un serveur DNS Unbound</h1>
- <span class="author">C. Boyer</span>,   <span class="date">2018-05-04 17:56:14 (UTC-04:00)</span><span class="markdown"> - <a href="filtrer-publicites-dns-unbound.md">format Markdown</a></span>
+ <span class="author">C. Boyer</span>,   <span class="date">2018-05-04 17:56:14 (UTC-04:00)</span>
 </header>
 <p>Les publicités sont devenues depuis quelques années une véritable plaie sur Internet. Rares sont les sites et autres blogues qui en sont exempts, l’appât du gain ouvrant grand les portes à la monétisation. Ce qui est d’autant plus dérangeant c’est qu’elles ne se limitent plus à afficher (de manière intempestive ou non) un produit quelconque: les régies publicitaires ciblent des annonces en fonctions des données accessibles depuis votre navigateur (cookies, user-agent, recoupement avec d’autres données, etc.).</p>
-<p>Il existe des moyens de contrer ce fléau avec des plugins s’installant dans votre navigateur comme AdBlock, uBlock Origin ou encore Disconnect. Une autre alternative est possible: filtrer la source de ces annonces par depuis un serveur de noms (DNS) local. Une suite d’outils pour Raspberry Pi reposant sur ce concept à même vu le jour: <a href="https://pi-hole.net">Pi-Hole</a>. Ainsi, vous accélérez votre navigation en ne téléchargeant plus les données associées aux publicités.</p>
+<p>Il existe des moyens de contrer ce fléau avec des plugins s’installant dans votre navigateur comme AdBlock, uBlock Origin ou encore Disconnect. Une autre alternative est possible: filtrer la source de ces annonces avec un serveur de noms (DNS) local. Une suite d’outils pour Raspberry Pi reposant sur ce concept à même vu le jour: <a href="https://pi-hole.net">Pi-Hole</a>. Ainsi, vous accélérez votre navigation en ne téléchargeant plus les données associées aux publicités.</p>
 <p>Nous allons voir comment monter son propre serveur DNS local avec Unbound pour filtrer les indésirables. Commençons par installer le package Unbound dépendamment de votre distribution (en root):</p>
 <pre class="console"><code>dnf install unbound
 apt-get install unbound

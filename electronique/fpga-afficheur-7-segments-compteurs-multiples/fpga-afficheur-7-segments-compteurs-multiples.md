@@ -11,12 +11,14 @@ abstract: |
   Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments.
 ---
 
-[ [Partie 1](../fpga-afficheur-7-segments-introduction/index.html) | [Partie 2](../fpga-afficheur-7-segments-compteur-unique/index.html) | Partie 3 ]
+[ [Partie 1](../fpga-afficheur-7-segments-introduction/) | [Partie 2](../fpga-afficheur-7-segments-compteur-unique/) | Partie 3 ]
 
-## Compteur à afficheurs multiples
 
-Nous avons vu dans [la partie 1](../fpga-afficheur-7-segments-introduction/index.html) comment afficher un chiffre sur l'afficheur le plus à droite et dans [la partie 2](../fpga-afficheur-7-segments-compteur-unique/index.html) comment implémenter un compteur avec ce même afficheur. L'objectif de cette troisième partie est d'implémenter un compteur sur plusieurs afficheurs.
+
+Nous avons vu dans [la partie 1](../fpga-afficheur-7-segments-introduction/) comment afficher un chiffre sur l'afficheur le plus à droite et dans [la partie 2](../fpga-afficheur-7-segments-compteur-unique/) comment implémenter un compteur avec ce même afficheur. L'objectif de cette troisième partie est d'implémenter un compteur sur plusieurs afficheurs.
 Nous commencerons par un compteur à deux afficheurs afin d’introduire les dizaines dans notre compteur et d’afficher des valeurs de 0 à 99. Par la suite, nous étendrons notre compteur aux quatre afficheurs.
+
+## Compteur à deux afficheurs
 
 Étant limité a une valeur maximale de 9, ajouter un afficheur supplémentaire va nous permettre de rehausser cette valeur à 99.
 Un problème se dessine à l’horizon: comment pouvons nous piloter un afficheur supplémentaire indépendamment du premier alors qu’ils partagent les mêmes cathodes?
@@ -242,4 +244,4 @@ endmodule
 Le bloc `case` nous permet de comparer `counter[18:17]` de manière élégante bien qu'une série de 4 `if` aurait parfaitement fonctionné.
 
 
-[ [Partie 1](../fpga-afficheur-7-segments-introduction/index.html) | [Partie 2](../fpga-afficheur-7-segments-compteur-unique/index.html) | Partie 3 ]
+[ [Partie 1](../fpga-afficheur-7-segments-introduction/) | [Partie 2](../fpga-afficheur-7-segments-compteur-unique/) | Partie 3 ]

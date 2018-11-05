@@ -11,9 +11,7 @@ abstract: |
   Pilotage d'un afficheur 7 segments avec un FPGA et Verilog.
 ---
 
-[ Partie 1 | [Partie 2](../fpga-afficheur-7-segments-compteur-unique/index.html) | [Partie 3](../fpga-afficheur-7-segments-compteurs-multiples/index.html) ]
-
-## Introduction
+[ Partie 1 | [Partie 2](../fpga-afficheur-7-segments-compteur-unique/) | [Partie 3](../fpga-afficheur-7-segments-compteurs-multiples/) ]
 
 Dans cette article nous verrons comment piloter un afficheur 7 segments avec un FPGA. L’objectif étant purement pédagogique, il s’agit ici d’un exercice visant la mise en pratique de Verilog pour la description d’un circuit logique simple dont le fonctionnement peut s’observer facilement avec un afficheur 7 segments.
 
@@ -223,6 +221,6 @@ display_1_leds <= 9'b111011101;
 
 Nous sommes maintenant en mesure d’afficher n’importe quel chiffre sur notre afficheur 7 segments.
 
-Dans [la partie 2](../fpga-afficheur-7-segments-compteur-unique/index.html), nous irons un peu plus loin en implémentant un compteur pour afficher les chiffres de 0 à 9.
+Dans [la partie 2](../fpga-afficheur-7-segments-compteur-unique/), nous irons un peu plus loin en implémentant un compteur pour afficher les chiffres de 0 à 9.
 
-[ Partie 1 | [Partie 2](../fpga-afficheur-7-segments-compteur-unique/index.html) | [Partie 3](../fpga-afficheur-7-segments-compteurs-multiples/index.html) ]
+[ Partie 1 | [Partie 2](../fpga-afficheur-7-segments-compteur-unique/) | [Partie 3](../fpga-afficheur-7-segments-compteurs-multiples/) ]

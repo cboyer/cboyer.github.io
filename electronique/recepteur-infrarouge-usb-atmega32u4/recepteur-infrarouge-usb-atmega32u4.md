@@ -163,7 +163,7 @@ Dans le cas où votre télécommande n'utiliserai pas les mêmes codes infraroug
 
 ## Limites
 
-Les touches MEDIA_* fonctionnent uniquement sur un système Linux, Windows ne les reconnait pas. Ceci n'est donc pas un problème pour les utilisateurs de [LibreELEC](https://libreelec.tv/)/[OpenELEC](https://www.openelec.tv/).
+Les touches `MEDIA_*` fonctionnent uniquement sur un système Linux, Windows ne les reconnait pas. Ceci n'est donc pas un problème pour les utilisateurs de [LibreELEC](https://libreelec.tv/)/[OpenELEC](https://www.openelec.tv/).
 
 ### Sources
 

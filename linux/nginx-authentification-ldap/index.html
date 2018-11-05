@@ -2,11 +2,17 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Ajouter l’authentification LDAP à NGINX - C. Boyer</title>
   <meta name="description" content="Ajout du support LDAP en compilant le module d’authentification LDAP avec la version open source d’NGINX." />
   <meta name="author" content="C. Boyer" />
-  <meta name="dcterms.date" content="2018-05-31T19:14:12-04:00" />
   <meta name="keywords" content="nginx, ldap, authentification, linux" />
+  <meta property="og:title" content="Ajouter l’authentification LDAP à NGINX" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Ajout du support LDAP en compilant le module d’authentification LDAP avec la version open source d’NGINX." />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2018-05-31T19:14:12-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="generator" content="pandoc" />
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
@@ -122,7 +128,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h2 class="title">Ajouter l’authentification LDAP à NGINX</h1>
- <span class="author">C. Boyer</span>,   <span class="date">2018-05-31 19:14:12 (UTC-04:00)</span><span class="markdown"> - <a href="nginx-authentification-ldap.md">format Markdown</a></span>
+ <span class="author">C. Boyer</span>,   <span class="date">2018-05-31 19:14:12 (UTC-04:00)</span>
 </header>
 <p>La version gratuite de NGINX n’intègre pas le module d’authentification via LDAP par défaut. Pour y remédier, il faut passer par une compilation des sources avec le module <code>nginx-auth-ldap</code>.</p>
 <p>Récupérer le module:</p>

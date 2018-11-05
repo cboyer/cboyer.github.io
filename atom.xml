@@ -3,7 +3,7 @@
     <title>Articles, notes techniques et expérimentations - C. Boyer</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-	<updated>2018-11-03T15:49:57-04:00</updated>
+	<updated>2018-11-05T18:30:27-05:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
@@ -12,7 +12,7 @@
 	<entry>
 		<title>Automobile, bus CAN et norme OBD2</title>
 		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/electronique/automobile-bus-can-obd2"/>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/electronique/automobile-bus-can-obd2" hreflang="fr"/>
 		<category term="Électronique"/>
 		<id>urn:uuid:51d7eac3-665e-5201-9605-43aea61a38f3</id>
 		<published>2018-11-01T18:08:32-04:00</published>
@@ -20,9 +20,19 @@
 		<summary>Dialoguer avec l'ordinateur de bord d'un véhicule automobile via OBD2.</summary>
 	</entry>
 	<entry>
+		<title>Système embarqué Linux avec Buildroot</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/linux/systeme-embarque-linux-buildroot" hreflang="fr"/>
+		<category term="Linux"/>
+		<id>urn:uuid:2ac30941-2388-5665-bfde-17e8d32ba124</id>
+		<published>2018-08-09T11:29:00-04:00</published>
+		<updated>2018-11-04T12:42:12-05:00</updated>
+		<summary>Création d'un système embarqué Linux avec Buildroot pour Raspberry Pi 2.</summary>
+	</entry>
+	<entry>
 		<title>Ajouter l'authentification LDAP à NGINX</title>
 		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/linux/nginx-authentification-ldap"/>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/linux/nginx-authentification-ldap" hreflang="fr"/>
 		<category term="Linux"/>
 		<id>urn:uuid:120d7776-422d-5f73-8603-0e25425c6bde</id>
 		<published>2018-05-31T19:14:12-04:00</published>
@@ -32,7 +42,7 @@
 	<entry>
 		<title>Commander à distance un Dreamscreen: dreamscreen-daemon</title>
 		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/linux/dreamscreen-daemon"/>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/linux/dreamscreen-daemon" hreflang="fr"/>
 		<category term="Linux"/>
 		<id>urn:uuid:d6c5fa53-fa1f-5622-9004-47a68cd06a05</id>
 		<published>2018-05-29T19:36:04-04:00</published>
@@ -42,7 +52,7 @@
 	<entry>
 		<title>Page d'authentification personnalisée pour Grafana avec NGINX</title>
 		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/linux/page-authentification-grafana"/>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/linux/page-authentification-grafana" hreflang="fr"/>
 		<category term="Linux"/>
 		<id>urn:uuid:a0f3108b-795b-5cf9-91e2-0a8b245cb977</id>
 		<published>2018-05-06T21:23:46-04:00</published>
@@ -52,7 +62,7 @@
 	<entry>
 		<title>Filtrer les publicités avec un serveur DNS Unbound</title>
 		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/linux/filtrer-publicites-dns-unbound"/>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/linux/filtrer-publicites-dns-unbound" hreflang="fr"/>
 		<category term="Linux"/>
 		<id>urn:uuid:c790f5b1-24ff-54d2-a68e-346d7e78ff9f</id>
 		<published>2018-05-04T17:56:14-04:00</published>
@@ -62,7 +72,7 @@
 	<entry>
 		<title>FPGA et afficheur 7 segments: compteur à afficheurs multiples</title>
 		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteurs-multiples"/>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteurs-multiples" hreflang="fr"/>
 		<category term="Électronique"/>
 		<id>urn:uuid:39815594-5031-5059-a56c-c38e8d7d931c</id>
 		<published>2018-04-27T20:02:50-04:00</published>
@@ -72,7 +82,7 @@
 	<entry>
 		<title>FPGA et afficheur 7 segments: compteur à afficheur unique</title>
 		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteur-unique"/>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteur-unique" hreflang="fr"/>
 		<category term="Électronique"/>
 		<id>urn:uuid:3724657b-6ef8-505d-b337-510117cbf789</id>
 		<published>2018-04-25T20:00:50-04:00</published>
@@ -82,7 +92,7 @@
 	<entry>
 		<title>Récepteur infrarouge USB avec un ATmega32u4</title>
 		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/electronique/recepteur-infrarouge-usb-atmega32u4"/>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/electronique/recepteur-infrarouge-usb-atmega32u4" hreflang="fr"/>
 		<category term="Électronique"/>
 		<id>urn:uuid:74e08c26-8970-5fe0-b96c-5033173d2ef8</id>
 		<published>2018-04-20T18:45:18-04:00</published>
@@ -92,11 +102,21 @@
 	<entry>
 		<title>FPGA et afficheur 7 segments: introduction</title>
 		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-		<link rel="alternate" hreflang="fr" type="text/html"  href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-introduction"/>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-introduction" hreflang="fr"/>
 		<category term="Électronique"/>
 		<id>urn:uuid:b274ea6f-eea9-5ca1-8893-718f430463dc</id>
 		<published>2018-04-20T15:32:12-04:00</published>
 		<updated>2018-11-01T18:08:32-04:00</updated>
 		<summary>Pilotage d'un afficheur 7 segments avec un FPGA et Verilog.</summary>
+	</entry>
+	<entry>
+		<title>Système de fichiers distribué GlusterFS</title>
+		<rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+		<link rel="alternate" type="text/html"  href="https://cboyer.github.io/linux/systeme-fichiers-distribue-glusterfs" hreflang="fr"/>
+		<category term="Linux"/>
+		<id>urn:uuid:50369ec3-e56b-5476-9322-95a7cf25ad6b</id>
+		<published>2016-10-30T14:24:16-04:00</published>
+		<updated>2018-11-04T11:04:32-05:00</updated>
+		<summary>Configuration d'un volume GlusterFS sous CentOS.</summary>
 	</entry>
 </feed>

@@ -2,11 +2,17 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>FPGA et afficheur 7 segments: introduction - C. Boyer</title>
   <meta name="description" content="Pilotage d’un afficheur 7 segments avec un FPGA et Verilog." />
   <meta name="author" content="C. Boyer" />
-  <meta name="dcterms.date" content="2018-04-20T15:32:12-04:00" />
   <meta name="keywords" content="fpga, afficheur, led, verilog" />
+  <meta property="og:title" content="FPGA et afficheur 7 segments: introduction" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Pilotage d’un afficheur 7 segments avec un FPGA et Verilog." />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2018-04-20T15:32:12-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="generator" content="pandoc" />
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
@@ -122,10 +128,9 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h2 class="title">FPGA et afficheur 7 segments: introduction</h1>
- <span class="author">C. Boyer</span>,   <span class="date">2018-04-20 15:32:12 (UTC-04:00)</span><span class="markdown"> - <a href="fpga-afficheur-7-segments-introduction.md">format Markdown</a></span>
+ <span class="author">C. Boyer</span>,   <span class="date">2018-04-20 15:32:12 (UTC-04:00)</span>
 </header>
-<p>[ Partie 1 | <a href="../fpga-afficheur-7-segments-compteur-unique/index.html">Partie 2</a> | <a href="../fpga-afficheur-7-segments-compteurs-multiples/index.html">Partie 3</a> ]</p>
-<h2 id="introduction">Introduction</h2>
+<p>[ Partie 1 | <a href="../fpga-afficheur-7-segments-compteur-unique/">Partie 2</a> | <a href="../fpga-afficheur-7-segments-compteurs-multiples/">Partie 3</a> ]</p>
 <p>Dans cette article nous verrons comment piloter un afficheur 7 segments avec un FPGA. L’objectif étant purement pédagogique, il s’agit ici d’un exercice visant la mise en pratique de Verilog pour la description d’un circuit logique simple dont le fonctionnement peut s’observer facilement avec un afficheur 7 segments.</p>
 <p>Le soin est laissé au lecteur d’avoir l’équipement et l’environnement de développement fonctionnel. À titre indicatif, cet article a été rédigé en utilisant un FPGA Cyclone IV EP4E22E22C8N d’Altera avec Quartus Prime 17.1.0 Lite sous Linux (Fedora 27). Les codes Verilog proposés fonctionneront parfaitement pour d’autres FPGA et environnements tels que Xilinx ou encore Lattice. L’afficheur 7 segments provient d’un vieux décodeur TV Vidéotron, son circuit nous est pour le moment complètement inconnu ce qui implique de faire un peu de rétro-ingénierie même s’il y a fort à parier que le schéma soit disponible sur Internet.</p>
 <h2 id="circuit-de-lafficheur-7-segments">Circuit de l’afficheur 7 segments</h2>
@@ -281,8 +286,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb5-28" data-line-number="28"><span class="co">//Chiffre 9, segments {ED, E7, E6, E4, E3, EC}</span></a>
 <a class="sourceLine" id="cb5-29" data-line-number="29">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111011101</span>;</a></code></pre></div>
 <p>Nous sommes maintenant en mesure d’afficher n’importe quel chiffre sur notre afficheur 7 segments.</p>
-<p>Dans <a href="../fpga-afficheur-7-segments-compteur-unique/index.html">la partie 2</a>, nous irons un peu plus loin en implémentant un compteur pour afficher les chiffres de 0 à 9.</p>
-<p>[ Partie 1 | <a href="../fpga-afficheur-7-segments-compteur-unique/index.html">Partie 2</a> | <a href="../fpga-afficheur-7-segments-compteurs-multiples/index.html">Partie 3</a> ]</p>
+<p>Dans <a href="../fpga-afficheur-7-segments-compteur-unique/">la partie 2</a>, nous irons un peu plus loin en implémentant un compteur pour afficher les chiffres de 0 à 9.</p>
+<p>[ Partie 1 | <a href="../fpga-afficheur-7-segments-compteur-unique/">Partie 2</a> | <a href="../fpga-afficheur-7-segments-compteurs-multiples/">Partie 3</a> ]</p>
 </article>
 
 <div id="footer">

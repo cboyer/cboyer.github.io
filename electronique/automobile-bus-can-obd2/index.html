@@ -2,11 +2,17 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Automobile, bus CAN et norme OBD2 - C. Boyer</title>
   <meta name="description" content="Dialoguer avec l’ordinateur de bord d’un véhicule automobile via OBD2." />
   <meta name="author" content="C. Boyer" />
-  <meta name="dcterms.date" content="2018-11-01T18:08:32-04:00" />
   <meta name="keywords" content="automobile, can, bus, obd2, macchina, savvycan" />
+  <meta property="og:title" content="Automobile, bus CAN et norme OBD2" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Dialoguer avec l’ordinateur de bord d’un véhicule automobile via OBD2." />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2018-11-01T18:08:32-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="generator" content="pandoc" />
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
@@ -122,7 +128,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h2 class="title">Automobile, bus CAN et norme OBD2</h1>
- <span class="author">C. Boyer</span>,   <span class="date">2018-11-01 18:08:32 (UTC-04:00)</span><span class="markdown"> - <a href="automobile-bus-can-obd2.md">format Markdown</a></span>
+ <span class="author">C. Boyer</span>,   <span class="date">2018-11-01 18:08:32 (UTC-04:00)</span>
 </header>
 <p>Pour établir la communication avec l’ordinateur embarqué d’une automobile (appelé ECU pour Electronic Control Unit), rien de bien compliqué car la technologie mis en oeuvre ici (CAN pour Controller Area Network) date en partie des années 1980 et n’intègre pas les concepts issus des enjeux d’aujourd’hui (authentification, cryptage etc.). N’oublions pas que ces systèmes embarqués sont très limités en terme de capacité de traitement tout en étant soumis à des contraintes de temps dans lesquelles ils doivent être en mesure d’opérer.</p>
 <p>La couche physique (niveau 1 OSI), fonctionne selon une topologie de type bus: tous les noeuds connectés au bus reçoivent chaque message émis (broadcast) ce qui nécessite d’introduire la notion d’identification afin d’être en mesure d’identifier un noeud comme destinataire ou émetteur d’un message. L’identification des noeuds s’effectue par la couche liaison de donnée (niveau 2 OSI) qui est normalisée ISO avec deux variantes: l’une fonctionnant avec 11 bits et l’autre (dite “extended”) sur 29 bits. On ne peut pas parler d’adressage formel car un noeud peut écouter sur un identifiant et répondre avec un autre (c’est le cas de l’ECU).</p>

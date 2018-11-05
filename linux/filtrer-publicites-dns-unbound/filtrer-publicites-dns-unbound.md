@@ -14,7 +14,7 @@ abstract: |
 Les publicités sont devenues depuis quelques années une véritable plaie sur Internet. Rares sont les sites et autres blogues qui en sont exempts, l'appât du gain ouvrant grand les portes à la monétisation. Ce qui est d'autant plus dérangeant c'est qu'elles ne se limitent plus à afficher (de manière intempestive ou non) un produit quelconque: les régies publicitaires ciblent des annonces en fonctions des données accessibles depuis votre navigateur (cookies, user-agent, recoupement avec d'autres données, etc.).
 
 Il existe des moyens de contrer ce fléau avec des plugins s'installant dans votre navigateur comme AdBlock, uBlock Origin ou encore Disconnect.
-Une autre alternative est possible: filtrer la source de ces annonces par depuis un serveur de noms (DNS) local. Une suite d'outils pour Raspberry Pi reposant sur ce concept à même vu le jour: [Pi-Hole](https://pi-hole.net). Ainsi, vous accélérez votre navigation en ne téléchargeant plus les données associées aux publicités.
+Une autre alternative est possible: filtrer la source de ces annonces avec un serveur de noms (DNS) local. Une suite d'outils pour Raspberry Pi reposant sur ce concept à même vu le jour: [Pi-Hole](https://pi-hole.net). Ainsi, vous accélérez votre navigation en ne téléchargeant plus les données associées aux publicités.
 
 Nous allons voir comment monter son propre serveur DNS local avec Unbound pour filtrer les indésirables.
 Commençons par installer le package Unbound dépendamment de votre distribution (en root):

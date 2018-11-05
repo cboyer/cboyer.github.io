@@ -2,11 +2,17 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>FPGA et afficheur 7 segments: compteur à afficheur unique - C. Boyer</title>
   <meta name="description" content="Implémentation en Verilog d’un compteur sur un afficheur 7 segments." />
   <meta name="author" content="C. Boyer" />
-  <meta name="dcterms.date" content="2018-04-25T20:00:50-04:00" />
   <meta name="keywords" content="fpga, afficheur, led, verilog" />
+  <meta property="og:title" content="FPGA et afficheur 7 segments: compteur à afficheur unique" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Implémentation en Verilog d’un compteur sur un afficheur 7 segments." />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2018-04-25T20:00:50-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="generator" content="pandoc" />
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
@@ -122,11 +128,10 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h2 class="title">FPGA et afficheur 7 segments: compteur à afficheur unique</h1>
- <span class="author">C. Boyer</span>,   <span class="date">2018-04-25 20:00:50 (UTC-04:00)</span><span class="markdown"> - <a href="fpga-afficheur-7-segments-compteur-unique.md">format Markdown</a></span>
+ <span class="author">C. Boyer</span>,   <span class="date">2018-04-25 20:00:50 (UTC-04:00)</span>
 </header>
-<p>[ <a href="../fpga-afficheur-7-segments-introduction/index.html">Partie 1</a> | Partie 2 | <a href="../fpga-afficheur-7-segments-compteurs-multiples/index.html">Partie 3</a> ]</p>
-<h2 id="compteur-à-un-afficheur">Compteur à un afficheur</h2>
-<p>Nous avons vu dans <a href="../fpga-afficheur-7-segments-introduction/index.html">la partie 1</a> comment afficher un chiffre sur l’afficheur le plus à droite. L’objectif de cette seconde partie est d’implémenter un compteur pour afficher les chiffres de 0 à 9. Avant de continuer, rappelons quelques éléments importants de la partie précédente:</p>
+<p>[ <a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a> | Partie 2 | <a href="../fpga-afficheur-7-segments-compteurs-multiples/">Partie 3</a> ]</p>
+<p>Nous avons vu dans <a href="../fpga-afficheur-7-segments-introduction/">la partie 1</a> comment afficher un chiffre sur l’afficheur le plus à droite. L’objectif de cette seconde partie est d’implémenter un compteur pour afficher les chiffres de 0 à 9. Avant de continuer, rappelons quelques éléments importants de la partie précédente:</p>
 <p>La nomenclature des segments:</p>
 <ul>
 <li>le premier caractère représente l’anode (pôle positif)</li>
@@ -135,7 +140,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <figure>
 <img src="../fpga-afficheur-7-segments-introduction/7segments_schema_labels.jpg" alt="Schéma annoté" /><figcaption>Schéma annoté</figcaption>
 </figure>
-<p>Les correspondances sorties-registres-segments (forme explicite de la ligne <em>assign DISPLAY_1 = display_1_leds</em>):</p>
+<p>Les correspondances sorties-registres-segments (forme explicite de la ligne <code>assign DISPLAY_1 = display_1_leds</code>):</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">0</span>] = display_<span class="dv">1</span>_leds[<span class="dv">0</span>]; <span class="co">//E (anode commune)</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">1</span>] = display_<span class="dv">1</span>_leds[<span class="dv">1</span>]; <span class="co">//1</span></a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">2</span>] = display_<span class="dv">1</span>_leds[<span class="dv">2</span>]; <span class="co">//C</span></a>
@@ -204,8 +209,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Et pour l’augmenter, nous pouvons réduire la comparaison à 24 bits ou moins:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">if</span>(counter[<span class="dv">23</span>:<span class="dv">0</span>] == <span class="bn">24&#39;b1</span>) <span class="kw">begin</span></a></code></pre></div>
 <p>Il est très important de prendre un intervalle de 0 à N bits et non un seul bit en particulier (à l’exception du bit de poids faible) car la condition s’avèrera vraie aussi longtemps qu’incrémenter les bits précédents ne change pas le bit comparé. Ceci aura pour effet d’incrémenter <code>display_1_value</code> à 50 MHz et d’afficher le chiffre correspondant beaucoup trop rapidement (notre oeil percevra le chiffre 8 à cause de la persistance rétinienne).</p>
-<p>Dans <a href="../fpga-afficheur-7-segments-compteurs-multiples/index.html">la partie 3</a>, nous verrons comment utiliser un afficheur supplémentaire afin d’introduire les dizaines dans notre compteur et d’afficher des valeurs de 0 à 99.</p>
-<p>[ <a href="../fpga-afficheur-7-segments-introduction/index.html">Partie 1</a> | Partie 2 | <a href="../fpga-afficheur-7-segments-compteurs-multiples/index.html">Partie 3</a> ]</p>
+<p>Dans <a href="../fpga-afficheur-7-segments-compteurs-multiples/">la partie 3</a>, nous verrons comment utiliser un afficheur supplémentaire afin d’introduire les dizaines dans notre compteur et d’afficher des valeurs de 0 à 99.</p>
+<p>[ <a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a> | Partie 2 | <a href="../fpga-afficheur-7-segments-compteurs-multiples/">Partie 3</a> ]</p>
 </article>
 
 <div id="footer">
