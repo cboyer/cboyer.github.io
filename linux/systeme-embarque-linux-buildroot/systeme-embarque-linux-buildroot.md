@@ -173,6 +173,13 @@ qemu-system-arm -M raspi2 -cpu arm1176 -m 1G -smp 4 \
 -kernel output/images/zImage -serial stdio
 ```
 
+Pour envoyer votre image sur un support physique (carte SD dans notre cas):
+
+```bash
+dd bs=4M if=rpi2.img of=/dev/mmcblk0 status=progress
+sync
+```
+
 ## Modification manuelle de l'image
 
 Il est nécessaire d'ajouter des fichiers `.dtb` dans la partition `/boot` afin de faire fonctionner certains composants comme le capteur DS18B20.

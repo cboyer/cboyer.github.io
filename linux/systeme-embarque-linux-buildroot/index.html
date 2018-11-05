@@ -229,12 +229,15 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb13-2" data-line-number="2">-append <span class="st">&quot;ro earlyprintk loglevel=8 console=ttyAMA0,115200 dwc_otg.lpm_enable=0 rootfstype=ext4 root=/dev/mmcblk0p2 rootwait&quot;</span> \</a>
 <a class="sourceLine" id="cb13-3" data-line-number="3">-dtb output/images/bcm2709-rpi-2-b.dtb -drive if=sd,driver=raw,file=rpi2.img \</a>
 <a class="sourceLine" id="cb13-4" data-line-number="4">-kernel output/images/zImage -serial stdio</a></code></pre></div>
+<p>Pour envoyer votre image sur un support physique (carte SD dans notre cas):</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="fu">dd</span> bs=4M if=rpi2.img of=/dev/mmcblk0 status=progress</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="fu">sync</span></a></code></pre></div>
 <h2 id="modification-manuelle-de-limage">Modification manuelle de l’image</h2>
 <p>Il est nécessaire d’ajouter des fichiers <code>.dtb</code> dans la partition <code>/boot</code> afin de faire fonctionner certains composants comme le capteur DS18B20. Pour cela, monter la partition <code>/boot</code> du fichier <code>rpi2.img</code> avec <code>losetup</code> et <code>mount</code> comme dans le script précédent puis:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="fu">mkdir</span> mnt/boot/overlays</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="ex">dtc</span> -O dtb -o w1-gpio-overlay.dtb output/build/linux-custom/arch/arm/boot/dts/overlays/w1-gpio-overlay.dts</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="fu">cp</span> w1-gpio-overlay.dtb mnt/boot/overlays</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="bu">echo</span> <span class="st">&quot;dtoverlay=w1-gpio,pullup=1,gpiopin=4&quot;</span> <span class="op">&gt;&gt;</span> mnt/boot/config.txt</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="fu">mkdir</span> mnt/boot/overlays</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="ex">dtc</span> -O dtb -o w1-gpio-overlay.dtb output/build/linux-custom/arch/arm/boot/dts/overlays/w1-gpio-overlay.dts</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="fu">cp</span> w1-gpio-overlay.dtb mnt/boot/overlays</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="bu">echo</span> <span class="st">&quot;dtoverlay=w1-gpio,pullup=1,gpiopin=4&quot;</span> <span class="op">&gt;&gt;</span> mnt/boot/config.txt</a></code></pre></div>
 <p>Pour faire correctement les choses, il faudrait utiliser un <em>post-script</em> ou encore un <em>overlay</em> dans Builroot pour insérer des fichiers dans l’image produite. C’est également de cette manière qu’il faut intégrer sa partie applicative.</p>
 <h2 id="les-bonnes-pratiques">Les bonnes pratiques</h2>
 <ul>
