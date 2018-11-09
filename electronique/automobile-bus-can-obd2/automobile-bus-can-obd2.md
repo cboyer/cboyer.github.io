@@ -156,8 +156,8 @@ Les automobiles d'aujourd'hui sont électroniquement très bavardes.
 Avec autant de données produites, il ne faudra pas attendre longtemps avant de pouvoir observer l'intérêt de certaines compagnies et des autorités.
 Imaginez le potentiel d'un dispositif de type boite noir (comme sur les avions de ligne) enregistrant toutes ces données pour décrire votre trajet avec précision (vitesse, régime moteur, consommation essence, etc.) couplé à une interface sans-fils.
 En cas d'accident il serait possible d'investiguer avec d'autres informations que les seuls dires des conducteurs.
-Ceci permettrait au forces de polices de constater des infractions (excès de vitesse) sans vous prendre sur le fait, tout en passant à proximité de votre véhicule (ou depuis un bureau).
-Les compagnies d'assurance ou de location pourrait vérifier le comportement d'un conducteur (régime moteur, vitesse, etc...) et vous réclamer des montants supplémentaires.
+Ceci permettrait aux forces de police de constater des infractions (excès de vitesse) sans vous prendre sur le fait, tout en passant à proximité de votre véhicule (ou depuis un bureau).
+Les compagnies d'assurance ou de location pourrait vérifier le comportement d'un conducteur (régime moteur, vitesse, etc...) et réclamer des montants supplémentaires.
 
 OBD2 n'étant pas complètement standardisé, l'absence de stockage de ces données et d'interfaces pour y accéder nous protègent de telles dérives, mais pour combien de temps.
 
