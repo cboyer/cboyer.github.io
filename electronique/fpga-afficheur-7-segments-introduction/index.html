@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="HandheldFriendly" content="True">
   <title>FPGA et afficheur 7 segments: introduction - C. Boyer</title>
   <meta name="description" content="Pilotage d’un afficheur 7 segments avec un FPGA et Verilog." />
   <meta name="author" content="C. Boyer" />
@@ -18,6 +19,8 @@
   <meta property="article:published_time" content="2018-04-20T15:32:12-04:00" />
   <meta property="article:modified_time" content="2018-11-01T18:08:32-04:00" />
   <meta name="generator" content="pandoc" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
   <link rel="stylesheet" type="text/css" href="../../style.css" />
 
@@ -179,7 +182,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5">);</a>
 <a class="sourceLine" id="cb2-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">        <span class="co">/* reg */</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">    <span class="co">/* reg */</span></a>
 <a class="sourceLine" id="cb2-8" data-line-number="8">    <span class="co">//Désactive tout par défaut</span></a>
 <a class="sourceLine" id="cb2-9" data-line-number="9">    <span class="dt">reg</span> [<span class="dv">8</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_leds = <span class="bn">9&#39;b000000000</span>;</a>
 <a class="sourceLine" id="cb2-10" data-line-number="10"></a>
@@ -202,7 +205,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb3-4" data-line-number="4">    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">);</a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">        <span class="co">/* reg */</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">    <span class="co">/* reg */</span></a>
 <a class="sourceLine" id="cb3-8" data-line-number="8">    <span class="co">//Désactive tout par défaut</span></a>
 <a class="sourceLine" id="cb3-9" data-line-number="9">    <span class="dt">reg</span> [<span class="dv">8</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_leds = <span class="bn">9&#39;b000000000</span>;</a>
 <a class="sourceLine" id="cb3-10" data-line-number="10"></a>
@@ -241,7 +244,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb4-4" data-line-number="4">    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5">);</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">        <span class="co">/* reg */</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">    <span class="co">/* reg */</span></a>
 <a class="sourceLine" id="cb4-8" data-line-number="8">    <span class="co">//Désactive tout par défaut</span></a>
 <a class="sourceLine" id="cb4-9" data-line-number="9">    <span class="dt">reg</span> [<span class="dv">8</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_leds = <span class="bn">9&#39;b000000000</span>;</a>
 <a class="sourceLine" id="cb4-10" data-line-number="10"></a>

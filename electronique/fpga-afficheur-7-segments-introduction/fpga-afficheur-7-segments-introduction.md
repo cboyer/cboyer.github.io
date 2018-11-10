@@ -91,7 +91,7 @@ module SevenSegment (
 	output [8:0] DISPLAY_1
 );
 
-    	/* reg */
+	/* reg */
 	//Désactive tout par défaut
 	reg [8:0] display_1_leds = 9'b000000000;
 
@@ -120,7 +120,7 @@ module SevenSegment (
 	output [8:0] DISPLAY_1
 );
 
-    	/* reg */
+	/* reg */
 	//Désactive tout par défaut
 	reg [8:0] display_1_leds = 9'b000000000;
 
@@ -164,7 +164,7 @@ module SevenSegment (
 	output [8:0] DISPLAY_1
 );
 
-    	/* reg */
+	/* reg */
 	//Désactive tout par défaut
 	reg [8:0] display_1_leds = 9'b000000000;
 
