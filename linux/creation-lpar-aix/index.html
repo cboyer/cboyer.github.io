@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="HandheldFriendly" content="True">
+  <title>Création manuelle d’un LPAR AIX depuis le VIOS - C. Boyer</title>
+  <meta name="description" content="Monter manuellement un LPAR AIX 7.1 depuis le VIOS." />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="IBM, AIX, LPAR, HMC, VIOS, création, manuelle" />
+  <link rel="canonical" href="https://cboyer.github.io/linux/creation-lpar-aix" />
+  <meta property="og:title" content="Création manuelle d’un LPAR AIX depuis le VIOS - C. Boyer" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Monter manuellement un LPAR AIX 7.1 depuis le VIOS." />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="website" />
+  <meta property="og:updated_time" content="2018-11-17T13:09:10-04:00" />
+  <meta property="article:published_time" content="2015-07-09T13:23:14-04:00" />
+  <meta property="article:modified_time" content="2018-11-17T13:09:10-04:00" />
+  <meta name="generator" content="pandoc" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style>
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="links">
+      <a href="../../rechercher.html" class="search" title="Rechercher">
+          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
+            <title id="search-icon">Rechercher</title>
+            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
+          </svg>
+      </a>
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+
+    <h1>cboyer.github.io</h1>
+
+    <ul class="menu">
+      <li class="menu_item"><a href="../../index.html">Publications</a></li>
+      <li class="menu_item active"><a href="../../linux.html">Linux</a></li>
+      <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
+      <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
+    </ul>
+
+<article>
+<header id="title-block-header">
+<h2 class="title">Création manuelle d’un LPAR AIX depuis le VIOS</h2>
+ <span class="author">C. Boyer</span>,   <span class="date">2015-07-09 13:23:14 (UTC-04:00)</span>
+</header>
+<p>Quelques notes pour le montage d’un LPAR AIX 7.1 depuis le VIOS sans utiliser d’HMC.</p>
+<p>Accepter la license du VIOS:</p>
+<pre class="console"><code>license -accept</code></pre>
+<p>Passer en root:</p>
+<pre class="console"><code>oem_setup_env
+id</code></pre>
+<p>Installer la mise à jour du VIOS:</p>
+<pre class="console"><code>updateios -accept -dev /home/padmin/Extact/ -install</code></pre>
+<p>Changer le prompt:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="bu">echo</span> <span class="st">&quot;export ENV=/home/padmin/.kshrc&quot;</span> <span class="op">&gt;&gt;</span> /home/padmin/.profile</a></code></pre></div>
+<p>Créer le /home/padmin/.kshrc avec:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="bu">export</span> <span class="va">HOST=</span><span class="st">&quot;</span><span class="va">$(</span><span class="ex">/usr/bin/uname</span> -n<span class="va">)</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">if</span><span class="bu"> [</span> <span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;root&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> # &quot;</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw">else</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> $ &quot;</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="kw">fi</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw">set</span> <span class="ex">-o</span> vi</a></code></pre></div>
+<p>Changer la date (mmJJHHMMAAAA):</p>
+<pre class="console"><code>chdate 070913232015</code></pre>
+<p>Détails des interfaces:</p>
+<pre class="console"><code>entstat ent0
+entstat -d ent0</code></pre>
+<p>Statut des interfaces:</p>
+<pre class="console"><code>netstat -state
+lstcpip
+lstcpip -interfaces
+netstat -v en0 | egrep -i &quot;link|speed&quot;</code></pre>
+<p>Outil de configuration:</p>
+<pre class="console"><code>smit</code></pre>
+<p>Configuration IP:</p>
+<pre class="console"><code>mktcpip -hostname violab02 -inetaddr 192.168.0.22 -interface en0 -start -netmask 255.255.255.0 -gateway 192.168.0.100 -nsrvaddr 192.168.0.15 -nsrvdomain ibmlabo.lab
+smitty tcpip</code></pre>
+<p>Afficher les routes:</p>
+<pre class="console"><code>netstat -routinfo
+netstat -rn</code></pre>
+<p>Lister les périphériques:</p>
+<pre class="console"><code>lsdev</code></pre>
+<p>Lister les slots des périphériques:</p>
+<pre class="console"><code>lsdev -slots</code></pre>
+<p>Lister les lecteur CD:</p>
+<pre class="console"><code>lsdev -type optical</code></pre>
+<p>Lister les disques durs:</p>
+<pre class="console"><code>lsdev -type disk
+lspv
+lspv hdisk1</code></pre>
+<p>Statistiques mémoire:</p>
+<pre class="console"><code>lshwres -r mem --level sys</code></pre>
+<p>Lister les LPAR:</p>
+<pre class="console"><code>lssyscfg -r lpar -F lpar_id,name,state</code></pre>
+<p>Reset de la configuration IP:</p>
+<pre class="console"><code>rmtcpip -interface en1</code></pre>
+<p>Créer une interface partagée SEA:</p>
+<pre class="console"><code>mkvdev -sea ent1 -vadapter ent5 -default ent5 -defaultid 1</code></pre>
+<p>Lister le mappage des interfaces:</p>
+<pre class="console"><code>lsmap -all -net</code></pre>
+<p>Trouver le port_vlan_id pour le slot de l’interface réseau:</p>
+<pre class="console"><code>lshwres --level lpar -r virtualio --rsubtype eth</code></pre>
+<p>Créer le LPAR (<code>virtual_eth_adapters</code> = <em>slot_num/ieee_virtual_eth/port_vlan_id/addl_vlan_ids/is_trunk/trunk_priority</em>):</p>
+<pre class="console"><code>mksyscfg -r lpar -i &#39;name=aixlab02,profile_name=aixlab02,lpar_env=aixlinux,min_mem=8192,desired_mem=16384,max_mem=32768,proc_mode=shared,min_procs=1,desired_procs=2,max_procs=4,min_proc_units=1,desired_proc_units=2,max_proc_units=4,sharing_mode=uncap,uncap_weight=128,boot_mode=norm,auto_start=1,&quot;virtual_scsi_adapters=2/client/1/vioserver/11/1&quot;,&quot;virtual_eth_adapters=4/0/2//0/0&quot;&#39;</code></pre>
+<p>Éditer un profil LPAR (le LPAR doit être off):</p>
+<pre class="console"><code>chsyscfg -r prof -i &#39;name=aixlab02,lpar_name=aixlab02,&quot;virtual_eth_adapters=4/0/2//0/0&quot;&#39;</code></pre>
+<p>Changer le nom d’une LPAR:</p>
+<pre class="console"><code>chsyscfg -r lpar -i &quot;name=LPAR_Name,new_name=New_LPAR_Name&quot;</code></pre>
+<p>Changer le min/desired/maximum memory:</p>
+<pre class="console"><code>chsyscfg -r prof -i &quot;name=Profile_Name,lpar_name=LPAR_Name,min_mem=512,desired_mem=19456,max_mem=20480&quot;</code></pre>
+<p>Changer le min/desired/maximum processor units:</p>
+<pre class="console"><code>chsyscfg -r prof -i &quot;name=Profile_Name,lpar_name=LPAR_Name,min_proc_units=0.2,desired_proc_units=0.5,max_proc_units=2.0&quot;</code></pre>
+<p>Changer le min/desired/maximum virtual processor:</p>
+<pre class="console"><code>chsyscfg -r prof -i &quot;name=Profile_Name,lpar_name=LPAR_Name,min_procs=1,desired_procs=2,max_procs=6&quot;</code></pre>
+<p>Changer le capped/uncapped (sharing_mode=cap|uncap;uncap_weight=[0;128]):</p>
+<pre class="console"><code>chsyscfg -r prof -i &quot;name=Profile_Name,lpar_name=LPAR_Name,sharing_mode=uncap,uncap_weight=128&quot;</code></pre>
+<p>Lister les LPAR:</p>
+<pre class="console"><code>lssyscfg -r lpar</code></pre>
+<p>Afficher le profil d’un LPAR:</p>
+<pre class="console"><code>lssyscfg -r prof
+lssyscfg -r prof --filter lpar_names=aixlba02
+lssyscfg -r prof --filter lpar_ids=2</code></pre>
+<p>Recharger la liste des disques visibles par le VIOS:</p>
+<pre class="console"><code>cfgdev</code></pre>
+<p>Lister les virtual SCSI server (vhostX):</p>
+<pre class="console"><code>lsdev -virtual</code></pre>
+<p>Vérifier les slots vhost:</p>
+<pre class="console"><code>lsmap -all</code></pre>
+<p>Créer un vg pour créer les disques virtuels à l’intérieur:</p>
+<pre class="console"><code>mkvg -f -vg aixlab02_vg hdisk4</code></pre>
+<p>Ajouter un disk dans le vg:</p>
+<pre class="console"><code>extendvg aixlab02_vg hdisk5</code></pre>
+<p>Lister les vg:</p>
+<pre class="console"><code>lsvg</code></pre>
+<p>Afficher détails d’un vg:</p>
+<pre class="console"><code>lsvg aixlab02_vg</code></pre>
+<p>Créer un lv dans le vg qui va servir de disque virtuel au LPAR:</p>
+<pre class="console"><code>mklv -lv aixlab02 aixlab02_vg 140G</code></pre>
+<p>Assigner le disque à un vhost et lister les vhosts:</p>
+<pre class="console"><code>mkvdev -vdev aixlab02 -vadapter vhost0 -dev vaixlab02
+lsdev -virtual
+lsmap -all</code></pre>
+<p>Assigner le lecteur CD à un vhosts:</p>
+<pre class="console"><code>mkvdev -vdev cd0 -vadapter vhost0 -dev vcd</code></pre>
+<p>Booter le LPAR en SMS menu et afficher son statut:</p>
+<pre class="console"><code>chsysstate -r lpar -o on -b sms --id 2</code></pre>
+<p>Créer un terminal virtuel pour se connecter au LPAR:</p>
+<pre class="console"><code>mkvt -id 2</code></pre>
+<p>Supprimer le terminal virtuel:</p>
+<pre class="console"><code>rmvt -id 2</code></pre>
+<p>Récupérer l’id du CD dans le LPAR pour le supprimer après:</p>
+<pre class="console"><code>lsdev -l cd0 -F parent</code></pre>
+<p>Supprimer le CD du LPAR:</p>
+<pre class="console"><code>rmdev -dl vscsiXX -R</code></pre>
+<p>Rattacher le CD dans un autre LPAR:</p>
+<pre class="console"><code>cfgmgr</code></pre>
+<p>Éteindre le LPAR:</p>
+<pre class="console"><code>chsysstate -o shutdown -r lpar --immed -n aixlab02</code></pre>
+<p>Démarrer le LPAR en mode normal:</p>
+<pre class="console"><code>chsysstate -o on -b norm -r lpar -n aixlab02</code></pre>
+<h4 id="sources">Sources</h4>
+<ul>
+<li><a href="http://www.unixbulletin.com/create-an-lpar-running-aix-7-1-on-a-power7-blade-with-vios-2-2/">UnixBulletin</a></li>
+</ul>
+</article>
+
+<div id="footer">
+  <hr />
+  <span class="copyrights">© 2018 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+</div>
+
+</div>
+</body>
+</html>

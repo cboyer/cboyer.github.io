@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="HandheldFriendly" content="True">
+  <title>Confidentialité et paramètres avancés dans Firefox - C. Boyer</title>
+  <meta name="description" content="Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance." />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="firefox, confidentialité, paramètres, avancé, about config" />
+  <link rel="canonical" href="https://cboyer.github.io/linux/firefox-parametres-confidentialite" />
+  <meta property="og:title" content="Confidentialité et paramètres avancés dans Firefox - C. Boyer" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance." />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="website" />
+  <meta property="og:updated_time" content="2018-11-17T11:58:22-04:00" />
+  <meta property="article:published_time" content="2018-11-17T11:58:22-04:00" />
+  <meta property="article:modified_time" content="2018-11-17T11:58:22-04:00" />
+  <meta name="generator" content="pandoc" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style>
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="links">
+      <a href="../../rechercher.html" class="search" title="Rechercher">
+          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
+            <title id="search-icon">Rechercher</title>
+            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
+          </svg>
+      </a>
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+
+    <h1>cboyer.github.io</h1>
+
+    <ul class="menu">
+      <li class="menu_item"><a href="../../index.html">Publications</a></li>
+      <li class="menu_item active"><a href="../../linux.html">Linux</a></li>
+      <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
+      <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
+    </ul>
+
+<article>
+<header id="title-block-header">
+<h2 class="title">Confidentialité et paramètres avancés dans Firefox</h2>
+ <span class="author">C. Boyer</span>,   <span class="date">2018-11-17 11:58:22 (UTC-04:00)</span>
+</header>
+<p>Firefox possède de nombreux paramètres qui ne sont pas accessibles par les menus de l’interface graphique (Édition &gt; Préférences). Pour y accéder, tapez <code>about:config</code> dans la barre d’adresse (une confirmation va vous être demandée car certaines modifications peuvent entrainer des disfonctionnements). Voici quelques paramètres intéressants que j’utilise pour la confidentialité. Une liste plus complète est disponible dans les sources.</p>
+<p>Il est important de noter que certains risquent de vous refuser l’accès à leurs services (ou de mal fonctionner) s’ils ne peuvent plus abuser de vos données personnelles. Cela a été le cas pour moi avec un site d’hébergement de photo qui me refusait clairement l’accès car je ne transmettais plus d’entête Referer (page consultée précédemment). Modifier les paramètres relatifs aux cookies pose énormément de problèmes car c’est là que se situent principalement les abus d’accès aux données personnelles.</p>
+<p>Empêcher la désactivation du click droit (peut entrainer quelques problèmes si le site utilise son propre menu contextuel):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="va">dom</span>.<span class="va">event</span>.<span class="va">contextmenu</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
+<p>Éviter le blocage du copier/coller:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="va">dom</span>.<span class="va">event</span>.<span class="va">clipboardevents</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
+<p>Empêcher la consultation de la liste des modules installés (Adblock, etc.).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="va">plugins</span>.<span class="at">enumerable_names</span> <span class="op">=</span> blank</a></code></pre></div>
+<p>Ne plus transmettre l’URL consultée précédemment (entêtes Referer):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="va">network</span>.<span class="va">http</span>.<span class="at">sendRefererHeader</span> <span class="op">=</span> <span class="dv">0</span></a></code></pre></div>
+<p>Falsifer l’URL consultée précédemment:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="va">network</span>.<span class="va">http</span>.<span class="va">referer</span>.<span class="at">spoofSource</span> <span class="op">=</span> <span class="kw">true</span></a></code></pre></div>
+<p>Active la protection contre les trackers:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="va">privacy</span>.<span class="va">trackingprotection</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">true</span></a></code></pre></div>
+<p>Désactiver tous les types de géolocalisation:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="va">geo</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="va">geo</span>.<span class="va">wifi</span>.<span class="at">uri</span> <span class="op">=</span> blank</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="va">browser</span>.<span class="va">search</span>.<span class="va">geoip</span>.<span class="at">url</span> <span class="op">=</span> blank</a></code></pre></div>
+<p>Désactiver l’extension Pocket imposée dans Firefox (non open source):</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">site</span> <span class="op">=</span> blank</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">oAuthConsumerKey</span> <span class="op">=</span> blank</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">api</span> <span class="op">=</span> blank</a></code></pre></div>
+<p>Désactiver l’accès au statut de la batterie (utilisé par les trackers pour l’identification):</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="va">dom</span>.<span class="va">battery</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
+<p>Supprime un identifiant télémétrique inconnu (ne peut qu’être utilisé pour vous identifier):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="va">toolkit</span>.<span class="va">telemetry</span>.<span class="at">cachedClientID</span> <span class="op">=</span> blank</a></code></pre></div>
+<p>Désactiver le suivi de vos click:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="va">browser</span>.<span class="at">send_pings</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
+<h4 id="sources">Sources</h4>
+<ul>
+<li><a href="https://gist.github.com/0XDE57/fbd302cef7693e62c769" class="uri">https://gist.github.com/0XDE57/fbd302cef7693e62c769</a></li>
+</ul>
+</article>
+
+<div id="footer">
+  <hr />
+  <span class="copyrights">© 2018 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+</div>
+
+</div>
+</body>
+</html>

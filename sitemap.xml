@@ -2,92 +2,104 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://cboyer.github.io</loc>
-        <lastmod>2018-11-10T17:32:31-05:00</lastmod>
+        <lastmod>2018-11-17T18:47:15-05:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/linux.html</loc>
-        <lastmod>2018-11-10T17:32:31-05:00</lastmod>
+        <lastmod>2018-11-17T18:47:15-05:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/electronique.html</loc>
-        <lastmod>2018-11-10T17:32:31-05:00</lastmod>
+        <lastmod>2018-11-17T18:47:15-05:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/apropos.html</loc>
-        <lastmod>2018-11-10T17:32:31-05:00</lastmod>
+        <lastmod>2018-11-17T18:47:15-05:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>https://cboyer.github.io/electronique/automobile-bus-can-obd2</loc>
+        <loc>https://cboyer.github.io/linux/firefox-parametres-confidentialite/</loc>
+        <lastmod>2018-11-17T11:58:22-04:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://cboyer.github.io/electronique/automobile-bus-can-obd2/</loc>
         <lastmod>2018-11-01T18:08:32-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/linux/systeme-embarque-linux-buildroot</loc>
+        <loc>https://cboyer.github.io/linux/systeme-embarque-linux-buildroot/</loc>
         <lastmod>2018-11-04T12:42:12-05:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/linux/nginx-authentification-ldap</loc>
+        <loc>https://cboyer.github.io/linux/nginx-authentification-ldap/</loc>
         <lastmod>2018-11-01T18:08:32-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/linux/dreamscreen-daemon</loc>
+        <loc>https://cboyer.github.io/linux/dreamscreen-daemon/</loc>
         <lastmod>2018-11-01T18:08:32-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/linux/page-authentification-grafana</loc>
+        <loc>https://cboyer.github.io/linux/page-authentification-grafana/</loc>
         <lastmod>2018-11-01T18:08:32-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/linux/filtrer-publicites-dns-unbound</loc>
+        <loc>https://cboyer.github.io/linux/filtrer-publicites-dns-unbound/</loc>
         <lastmod>2018-11-01T18:08:32-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteurs-multiples</loc>
+        <loc>https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteurs-multiples/</loc>
         <lastmod>2018-11-01T18:08:32-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteur-unique</loc>
+        <loc>https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteur-unique/</loc>
         <lastmod>2018-11-01T18:08:32-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/electronique/recepteur-infrarouge-usb-atmega32u4</loc>
+        <loc>https://cboyer.github.io/electronique/recepteur-infrarouge-usb-atmega32u4/</loc>
         <lastmod>2018-11-01T18:08:32-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/electronique/fpga-afficheur-7-segments-introduction</loc>
+        <loc>https://cboyer.github.io/electronique/fpga-afficheur-7-segments-introduction/</loc>
         <lastmod>2018-11-01T18:08:32-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/linux/systeme-fichiers-distribue-glusterfs</loc>
+        <loc>https://cboyer.github.io/linux/systeme-fichiers-distribue-glusterfs/</loc>
         <lastmod>2018-11-04T11:04:32-05:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://cboyer.github.io/linux/creation-lpar-aix/</loc>
+        <lastmod>2018-11-17T13:09:10-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
