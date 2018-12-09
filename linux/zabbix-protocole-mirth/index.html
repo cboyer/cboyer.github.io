@@ -185,7 +185,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb3-18" data-line-number="18"><span class="va">zabbix_message_bytes</span>.<span class="at">put</span>(data_bytes)<span class="op">;</span></a>
 <a class="sourceLine" id="cb3-19" data-line-number="19"></a>
 <a class="sourceLine" id="cb3-20" data-line-number="20"><span class="cf">return</span> <span class="va">Packages</span>.<span class="va">org</span>.<span class="va">apache</span>.<span class="va">commons</span>.<span class="va">codec</span>.<span class="va">binary</span>.<span class="va">Base64</span>.<span class="at">encodeBase64String</span>(<span class="va">zabbix_message_bytes</span>.<span class="at">array</span>())<span class="op">;</span></a></code></pre></div>
-<p>Notons qu’il est nécessaire d’encoder le message en base 64 pour fonctionner en mode binaire dans Mirth. Coté Zabbix toute la configuration s’effectue via un <a href="https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml">template</a> pour la définission des items/clé à monitorer.</p>
+<p>Notons qu’il est nécessaire d’encoder le message en base 64 pour fonctionner en mode binaire dans Mirth. Coté Zabbix toute la configuration s’effectue via un <a href="https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml">template</a> pour la définition des items/clé à monitorer.</p>
 <h4 id="sources">Sources</h4>
 <ul>
 <li><a href="https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive" class="uri">https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive</a></li>

@@ -89,7 +89,7 @@ return Packages.org.apache.commons.codec.binary.Base64.encodeBase64String(zabbix
 ```
 
 Notons qu'il est nécessaire d'encoder le message en base 64 pour fonctionner en mode binaire dans Mirth.
-Coté Zabbix toute la configuration s'effectue via un [template](https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml) pour la définission des items/clé à monitorer.
+Coté Zabbix toute la configuration s'effectue via un [template](https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml) pour la définition des items/clé à monitorer.
 
 
 #### Sources
