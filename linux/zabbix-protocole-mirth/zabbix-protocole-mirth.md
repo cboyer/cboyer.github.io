@@ -58,7 +58,7 @@ switch (item_requested) {
 		break;
 
 	default:
-		msg = "ZBX_NOTSUPPORTED\x00Key not implemented in Mirthix: " + msg;
+		msg = "ZBX_NOTSUPPORTED\x00Key not implemented in Mirthix: " + item_requested;
 }
 ```
 
