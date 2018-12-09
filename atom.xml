@@ -3,12 +3,22 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2018-11-17T18:47:15-05:00</updated>
+    <updated>2018-12-08T19:06:35-05:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
     <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <entry>
+        <title>Implémentation du protocole Zabbix dans Mirth Connect</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/zabbix-protocole-mirth/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:b7530ed8-20d2-5fd9-ac96-e4a96cc91f2d</id>
+        <published>2018-12-08T18:23:15-04:00</published>
+        <updated>2018-12-08T18:23:15-04:00</updated>
+        <summary>Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener.</summary>
+    </entry>
     <entry>
         <title>Confidentialité et paramètres avancés dans Firefox</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
