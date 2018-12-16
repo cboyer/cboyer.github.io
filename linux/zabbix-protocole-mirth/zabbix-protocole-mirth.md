@@ -15,7 +15,7 @@ abstract: |
 Les moteurs d'intégration constituent le véritable systèmes nerveux pour les échanges de données entre application.
 Leur importance implique la nécessité de monitorer ces échanges peut s'avérer plus ou moins compliqué dépendamment des technologies utilisées.
 Nous verrons ici comment rendre cela possible avec deux solutions Open Source: Zabbix pour le monitoring et Mirth Connect pour l'intégration.
-Cette article décrit brièvement un projet disponible sur Github sous licence GPLv3: [https://github.com/cboyer/mirth-zabbix](https://github.com/cboyer/mirth-zabbix).
+Cet article décrit brièvement un projet disponible sur Github sous licence GPLv3: [https://github.com/cboyer/mirth-zabbix](https://github.com/cboyer/mirth-zabbix).
 
 ### Zabbix
 
@@ -37,7 +37,7 @@ Les données envoyées sont en texte clair au format JSON (Zabbix peut crypter s
 
 ### Mirth Connect
 
-L'objectif est d'imiter le fonctionnement de l'agent Zabbix avec un canal Mirth. Dans un premier temps un connecteur source de type TCP Listener est nécessaire afin d'accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu'ils soient altérés par les standards d'encodage (UTF-8, etc.) liés aux chaînes de caractères. Tous ces paramètre peuvent être configurés directement dans Mirth sans code.
+L'objectif est d'imiter le fonctionnement de l'agent Zabbix avec un canal Mirth. Dans un premier temps un connecteur source de type TCP Listener est nécessaire afin d'accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu'ils soient altérés par les standards d'encodage (UTF-8, etc.) liés aux chaînes de caractères. Tous ces paramètres peuvent être configurés directement dans Mirth sans code.
 
 Une fois le connecteur source mis en place, nous allons faire appel à un [transformer](https://github.com/cboyer/mirth-zabbix/blob/master/src/destination_transformer.js) afin de récupérer les données demandées par le serveur et les transmettre au connecteur de destination. C'est ici que sont centralisées les fonctionnalités de l'agent Zabbix, plus précisément les clés supportées. Concrètement il s'agit un simple `switch` pour exécuter du code en fonction de la métrique demandée par le serveur:
 
@@ -89,7 +89,7 @@ return Packages.org.apache.commons.codec.binary.Base64.encodeBase64String(zabbix
 ```
 
 Notons qu'il est nécessaire d'encoder le message en base 64 pour fonctionner en mode binaire dans Mirth.
-Coté Zabbix toute la configuration s'effectue via un [template](https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml) pour la définition des items/clé à monitorer.
+Coté Zabbix toute la configuration s'effectue via un [template](https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml) pour la définition des items/clés à monitorer.
 
 
 #### Sources

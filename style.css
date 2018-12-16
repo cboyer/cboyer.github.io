@@ -18,15 +18,20 @@ th, td { border: 1px solid #b6b6b6; padding: 5px; }
 .button { width: 30px; }
 .author, .date { font-size: 0.8em; }
 #title-block-header { margin: 0 0 50px 0; }
-#links{ float: right; padding-top: 7px; }
+#header { margin-left: auto; margin-right: auto; max-width: 1150px; }
+#header div { float: left; overflow:hidden; }
+#site_title { width: 70%; }
+#links{ width: 30%; padding-top: 31px; text-align: right; }
 #menu { margin-bottom: 60px; }
 #footer { width: 100%; margin: 160px 0 50px 0; text-align: center; }
+
 @media print {
   body { font-size: 13px; }
   code, code.sourceCode { font-size: 70%; }
   #links, #menu, .menu_item { display: none; }
   h2.title { margin: 0; }
 }
+
 @media screen {
   body { font-size: 18px; }
   p { line-height: 1.5; }
