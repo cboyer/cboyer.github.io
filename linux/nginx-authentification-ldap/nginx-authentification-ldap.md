@@ -67,7 +67,7 @@ sudo systemctl daemon-reload
 
 Pour la suite, il suffit de suivre la documentation du module et modifier le fichier `/usr/local/nginx/conf/nginx.conf`.
 
-### Sources
+## Sources
 
  - [https://github.com/kvspb/nginx-auth-ldap/issues/180](https://github.com/kvspb/nginx-auth-ldap/issues/180)
  - [https://github.com/kvspb/nginx-auth-ldap](https://github.com/kvspb/nginx-auth-ldap)

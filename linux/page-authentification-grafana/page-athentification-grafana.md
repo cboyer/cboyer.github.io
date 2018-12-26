@@ -188,7 +188,7 @@ NGINX se fie à l'URI pour fournir les pages demandée: la chaîne de caractère
 
 J'ai également pu observer l'affichage d'une erreur 404 de Grafana pendant une fraction de seconde après l'authentification sans en trouver l'origine.
 
-### Sources:
+## Sources:
 
  - [Grafana derrière un proxy](http://docs.grafana.org/installation/behind_proxy)
  - [NGINX en reverse proxy](http://nginx.org/en/docs/http/ngx_http_core_module.html#location)

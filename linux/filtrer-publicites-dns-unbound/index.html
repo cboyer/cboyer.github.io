@@ -124,12 +124,14 @@ code span.wa { color: #bf0303; } /* Warning */
       </a>
     </div>
 
-    <ul class="menu">
-      <li class="menu_item"><a href="../../index.html">Publications</a></li>
-      <li class="menu_item active"><a href="../../linux.html">Linux</a></li>
-      <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
-      <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
-    </ul>
+    <div id="menu">
+      <ul class="menu">
+        <li class="menu_item"><a href="../../index.html">Publications</a></li>
+        <li class="menu_item active"><a href="../../linux.html">Linux</a></li>
+        <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
+        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
+      </ul>
+    </div>
   </div>
 
   <div id="container">
@@ -196,7 +198,7 @@ local-data: &quot;patate A 192.168.10.12&quot;</code></pre>
 <p>Pour redémarrer Unbound:</p>
 <pre class="console"><code>systemctl restart unbound</code></pre>
 <p>Il ne reste plus qu’à faire pointer vos clients vers le serveur DNS en ajoutant l’adresse IP dans la configuration de vos machines et/ou dans votre DHCP (routeur).</p>
-<h3 id="sources">Sources:</h3>
+<h2 id="sources">Sources:</h2>
 <ul>
 <li><a href="https://etherarp.net/build-an-adblocking-dns-server/index.html" class="uri">https://etherarp.net/build-an-adblocking-dns-server/index.html</a></li>
 <li><a href="https://wiki.archlinux.org/index.php/unbound" class="uri">https://wiki.archlinux.org/index.php/unbound</a></li>
@@ -206,7 +208,6 @@ local-data: &quot;patate A 192.168.10.12&quot;</code></pre>
 </article>
 
 <div id="footer">
-  <hr />
   <span class="copyrights">© 2018 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
 </div>
 

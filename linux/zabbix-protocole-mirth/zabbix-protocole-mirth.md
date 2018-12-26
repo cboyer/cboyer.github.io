@@ -17,11 +17,11 @@ Leur importance implique la nécessité de monitorer ces échanges peut s'avére
 Nous verrons ici comment rendre cela possible avec deux solutions Open Source: Zabbix pour le monitoring et Mirth Connect pour l'intégration.
 Cet article décrit brièvement un projet disponible sur Github sous licence GPLv3: [https://github.com/cboyer/mirth-zabbix](https://github.com/cboyer/mirth-zabbix).
 
-### Zabbix
+## Zabbix
 
 La solution Zabbix met en oeuvre un serveur chargé de collecter les données auprès des équipements notamment via un agent (Zabbix peut également utiliser d'autres standards comme SNMP). Cette stratégie de "polling" implique dans un premier temps une connexion à l'agent pour l'interroger concernant la valeur d'une métrique (clé) que ce dernier lui retournera.
 
-### Le protocole Zabbix
+## Le protocole Zabbix
 
 Zabbix utilise un protocole relativement simple: il repose sur des échanges de données au format JSON sur TCP. Étant une technologie libre et open source nous disposons du code source de l'agent Zabbix ainsi qu'une excellente documentation pour en comprendre le fonctionnement (cf. sources en bas de page).
 
@@ -31,13 +31,13 @@ Zabbix structure ses messages de la façon suivante:
 <Entête> <Longueur des données> <Données>
 ```
 
-L'entête est une chaîne de caractères fixe: `"ZBXD\x01"`. Elle est composé de la chaîne `ZBXD` et de l'octet `0x01`.
+L'entête est une chaîne de caractères fixe: `"ZBXD\x01"`. Elle est composée de la chaîne `ZBXD` et de l'octet `0x01`.
 La quantité de données est un entier non signé sur 8 octets en little-endian qui représente la longueur de la chaîne contenant les données JSON. Zabbix est limité à une quantité maximale de 134217728 octets.
 Les données envoyées sont en texte clair au format JSON (Zabbix peut crypter ses échanges, cas que nous ne traiterons pas ici).
 
-### Mirth Connect
+## Mirth Connect
 
-L'objectif est d'imiter le fonctionnement de l'agent Zabbix avec un canal Mirth. Dans un premier temps un connecteur source de type TCP Listener est nécessaire afin d'accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu'ils soient altérés par les standards d'encodage (UTF-8, etc.) liés aux chaînes de caractères. Tous ces paramètres peuvent être configurés directement dans Mirth sans code.
+L'objectif est d'imiter le fonctionnement de l'agent Zabbix avec un canal Mirth. Dans un premier temps un connecteur source de type TCP Listener est nécessaire afin d'accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu'ils soient altérés par les standards d'encodage (UTF-8, etc.) liés aux chaînes de caractères. Le caractère `0x0A` sera utilisé comme indicateur de fin de message. Tous ces paramètres sont configurables directement dans Mirth sans la moindre ligne de code.
 
 Une fois le connecteur source mis en place, nous allons faire appel à un [transformer](https://github.com/cboyer/mirth-zabbix/blob/master/src/destination_transformer.js) afin de récupérer les données demandées par le serveur et les transmettre au connecteur de destination. C'est ici que sont centralisées les fonctionnalités de l'agent Zabbix, plus précisément les clés supportées. Concrètement il s'agit un simple `switch` pour exécuter du code en fonction de la métrique demandée par le serveur:
 
@@ -92,7 +92,7 @@ Notons qu'il est nécessaire d'encoder le message en base 64 pour fonctionner en
 Coté Zabbix toute la configuration s'effectue via un [template](https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml) pour la définition des items/clés à monitorer.
 
 
-#### Sources
+## Sources
 
  - [https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive](https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive)
  - [https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen](https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen)

@@ -90,7 +90,7 @@ make
 ```
 
 Après un long moment de compilation (notamment pour la toolchain), l'image devrait être disponible dans `output/images/`.
-Au final je suis parvenu à un partition `/` de 30Mo, `/boot` de 10Mo et une utilisation de la RAM sur le Raspberry ne dépasse pas 16Mo. Il aurait été possible de descendre encore en retirant des éléments dans BusyBox.
+Au final je suis parvenu à une partition `/` de 30Mo, `/boot` de 10Mo et une utilisation de la RAM sur le Raspberry ne dépassant pas 16Mo. Il aurait été possible de descendre encore en retirant des éléments dans BusyBox.
 
 
 ## Tests avec Qemu

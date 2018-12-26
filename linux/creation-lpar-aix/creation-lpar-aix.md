@@ -321,8 +321,3 @@ Démarrer le LPAR en mode normal:
 ```console
 chsysstate -o on -b norm -r lpar -n aixlab02
 ```
-
-
-#### Sources
-
- - [UnixBulletin](http://www.unixbulletin.com/create-an-lpar-running-aix-7-1-on-a-power7-blade-with-vios-2-2/)

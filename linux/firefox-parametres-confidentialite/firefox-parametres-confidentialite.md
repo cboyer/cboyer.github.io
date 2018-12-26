@@ -83,12 +83,12 @@ Supprime un identifiant télémétrique inconnu (ne peut qu'être utilisé pour 
 toolkit.telemetry.cachedClientID = blank
 ```
 
-Désactiver le suivi de vos click:
+Désactiver le suivi de vos clicks:
 
 ```javascript
 browser.send_pings = false
 ```
 
-#### Sources
+## Sources
 
  - [https://gist.github.com/0XDE57/fbd302cef7693e62c769](https://gist.github.com/0XDE57/fbd302cef7693e62c769)
