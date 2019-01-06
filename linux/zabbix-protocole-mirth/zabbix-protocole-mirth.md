@@ -1,7 +1,7 @@
 ---
 title: "Implémentation du protocole Zabbix dans Mirth Connect"
 date: "2018-12-08T18:23:15-04:00"
-updated: "2018-12-08T18:23:15-04:00"
+updated: "2019-03-03T17:39:47-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -11,15 +11,11 @@ abstract: |
   Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener.
 ---
 
+L'objectif est d'implémenter un agent [Zabbix](https://www.zabbix.com/) dans [Mirth Connect](https://www.nextgen.com/products-and-services/NextGen-Connect-Integration-Engine-Downloads) comme n'importe quel autre échange de données afin de monitorer l'activité de ce dernier (erreurs, statuts, volumes de transactions, etc.).
+L'intégralité du code source de ce projet est disponible sur Github (licence GPLv3): [https://github.com/cboyer/mirth-zabbix](https://github.com/cboyer/mirth-zabbix).
 
-Les moteurs d'intégration constituent le véritable systèmes nerveux pour les échanges de données entre application.
-Leur importance implique la nécessité de monitorer ces échanges peut s'avérer plus ou moins compliqué dépendamment des technologies utilisées.
-Nous verrons ici comment rendre cela possible avec deux solutions Open Source: Zabbix pour le monitoring et Mirth Connect pour l'intégration.
-Cet article décrit brièvement un projet disponible sur Github sous licence GPLv3: [https://github.com/cboyer/mirth-zabbix](https://github.com/cboyer/mirth-zabbix).
+Le monitoring avec Zabbix repose sur un serveur chargé de collecter les données auprès des équipements notamment via un agent (Zabbix peut également utiliser d'autres standards comme SNMP). Cette stratégie de "polling" implique dans un premier temps une connexion à l'agent pour l'interroger concernant la valeur d'une métrique (clé) que ce dernier lui retournera.
 
-## Zabbix
-
-La solution Zabbix met en oeuvre un serveur chargé de collecter les données auprès des équipements notamment via un agent (Zabbix peut également utiliser d'autres standards comme SNMP). Cette stratégie de "polling" implique dans un premier temps une connexion à l'agent pour l'interroger concernant la valeur d'une métrique (clé) que ce dernier lui retournera.
 
 ## Le protocole Zabbix
 
@@ -28,8 +24,15 @@ Zabbix utilise un protocole relativement simple: il repose sur des échanges de 
 Zabbix structure ses messages de la façon suivante:
 
 ```console
-<Entête> <Longueur des données> <Données>
+<Entête> <Quantité des données> <Données>
 ```
+
+&nbsp;|**Entête**|**Quantité de données**|**Données**
+:-----:|:-----:|:-----:|:-----:
+**Type**|Chaîne de caractères|Entier (little endian)|Chaîne de caractères
+**Taille**|5 octets|8 octets|Variable, maximum 134217728 octets
+**Contenu**|"ZBXD\\x01"|Taille du champ Données|Données de monitoring (JSON)
+
 
 L'entête est une chaîne de caractères fixe: `"ZBXD\x01"`. Elle est composée de la chaîne `ZBXD` et de l'octet `0x01`.
 La quantité de données est un entier non signé sur 8 octets en little-endian qui représente la longueur de la chaîne contenant les données JSON. Zabbix est limité à une quantité maximale de 134217728 octets.
@@ -37,7 +40,9 @@ Les données envoyées sont en texte clair au format JSON (Zabbix peut crypter s
 
 ## Mirth Connect
 
-L'objectif est d'imiter le fonctionnement de l'agent Zabbix avec un canal Mirth. Dans un premier temps un connecteur source de type TCP Listener est nécessaire afin d'accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu'ils soient altérés par les standards d'encodage (UTF-8, etc.) liés aux chaînes de caractères. Le caractère `0x0A` sera utilisé comme indicateur de fin de message. Tous ces paramètres sont configurables directement dans Mirth sans la moindre ligne de code.
+Pour imiter le fonctionnement de l'agent Zabbix avec un canal Mirth un connecteur source de type TCP Listener est nécessaire afin d'accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu'ils soient altérés par les standards d'encodage (UTF-8, etc.) liés aux chaînes de caractères. Le caractère `0x0A` (LF) sera utilisé comme indicateur de fin de message. Tous ces paramètres sont configurables directement dans Mirth sans la moindre ligne de code.
+
+![Configuration du connecteur source](mirth_source.png)
 
 Une fois le connecteur source mis en place, nous allons faire appel à un [transformer](https://github.com/cboyer/mirth-zabbix/blob/master/src/destination_transformer.js) afin de récupérer les données demandées par le serveur et les transmettre au connecteur de destination. C'est ici que sont centralisées les fonctionnalités de l'agent Zabbix, plus précisément les clés supportées. Concrètement il s'agit un simple `switch` pour exécuter du code en fonction de la métrique demandée par le serveur:
 

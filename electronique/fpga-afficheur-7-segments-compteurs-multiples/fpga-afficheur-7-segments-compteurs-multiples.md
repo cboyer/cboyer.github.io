@@ -11,7 +11,7 @@ abstract: |
   Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments.
 ---
 
-[ [Partie 1](../fpga-afficheur-7-segments-introduction/) | [Partie 2](../fpga-afficheur-7-segments-compteur-unique/) | Partie 3 ]
+[Partie 1](../fpga-afficheur-7-segments-introduction/), [partie 2](../fpga-afficheur-7-segments-compteur-unique/), partie 3
 
 
 
@@ -25,7 +25,7 @@ Un problème se dessine à l’horizon: comment pouvons nous piloter un afficheu
 
 Rappelons nous notre schéma :
 
-![Schéma annoté](../fpga-afficheur-7-segments-introduction/7segments_schema_labels.jpg)
+![Schéma annoté](../fpga-afficheur-7-segments-introduction/7segments_schema_labels.png)
 
 
 Prenons l’exemple du nombre 21 qui s’affiche avec les segments `{B6, B7, B3, B1, BD}` et `{E7, EC}`.
@@ -244,4 +244,4 @@ endmodule
 Le bloc `case` nous permet de comparer `counter[18:17]` de manière élégante bien qu'une série de 4 `if` aurait parfaitement fonctionné.
 
 
-[ [Partie 1](../fpga-afficheur-7-segments-introduction/) | [Partie 2](../fpga-afficheur-7-segments-compteur-unique/) | Partie 3 ]
+[Partie 1](../fpga-afficheur-7-segments-introduction/), [partie 2](../fpga-afficheur-7-segments-compteur-unique/), partie 3

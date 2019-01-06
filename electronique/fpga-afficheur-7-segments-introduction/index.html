@@ -15,9 +15,9 @@
   <meta property="og:description" content="Pilotage d’un afficheur 7 segments avec un FPGA et Verilog." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2018-11-01T18:08:32-04:00" />
+  <meta property="og:updated_time" content="2019-01-06T15:23:31-04:00" />
   <meta property="article:published_time" content="2018-04-20T15:32:12-04:00" />
-  <meta property="article:modified_time" content="2018-11-01T18:08:32-04:00" />
+  <meta property="article:modified_time" content="2019-01-06T15:23:31-04:00" />
   <meta name="generator" content="pandoc" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -140,15 +140,20 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 class="title">FPGA et afficheur 7 segments: introduction</h2>
  <span class="author">C. Boyer</span>,   <span class="date">2018-04-20 15:32:12 (UTC-04:00)</span>
 </header>
-<p>[ Partie 1 | <a href="../fpga-afficheur-7-segments-compteur-unique/">Partie 2</a> | <a href="../fpga-afficheur-7-segments-compteurs-multiples/">Partie 3</a> ]</p>
+<p>Partie 1, <a href="../fpga-afficheur-7-segments-compteur-unique/">partie 2</a>, <a href="../fpga-afficheur-7-segments-compteurs-multiples/">partie 3</a></p>
 <p>Dans cette article nous verrons comment piloter un afficheur 7 segments avec un FPGA. L’objectif étant purement pédagogique, il s’agit ici d’un exercice visant la mise en pratique de Verilog pour la description d’un circuit logique simple dont le fonctionnement peut s’observer facilement avec un afficheur 7 segments.</p>
-<p>Le soin est laissé au lecteur d’avoir l’équipement et l’environnement de développement fonctionnel. À titre indicatif, cet article a été rédigé en utilisant un FPGA Cyclone IV EP4E22E22C8N d’Altera avec Quartus Prime 17.1.0 Lite sous Linux (Fedora 27). Les codes Verilog proposés fonctionneront parfaitement pour d’autres FPGA et environnements tels que Xilinx ou encore Lattice. L’afficheur 7 segments provient d’un vieux décodeur TV Vidéotron, son circuit nous est pour le moment complètement inconnu ce qui implique de faire un peu de rétro-ingénierie même s’il y a fort à parier que le schéma soit disponible sur Internet.</p>
+<p>Le soin est laissé au lecteur d’avoir l’équipement et l’environnement de développement fonctionnel. À titre indicatif, cet article a été rédigé en utilisant un FPGA Cyclone IV EP4CE22E22C8N d’Altera avec <a href="http://fpgasoftware.intel.com/?edition=lite">Quartus Prime 17.1.0 Lite</a> sous Linux (Fedora 27). Les codes Verilog proposés fonctionneront parfaitement pour d’autres FPGA et environnements tels que Xilinx ou encore Lattice. L’afficheur 7 segments provient d’un vieux décodeur TV Vidéotron, son circuit nous est pour le moment complètement inconnu ce qui implique de faire un peu de rétro-ingénierie même s’il y a fort à parier que le schéma soit disponible sur Internet.</p>
 <h2 id="circuit-de-lafficheur-7-segments">Circuit de l’afficheur 7 segments</h2>
 <p>Pour utiliser un afficheur 7 segments, nous devons d’abord nous attarder sur le fonctionnement de celui-ci. Il s’agit d’un ensemble de diodes électroluminescentes (DEL ou LED en anglais) disposées de façon à pouvoir représenter un chiffre entre 0 et 9 ainsi que certaines lettres. La principale caractéristique d’une diode est qu’elle ne laisse passer le courant que dans un seul sens : de l’anode (pôle positif) vers la cathode (pole négatif). Les diodes électroluminescentes ont la particularité d’émettre un rayonnement lumineux lorsqu’elles sont traversées par un courant électrique.</p>
-<p><img src="7segments.jpg" alt="Afficheur 7 segments" /> <img src="7segments_back.jpg" alt="Arrière de l’afficheur 7 segments" /></p>
+<figure>
+<img src="7segments.jpg" alt="Afficheur 7 segments à quatre digits" /><figcaption>Afficheur 7 segments à quatre digits</figcaption>
+</figure>
+<figure>
+<img src="7segments_back.jpg" alt="Arrière de l’afficheur" /><figcaption>Arrière de l’afficheur</figcaption>
+</figure>
 <p>Nous avons donc à faire à un composant polarisé: ceci implique de différencier l’anode de la cathode pour chaque segments afin d’établir le schéma de l’afficheur et être en mesure de le faire fonctionner. Commençons par établir une nomenclature des broches de l’afficheur:</p>
 <figure>
-<img src="7segments_schema.jpg" alt="Schéma" /><figcaption>Schéma</figcaption>
+<img src="7segments_schema.png" alt="Brochage de l’afficheur" /><figcaption>Brochage de l’afficheur</figcaption>
 </figure>
 <p>Déterminons les paires de broches permettant d’activer chaque segment. Pour cela nous allons procéder par essai/erreur en appliquant une faible tension (1V suffira) depuis un multimètre ou une autre source de faible intensité comme le FPGA avec ses broches VCC et GND. Une plaque de prototypage avec des câbles Dupont est recommandée pour cette étape ainsi que pour connecter le FPGA à l’afficheur.</p>
 <p>Nous prendrons en note chacun de nos essais afin de nous assurer de tester toutes les combinaisons de broches et leur polarité. Dès qu’un segment s’allume, nous annoterons sur le schéma les broches correspondantes. Pour respecter le sens de déplacement des électrons (du pôle positif vers le pôle négatif) nous adopterons la convention suivante :</p>
@@ -156,18 +161,18 @@ code span.wa { color: #bf0303; } /* Warning */
 <li>le premier caractère : anode (pôle positif)</li>
 <li>le deuxième caractère : cathode (pôle négatif)</li>
 </ul>
-<p>Une fois nos tests terminés, nous obtenons le schéma avec les annotations suivantes :</p>
 <figure>
-<img src="7segments_schema_labels.jpg" alt="Schéma annoté" /><figcaption>Schéma annoté</figcaption>
+<img src="7segments_schema_labels.png" alt="Brochage de l’afficheur avec segments annotés" /><figcaption>Brochage de l’afficheur avec segments annotés</figcaption>
 </figure>
 <p>Rappelons que par convention le premier caractère de chaque segment représente l’anode (pôle positif) et le deuxième la cathode (pôle négatif). Le schéma obtenu peut différer de celui des autres afficheurs et de celui du lecteur.</p>
 <p>Nous sommes maintenant en mesure d’utiliser l’afficheur car nous avons identifié l’anode et la cathode de chaque segment.</p>
 <p>On observe que pour chaque afficheur tous les segments possèdent une anode commune. Ainsi le seul moyen de contrôler l’afficheur est d’appliquer une tension sur l’anode (qui est commune) et de relier la cathode des segments voulus à la masse. Par exemple pour afficher le chiffre 3 sur l’afficheur le plus à droite il faut appliquer une tension sur l’anode E et mettre à la masse les cathodes 6, 7, 3, C et D. Ce qui nous donne les segments {E6, E7, E3, EC, ED}.</p>
 <p>Ce mode de fonctionnement va poser un problème de taille : un FPGA n’est pas capable de faire office d’interrupteur pour fermer ou ouvrir le circuit, il peu uniquement générer une tension ou non (un 1 ou un 0). Ce problème se poserait également dans le cas d’un afficheur à cathode commune mais dans une moindre mesure: il y aurait seulement 4 cathodes (une par afficheur) à gérer contre 8 dans notre cas (afficheurs à anode commune).</p>
-<p>Pour contourner ce problème, nous allons utiliser un transistor à jonction NPN, le 2N3904, pour chaque cathode. Voici notre montage:</p>
+<p>Pour contourner ce problème, nous allons utiliser un transistor à jonction NPN, le 2N3904, pour chaque cathode. D’autres transistors NPN comme le 2N2222 peuvent être utilisés.</p>
 <figure>
-<img src="schema.jpg" alt="Schéma" /><figcaption>Schéma</figcaption>
+<img src="schema.png" alt="Schéma" /><figcaption>Schéma</figcaption>
 </figure>
+<p>Notez que nous utilisons certaines sorties du FPGA directement comme alimentation pour les anodes 2, A, B et E. Cette configuration n’est pas recommandée mais permet d’obtenir un montage très simple et fonctionnel pour travailler avec un FPGA et Verilog. L’idéal serait d’utiliser une source d’alimentation externe avec une résistance pour chaque anode en les contrôlant avec un transistor, comme c’est le cas pour les cathodes. Également, nos 8 transistors pourrait être remplacé pour un circuit <a href="http://www.ti.com/lit/ds/symlink/uln2803a.pdf">ULN2803A</a> plus compact.</p>
 <figure>
 <img src="breadboard.jpg" alt="Montage" /><figcaption>Montage</figcaption>
 </figure>
@@ -179,7 +184,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb1-3" data-line-number="3">    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4">    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></a>
 <a class="sourceLine" id="cb1-5" data-line-number="5">);</a></code></pre></div>
-<p>Remarquons que l’indexation d’un registre vectoriel <code>DISPLAY_1</code> se fait dans le sens inverse des tableaux que l’on retrouve dans des langages tels que le C. Ainsi, l’indice 0 représente la valeur la plus à droite (bit de poids faible) et l’indice 8 la valeur la plus à gauche (bit de poids fort). On pourrait dire qu’un registre vectoriel se lit de gauche à droite. Maintenant que notre module est déclaré, il nous faut un registre capable de stocker 9 bits pour contrôler nos 9 sorties (1 bit par sortie) :</p>
+<p>Remarquons que l’indexation de <code>DISPLAY_1</code> se fait dans le sens inverse des tableaux que l’on retrouve dans des langages tels que le C. Ainsi, l’indice 0 représente la valeur la plus à droite (bit de poids faible) et l’indice 8 la valeur la plus à gauche (bit de poids fort). On pourrait dire qu’un registre vectoriel se lit de gauche à droite. Maintenant que notre module est déclaré, il nous faut un registre capable de stocker 9 bits pour contrôler nos 9 sorties (1 bit par sortie) :</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">/* module */</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">module</span> SevenSegment (</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3">    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</a>
@@ -297,7 +302,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb5-29" data-line-number="29">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111011101</span>;</a></code></pre></div>
 <p>Nous sommes maintenant en mesure d’afficher n’importe quel chiffre sur notre afficheur 7 segments.</p>
 <p>Dans <a href="../fpga-afficheur-7-segments-compteur-unique/">la partie 2</a>, nous irons un peu plus loin en implémentant un compteur pour afficher les chiffres de 0 à 9.</p>
-<p>[ Partie 1 | <a href="../fpga-afficheur-7-segments-compteur-unique/">Partie 2</a> | <a href="../fpga-afficheur-7-segments-compteurs-multiples/">Partie 3</a> ]</p>
+<p>Partie 1, <a href="../fpga-afficheur-7-segments-compteur-unique/">partie 2</a>, <a href="../fpga-afficheur-7-segments-compteurs-multiples/">partie 3</a></p>
 </article>
 
 <div id="footer">

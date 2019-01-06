@@ -11,7 +11,7 @@ abstract: |
   Implémentation en Verilog d'un compteur sur un afficheur 7 segments.
 ---
 
-[ [Partie 1](../fpga-afficheur-7-segments-introduction/) | Partie 2 | [Partie 3](../fpga-afficheur-7-segments-compteurs-multiples/) ]
+[Partie 1](../fpga-afficheur-7-segments-introduction/), partie 2, [partie 3](../fpga-afficheur-7-segments-compteurs-multiples/)
 
 Nous avons vu dans [la partie 1](../fpga-afficheur-7-segments-introduction/) comment afficher un chiffre sur l'afficheur le plus à droite. L'objectif de cette seconde partie est d'implémenter un compteur pour afficher les chiffres de 0 à 9.
 Avant de continuer, rappelons quelques éléments importants de la partie précédente:
@@ -21,7 +21,7 @@ La nomenclature des segments:
 - le premier caractère représente l'anode (pôle positif)
 - le deuxième caractère représente la cathode (pôle négatif)
 
-![Schéma annoté](../fpga-afficheur-7-segments-introduction/7segments_schema_labels.jpg)
+![Schéma annoté](../fpga-afficheur-7-segments-introduction/7segments_schema_labels.png)
 
 Les correspondances sorties-registres-segments (forme explicite de la ligne `assign DISPLAY_1 = display_1_leds`):
 
@@ -117,4 +117,4 @@ Il est très important de prendre un intervalle de 0 à N bits et non un seul bi
 Dans [la partie 3](../fpga-afficheur-7-segments-compteurs-multiples/), nous verrons comment utiliser un afficheur supplémentaire afin d’introduire les dizaines dans notre compteur et d’afficher des valeurs de 0 à 99.
 
 
-[ [Partie 1](../fpga-afficheur-7-segments-introduction/) | Partie 2 | [Partie 3](../fpga-afficheur-7-segments-compteurs-multiples/) ]
+[Partie 1](../fpga-afficheur-7-segments-introduction/), partie 2, [partie 3](../fpga-afficheur-7-segments-compteurs-multiples/)

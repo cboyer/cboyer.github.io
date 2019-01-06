@@ -140,13 +140,13 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 class="title">FPGA et afficheur 7 segments: compteur à afficheurs multiples</h2>
  <span class="author">C. Boyer</span>,   <span class="date">2018-04-27 20:02:50 (UTC-04:00)</span>
 </header>
-<p>[ <a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a> | <a href="../fpga-afficheur-7-segments-compteur-unique/">Partie 2</a> | Partie 3 ]</p>
+<p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>, <a href="../fpga-afficheur-7-segments-compteur-unique/">partie 2</a>, partie 3</p>
 <p>Nous avons vu dans <a href="../fpga-afficheur-7-segments-introduction/">la partie 1</a> comment afficher un chiffre sur l’afficheur le plus à droite et dans <a href="../fpga-afficheur-7-segments-compteur-unique/">la partie 2</a> comment implémenter un compteur avec ce même afficheur. L’objectif de cette troisième partie est d’implémenter un compteur sur plusieurs afficheurs. Nous commencerons par un compteur à deux afficheurs afin d’introduire les dizaines dans notre compteur et d’afficher des valeurs de 0 à 99. Par la suite, nous étendrons notre compteur aux quatre afficheurs.</p>
 <h2 id="compteur-à-deux-afficheurs">Compteur à deux afficheurs</h2>
 <p>Étant limité a une valeur maximale de 9, ajouter un afficheur supplémentaire va nous permettre de rehausser cette valeur à 99. Un problème se dessine à l’horizon: comment pouvons nous piloter un afficheur supplémentaire indépendamment du premier alors qu’ils partagent les mêmes cathodes?</p>
 <p>Rappelons nous notre schéma :</p>
 <figure>
-<img src="../fpga-afficheur-7-segments-introduction/7segments_schema_labels.jpg" alt="Schéma annoté" /><figcaption>Schéma annoté</figcaption>
+<img src="../fpga-afficheur-7-segments-introduction/7segments_schema_labels.png" alt="Schéma annoté" /><figcaption>Schéma annoté</figcaption>
 </figure>
 <p>Prenons l’exemple du nombre 21 qui s’affiche avec les segments <code>{B6, B7, B3, B1, BD}</code> et <code>{E7, EC}</code>.</p>
 <p>Ce qui donne en Verilog :</p>
@@ -332,7 +332,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb5-83" data-line-number="83"></a>
 <a class="sourceLine" id="cb5-84" data-line-number="84"><span class="kw">endmodule</span></a></code></pre></div>
 <p>Le bloc <code>case</code> nous permet de comparer <code>counter[18:17]</code> de manière élégante bien qu’une série de 4 <code>if</code> aurait parfaitement fonctionné.</p>
-<p>[ <a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a> | <a href="../fpga-afficheur-7-segments-compteur-unique/">Partie 2</a> | Partie 3 ]</p>
+<p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>, <a href="../fpga-afficheur-7-segments-compteur-unique/">partie 2</a>, partie 3</p>
 </article>
 
 <div id="footer">

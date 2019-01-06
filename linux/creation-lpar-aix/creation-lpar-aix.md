@@ -45,9 +45,9 @@ Créer le /home/padmin/.kshrc avec:
 ```bash
 export HOST="$(/usr/bin/uname -n)"
 if [ "`whoami`" = "root" ]; then
-PS1="`whoami`@$HOST:$PWD # "
+  PS1="`whoami`@$HOST:$PWD # "
 else
-PS1="`whoami`@$HOST:$PWD $ "
+  PS1="`whoami`@$HOST:$PWD $ "
 fi
 set -o vi
 ```
