@@ -26,7 +26,7 @@ th, td { border: 1px solid #dfe2e5; padding: 5px; padding: 3px 15px !important; 
 #header { margin: 10px auto 0 auto; max-width: 1150px; }
 #site_title { float: left; width: 70%; overflow:hidden; height: 45px; }
 #site_title h1 { font-weight: normal; margin: 0; }
-#links{ float: right; width: 30%; padding-top: 15px; text-align: right; height: 30px; }
+#links{ float: right; width: 30%; padding-top: 15px; text-align: right; height: 25px; }
 #menu { width: 100%; padding-top: 15px; margin: 20px 0 60px 0; clear: both; }
 #footer { width: 100%; font-size: 80%; margin: 100px 0 50px 0; text-align: center; border-top: 1px solid #eaecef; padding-top: 10px; }
 

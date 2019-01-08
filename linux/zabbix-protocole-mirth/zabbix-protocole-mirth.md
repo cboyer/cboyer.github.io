@@ -27,11 +27,11 @@ Zabbix structure ses messages de la façon suivante:
 <Entête> <Quantité des données> <Données>
 ```
 
-&nbsp;|**Entête**|**Quantité de données**|**Données**
+&nbsp; |Entête|Quantité de données|Données
 :-----:|:-----:|:-----:|:-----:
-**Type**|Chaîne de caractères|Entier (little endian)|Chaîne de caractères
-**Taille**|5 octets|8 octets|Variable, maximum 134217728 octets
-**Contenu**|"ZBXD\\x01"|Taille du champ Données|Données de monitoring (JSON)
+**Type** |Chaîne de caractères|Entier (little endian)|Chaîne de caractères
+**Taille** |5 octets|8 octets|Variable, maximum 134217728 octets
+**Contenu** |"ZBXD\\x01"|Taille du champ Données|Données de monitoring (JSON)
 
 
 L'entête est une chaîne de caractères fixe: `"ZBXD\x01"`. Elle est composée de la chaîne `ZBXD` et de l'octet `0x01`.
