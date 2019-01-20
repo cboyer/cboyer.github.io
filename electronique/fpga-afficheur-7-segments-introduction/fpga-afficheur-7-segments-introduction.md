@@ -186,6 +186,9 @@ DISPLAY_1 et display_1_leds étant de même taille (9), l'assignation `assign DI
 Nous pouvons supprimer l’assignation `display_1_leds[0] <= 1'b1` (anode commune) car nous avons le contrôle de cette valeur dans 11101011**1** (première valeur de `display_1_leds`, donc `display_1_leds[0]`).
 
 
+![Schématisation correspondant au chiffre 0](schema_fpga_verilog.png)
+
+
 En suivant la même logique, on obtient la liste des segments actifs pour afficher respectivement chaque chiffre de 0 à 9 :
 
 ```verilog

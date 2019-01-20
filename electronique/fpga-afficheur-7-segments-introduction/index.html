@@ -270,6 +270,9 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb4-21" data-line-number="21"></a>
 <a class="sourceLine" id="cb4-22" data-line-number="22"><span class="kw">endmodule</span></a></code></pre></div>
 <p>DISPLAY_1 et display_1_leds étant de même taille (9), l’assignation <code>assign DISPLAY_1 = display_1_leds</code> se fait bit à bit. Nous pouvons supprimer l’assignation <code>display_1_leds[0] &lt;= 1'b1</code> (anode commune) car nous avons le contrôle de cette valeur dans 11101011<strong>1</strong> (première valeur de <code>display_1_leds</code>, donc <code>display_1_leds[0]</code>).</p>
+<figure>
+<img src="schema_fpga_verilog.png" alt="Schématisation correspondant au chiffre 0" /><figcaption>Schématisation correspondant au chiffre 0</figcaption>
+</figure>
 <p>En suivant la même logique, on obtient la liste des segments actifs pour afficher respectivement chaque chiffre de 0 à 9 :</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">//Chiffre 0, segments {ED, E7, E6, E4, EC, E1}</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111010111</span>;</a>

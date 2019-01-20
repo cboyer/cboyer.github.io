@@ -54,7 +54,7 @@ switch (item_requested) {
 		break;
 
 	case 'agent.version':
-		msg = 'Mirthix ' + agent_version;
+		msg = 'Mirthix 1.1.0';
 		break;
 
 	case 'agent.hostname':
