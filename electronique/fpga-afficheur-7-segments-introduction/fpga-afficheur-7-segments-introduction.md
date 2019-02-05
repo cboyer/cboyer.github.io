@@ -61,7 +61,7 @@ Pour contourner ce problème, nous allons utiliser un transistor à jonction NPN
 ![Schéma](schema.png)
 
 Notez que nous utilisons certaines sorties du FPGA directement comme alimentation pour les anodes 2, A, B et E. Cette configuration n'est pas recommandée mais permet d'obtenir un montage très simple et fonctionnel pour travailler avec un FPGA et Verilog. L'idéal serait d'utiliser une source d'alimentation externe avec une résistance pour chaque anode en les contrôlant avec un transistor, comme c'est le cas pour les cathodes.
-Également, nos 8 transistors pourrait être remplacé pour un circuit [ULN2803A](http://www.ti.com/lit/ds/symlink/uln2803a.pdf) plus compact.
+Également, nos 8 transistors pourrait être remplacés pour un circuit [ULN2803A](http://www.ti.com/lit/ds/symlink/uln2803a.pdf) plus compact.
 
 ![Montage](breadboard.jpg)
 

@@ -23,7 +23,7 @@ Ce programme peut facilement être intégré dans des systèmes comme [LibreELEC
 Dreamscreen utilise le port 8888 en UDP sur son interface WiFi pour envoyer et recevoir des messages binaires.
 
 &nbsp;|Début du paquet|Longueur du paquet|Adresse de groupe|Drapeau|Commande|Paramètre|Payload|CRC
-:-----|:-----|:-----|:-----|:-----|:-----|:-----|:-----|:-----
+:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:
 Longueur (en octets)|1|1|1|1|1|1|variable (1 à 3)|1
 
 
@@ -48,7 +48,7 @@ Dans le cas où l’adresse de groupe est incorrect, le message sera ignoré.
 ## Commandes et paramètres
 
 Description|Commande|Paramètre|Payload|Longueur du payload (en octets)
-:-----|:-----|:-----|:-----|:-----
+:-----|:----:|:----:|:-----|:----:
 Mode|0x03|0x01|0x00: Éteindre; 0x01: Vidéo; 0x02: Musique; 0x03: Ambiance|1
 Luminosité|0x03|0x02|0x00 à 0x64 (pourcentage de 0 à 100)|1
 Couleur d’ambiance lumineuse|0x03|0x05|Couleur RGB (sur 3 octets)|3

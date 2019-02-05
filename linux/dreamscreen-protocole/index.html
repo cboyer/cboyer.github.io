@@ -90,28 +90,28 @@
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;"> </th>
-<th style="text-align: left;">Début du paquet</th>
-<th style="text-align: left;">Longueur du paquet</th>
-<th style="text-align: left;">Adresse de groupe</th>
-<th style="text-align: left;">Drapeau</th>
-<th style="text-align: left;">Commande</th>
-<th style="text-align: left;">Paramètre</th>
-<th style="text-align: left;">Payload</th>
-<th style="text-align: left;">CRC</th>
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Début du paquet</th>
+<th style="text-align: center;">Longueur du paquet</th>
+<th style="text-align: center;">Adresse de groupe</th>
+<th style="text-align: center;">Drapeau</th>
+<th style="text-align: center;">Commande</th>
+<th style="text-align: center;">Paramètre</th>
+<th style="text-align: center;">Payload</th>
+<th style="text-align: center;">CRC</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Longueur (en octets)</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">variable (1 à 3)</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: center;">Longueur (en octets)</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">variable (1 à 3)</td>
+<td style="text-align: center;">1</td>
 </tr>
 </tbody>
 </table>
@@ -135,54 +135,54 @@
 <thead>
 <tr class="header">
 <th style="text-align: left;">Description</th>
-<th style="text-align: left;">Commande</th>
-<th style="text-align: left;">Paramètre</th>
+<th style="text-align: center;">Commande</th>
+<th style="text-align: center;">Paramètre</th>
 <th style="text-align: left;">Payload</th>
-<th style="text-align: left;">Longueur du payload (en octets)</th>
+<th style="text-align: center;">Longueur du payload (en octets)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Mode</td>
-<td style="text-align: left;">0x03</td>
-<td style="text-align: left;">0x01</td>
+<td style="text-align: center;">0x03</td>
+<td style="text-align: center;">0x01</td>
 <td style="text-align: left;">0x00: Éteindre; 0x01: Vidéo; 0x02: Musique; 0x03: Ambiance</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: center;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Luminosité</td>
-<td style="text-align: left;">0x03</td>
-<td style="text-align: left;">0x02</td>
+<td style="text-align: center;">0x03</td>
+<td style="text-align: center;">0x02</td>
 <td style="text-align: left;">0x00 à 0x64 (pourcentage de 0 à 100)</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: center;">1</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Couleur d’ambiance lumineuse</td>
-<td style="text-align: left;">0x03</td>
-<td style="text-align: left;">0x05</td>
+<td style="text-align: center;">0x03</td>
+<td style="text-align: center;">0x05</td>
 <td style="text-align: left;">Couleur RGB (sur 3 octets)</td>
-<td style="text-align: left;">3</td>
+<td style="text-align: center;">3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Type d’ambiance lumineuse</td>
-<td style="text-align: left;">0x03</td>
-<td style="text-align: left;">0x08</td>
+<td style="text-align: center;">0x03</td>
+<td style="text-align: center;">0x08</td>
 <td style="text-align: left;">0x00: Couleur RGB; 0x01: Préréglage</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: center;">1</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Préréglage d’ambiance lumineuse</td>
-<td style="text-align: left;">0x03</td>
-<td style="text-align: left;">0x0D</td>
+<td style="text-align: center;">0x03</td>
+<td style="text-align: center;">0x0D</td>
 <td style="text-align: left;">0x00: Couleur aléatoire; 0x01: Fireside; 0x02: Twinkle; 0x03: Océan; 0x04: Arc-en-ciel; 0x05: 4 Juillet; 0x06: Vacances; 0x07: Pop; 0x08: Forêt enchantée</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: center;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Entrée HDMI</td>
-<td style="text-align: left;">0x03</td>
-<td style="text-align: left;">0x20</td>
+<td style="text-align: center;">0x03</td>
+<td style="text-align: center;">0x20</td>
 <td style="text-align: left;">0x00: Entrée 1; 0x01: Entrée 2; 0x02: Entrée 3</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: center;">1</td>
 </tr>
 </tbody>
 </table>
