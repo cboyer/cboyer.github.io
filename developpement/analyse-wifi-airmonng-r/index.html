@@ -126,7 +126,7 @@ code span.wa { color: #bf0303; } /* Warning */
 
     <div id="menu">
       <ul class="menu">
-        <li class="menu_item"><a href="../../index.html">Publications</a></li>
+        <li class="menu_item"><a href="../../index.html">Index</a></li>
         <li class="menu_item active"><a href="../../developpement.html">Développement</a></li>
         <li class="menu_item"><a href="../../linux.html">Linux</a></li>
         <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
@@ -147,6 +147,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <li>Traitement des données en vue de les rendre exploitables</li>
 <li>Analyse et présentation des données</li>
 </ul>
+<p>Le script complet est disponible en bas de page, dans les sources.</p>
 <h2 id="collecte-des-données">Collecte des données</h2>
 <p>Airodump-ng nous permet d’obtenir des statistiques sur le trafic réseau WiFi: il agrège les données par point d’accès et client WiFi de façon cumulative. Ces données sont au format CSV. Pour commencer la collecte des données (nécessite les droits root):</p>
 <pre class="console"><code>airmon-ng start wlp3s0
@@ -212,7 +213,7 @@ airodump-ng --band abg -w output.csv --output-format csv wlp3s0mon</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">connected &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>( <span class="kw">table</span>(stations<span class="op">$</span>Network) )</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">connected[<span class="kw">order</span>(<span class="op">-</span>connected<span class="op">$</span>Freq),]</a></code></pre></div>
 <p>Ce qui nous donne:</p>
-<pre class="text"><code>Var1 Freq
+<pre class="text"><code>Var1           Freq
 TELUS1643-2.4G    3
 CE4E26CF3663      1
 TELUS0291         1
@@ -240,6 +241,7 @@ TELUS9714         1</code></pre>
 <p>D’autre types de diagrammes (graphe/réseau) sont utilisables afin de mieux présenter la topologie d’un réseau. Ce type d’analyse peut rapidement produire des diagrammes très complexes en fonction de la quantités de noeuds présents dans le réseau.</p>
 <h2 id="sources">Sources</h2>
 <ul>
+<li><a href="./wifi.R">Script R complet</a></li>
 <li><a href="https://bost.ocks.org/mike/sankey/" class="uri">https://bost.ocks.org/mike/sankey/</a></li>
 <li><a href="https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/" class="uri">https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/</a></li>
 <li><a href="https://www.jessesadler.com/post/network-analysis-with-r/" class="uri">https://www.jessesadler.com/post/network-analysis-with-r/</a></li>

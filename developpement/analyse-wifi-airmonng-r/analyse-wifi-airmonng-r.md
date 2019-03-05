@@ -19,6 +19,7 @@ Pour cela, nous procéderons en plusieurs étapes:
  - Traitement des données en vue de les rendre exploitables
  - Analyse et présentation des données
 
+Le script complet est disponible en bas de page, dans les sources.
 
 ## Collecte des données
 
@@ -129,7 +130,7 @@ connected[order(-connected$Freq),]
 Ce qui nous donne:
 
 ```text
-Var1 Freq
+Var1           Freq
 TELUS1643-2.4G    3
 CE4E26CF3663      1
 TELUS0291         1
@@ -165,6 +166,7 @@ D'autre types de diagrammes (graphe/réseau) sont utilisables afin de mieux pré
 
 ## Sources
 
+ - [Script R complet](./wifi.R)
  - [https://bost.ocks.org/mike/sankey/](https://bost.ocks.org/mike/sankey/)
  - [https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/](https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/)
  - [https://www.jessesadler.com/post/network-analysis-with-r/](https://www.jessesadler.com/post/network-analysis-with-r/)

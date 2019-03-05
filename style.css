@@ -8,7 +8,7 @@ p code, li code { font-family: "Courier New",monospace; font-size: 92%; font-wei
 pre { padding: 10px; overflow: auto; }
 code.sourceCode { padding: 0; }
 pre, pre code, code.sourceCode { font-size: 94%; font-family: "Courier New",monospace; line-height: 1.3; border: none; }
-div.sourceCode { background: rgba(230,235,237,0.25) !important; margin: 1em 0 2.5em 0 !important; }
+div.sourceCode { background: rgba(230,235,237,0.25) !important; margin: 1em 0 3.5em 0 !important; }
 .console code { border: none; padding: 0; }
 .console { margin: 1em 0 2.5em 0; background: rgba(230,235,237,0.25); }
 ul.nobullet{ list-style: none; padding: 0; }
