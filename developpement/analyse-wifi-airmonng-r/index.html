@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="HandheldFriendly" content="True">
+  <title>Analyse du trafic WiFi avec Airodump-ng et R - C. Boyer</title>
+  <meta name="description" content="Analyse du trafic WiFi avec Airodump-ng et R." />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="R, analyse, réseau, airmon-ng" />
+  <link rel="canonical" href="https://cboyer.github.io/developpement/analyse-wifi-airmonng-r" />
+  <meta property="og:title" content="Analyse du trafic WiFi avec Airodump-ng et R - C. Boyer" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Analyse du trafic WiFi avec Airodump-ng et R." />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="website" />
+  <meta property="og:updated_time" content="2019-03-04T14:22:12-04:00" />
+  <meta property="article:published_time" content="2019-03-04T14:22:12-04:00" />
+  <meta property="article:modified_time" content="2019-03-04T14:22:12-04:00" />
+  <meta name="generator" content="pandoc" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style>
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+</head>
+<body>
+  <div id="header">
+    <div id="site_title">
+      <h1>cboyer.github.io</h1>
+    </div>
+    <div id="links">
+      <a href="../../rechercher.html" class="search" title="Rechercher">
+          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
+            <title id="search-icon">Rechercher</title>
+            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
+          </svg>
+      </a>
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+
+    <div id="menu">
+      <ul class="menu">
+        <li class="menu_item"><a href="../../index.html">Publications</a></li>
+        <li class="menu_item active"><a href="../../developpement.html">Développement</a></li>
+        <li class="menu_item"><a href="../../linux.html">Linux</a></li>
+        <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
+        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="container">
+<article>
+<header id="title-block-header">
+<h2 class="title">Analyse du trafic WiFi avec Airodump-ng et R</h2>
+ <span class="author">C. Boyer</span>,   <span class="date">2019-03-04 14:22:12 (UTC-04:00)</span>
+</header>
+<p>Cet article présente un exemple d’utilisation de R avec les données issues d’<a href="https://www.aircrack-ng.org/doku.php?id=airodump-ng">Airodump-ng</a>. Pour cela, nous procéderons en plusieurs étapes:</p>
+<ul>
+<li>Collecte des données</li>
+<li>Traitement des données en vue de les rendre exploitables</li>
+<li>Analyse et présentation des données</li>
+</ul>
+<h2 id="collecte-des-données">Collecte des données</h2>
+<p>Airodump-ng nous permet d’obtenir des statistiques sur le trafic réseau WiFi: il agrège les données par point d’accès et client WiFi de façon cumulative. Ces données sont au format CSV. Pour commencer la collecte des données (nécessite les droits root):</p>
+<pre class="console"><code>airmon-ng start wlp3s0
+airodump-ng --band abg -w output.csv --output-format csv wlp3s0mon</code></pre>
+<p>Ici <code>wlp3s0</code> correspond au nom de l’interface WiFi utilisée pour l’écoute (mode monitor) et sera accessible via une nouvelle interface <code>wlp3s0mon</code>. Nous utiliserons l’extrait de données suivant à titre d’exemple: <a href="./airmonng_data.csv">airmonng_data.csv</a></p>
+<h2 id="traitement-des-données">Traitement des données</h2>
+<p>Le fichier CSV produit comporte un problème de structure: il inclut deux ensembles de données distincts présentant les données relatives aux points d’accès et celle des clients. Chacun de ces ensembles possède un nombre de colonnes différents ce qui va poser problème à R pour parser ce fichier.</p>
+<p>Autre problème, la colonne “Probe” des données des clients contient des valeurs multiples qui sont séparées par le même caractère (la virgule) servant à distinguer les différentes colonnes. Ceci créé un fichier à nombre de colonnes variables ce qui pose problème avec l’utilisation de la fonction <code>read.csv</code> de R nous obligeant alors à parser nous même le fichier.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#Lecture du fichier</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">airodump &lt;-<span class="st"> </span><span class="kw">readLines</span>(<span class="st">&#39;airmonng_data.csv&#39;</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#Supprime les espaces entre le séparateur</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">airodump &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&#39;</span><span class="ch">\\</span><span class="st">s*,</span><span class="ch">\\</span><span class="st">s*&#39;</span>, <span class="st">&#39;,&#39;</span>, airodump)</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#Séparation des données des Points d&#39;accès et des clients</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">i &lt;-<span class="st"> </span><span class="kw">cumsum</span>(airodump <span class="op">==</span><span class="st"> &#39;&#39;</span>)</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">airodump &lt;-<span class="st"> </span><span class="kw">by</span>(airodump, i, paste, <span class="dt">collapse=</span><span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">aps &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">text=</span>airodump[<span class="dv">1</span>], <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">stations &lt;-<span class="st"> </span>airodump[<span class="dv">2</span>]</a></code></pre></div>
+<p>L’utilisation de <code>stringsAsFactors=FALSE</code> nous permet d’avoir des colonnes contenant simplement les données sans utiliser de facteurs/levels. Concernant les données clients (<code>stations</code>) nous devons appliquer un traitement supplémentaire pour avoir une structure CSV conforme et parser les données afin obtenir un dataframe exploitable:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">#Sépare les données par lignes</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">stations &lt;-<span class="st"> </span><span class="kw">strsplit</span>(stations, <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>, <span class="dt">fixed=</span><span class="ot">FALSE</span>)<span class="op">$</span><span class="st">`</span><span class="dt">2</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#Supprime les lignes vides</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">stations &lt;-<span class="st"> </span>stations[stations <span class="op">!=</span><span class="st"> &quot;&quot;</span>]</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#Récupère jusqu&#39;à la 6eme colonne (au delà il s&#39;agit de la colonne &quot;Probed ESSIDs&quot; qui utilise le même séparateur pour contenir</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#plusieurs valeurs, ce qui crée un nombre de colonne variable d&#39;une ligne à l&#39;autre)</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">stations &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">strsplit</span>(stations, <span class="st">&quot;,&quot;</span>), <span class="st">`</span><span class="dt">[</span><span class="st">`</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#Supprime le nom de chaque colonne contenu dans la première ligne (header) car il contient des espaces et des #</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">stations[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#Passe la liste de vecteur en dataframe</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15">stations&lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">do.call</span>(rbind, stations), <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#Ajoute le header</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="kw">colnames</span>(stations) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;MacAddress&#39;</span>, <span class="st">&#39;FirstTimeSeen&#39;</span>, <span class="st">&#39;LastTimeSeen&#39;</span>, <span class="st">&#39;Power&#39;</span>, <span class="st">&#39;Packets&#39;</span>, <span class="st">&#39;BSSID&#39;</span>)</a></code></pre></div>
+<p>Pour exclure les client n’étant connecté à aucun point d’accès:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">stations &lt;-<span class="st"> </span><span class="kw">subset</span>(stations, <span class="op">!</span>(BSSID <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;(not associated)&#39;</span>) ))</a></code></pre></div>
+<p>Nous allons travailler à partir du dataframe <code>stations</code> qui contient les données des clients. Pour commencer, nous allons “résoudre” l’adresse MAC du point d’accès en nom de réseau auquel sont connectés les clients à partir de la colonne BSSID (comme un jointure en SQL):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span>aps<span class="op">$</span>ESSID[<span class="kw">match</span>(stations<span class="op">$</span>BSSID, aps<span class="op">$</span>BSSID)]</a></code></pre></div>
+<p>Notons que la totalité des colonnes du dataframe <code>aps</code> aurait pu être ajoutée avec la fonction <code>merge()</code>.</p>
+<p>Certains points d’accès ne diffusent pas le nom de leur réseau (d’où les <code>NA</code> dans la colonne <code>stations$Network</code>), utilisons leur adresse MAC pour combler ce manque:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span><span class="kw">ifelse</span>(stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span>, stations<span class="op">$</span>BSSID, stations<span class="op">$</span>Network)</a></code></pre></div>
+<p>Notons que la fonction <code>ifelse()</code> ne fonctionne pas sur facteurs, c’est pourquoi nous utilisons <code>stringsAsFactors=FALSE</code>. Autrement il aurait fallu utiliser <code>as.character()</code> pour chaque paramètre de <code>ifelse()</code>. Au lieu d’utiliser <code>ifelse()</code> nous aurions pu utiliser un vecteur logique afin d’effectuer la même opération:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">hidden &lt;-<span class="st"> </span>stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">stations<span class="op">$</span>Network[hidden] &lt;-<span class="st"> </span>stations<span class="op">$</span>BSSID[hidden]</a></code></pre></div>
+<p>Complétons nos données en identifiant les constructeurs depuis les adresses MAC avec les listes disponibles sur le site de l’ <a href="https://standards.ieee.org/content/ieee-standards/en/products-services/regauth/index.html">IEEE</a>. R permet de lire cette liste localement ou directement depuis le site de l’IEEE (moins rapide) en fournissant l’URL comme paramètre à <code>read.csv()</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#Chargement de la liste des constructeurs</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">manufacturers &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&#39;oui.csv&#39;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#Crée une colonne contenant l&#39;identifiant du constructeur depuis l&#39;adresse MAC</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">stations<span class="op">$</span>ManufacturerID &lt;-<span class="st"> </span><span class="kw">substr</span>( <span class="kw">gsub</span>(<span class="st">&#39;:&#39;</span>, <span class="st">&#39;&#39;</span>, stations<span class="op">$</span>MacAddress), <span class="dv">0</span>, <span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#Obtient le nom du constructeur et le stock dans une nouvelle colonne Constructor</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>Organization.Name[<span class="kw">match</span>(stations<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>Assignment)]</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#Trie les lignes du dataframe par ordre alphabétique des noms de réseau</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">stations &lt;-<span class="st"> </span>stations[<span class="kw">order</span>(stations<span class="op">$</span>Network),]</a></code></pre></div>
+<h2 id="analyse-et-présentation-des-données">Analyse et présentation des données</h2>
+<p>Nous sommes maintenant en mesure d’analyser nos données. Commençons par comptabiliser le nombre de client connecté à chaque point d’accès:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">connected &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>( <span class="kw">table</span>(stations<span class="op">$</span>Network) )</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">connected[<span class="kw">order</span>(<span class="op">-</span>connected<span class="op">$</span>Freq),]</a></code></pre></div>
+<p>Ce qui nous donne:</p>
+<pre class="text"><code>Var1 Freq
+TELUS1643-2.4G    3
+CE4E26CF3663      1
+TELUS0291         1
+TELUS2455         1
+TELUS5176-2.4G    1
+TELUS9471         1
+TELUS9714         1</code></pre>
+<p>Nous pouvons représenter la quantité de données échangées entre chaque clients/points d’accès avec un <a href="https://fr.wikipedia.org/wiki/Diagramme_de_Sankey">diagramme de Sankey</a> à l’aide de la librairie <code>networkD3</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">links &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">source=</span>stations<span class="op">$</span>MacAddress, <span class="dt">target=</span>stations<span class="op">$</span>Network, <span class="dt">value=</span><span class="kw">as.integer</span>(stations<span class="op">$</span>Packets))</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">nodes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name=</span><span class="kw">unique</span>( <span class="kw">c</span>(<span class="kw">as.character</span>(links<span class="op">$</span>source), <span class="kw">as.character</span>(links<span class="op">$</span>target) ) ) )</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">links<span class="op">$</span>IDsource &lt;-<span class="st"> </span><span class="kw">match</span>(links<span class="op">$</span>source, nodes<span class="op">$</span>name)<span class="op">-</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">links<span class="op">$</span>IDtarget &lt;-<span class="st"> </span><span class="kw">match</span>(links<span class="op">$</span>target, nodes<span class="op">$</span>name)<span class="op">-</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">networkD3<span class="op">::</span><span class="kw">sankeyNetwork</span>(<span class="dt">Links =</span> links, <span class="dt">Nodes =</span> nodes,</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">                         <span class="dt">Source =</span> <span class="st">&#39;IDsource&#39;</span>,</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">                         <span class="dt">Target =</span> <span class="st">&#39;IDtarget&#39;</span>,</a>
+<a class="sourceLine" id="cb11-8" data-line-number="8">                         <span class="dt">Value =</span> <span class="st">&#39;value&#39;</span>,</a>
+<a class="sourceLine" id="cb11-9" data-line-number="9">                         <span class="dt">NodeID =</span> <span class="st">&#39;name&#39;</span>,</a>
+<a class="sourceLine" id="cb11-10" data-line-number="10">                         <span class="dt">units =</span> <span class="st">&#39;Packets&#39;</span>,</a>
+<a class="sourceLine" id="cb11-11" data-line-number="11">                         <span class="dt">sinksRight=</span><span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb11-12" data-line-number="12">                         <span class="dt">fontSize =</span> <span class="dv">15</span>, <span class="dt">nodeWidth =</span> <span class="dv">20</span>)</a></code></pre></div>
+<p>Le diagramme qui en résulte est interactif avec RStudio (le survol indique la quantité de paquets), en voici la capture d’écran:</p>
+<figure>
+<img src="sankey.png" alt="Diagramme Sankey" /><figcaption>Diagramme Sankey</figcaption>
+</figure>
+<p>D’autre types de diagrammes (graphe/réseau) sont utilisables afin de mieux présenter la topologie d’un réseau. Ce type d’analyse peut rapidement produire des diagrammes très complexes en fonction de la quantités de noeuds présents dans le réseau.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://bost.ocks.org/mike/sankey/" class="uri">https://bost.ocks.org/mike/sankey/</a></li>
+<li><a href="https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/" class="uri">https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/</a></li>
+<li><a href="https://www.jessesadler.com/post/network-analysis-with-r/" class="uri">https://www.jessesadler.com/post/network-analysis-with-r/</a></li>
+<li><a href="https://briatte.github.io/ggnet/" class="uri">https://briatte.github.io/ggnet/</a></li>
+</ul>
+</article>
+
+<div id="footer">
+  <span class="copyrights">© 2018-2019 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+</div>
+
+</div>
+</body>
+</html>

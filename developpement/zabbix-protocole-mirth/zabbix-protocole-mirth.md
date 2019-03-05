@@ -5,7 +5,7 @@ updated: "2019-03-03T17:39:47-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
-category: "Linux"
+category: "Développement"
 keywords: [zabbix, mirth, mirth connect, monitoring]
 abstract: |
   Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener.

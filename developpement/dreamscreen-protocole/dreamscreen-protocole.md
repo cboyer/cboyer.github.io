@@ -5,7 +5,7 @@ updated: "2019-01-10T18:25:32-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
-category: "Linux"
+category: "Développement"
 keywords: [dreamscreen, linux, kodi]
 abstract: |
   Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen.
