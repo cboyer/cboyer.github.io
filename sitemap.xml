@@ -2,29 +2,35 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://cboyer.github.io</loc>
-        <lastmod>2019-03-05T16:59:59-05:00</lastmod>
+        <lastmod>2019-05-25T11:33:08-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/linux.html</loc>
-        <lastmod>2019-03-05T16:59:59-05:00</lastmod>
+        <lastmod>2019-05-25T11:33:08-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/electronique.html</loc>
-        <lastmod>2019-03-05T16:59:59-05:00</lastmod>
+        <lastmod>2019-05-25T11:33:08-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/apropos.html</loc>
-        <lastmod>2019-03-05T16:59:59-05:00</lastmod>
+        <lastmod>2019-05-25T11:33:08-04:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.2</priority>
     </url>
 
+    <url>
+        <loc>https://cboyer.github.io/developpement/r-incontournables/</loc>
+        <lastmod>2019-05-25T10:09:13-04:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
     <url>
         <loc>https://cboyer.github.io/developpement/analyse-wifi-airmonng-r/</loc>
         <lastmod>2019-03-04T14:22:12-04:00</lastmod>

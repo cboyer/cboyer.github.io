@@ -32,7 +32,7 @@
   <style>
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -45,13 +45,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -157,21 +155,21 @@ make
 sudo make install</code></pre>
 <p>Après compilation, NGINX s’installe dans <code>/usr/local/nginx</code>.</p>
 <p>Intègrons NGINX à systemd avec le fichier <code>/usr/lib/systemd/system/nginx.service</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode ini"><code class="sourceCode ini"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">[Unit]</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="dt">Description</span><span class="ot">=</span><span class="st">nginx - high performance web server</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="dt">Documentation</span><span class="ot">=</span><span class="st">http://nginx.org/en/docs/</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="dt">After</span><span class="ot">=</span><span class="st">network-online.target remote-fs.target nss-lookup.target</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="dt">Wants</span><span class="ot">=</span><span class="st">network-online.target</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw">[Service]</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="dt">Type</span><span class="ot">=</span><span class="st">forking</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="dt">PIDFile</span><span class="ot">=</span><span class="st">/var/run/nginx.pid</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="dt">ExecStart</span><span class="ot">=</span><span class="st">/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="dt">ExecReload</span><span class="ot">=</span><span class="st">/bin/kill -s HUP $MAINPID</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="dt">ExecStop</span><span class="ot">=</span><span class="st">/bin/kill -s TERM $MAINPID</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="kw">[Install]</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="dt">WantedBy</span><span class="ot">=</span><span class="st">multi-user.target</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ini"><code class="sourceCode ini"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">[Unit]</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="dt">Description</span><span class="ot">=</span><span class="st">nginx - high performance web server</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="dt">Documentation</span><span class="ot">=</span><span class="st">http://nginx.org/en/docs/</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="dt">After</span><span class="ot">=</span><span class="st">network-online.target remote-fs.target nss-lookup.target</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="dt">Wants</span><span class="ot">=</span><span class="st">network-online.target</span></a>
+<a class="sourceLine" id="cb4-6" title="6"></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="kw">[Service]</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="dt">Type</span><span class="ot">=</span><span class="st">forking</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="dt">PIDFile</span><span class="ot">=</span><span class="st">/var/run/nginx.pid</span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="dt">ExecStart</span><span class="ot">=</span><span class="st">/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf</span></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="dt">ExecReload</span><span class="ot">=</span><span class="st">/bin/kill -s HUP $MAINPID</span></a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="dt">ExecStop</span><span class="ot">=</span><span class="st">/bin/kill -s TERM $MAINPID</span></a>
+<a class="sourceLine" id="cb4-13" title="13"></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="kw">[Install]</span></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="dt">WantedBy</span><span class="ot">=</span><span class="st">multi-user.target</span></a></code></pre></div>
 <p>On recharge les fichiers services:</p>
 <pre class="console"><code>sudo systemctl daemon-reload</code></pre>
 <p>Pour la suite, il suffit de suivre la documentation du module et modifier le fichier <code>/usr/local/nginx/conf/nginx.conf</code>.</p>

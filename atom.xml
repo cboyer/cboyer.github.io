@@ -3,12 +3,22 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2019-03-05T16:59:59-05:00</updated>
+    <updated>2019-05-25T11:33:08-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
     <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <entry>
+        <title>R: les incontournables</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/r-incontournables/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:48d29d28-f09d-5e23-baed-7073729aeb3d</id>
+        <published>2019-05-25T10:09:13-04:00</published>
+        <updated>2019-05-25T10:09:13-04:00</updated>
+        <summary>Opérations incontournables avec le langage R.</summary>
+    </entry>
     <entry>
         <title>Analyse du trafic WiFi avec Airodump-ng et R</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>

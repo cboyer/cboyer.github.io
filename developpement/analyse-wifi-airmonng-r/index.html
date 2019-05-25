@@ -32,7 +32,7 @@
   <style>
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -45,13 +45,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -156,62 +154,62 @@ airodump-ng --band abg -w output.csv --output-format csv wlp3s0mon</code></pre>
 <h2 id="traitement-des-données">Traitement des données</h2>
 <p>Le fichier CSV produit comporte un problème de structure: il inclut deux ensembles de données distincts présentant les données relatives aux points d’accès et celle des clients. Chacun de ces ensembles possède un nombre de colonnes différents ce qui va poser problème à R pour parser ce fichier.</p>
 <p>Autre problème, la colonne “Probe” des données des clients contient des valeurs multiples qui sont séparées par le même caractère (la virgule) servant à distinguer les différentes colonnes. Ceci créé un fichier à nombre de colonnes variables ce qui pose problème avec l’utilisation de la fonction <code>read.csv</code> de R nous obligeant alors à parser nous même le fichier.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#Lecture du fichier</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">airodump &lt;-<span class="st"> </span><span class="kw">readLines</span>(<span class="st">&#39;airmonng_data.csv&#39;</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#Supprime les espaces entre le séparateur</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">airodump &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&#39;</span><span class="ch">\\</span><span class="st">s*,</span><span class="ch">\\</span><span class="st">s*&#39;</span>, <span class="st">&#39;,&#39;</span>, airodump)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#Séparation des données des Points d&#39;accès et des clients</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">i &lt;-<span class="st"> </span><span class="kw">cumsum</span>(airodump <span class="op">==</span><span class="st"> &#39;&#39;</span>)</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">airodump &lt;-<span class="st"> </span><span class="kw">by</span>(airodump, i, paste, <span class="dt">collapse=</span><span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">aps &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">text=</span>airodump[<span class="dv">1</span>], <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">stations &lt;-<span class="st"> </span>airodump[<span class="dv">2</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co">#Lecture du fichier</span></a>
+<a class="sourceLine" id="cb2-2" title="2">airodump &lt;-<span class="st"> </span><span class="kw">readLines</span>(<span class="st">&#39;airmonng_data.csv&#39;</span>)</a>
+<a class="sourceLine" id="cb2-3" title="3"></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">#Supprime les espaces entre le séparateur</span></a>
+<a class="sourceLine" id="cb2-5" title="5">airodump &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&#39;</span><span class="ch">\\</span><span class="st">s*,</span><span class="ch">\\</span><span class="st">s*&#39;</span>, <span class="st">&#39;,&#39;</span>, airodump)</a>
+<a class="sourceLine" id="cb2-6" title="6"></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#Séparation des données des Points d&#39;accès et des clients</span></a>
+<a class="sourceLine" id="cb2-8" title="8">i &lt;-<span class="st"> </span><span class="kw">cumsum</span>(airodump <span class="op">==</span><span class="st"> &#39;&#39;</span>)</a>
+<a class="sourceLine" id="cb2-9" title="9">airodump &lt;-<span class="st"> </span><span class="kw">by</span>(airodump, i, paste, <span class="dt">collapse=</span><span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</a>
+<a class="sourceLine" id="cb2-10" title="10">aps &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">text=</span>airodump[<span class="dv">1</span>], <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb2-11" title="11">stations &lt;-<span class="st"> </span>airodump[<span class="dv">2</span>]</a></code></pre></div>
 <p>L’utilisation de <code>stringsAsFactors=FALSE</code> nous permet d’avoir des colonnes contenant simplement les données sans utiliser de facteurs/levels. Concernant les données clients (<code>stations</code>) nous devons appliquer un traitement supplémentaire pour avoir une structure CSV conforme et parser les données afin obtenir un dataframe exploitable:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">#Sépare les données par lignes</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">stations &lt;-<span class="st"> </span><span class="kw">strsplit</span>(stations, <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>, <span class="dt">fixed=</span><span class="ot">FALSE</span>)<span class="op">$</span><span class="st">`</span><span class="dt">2</span><span class="st">`</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#Supprime les lignes vides</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">stations &lt;-<span class="st"> </span>stations[stations <span class="op">!=</span><span class="st"> &quot;&quot;</span>]</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#Récupère jusqu&#39;à la 6eme colonne (au delà il s&#39;agit de la colonne &quot;Probed ESSIDs&quot; qui utilise le même séparateur pour contenir</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#plusieurs valeurs, ce qui crée un nombre de colonne variable d&#39;une ligne à l&#39;autre)</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">stations &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">strsplit</span>(stations, <span class="st">&quot;,&quot;</span>), <span class="st">`</span><span class="dt">[</span><span class="st">`</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>)</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#Supprime le nom de chaque colonne contenu dans la première ligne (header) car il contient des espaces et des #</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">stations[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#Passe la liste de vecteur en dataframe</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15">stations&lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">do.call</span>(rbind, stations), <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#Ajoute le header</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="kw">colnames</span>(stations) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;MacAddress&#39;</span>, <span class="st">&#39;FirstTimeSeen&#39;</span>, <span class="st">&#39;LastTimeSeen&#39;</span>, <span class="st">&#39;Power&#39;</span>, <span class="st">&#39;Packets&#39;</span>, <span class="st">&#39;BSSID&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co">#Sépare les données par lignes</span></a>
+<a class="sourceLine" id="cb3-2" title="2">stations &lt;-<span class="st"> </span><span class="kw">strsplit</span>(stations, <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>, <span class="dt">fixed=</span><span class="ot">FALSE</span>)<span class="op">$</span><span class="st">`</span><span class="dt">2</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">#Supprime les lignes vides</span></a>
+<a class="sourceLine" id="cb3-5" title="5">stations &lt;-<span class="st"> </span>stations[stations <span class="op">!=</span><span class="st"> &quot;&quot;</span>]</a>
+<a class="sourceLine" id="cb3-6" title="6"></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#Récupère jusqu&#39;à la 6eme colonne (au delà il s&#39;agit de la colonne &quot;Probed ESSIDs&quot; qui utilise le même séparateur pour contenir</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#plusieurs valeurs, ce qui crée un nombre de colonne variable d&#39;une ligne à l&#39;autre)</span></a>
+<a class="sourceLine" id="cb3-9" title="9">stations &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">strsplit</span>(stations, <span class="st">&quot;,&quot;</span>), <span class="st">`</span><span class="dt">[</span><span class="st">`</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb3-10" title="10"></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#Supprime le nom de chaque colonne contenu dans la première ligne (header) car il contient des espaces et des #</span></a>
+<a class="sourceLine" id="cb3-12" title="12">stations[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb3-13" title="13"></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co">#Passe la liste de vecteur en dataframe</span></a>
+<a class="sourceLine" id="cb3-15" title="15">stations&lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">do.call</span>(rbind, stations), <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb3-16" title="16"></a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="co">#Ajoute le header</span></a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="kw">colnames</span>(stations) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;MacAddress&#39;</span>, <span class="st">&#39;FirstTimeSeen&#39;</span>, <span class="st">&#39;LastTimeSeen&#39;</span>, <span class="st">&#39;Power&#39;</span>, <span class="st">&#39;Packets&#39;</span>, <span class="st">&#39;BSSID&#39;</span>)</a></code></pre></div>
 <p>Pour exclure les client n’étant connecté à aucun point d’accès:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">stations &lt;-<span class="st"> </span><span class="kw">subset</span>(stations, <span class="op">!</span>(BSSID <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;(not associated)&#39;</span>) ))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">stations &lt;-<span class="st"> </span><span class="kw">subset</span>(stations, <span class="op">!</span>(BSSID <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;(not associated)&#39;</span>) ))</a></code></pre></div>
 <p>Nous allons travailler à partir du dataframe <code>stations</code> qui contient les données des clients. Pour commencer, nous allons “résoudre” l’adresse MAC du point d’accès en nom de réseau auquel sont connectés les clients à partir de la colonne BSSID (comme un jointure en SQL):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span>aps<span class="op">$</span>ESSID[<span class="kw">match</span>(stations<span class="op">$</span>BSSID, aps<span class="op">$</span>BSSID)]</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span>aps<span class="op">$</span>ESSID[<span class="kw">match</span>(stations<span class="op">$</span>BSSID, aps<span class="op">$</span>BSSID)]</a></code></pre></div>
 <p>Notons que la totalité des colonnes du dataframe <code>aps</code> aurait pu être ajoutée avec la fonction <code>merge()</code>.</p>
 <p>Certains points d’accès ne diffusent pas le nom de leur réseau (d’où les <code>NA</code> dans la colonne <code>stations$Network</code>), utilisons leur adresse MAC pour combler ce manque:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span><span class="kw">ifelse</span>(stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span>, stations<span class="op">$</span>BSSID, stations<span class="op">$</span>Network)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span><span class="kw">ifelse</span>(stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span>, stations<span class="op">$</span>BSSID, stations<span class="op">$</span>Network)</a></code></pre></div>
 <p>Notons que la fonction <code>ifelse()</code> ne fonctionne pas sur facteurs, c’est pourquoi nous utilisons <code>stringsAsFactors=FALSE</code>. Autrement il aurait fallu utiliser <code>as.character()</code> pour chaque paramètre de <code>ifelse()</code>. Au lieu d’utiliser <code>ifelse()</code> nous aurions pu utiliser un vecteur logique afin d’effectuer la même opération:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">hidden &lt;-<span class="st"> </span>stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">stations<span class="op">$</span>Network[hidden] &lt;-<span class="st"> </span>stations<span class="op">$</span>BSSID[hidden]</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">hidden &lt;-<span class="st"> </span>stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span></a>
+<a class="sourceLine" id="cb7-2" title="2">stations<span class="op">$</span>Network[hidden] &lt;-<span class="st"> </span>stations<span class="op">$</span>BSSID[hidden]</a></code></pre></div>
 <p>Complétons nos données en identifiant les constructeurs depuis les adresses MAC avec les listes disponibles sur le site de l’ <a href="https://standards.ieee.org/content/ieee-standards/en/products-services/regauth/index.html">IEEE</a>. R permet de lire cette liste localement ou directement depuis le site de l’IEEE (moins rapide) en fournissant l’URL comme paramètre à <code>read.csv()</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#Chargement de la liste des constructeurs</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">manufacturers &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&#39;oui.csv&#39;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#Crée une colonne contenant l&#39;identifiant du constructeur depuis l&#39;adresse MAC</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">stations<span class="op">$</span>ManufacturerID &lt;-<span class="st"> </span><span class="kw">substr</span>( <span class="kw">gsub</span>(<span class="st">&#39;:&#39;</span>, <span class="st">&#39;&#39;</span>, stations<span class="op">$</span>MacAddress), <span class="dv">0</span>, <span class="dv">6</span>)</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#Obtient le nom du constructeur et le stock dans une nouvelle colonne Constructor</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>Organization.Name[<span class="kw">match</span>(stations<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>Assignment)]</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#Trie les lignes du dataframe par ordre alphabétique des noms de réseau</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">stations &lt;-<span class="st"> </span>stations[<span class="kw">order</span>(stations<span class="op">$</span>Network),]</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co">#Chargement de la liste des constructeurs</span></a>
+<a class="sourceLine" id="cb8-2" title="2">manufacturers &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&#39;oui.csv&#39;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb8-3" title="3"></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co">#Crée une colonne contenant l&#39;identifiant du constructeur depuis l&#39;adresse MAC</span></a>
+<a class="sourceLine" id="cb8-5" title="5">stations<span class="op">$</span>ManufacturerID &lt;-<span class="st"> </span><span class="kw">substr</span>( <span class="kw">gsub</span>(<span class="st">&#39;:&#39;</span>, <span class="st">&#39;&#39;</span>, stations<span class="op">$</span>MacAddress), <span class="dv">0</span>, <span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb8-6" title="6"></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">#Obtient le nom du constructeur et le stock dans une nouvelle colonne Constructor</span></a>
+<a class="sourceLine" id="cb8-8" title="8">stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>Organization.Name[<span class="kw">match</span>(stations<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>Assignment)]</a>
+<a class="sourceLine" id="cb8-9" title="9"></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#Trie les lignes du dataframe par ordre alphabétique des noms de réseau</span></a>
+<a class="sourceLine" id="cb8-11" title="11">stations &lt;-<span class="st"> </span>stations[<span class="kw">order</span>(stations<span class="op">$</span>Network),]</a></code></pre></div>
 <h2 id="analyse-et-présentation-des-données">Analyse et présentation des données</h2>
 <p>Nous sommes maintenant en mesure d’analyser nos données. Commençons par comptabiliser le nombre de client connecté à chaque point d’accès:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">connected &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>( <span class="kw">table</span>(stations<span class="op">$</span>Network) )</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">connected[<span class="kw">order</span>(<span class="op">-</span>connected<span class="op">$</span>Freq),]</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">connected &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>( <span class="kw">table</span>(stations<span class="op">$</span>Network) )</a>
+<a class="sourceLine" id="cb9-2" title="2">connected[<span class="kw">order</span>(<span class="op">-</span>connected<span class="op">$</span>Freq),]</a></code></pre></div>
 <p>Ce qui nous donne:</p>
 <pre class="text"><code>Var1           Freq
 TELUS1643-2.4G    3
@@ -222,18 +220,18 @@ TELUS5176-2.4G    1
 TELUS9471         1
 TELUS9714         1</code></pre>
 <p>Nous pouvons représenter la quantité de données échangées entre chaque clients/points d’accès avec un <a href="https://fr.wikipedia.org/wiki/Diagramme_de_Sankey">diagramme de Sankey</a> à l’aide de la librairie <code>networkD3</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">links &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">source=</span>stations<span class="op">$</span>MacAddress, <span class="dt">target=</span>stations<span class="op">$</span>Network, <span class="dt">value=</span><span class="kw">as.integer</span>(stations<span class="op">$</span>Packets))</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">nodes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name=</span><span class="kw">unique</span>( <span class="kw">c</span>(<span class="kw">as.character</span>(links<span class="op">$</span>source), <span class="kw">as.character</span>(links<span class="op">$</span>target) ) ) )</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">links<span class="op">$</span>IDsource &lt;-<span class="st"> </span><span class="kw">match</span>(links<span class="op">$</span>source, nodes<span class="op">$</span>name)<span class="op">-</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">links<span class="op">$</span>IDtarget &lt;-<span class="st"> </span><span class="kw">match</span>(links<span class="op">$</span>target, nodes<span class="op">$</span>name)<span class="op">-</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">networkD3<span class="op">::</span><span class="kw">sankeyNetwork</span>(<span class="dt">Links =</span> links, <span class="dt">Nodes =</span> nodes,</a>
-<a class="sourceLine" id="cb11-6" data-line-number="6">                         <span class="dt">Source =</span> <span class="st">&#39;IDsource&#39;</span>,</a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">                         <span class="dt">Target =</span> <span class="st">&#39;IDtarget&#39;</span>,</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8">                         <span class="dt">Value =</span> <span class="st">&#39;value&#39;</span>,</a>
-<a class="sourceLine" id="cb11-9" data-line-number="9">                         <span class="dt">NodeID =</span> <span class="st">&#39;name&#39;</span>,</a>
-<a class="sourceLine" id="cb11-10" data-line-number="10">                         <span class="dt">units =</span> <span class="st">&#39;Packets&#39;</span>,</a>
-<a class="sourceLine" id="cb11-11" data-line-number="11">                         <span class="dt">sinksRight=</span><span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb11-12" data-line-number="12">                         <span class="dt">fontSize =</span> <span class="dv">15</span>, <span class="dt">nodeWidth =</span> <span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">links &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">source=</span>stations<span class="op">$</span>MacAddress, <span class="dt">target=</span>stations<span class="op">$</span>Network, <span class="dt">value=</span><span class="kw">as.integer</span>(stations<span class="op">$</span>Packets))</a>
+<a class="sourceLine" id="cb11-2" title="2">nodes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name=</span><span class="kw">unique</span>( <span class="kw">c</span>(<span class="kw">as.character</span>(links<span class="op">$</span>source), <span class="kw">as.character</span>(links<span class="op">$</span>target) ) ) )</a>
+<a class="sourceLine" id="cb11-3" title="3">links<span class="op">$</span>IDsource &lt;-<span class="st"> </span><span class="kw">match</span>(links<span class="op">$</span>source, nodes<span class="op">$</span>name)<span class="op">-</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb11-4" title="4">links<span class="op">$</span>IDtarget &lt;-<span class="st"> </span><span class="kw">match</span>(links<span class="op">$</span>target, nodes<span class="op">$</span>name)<span class="op">-</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb11-5" title="5">networkD3<span class="op">::</span><span class="kw">sankeyNetwork</span>(<span class="dt">Links =</span> links, <span class="dt">Nodes =</span> nodes,</a>
+<a class="sourceLine" id="cb11-6" title="6">                         <span class="dt">Source =</span> <span class="st">&#39;IDsource&#39;</span>,</a>
+<a class="sourceLine" id="cb11-7" title="7">                         <span class="dt">Target =</span> <span class="st">&#39;IDtarget&#39;</span>,</a>
+<a class="sourceLine" id="cb11-8" title="8">                         <span class="dt">Value =</span> <span class="st">&#39;value&#39;</span>,</a>
+<a class="sourceLine" id="cb11-9" title="9">                         <span class="dt">NodeID =</span> <span class="st">&#39;name&#39;</span>,</a>
+<a class="sourceLine" id="cb11-10" title="10">                         <span class="dt">units =</span> <span class="st">&#39;Packets&#39;</span>,</a>
+<a class="sourceLine" id="cb11-11" title="11">                         <span class="dt">sinksRight=</span><span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb11-12" title="12">                         <span class="dt">fontSize =</span> <span class="dv">15</span>, <span class="dt">nodeWidth =</span> <span class="dv">20</span>)</a></code></pre></div>
 <p>Le diagramme qui en résulte est interactif avec RStudio (le survol indique la quantité de paquets), en voici la capture d’écran:</p>
 <figure>
 <img src="sankey.png" alt="Diagramme Sankey" /><figcaption>Diagramme Sankey</figcaption>

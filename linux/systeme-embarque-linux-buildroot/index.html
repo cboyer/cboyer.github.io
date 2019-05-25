@@ -32,7 +32,7 @@
   <style>
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -45,13 +45,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -145,110 +143,110 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Le ciment permettant de lier l’ensemble est <a href="https://buildroot.org/">Buildroot</a> qui va nous permettre d’obtenir un système Linux sur mesure. Buildroot est un outil permettant de générer des systèmes Linux sur mesure en prenant en charge la compilation de la toolchain pour l’architecture cible (ARMv7), du noyau, du bootloader (que nous n’utiliserons pas) et de BusyBox pour l’environnement utilisateur. Tout cela avec nos paramètres définis pour chaque élément: modules dans le noyau, librairies standards (<a href="http://www.etalabs.net/compare_libcs.html">musl</a>, glibc, etc.), gestionnaire de services/périphériques (initd, systemd, udev), binaires à inclure dans BusyBoxy, etc. L’utilité de Buildroot se situe principalement dans sa capacité à gérer les dépendances pour la compilation, exactement comme Portage le fait dans Gentoo.</p>
 <p>Voici les grandes lignes pour produire un système fonctionnel.</p>
 <p>Commençons par récupérer Buildroot:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="fu">git</span> clone https://github.com/buildroot/buildroot</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="bu">cd</span> buildroot</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="fu">git</span> clone https://github.com/buildroot/buildroot</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="bu">cd</span> buildroot</a></code></pre></div>
 <p>Charger la configuration par défaut pour Raspberry Pi 2 (sera ajustée à nos besoins par la suite):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="fu">make</span> raspberrypi2_defconfig</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="fu">make</span> raspberrypi2_defconfig</a></code></pre></div>
 <p>Paramétrer le système (basé sur <code>raspberrypi2_defconfig</code>), les applications à inclure et l’image en sortie. Si on utilise <code>U-Boot</code> comme bootloader, mettre la valeur <code>rpi</code> dans <code>Bootloaders &gt; Select U-Boot &gt; U-Boot board name</code></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="fu">make</span> menuconfig</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="fu">make</span> menuconfig</a></code></pre></div>
 <p>Sauvegarder la configuration Buildroot si on veut la stocker quelque part en particulier:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildroot_config</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildroot_config</a></code></pre></div>
 <p>Pour la charger dans Buildroot:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="fu">make</span> defconfig BR2_DEFCONFIG=./buildroot_config</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1"><span class="fu">make</span> defconfig BR2_DEFCONFIG=./buildroot_config</a></code></pre></div>
 <p>Copier la configuration du noyau (supprimée après un <code>make clean</code>):</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="fu">mkdir</span> -p output/build/linux-custom/</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="fu">cp</span> kernel_config output/build/linux-custom/.config</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="fu">mkdir</span> -p output/build/linux-custom/</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="fu">cp</span> kernel_config output/build/linux-custom/.config</a></code></pre></div>
 <p>Paramétrer le noyau:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="fu">make</span> linux-menuconfig</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" title="1"><span class="fu">make</span> linux-menuconfig</a></code></pre></div>
 <p>On a tendance à vouloir retirer beaucoup de chose dans le noyau (supports de périphériques multimédia, radioamateur, joystick, etc.), il peut arriver de retirer quelque chose d’essentiel ou une dépendance ce qui se traduira par quelque chose de non fonctionnel. Cela a été mon cas avec le driver pour l’interface Ethernet <a href="https://cateee.net/lkddb/web-lkddb/USB_NET_SMSC95XX.html">SMSC95XX</a> dans <code>Devices Drivers &gt; Network Device Support &gt; USB Network Adapters &gt; SMSC LAN95XX based USB 2.0 10/100 ethernet devices</code> qui dépendait de <code>Multi-purpose USB Networking Framework</code>.</p>
 <p>Pour recompiler le noyau uniquement après un changement dans sa configuration:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="fu">make</span> linux-build</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" title="1"><span class="fu">make</span> linux-build</a></code></pre></div>
 <p>Paramétrer Busybox:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="fu">make</span> busybox-menuconfig</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb9-1" title="1"><span class="fu">make</span> busybox-menuconfig</a></code></pre></div>
 <p>Paramétrer UBoot (si utilisé):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="fu">make</span> uboot-menuconfig</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb10-1" title="1"><span class="fu">make</span> uboot-menuconfig</a></code></pre></div>
 <p>Lancer la compilation:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="fu">make</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb11-1" title="1"><span class="fu">make</span></a></code></pre></div>
 <p>Après un long moment de compilation (notamment pour la toolchain), l’image devrait être disponible dans <code>output/images/</code>. Au final je suis parvenu à une partition <code>/</code> de 30Mo, <code>/boot</code> de 10Mo et une utilisation de la RAM sur le Raspberry ne dépassant pas 16Mo. Il aurait été possible de descendre encore en retirant des éléments dans BusyBox.</p>
 <h2 id="tests-avec-qemu">Tests avec Qemu</h2>
 <p>L’image générée après compilation m’a posée problème avec Qemu pour faire mes tests: il semble y avoir un problème d’offset dans la table de partition bien que le Raspberry Pi arrive parfaitement à exécuter le système. J’ai donc généré moi même l’image depuis l’archive <code>rootfs.tar.gz</code> et <code>boot.vfat</code> produits par Buildroot avec le script suivant (utilise <code>bsdtar</code> et nécessite <code>sudo</code> pour l’exécution):</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="va">IMG_SIZE=</span><span class="st">&quot;60M&quot;</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="va">IMG_DIR=</span><span class="st">&quot;/opt/buildroot/buildroot/output/images&quot;</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="va">IMG_OUTPUT=</span><span class="st">&quot;rpi2.img&quot;</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="bu">echo</span> -e <span class="st">&quot;\nCREATING IMAGE FILE&quot;</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="fu">rm</span> -f <span class="st">&quot;</span><span class="va">$IMG_OUTPUT</span><span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="ex">fallocate</span> -l <span class="st">&quot;</span><span class="va">$IMG_SIZE</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$IMG_OUTPUT</span><span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="bu">echo</span> -e <span class="st">&quot;CREATING IMAGE FILESYSTEMS&quot;</span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="va">LOOP=$(</span><span class="ex">losetup</span> -f<span class="va">)</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="ex">losetup</span> <span class="st">&quot;</span><span class="va">$LOOP</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$IMG_OUTPUT</span><span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="ex">fdisk</span> <span class="st">&quot;</span><span class="va">$LOOP</span><span class="st">&quot;</span> <span class="op">&lt;&lt;EOF</span></a>
-<a class="sourceLine" id="cb12-14" data-line-number="14">o</a>
-<a class="sourceLine" id="cb12-15" data-line-number="15">n</a>
-<a class="sourceLine" id="cb12-16" data-line-number="16">p</a>
-<a class="sourceLine" id="cb12-17" data-line-number="17">1</a>
-<a class="sourceLine" id="cb12-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb12-19" data-line-number="19">+10M</a>
-<a class="sourceLine" id="cb12-20" data-line-number="20">t</a>
-<a class="sourceLine" id="cb12-21" data-line-number="21">c</a>
-<a class="sourceLine" id="cb12-22" data-line-number="22">n</a>
-<a class="sourceLine" id="cb12-23" data-line-number="23">p</a>
-<a class="sourceLine" id="cb12-24" data-line-number="24">2</a>
-<a class="sourceLine" id="cb12-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb12-26" data-line-number="26">+50M</a>
-<a class="sourceLine" id="cb12-27" data-line-number="27">n</a>
-<a class="sourceLine" id="cb12-28" data-line-number="28">p</a>
-<a class="sourceLine" id="cb12-29" data-line-number="29">3</a>
-<a class="sourceLine" id="cb12-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb12-31" data-line-number="31"></a>
-<a class="sourceLine" id="cb12-32" data-line-number="32">p</a>
-<a class="sourceLine" id="cb12-33" data-line-number="33">w</a>
-<a class="sourceLine" id="cb12-34" data-line-number="34">EOF</a>
-<a class="sourceLine" id="cb12-35" data-line-number="35"></a>
-<a class="sourceLine" id="cb12-36" data-line-number="36">losetup -d &quot;<span class="va">$LOOP</span>&quot;</a>
-<a class="sourceLine" id="cb12-37" data-line-number="37">losetup -P &quot;<span class="va">$LOOP</span>&quot; &quot;<span class="va">$IMG_OUTPUT</span>&quot;</a>
-<a class="sourceLine" id="cb12-38" data-line-number="38"></a>
-<a class="sourceLine" id="cb12-39" data-line-number="39">echo -e &quot;FORMAT IMAGE FILESYSTEMS&quot;</a>
-<a class="sourceLine" id="cb12-40" data-line-number="40">sleep 3</a>
-<a class="sourceLine" id="cb12-41" data-line-number="41">mkfs.vfat &quot;<span class="va">${LOOP}</span>p1&quot;</a>
-<a class="sourceLine" id="cb12-42" data-line-number="42">mkfs.ext4 &quot;<span class="va">${LOOP}</span>p2&quot;</a>
-<a class="sourceLine" id="cb12-43" data-line-number="43"></a>
-<a class="sourceLine" id="cb12-44" data-line-number="44">echo -e &quot;MOUNTING IMAGE FILESYSTEMS&quot;</a>
-<a class="sourceLine" id="cb12-45" data-line-number="45">mkdir -p mnt/boot_temp</a>
-<a class="sourceLine" id="cb12-46" data-line-number="46">mount -t vfat -o loop &quot;<span class="va">${IMG_DIR}</span>/boot.vfat&quot; &quot;mnt/boot_temp&quot;</a>
-<a class="sourceLine" id="cb12-47" data-line-number="47">mkdir -p mnt/boot</a>
-<a class="sourceLine" id="cb12-48" data-line-number="48">mount &quot;<span class="va">${LOOP}</span>p1&quot; mnt/boot</a>
-<a class="sourceLine" id="cb12-49" data-line-number="49">mkdir -p mnt/root</a>
-<a class="sourceLine" id="cb12-50" data-line-number="50">mount &quot;<span class="va">${LOOP}</span>p2&quot; mnt/root</a>
-<a class="sourceLine" id="cb12-51" data-line-number="51"></a>
-<a class="sourceLine" id="cb12-52" data-line-number="52">echo -e &quot;EXTRACTING ROOTFS TO IMAGE&quot;</a>
-<a class="sourceLine" id="cb12-53" data-line-number="53">bsdtar -xpf &quot;<span class="va">$IMG_DIR</span>/rootfs.tar.gz&quot; -C mnt/root</a>
-<a class="sourceLine" id="cb12-54" data-line-number="54">echo -e &quot;EXTRACTING BOOTFS TO IMAGE&quot;</a>
-<a class="sourceLine" id="cb12-55" data-line-number="55">cp mnt/boot_temp/* mnt/boot</a>
-<a class="sourceLine" id="cb12-56" data-line-number="56"></a>
-<a class="sourceLine" id="cb12-57" data-line-number="57">echo -e &quot;UNMOUNTING IMAGE FILESYSTEMS&quot;</a>
-<a class="sourceLine" id="cb12-58" data-line-number="58">sync</a>
-<a class="sourceLine" id="cb12-59" data-line-number="59">umount mnt/boot mnt/root mnt/boot_temp</a>
-<a class="sourceLine" id="cb12-60" data-line-number="60">losetup -d &quot;<span class="va">$LOOP</span>&quot;</a>
-<a class="sourceLine" id="cb12-61" data-line-number="61"></a>
-<a class="sourceLine" id="cb12-62" data-line-number="62">chown cyril:cyril &quot;<span class="va">$IMG_OUTPUT</span>&quot;</a>
-<a class="sourceLine" id="cb12-63" data-line-number="63">echo -e &quot;Done !&quot;</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" title="1"><span class="va">IMG_SIZE=</span><span class="st">&quot;60M&quot;</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="va">IMG_DIR=</span><span class="st">&quot;/opt/buildroot/buildroot/output/images&quot;</span></a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="va">IMG_OUTPUT=</span><span class="st">&quot;rpi2.img&quot;</span></a>
+<a class="sourceLine" id="cb12-4" title="4"></a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="bu">echo</span> -e <span class="st">&quot;\nCREATING IMAGE FILE&quot;</span></a>
+<a class="sourceLine" id="cb12-6" title="6"><span class="fu">rm</span> -f <span class="st">&quot;</span><span class="va">$IMG_OUTPUT</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb12-7" title="7"><span class="ex">fallocate</span> -l <span class="st">&quot;</span><span class="va">$IMG_SIZE</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$IMG_OUTPUT</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb12-8" title="8"></a>
+<a class="sourceLine" id="cb12-9" title="9"><span class="bu">echo</span> -e <span class="st">&quot;CREATING IMAGE FILESYSTEMS&quot;</span></a>
+<a class="sourceLine" id="cb12-10" title="10"><span class="va">LOOP=$(</span><span class="ex">losetup</span> -f<span class="va">)</span></a>
+<a class="sourceLine" id="cb12-11" title="11"><span class="ex">losetup</span> <span class="st">&quot;</span><span class="va">$LOOP</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$IMG_OUTPUT</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb12-12" title="12"></a>
+<a class="sourceLine" id="cb12-13" title="13"><span class="ex">fdisk</span> <span class="st">&quot;</span><span class="va">$LOOP</span><span class="st">&quot;</span> <span class="op">&lt;&lt;EOF</span></a>
+<a class="sourceLine" id="cb12-14" title="14">o</a>
+<a class="sourceLine" id="cb12-15" title="15">n</a>
+<a class="sourceLine" id="cb12-16" title="16">p</a>
+<a class="sourceLine" id="cb12-17" title="17">1</a>
+<a class="sourceLine" id="cb12-18" title="18"></a>
+<a class="sourceLine" id="cb12-19" title="19">+10M</a>
+<a class="sourceLine" id="cb12-20" title="20">t</a>
+<a class="sourceLine" id="cb12-21" title="21">c</a>
+<a class="sourceLine" id="cb12-22" title="22">n</a>
+<a class="sourceLine" id="cb12-23" title="23">p</a>
+<a class="sourceLine" id="cb12-24" title="24">2</a>
+<a class="sourceLine" id="cb12-25" title="25"></a>
+<a class="sourceLine" id="cb12-26" title="26">+50M</a>
+<a class="sourceLine" id="cb12-27" title="27">n</a>
+<a class="sourceLine" id="cb12-28" title="28">p</a>
+<a class="sourceLine" id="cb12-29" title="29">3</a>
+<a class="sourceLine" id="cb12-30" title="30"></a>
+<a class="sourceLine" id="cb12-31" title="31"></a>
+<a class="sourceLine" id="cb12-32" title="32">p</a>
+<a class="sourceLine" id="cb12-33" title="33">w</a>
+<a class="sourceLine" id="cb12-34" title="34"><span class="op">EOF</span></a>
+<a class="sourceLine" id="cb12-35" title="35"></a>
+<a class="sourceLine" id="cb12-36" title="36"><span class="ex">losetup</span> -d <span class="st">&quot;</span><span class="va">$LOOP</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb12-37" title="37"><span class="ex">losetup</span> -P <span class="st">&quot;</span><span class="va">$LOOP</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$IMG_OUTPUT</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb12-38" title="38"></a>
+<a class="sourceLine" id="cb12-39" title="39"><span class="bu">echo</span> -e <span class="st">&quot;FORMAT IMAGE FILESYSTEMS&quot;</span></a>
+<a class="sourceLine" id="cb12-40" title="40"><span class="fu">sleep</span> 3</a>
+<a class="sourceLine" id="cb12-41" title="41"><span class="ex">mkfs.vfat</span> <span class="st">&quot;</span><span class="va">${LOOP}</span><span class="st">p1&quot;</span></a>
+<a class="sourceLine" id="cb12-42" title="42"><span class="ex">mkfs.ext4</span> <span class="st">&quot;</span><span class="va">${LOOP}</span><span class="st">p2&quot;</span></a>
+<a class="sourceLine" id="cb12-43" title="43"></a>
+<a class="sourceLine" id="cb12-44" title="44"><span class="bu">echo</span> -e <span class="st">&quot;MOUNTING IMAGE FILESYSTEMS&quot;</span></a>
+<a class="sourceLine" id="cb12-45" title="45"><span class="fu">mkdir</span> -p mnt/boot_temp</a>
+<a class="sourceLine" id="cb12-46" title="46"><span class="fu">mount</span> -t vfat -o loop <span class="st">&quot;</span><span class="va">${IMG_DIR}</span><span class="st">/boot.vfat&quot;</span> <span class="st">&quot;mnt/boot_temp&quot;</span></a>
+<a class="sourceLine" id="cb12-47" title="47"><span class="fu">mkdir</span> -p mnt/boot</a>
+<a class="sourceLine" id="cb12-48" title="48"><span class="fu">mount</span> <span class="st">&quot;</span><span class="va">${LOOP}</span><span class="st">p1&quot;</span> mnt/boot</a>
+<a class="sourceLine" id="cb12-49" title="49"><span class="fu">mkdir</span> -p mnt/root</a>
+<a class="sourceLine" id="cb12-50" title="50"><span class="fu">mount</span> <span class="st">&quot;</span><span class="va">${LOOP}</span><span class="st">p2&quot;</span> mnt/root</a>
+<a class="sourceLine" id="cb12-51" title="51"></a>
+<a class="sourceLine" id="cb12-52" title="52"><span class="bu">echo</span> -e <span class="st">&quot;EXTRACTING ROOTFS TO IMAGE&quot;</span></a>
+<a class="sourceLine" id="cb12-53" title="53"><span class="ex">bsdtar</span> -xpf <span class="st">&quot;</span><span class="va">$IMG_DIR</span><span class="st">/rootfs.tar.gz&quot;</span> -C mnt/root</a>
+<a class="sourceLine" id="cb12-54" title="54"><span class="bu">echo</span> -e <span class="st">&quot;EXTRACTING BOOTFS TO IMAGE&quot;</span></a>
+<a class="sourceLine" id="cb12-55" title="55"><span class="fu">cp</span> mnt/boot_temp/* mnt/boot</a>
+<a class="sourceLine" id="cb12-56" title="56"></a>
+<a class="sourceLine" id="cb12-57" title="57"><span class="bu">echo</span> -e <span class="st">&quot;UNMOUNTING IMAGE FILESYSTEMS&quot;</span></a>
+<a class="sourceLine" id="cb12-58" title="58"><span class="fu">sync</span></a>
+<a class="sourceLine" id="cb12-59" title="59"><span class="fu">umount</span> mnt/boot mnt/root mnt/boot_temp</a>
+<a class="sourceLine" id="cb12-60" title="60"><span class="ex">losetup</span> -d <span class="st">&quot;</span><span class="va">$LOOP</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb12-61" title="61"></a>
+<a class="sourceLine" id="cb12-62" title="62"><span class="fu">chown</span> cyril:cyril <span class="st">&quot;</span><span class="va">$IMG_OUTPUT</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb12-63" title="63"><span class="bu">echo</span> -e <span class="st">&quot;Done !&quot;</span></a></code></pre></div>
 <p>Lancer l’image avec Qemu pour les tests</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="ex">qemu-system-arm</span> -M raspi2 -cpu arm1176 -m 1G -smp 4 \</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">-append <span class="st">&quot;ro earlyprintk loglevel=8 console=ttyAMA0,115200 dwc_otg.lpm_enable=0 rootfstype=ext4 root=/dev/mmcblk0p2 rootwait&quot;</span> \</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">-dtb output/images/bcm2709-rpi-2-b.dtb -drive if=sd,driver=raw,file=rpi2.img \</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">-kernel output/images/zImage -serial stdio</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" title="1"><span class="ex">qemu-system-arm</span> -M raspi2 -cpu arm1176 -m 1G -smp 4 \</a>
+<a class="sourceLine" id="cb13-2" title="2">-append <span class="st">&quot;ro earlyprintk loglevel=8 console=ttyAMA0,115200 dwc_otg.lpm_enable=0 rootfstype=ext4 root=/dev/mmcblk0p2 rootwait&quot;</span> \</a>
+<a class="sourceLine" id="cb13-3" title="3">-dtb output/images/bcm2709-rpi-2-b.dtb -drive if=sd,driver=raw,file=rpi2.img \</a>
+<a class="sourceLine" id="cb13-4" title="4">-kernel output/images/zImage -serial stdio</a></code></pre></div>
 <p>Pour envoyer votre image sur un support physique (carte SD dans notre cas):</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="fu">dd</span> bs=4M if=rpi2.img of=/dev/mmcblk0 status=progress</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="fu">sync</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" title="1"><span class="fu">dd</span> bs=4M if=rpi2.img of=/dev/mmcblk0 status=progress</a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="fu">sync</span></a></code></pre></div>
 <h2 id="modification-manuelle-de-limage">Modification manuelle de l’image</h2>
 <p>Il est nécessaire d’ajouter des fichiers <code>.dtb</code> dans la partition <code>/boot</code> afin de faire fonctionner certains composants comme le capteur DS18B20. Pour cela, monter la partition <code>/boot</code> du fichier <code>rpi2.img</code> avec <code>losetup</code> et <code>mount</code> comme dans le script précédent puis:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="fu">mkdir</span> mnt/boot/overlays</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="ex">dtc</span> -O dtb -o w1-gpio-overlay.dtb output/build/linux-custom/arch/arm/boot/dts/overlays/w1-gpio-overlay.dts</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="fu">cp</span> w1-gpio-overlay.dtb mnt/boot/overlays</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="bu">echo</span> <span class="st">&quot;dtoverlay=w1-gpio,pullup=1,gpiopin=4&quot;</span> <span class="op">&gt;&gt;</span> mnt/boot/config.txt</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb15-1" title="1"><span class="fu">mkdir</span> mnt/boot/overlays</a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="ex">dtc</span> -O dtb -o w1-gpio-overlay.dtb output/build/linux-custom/arch/arm/boot/dts/overlays/w1-gpio-overlay.dts</a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="fu">cp</span> w1-gpio-overlay.dtb mnt/boot/overlays</a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="bu">echo</span> <span class="st">&quot;dtoverlay=w1-gpio,pullup=1,gpiopin=4&quot;</span> <span class="op">&gt;&gt;</span> mnt/boot/config.txt</a></code></pre></div>
 <p>Pour faire correctement les choses, il faudrait utiliser un <em>post-script</em> ou encore un <em>overlay</em> dans Builroot pour insérer des fichiers dans l’image produite. C’est également de cette manière qu’il faut intégrer sa partie applicative.</p>
 <h2 id="les-bonnes-pratiques">Les bonnes pratiques</h2>
 <ul>

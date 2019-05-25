@@ -32,7 +32,7 @@
   <style>
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -45,13 +45,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -150,15 +148,15 @@ id</code></pre>
 <p>Installer la mise à jour du VIOS:</p>
 <pre class="console"><code>updateios -accept -dev /home/padmin/Extact/ -install</code></pre>
 <p>Changer le prompt:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="bu">echo</span> <span class="st">&quot;export ENV=/home/padmin/.kshrc&quot;</span> <span class="op">&gt;&gt;</span> /home/padmin/.profile</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="bu">echo</span> <span class="st">&quot;export ENV=/home/padmin/.kshrc&quot;</span> <span class="op">&gt;&gt;</span> /home/padmin/.profile</a></code></pre></div>
 <p>Créer le /home/padmin/.kshrc avec:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="bu">export</span> <span class="va">HOST=</span><span class="st">&quot;</span><span class="va">$(</span><span class="ex">/usr/bin/uname</span> -n<span class="va">)</span><span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">if</span><span class="bu"> [</span> <span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;root&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> # &quot;</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw">else</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> $ &quot;</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="kw">fi</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw">set</span> <span class="ex">-o</span> vi</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1"><span class="bu">export</span> <span class="va">HOST=</span><span class="st">&quot;</span><span class="va">$(</span><span class="ex">/usr/bin/uname</span> -n<span class="va">)</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw">if</span><span class="bu"> [</span> <span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;root&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></a>
+<a class="sourceLine" id="cb5-3" title="3">  <span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> # &quot;</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="kw">else</span></a>
+<a class="sourceLine" id="cb5-5" title="5">  <span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> $ &quot;</span></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="kw">fi</span></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="kw">set</span> <span class="ex">-o</span> vi</a></code></pre></div>
 <p>Changer la date (mmJJHHMMAAAA):</p>
 <pre class="console"><code>chdate 070913232015</code></pre>
 <p>Détails des interfaces:</p>

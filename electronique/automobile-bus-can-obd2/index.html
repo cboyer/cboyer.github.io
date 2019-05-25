@@ -32,7 +32,7 @@
   <style>
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -45,13 +45,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -205,45 +203,45 @@ code span.wa { color: #bf0303; } /* Warning */
 </tbody>
 </table>
 <p>L’équivalent sous forme de code:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb1-1" data-line-number="1">[<span class="bn">0x7E0</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb1-1" title="1">[<span class="bn">0x7E0</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>]]</a></code></pre></div>
 <p>En réponse l’ECU devrait émettre le message suivant (avec la clé de contact):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb2-1" data-line-number="1">[<span class="bn">0x7E8</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> [<span class="dv">3</span><span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x41</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb2-1" title="1">[<span class="bn">0x7E8</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> [<span class="dv">3</span><span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x41</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>]]</a></code></pre></div>
 <p>Notons que la représentation hexadécimale utilisée ici pour les octets composant le message peut être remplacée pour utiliser directement des entiers. Nous utiliserons ici l’interface de scripting comme moyen d’interroger l’ECU bien que SavvyCAN possède déjà cette fonctionnalité via l’interface graphique en envoyant des messages dont le contenu est saisi sans code JavaScript. Voici un exemple de script SavvyCAN (JavaScript) pour récupérer la température de l’huile moteur et le régime moteur toutes les secondes:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">//Configuration initiale</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">function</span> <span class="at">setup</span>()<span class="op">{</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="co">//Fréquence d&#39;exécution de la fonction tick() à 1 seconde</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="va">host</span>.<span class="at">setTickInterval</span>(<span class="dv">1000</span>)<span class="op">;</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="co">//Accepte uniquement les réponses de l&#39;ECU (0x7E8)</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="va">uds</span>.<span class="at">setFilter</span>(<span class="bn">0x7E8</span><span class="op">,</span> <span class="bn">0x7E8</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">//Callback exécuté lors de la réception d&#39;un message</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="kw">function</span> <span class="at">gotUDSMessage</span>(bus<span class="op">,</span> id<span class="op">,</span> service<span class="op">,</span> subFunc<span class="op">,</span> len<span class="op">,</span> data)<span class="op">{</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">  <span class="co">//Affiche tout le message</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13">  <span class="co">//host.log(&quot;Bus: &quot; + bus + &quot; id: &quot; + id.toString(16) + &quot; service: &quot; + service.toString(16) + &quot; data: &quot; + data.toString(16));</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15">  <span class="co">//S&#39;il s&#39;agit de l&#39;huile moteur</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16">  <span class="cf">if</span>(data[<span class="dv">0</span>] <span class="op">==</span> <span class="bn">0x5C</span>)<span class="op">{</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17">    <span class="kw">var</span> temperature <span class="op">=</span> data[<span class="dv">1</span>] <span class="op">-</span> <span class="dv">40</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18">    <span class="va">host</span>.<span class="at">log</span>(<span class="st">&quot;Huile moteur: &quot;</span> <span class="op">+</span> <span class="va">temperature</span>.<span class="at">toString</span>() <span class="op">+</span> <span class="st">&quot; °C&quot;</span>)<span class="op">;</span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20">    <span class="co">//Demande le régime moteur RPM (0x0C) sur le bus 0</span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21">    <span class="va">can</span>.<span class="at">sendFrame</span>(<span class="dv">0</span><span class="op">,</span> <span class="bn">0x7E0</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> <span class="bn">0x0C</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>])<span class="op">;</span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22">  <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"></a>
-<a class="sourceLine" id="cb3-24" data-line-number="24">  <span class="co">//S&#39;il s&#39;agit du régime moteur</span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25">  <span class="cf">if</span>(data[<span class="dv">0</span>] <span class="op">==</span> <span class="bn">0x0C</span>)<span class="op">{</span></a>
-<a class="sourceLine" id="cb3-26" data-line-number="26">    <span class="kw">var</span> rpm <span class="op">=</span> (<span class="dv">256</span> <span class="op">*</span> data[<span class="dv">1</span>] <span class="op">+</span> data[<span class="dv">2</span>]) / <span class="dv">4</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb3-27" data-line-number="27">    <span class="va">host</span>.<span class="at">log</span>(<span class="st">&quot;Régime moteur: &quot;</span> <span class="op">+</span> <span class="va">rpm</span>.<span class="at">toString</span>() <span class="op">+</span> <span class="st">&quot; RPM&quot;</span>)<span class="op">;</span></a>
-<a class="sourceLine" id="cb3-28" data-line-number="28">  <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">//Fonction exécutée périodiquement</span></a>
-<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="kw">function</span> <span class="at">tick</span>()<span class="op">{</span></a>
-<a class="sourceLine" id="cb3-33" data-line-number="33">  <span class="co">//Demande la température de l&#39;huile moteur (0x5C) sur le bus 0</span></a>
-<a class="sourceLine" id="cb3-34" data-line-number="34">  <span class="va">can</span>.<span class="at">sendFrame</span>(<span class="dv">0</span><span class="op">,</span> <span class="bn">0x7E0</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>])<span class="op">;</span></a>
-<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb3-1" title="1"><span class="co">//Configuration initiale</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">function</span> <span class="at">setup</span>()<span class="op">{</span></a>
+<a class="sourceLine" id="cb3-3" title="3">  <span class="co">//Fréquence d&#39;exécution de la fonction tick() à 1 seconde</span></a>
+<a class="sourceLine" id="cb3-4" title="4">  <span class="va">host</span>.<span class="at">setTickInterval</span>(<span class="dv">1000</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb3-5" title="5"></a>
+<a class="sourceLine" id="cb3-6" title="6">  <span class="co">//Accepte uniquement les réponses de l&#39;ECU (0x7E8)</span></a>
+<a class="sourceLine" id="cb3-7" title="7">  <span class="va">uds</span>.<span class="at">setFilter</span>(<span class="bn">0x7E8</span><span class="op">,</span> <span class="bn">0x7E8</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-9" title="9"></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">//Callback exécuté lors de la réception d&#39;un message</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="kw">function</span> <span class="at">gotUDSMessage</span>(bus<span class="op">,</span> id<span class="op">,</span> service<span class="op">,</span> subFunc<span class="op">,</span> len<span class="op">,</span> data)<span class="op">{</span></a>
+<a class="sourceLine" id="cb3-12" title="12">  <span class="co">//Affiche tout le message</span></a>
+<a class="sourceLine" id="cb3-13" title="13">  <span class="co">//host.log(&quot;Bus: &quot; + bus + &quot; id: &quot; + id.toString(16) + &quot; service: &quot; + service.toString(16) + &quot; data: &quot; + data.toString(16));</span></a>
+<a class="sourceLine" id="cb3-14" title="14"></a>
+<a class="sourceLine" id="cb3-15" title="15">  <span class="co">//S&#39;il s&#39;agit de l&#39;huile moteur</span></a>
+<a class="sourceLine" id="cb3-16" title="16">  <span class="cf">if</span>(data[<span class="dv">0</span>] <span class="op">==</span> <span class="bn">0x5C</span>)<span class="op">{</span></a>
+<a class="sourceLine" id="cb3-17" title="17">    <span class="kw">var</span> temperature <span class="op">=</span> data[<span class="dv">1</span>] <span class="op">-</span> <span class="dv">40</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb3-18" title="18">    <span class="va">host</span>.<span class="at">log</span>(<span class="st">&quot;Huile moteur: &quot;</span> <span class="op">+</span> <span class="va">temperature</span>.<span class="at">toString</span>() <span class="op">+</span> <span class="st">&quot; °C&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb3-19" title="19"></a>
+<a class="sourceLine" id="cb3-20" title="20">    <span class="co">//Demande le régime moteur RPM (0x0C) sur le bus 0</span></a>
+<a class="sourceLine" id="cb3-21" title="21">    <span class="va">can</span>.<span class="at">sendFrame</span>(<span class="dv">0</span><span class="op">,</span> <span class="bn">0x7E0</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> <span class="bn">0x0C</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>])<span class="op">;</span></a>
+<a class="sourceLine" id="cb3-22" title="22">  <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-23" title="23"></a>
+<a class="sourceLine" id="cb3-24" title="24">  <span class="co">//S&#39;il s&#39;agit du régime moteur</span></a>
+<a class="sourceLine" id="cb3-25" title="25">  <span class="cf">if</span>(data[<span class="dv">0</span>] <span class="op">==</span> <span class="bn">0x0C</span>)<span class="op">{</span></a>
+<a class="sourceLine" id="cb3-26" title="26">    <span class="kw">var</span> rpm <span class="op">=</span> (<span class="dv">256</span> <span class="op">*</span> data[<span class="dv">1</span>] <span class="op">+</span> data[<span class="dv">2</span>]) / <span class="dv">4</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb3-27" title="27">    <span class="va">host</span>.<span class="at">log</span>(<span class="st">&quot;Régime moteur: &quot;</span> <span class="op">+</span> <span class="va">rpm</span>.<span class="at">toString</span>() <span class="op">+</span> <span class="st">&quot; RPM&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb3-28" title="28">  <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-29" title="29"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-30" title="30"></a>
+<a class="sourceLine" id="cb3-31" title="31"><span class="co">//Fonction exécutée périodiquement</span></a>
+<a class="sourceLine" id="cb3-32" title="32"><span class="kw">function</span> <span class="at">tick</span>()<span class="op">{</span></a>
+<a class="sourceLine" id="cb3-33" title="33">  <span class="co">//Demande la température de l&#39;huile moteur (0x5C) sur le bus 0</span></a>
+<a class="sourceLine" id="cb3-34" title="34">  <span class="va">can</span>.<span class="at">sendFrame</span>(<span class="dv">0</span><span class="op">,</span> <span class="bn">0x7E0</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>])<span class="op">;</span></a>
+<a class="sourceLine" id="cb3-35" title="35"><span class="op">}</span></a></code></pre></div>
 <p>Notons que la fonction <code>can.sendFrame()</code> pour récupérer le régime moteur <code>0x0C</code> est exécutée à la réception de la température de l’huile moteur <code>0x5C</code> car l’exécuter dans <code>tick()</code> directement à la suite de l’autre <code>can.sendFrame()</code> ne nous permet pas d’obtenir une réponse de l’ECU, probablement car il faut un délais entre les deux.</p>
 <p>Le réel intérêt d’utiliser l’interface de scripting est de pouvoir interagir avec l’ECU à la manière des outils du constructeur: par exemple la reprogrammation de l’ECU passe par une méthode d’authentification challenge-response suivie l’envoie d’octets. D’autres exemples sont disponibles <a href="https://github.com/collin80/SavvyCAN/tree/master/examples">ici</a>.</p>
 <h2 id="le-cas-subaru-impreza-2015">Le cas Subaru Impreza 2015</h2>

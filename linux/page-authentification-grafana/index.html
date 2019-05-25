@@ -32,7 +32,7 @@
   <style>
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -45,13 +45,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -238,51 +236,51 @@ location /status/public/img/fav32.png {
         proxy_pass https://127.0.0.1/favicon.ico;
 }</code></pre>
 <p>Maintenant ajoutons la page d’authentification personnalisée <code>login.html</code> dans <code>/usr/share/nginx/html/</code>. Voici une version minimaliste à étoffer selon vos besoins :</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">&lt;html&gt;</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">&lt;head&gt;</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="kw">&lt;title&gt;</span>Grafana Authentification<span class="kw">&lt;/title&gt;</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw">&lt;/head&gt;</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw">&lt;body&gt;</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="kw">&lt;h1&gt;</span>Grafana Authentification<span class="kw">&lt;/h1&gt;</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">  <span class="kw">&lt;form</span><span class="ot"> onsubmit=</span><span class="st">&quot;return false;&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9">    <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;text&quot;</span><span class="ot"> id=</span><span class="st">&quot;user&quot;</span><span class="ot"> placeholder=</span><span class="st">&quot;Identifiant&quot;</span><span class="ot"> required</span><span class="kw">&gt;&lt;br&gt;</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">    <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;password&quot;</span><span class="ot"> id=</span><span class="st">&quot;password&quot;</span><span class="ot"> placeholder=</span><span class="st">&quot;Mot de passe&quot;</span><span class="ot"> required</span><span class="kw">&gt;&lt;br&gt;</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">    <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;submit&quot;</span><span class="ot"> value=</span><span class="st">&quot;Connexion&quot;</span><span class="ot"> onClick=</span><span class="st">&quot;login()&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="kw">&lt;/form&gt;</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="kw">&lt;/body&gt;</span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="kw">&lt;script&gt;</span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="kw">function</span> <span class="at">login</span>()<span class="op">{</span></a>
-<a class="sourceLine" id="cb4-17" data-line-number="17">  <span class="kw">var</span> user <span class="op">=</span> <span class="va">document</span>.<span class="at">getElementById</span>(<span class="st">&#39;user&#39;</span>).<span class="at">value</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb4-18" data-line-number="18">  <span class="kw">var</span> password <span class="op">=</span> <span class="va">document</span>.<span class="at">getElementById</span>(<span class="st">&#39;password&#39;</span>).<span class="at">value</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb4-19" data-line-number="19">  <span class="cf">if</span>(user <span class="op">==</span> <span class="st">&#39;&#39;</span>)</a>
-<a class="sourceLine" id="cb4-20" data-line-number="20">    <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb4-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb4-22" data-line-number="22">  <span class="cf">if</span>(password <span class="op">==</span> <span class="st">&#39;&#39;</span>)</a>
-<a class="sourceLine" id="cb4-23" data-line-number="23">    <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb4-24" data-line-number="24"></a>
-<a class="sourceLine" id="cb4-25" data-line-number="25">  <span class="kw">var</span> http <span class="op">=</span> <span class="kw">new</span> <span class="at">XMLHttpRequest</span>()<span class="op">;</span></a>
-<a class="sourceLine" id="cb4-26" data-line-number="26">  <span class="kw">var</span> url <span class="op">=</span> <span class="st">&quot;/grafana/auth&quot;</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb4-27" data-line-number="27">  <span class="kw">var</span> params <span class="op">=</span> <span class="st">&quot;user=&quot;</span><span class="op">+</span>user<span class="op">+</span><span class="st">&quot;&amp;password=&quot;</span><span class="op">+</span>password<span class="op">;</span></a>
-<a class="sourceLine" id="cb4-28" data-line-number="28">  <span class="va">http</span>.<span class="at">open</span>(<span class="st">&quot;POST&quot;</span><span class="op">,</span> url<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></a>
-<a class="sourceLine" id="cb4-29" data-line-number="29">  <span class="va">http</span>.<span class="at">setRequestHeader</span>(<span class="st">&quot;Content-type&quot;</span><span class="op">,</span> <span class="st">&quot;application/x-www-form-urlencoded&quot;</span>)<span class="op">;</span></a>
-<a class="sourceLine" id="cb4-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb4-31" data-line-number="31">  <span class="va">http</span>.<span class="at">onreadystatechange</span> <span class="op">=</span> <span class="kw">function</span>() <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-32" data-line-number="32">      <span class="cf">if</span>(<span class="va">http</span>.<span class="at">readyState</span> <span class="op">==</span> <span class="dv">4</span> <span class="op">&amp;&amp;</span> <span class="va">http</span>.<span class="at">status</span> <span class="op">==</span> <span class="dv">200</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-33" data-line-number="33">          <span class="co">//console.log(http.responseText);</span></a>
-<a class="sourceLine" id="cb4-34" data-line-number="34">          <span class="va">window</span>.<span class="va">location</span>.<span class="at">replace</span>(<span class="st">&quot;/grafana&quot;</span>)<span class="op">;</span></a>
-<a class="sourceLine" id="cb4-35" data-line-number="35">      <span class="op">}</span></a>
-<a class="sourceLine" id="cb4-36" data-line-number="36">      <span class="co">//401 Unauthorized</span></a>
-<a class="sourceLine" id="cb4-37" data-line-number="37">      <span class="cf">if</span>(<span class="va">http</span>.<span class="at">readyState</span> <span class="op">==</span> <span class="dv">4</span> <span class="op">&amp;&amp;</span> <span class="va">http</span>.<span class="at">status</span> <span class="op">==</span> <span class="dv">401</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-38" data-line-number="38">          <span class="co">//console.log(http.responseText);</span></a>
-<a class="sourceLine" id="cb4-39" data-line-number="39">          <span class="at">alert</span>(<span class="st">&quot;Login ou mot de passe incorrect.&quot;</span>)<span class="op">;</span></a>
-<a class="sourceLine" id="cb4-40" data-line-number="40">      <span class="op">}</span></a>
-<a class="sourceLine" id="cb4-41" data-line-number="41">  <span class="op">}</span></a>
-<a class="sourceLine" id="cb4-42" data-line-number="42">  <span class="va">http</span>.<span class="at">send</span>(params)<span class="op">;</span></a>
-<a class="sourceLine" id="cb4-43" data-line-number="43"><span class="op">}</span></a>
-<a class="sourceLine" id="cb4-44" data-line-number="44"><span class="kw">&lt;/script&gt;</span></a>
-<a class="sourceLine" id="cb4-45" data-line-number="45"><span class="kw">&lt;/html&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb4-1" title="1"><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw">&lt;html&gt;</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="kw">&lt;head&gt;</span></a>
+<a class="sourceLine" id="cb4-4" title="4">  <span class="kw">&lt;title&gt;</span>Grafana Authentification<span class="kw">&lt;/title&gt;</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="kw">&lt;/head&gt;</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="kw">&lt;body&gt;</span></a>
+<a class="sourceLine" id="cb4-7" title="7">  <span class="kw">&lt;h1&gt;</span>Grafana Authentification<span class="kw">&lt;/h1&gt;</span></a>
+<a class="sourceLine" id="cb4-8" title="8">  <span class="kw">&lt;form</span><span class="ot"> onsubmit=</span><span class="st">&quot;return false;&quot;</span><span class="kw">&gt;</span></a>
+<a class="sourceLine" id="cb4-9" title="9">    <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;text&quot;</span><span class="ot"> id=</span><span class="st">&quot;user&quot;</span><span class="ot"> placeholder=</span><span class="st">&quot;Identifiant&quot;</span><span class="ot"> required</span><span class="kw">&gt;&lt;br&gt;</span></a>
+<a class="sourceLine" id="cb4-10" title="10">    <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;password&quot;</span><span class="ot"> id=</span><span class="st">&quot;password&quot;</span><span class="ot"> placeholder=</span><span class="st">&quot;Mot de passe&quot;</span><span class="ot"> required</span><span class="kw">&gt;&lt;br&gt;</span></a>
+<a class="sourceLine" id="cb4-11" title="11">    <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;submit&quot;</span><span class="ot"> value=</span><span class="st">&quot;Connexion&quot;</span><span class="ot"> onClick=</span><span class="st">&quot;login()&quot;</span><span class="kw">&gt;</span></a>
+<a class="sourceLine" id="cb4-12" title="12">  <span class="kw">&lt;/form&gt;</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="kw">&lt;/body&gt;</span></a>
+<a class="sourceLine" id="cb4-14" title="14"></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="kw">&lt;script&gt;</span></a>
+<a class="sourceLine" id="cb4-16" title="16"><span class="kw">function</span> <span class="at">login</span>()<span class="op">{</span></a>
+<a class="sourceLine" id="cb4-17" title="17">  <span class="kw">var</span> user <span class="op">=</span> <span class="va">document</span>.<span class="at">getElementById</span>(<span class="st">&#39;user&#39;</span>).<span class="at">value</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb4-18" title="18">  <span class="kw">var</span> password <span class="op">=</span> <span class="va">document</span>.<span class="at">getElementById</span>(<span class="st">&#39;password&#39;</span>).<span class="at">value</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb4-19" title="19">  <span class="cf">if</span>(user <span class="op">==</span> <span class="st">&#39;&#39;</span>)</a>
+<a class="sourceLine" id="cb4-20" title="20">    <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb4-21" title="21"></a>
+<a class="sourceLine" id="cb4-22" title="22">  <span class="cf">if</span>(password <span class="op">==</span> <span class="st">&#39;&#39;</span>)</a>
+<a class="sourceLine" id="cb4-23" title="23">    <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb4-24" title="24"></a>
+<a class="sourceLine" id="cb4-25" title="25">  <span class="kw">var</span> http <span class="op">=</span> <span class="kw">new</span> <span class="at">XMLHttpRequest</span>()<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-26" title="26">  <span class="kw">var</span> url <span class="op">=</span> <span class="st">&quot;/grafana/auth&quot;</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb4-27" title="27">  <span class="kw">var</span> params <span class="op">=</span> <span class="st">&quot;user=&quot;</span><span class="op">+</span>user<span class="op">+</span><span class="st">&quot;&amp;password=&quot;</span><span class="op">+</span>password<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-28" title="28">  <span class="va">http</span>.<span class="at">open</span>(<span class="st">&quot;POST&quot;</span><span class="op">,</span> url<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-29" title="29">  <span class="va">http</span>.<span class="at">setRequestHeader</span>(<span class="st">&quot;Content-type&quot;</span><span class="op">,</span> <span class="st">&quot;application/x-www-form-urlencoded&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-30" title="30"></a>
+<a class="sourceLine" id="cb4-31" title="31">  <span class="va">http</span>.<span class="at">onreadystatechange</span> <span class="op">=</span> <span class="kw">function</span>() <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-32" title="32">      <span class="cf">if</span>(<span class="va">http</span>.<span class="at">readyState</span> <span class="op">==</span> <span class="dv">4</span> <span class="op">&amp;&amp;</span> <span class="va">http</span>.<span class="at">status</span> <span class="op">==</span> <span class="dv">200</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-33" title="33">          <span class="co">//console.log(http.responseText);</span></a>
+<a class="sourceLine" id="cb4-34" title="34">          <span class="va">window</span>.<span class="va">location</span>.<span class="at">replace</span>(<span class="st">&quot;/grafana&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-35" title="35">      <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-36" title="36">      <span class="co">//401 Unauthorized</span></a>
+<a class="sourceLine" id="cb4-37" title="37">      <span class="cf">if</span>(<span class="va">http</span>.<span class="at">readyState</span> <span class="op">==</span> <span class="dv">4</span> <span class="op">&amp;&amp;</span> <span class="va">http</span>.<span class="at">status</span> <span class="op">==</span> <span class="dv">401</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-38" title="38">          <span class="co">//console.log(http.responseText);</span></a>
+<a class="sourceLine" id="cb4-39" title="39">          <span class="at">alert</span>(<span class="st">&quot;Login ou mot de passe incorrect.&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-40" title="40">      <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-41" title="41">  <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-42" title="42">  <span class="va">http</span>.<span class="at">send</span>(params)<span class="op">;</span></a>
+<a class="sourceLine" id="cb4-43" title="43"><span class="op">}</span></a>
+<a class="sourceLine" id="cb4-44" title="44"><span class="kw">&lt;/script&gt;</span></a>
+<a class="sourceLine" id="cb4-45" title="45"><span class="kw">&lt;/html&gt;</span></a></code></pre></div>
 <p>Si vous souhaitez personnaliser cette page en ajoutant des images, feuillet de style CSS ou autre, il faut placer les fichiers dans <code>/usr/share/nginx/html/</code> et utiliser des URL dans le code.</p>
 <p>Redémarrons NGINX:</p>
 <pre class="console"><code>systemctl restart nginx</code></pre>

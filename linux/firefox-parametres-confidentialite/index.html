@@ -32,7 +32,7 @@
   <style>
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -45,13 +45,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -144,32 +142,32 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Firefox possède de nombreux paramètres qui ne sont pas accessibles par les menus de l’interface graphique (Édition &gt; Préférences). Pour y accéder, tapez <code>about:config</code> dans la barre d’adresse (une confirmation va vous être demandée car certaines modifications peuvent entrainer des disfonctionnements). Voici quelques paramètres intéressants que j’utilise pour la confidentialité. Une liste plus complète est disponible dans les sources.</p>
 <p>Il est important de noter que certains risquent de vous refuser l’accès à leurs services (ou de mal fonctionner) s’ils ne peuvent plus abuser de vos données personnelles. Cela a été le cas pour moi avec un site d’hébergement de photo qui me refusait clairement l’accès car je ne transmettais plus d’entête Referer (page consultée précédemment). Modifier les paramètres relatifs aux cookies pose énormément de problèmes car c’est là que se situent principalement les abus d’accès aux données personnelles.</p>
 <p>Empêcher la désactivation du click droit (peut entrainer quelques problèmes si le site utilise son propre menu contextuel):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="va">dom</span>.<span class="va">event</span>.<span class="va">contextmenu</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb1-1" title="1"><span class="va">dom</span>.<span class="va">event</span>.<span class="va">contextmenu</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
 <p>Éviter le blocage du copier/coller:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="va">dom</span>.<span class="va">event</span>.<span class="va">clipboardevents</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb2-1" title="1"><span class="va">dom</span>.<span class="va">event</span>.<span class="va">clipboardevents</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
 <p>Empêcher la consultation de la liste des modules installés (Adblock, etc.).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="va">plugins</span>.<span class="at">enumerable_names</span> <span class="op">=</span> blank</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb3-1" title="1"><span class="va">plugins</span>.<span class="at">enumerable_names</span> <span class="op">=</span> blank</a></code></pre></div>
 <p>Ne plus transmettre l’URL consultée précédemment (entêtes Referer):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="va">network</span>.<span class="va">http</span>.<span class="at">sendRefererHeader</span> <span class="op">=</span> <span class="dv">0</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb4-1" title="1"><span class="va">network</span>.<span class="va">http</span>.<span class="at">sendRefererHeader</span> <span class="op">=</span> <span class="dv">0</span></a></code></pre></div>
 <p>Falsifer l’URL consultée précédemment:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="va">network</span>.<span class="va">http</span>.<span class="va">referer</span>.<span class="at">spoofSource</span> <span class="op">=</span> <span class="kw">true</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb5-1" title="1"><span class="va">network</span>.<span class="va">http</span>.<span class="va">referer</span>.<span class="at">spoofSource</span> <span class="op">=</span> <span class="kw">true</span></a></code></pre></div>
 <p>Active la protection contre les trackers:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="va">privacy</span>.<span class="va">trackingprotection</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">true</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb6-1" title="1"><span class="va">privacy</span>.<span class="va">trackingprotection</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">true</span></a></code></pre></div>
 <p>Désactiver tous les types de géolocalisation:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="va">geo</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="va">geo</span>.<span class="va">wifi</span>.<span class="at">uri</span> <span class="op">=</span> blank</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="va">browser</span>.<span class="va">search</span>.<span class="va">geoip</span>.<span class="at">url</span> <span class="op">=</span> blank</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb7-1" title="1"><span class="va">geo</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="va">geo</span>.<span class="va">wifi</span>.<span class="at">uri</span> <span class="op">=</span> blank</a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="va">browser</span>.<span class="va">search</span>.<span class="va">geoip</span>.<span class="at">url</span> <span class="op">=</span> blank</a></code></pre></div>
 <p>Désactiver l’extension Pocket imposée dans Firefox (non open source):</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">site</span> <span class="op">=</span> blank</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">oAuthConsumerKey</span> <span class="op">=</span> blank</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">api</span> <span class="op">=</span> blank</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb8-1" title="1"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">site</span> <span class="op">=</span> blank</a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">oAuthConsumerKey</span> <span class="op">=</span> blank</a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">api</span> <span class="op">=</span> blank</a></code></pre></div>
 <p>Désactiver l’accès au statut de la batterie (utilisé par les trackers pour l’identification):</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="va">dom</span>.<span class="va">battery</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb9-1" title="1"><span class="va">dom</span>.<span class="va">battery</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
 <p>Supprime un identifiant télémétrique inconnu (ne peut qu’être utilisé pour vous identifier):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="va">toolkit</span>.<span class="va">telemetry</span>.<span class="at">cachedClientID</span> <span class="op">=</span> blank</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb10-1" title="1"><span class="va">toolkit</span>.<span class="va">telemetry</span>.<span class="at">cachedClientID</span> <span class="op">=</span> blank</a></code></pre></div>
 <p>Désactiver le suivi de vos clicks:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="va">browser</span>.<span class="at">send_pings</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb11-1" title="1"><span class="va">browser</span>.<span class="at">send_pings</span> <span class="op">=</span> <span class="kw">false</span></a></code></pre></div>
 <h2 id="sources">Sources</h2>
 <ul>
 <li><a href="https://gist.github.com/0XDE57/fbd302cef7693e62c769" class="uri">https://gist.github.com/0XDE57/fbd302cef7693e62c769</a></li>
