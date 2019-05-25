@@ -17,14 +17,14 @@ Cet article recense les opérations incontournables avec R:
 
 ## Options d'exécution
 
-Augmenter la taille des messages d'erreur au maximum (permet les erreurs à la fin de longues requêtes SQL):
+Augmenter la taille des messages d'erreur au maximum (permet d'afficher les erreurs à la fin de longues requêtes SQL):
 ```R
 options(warning.length = 8170)
 ```
 
 Ne pas utiliser la notation scientifique pour les entiers de grande taille (s'applique lors de l'écriture de fichiers CSV):
 ```R
-options(scipen=999)
+options(scipen = 999)
 ```
 
 Ajuster la mémoire allouée à Java pour les appels externes (par exemple les requêtes SQL avec JDBC):
@@ -129,6 +129,11 @@ stations$Network <- ifelse(stations$Network == "", stations$BSSID, stations$Netw
 Traiter une colonne (chaîne de caractères) pour remplacer certains caractères par un espace:
 ```R
 users$Descriptions <- sapply(users$Descriptions, function(x) { gsub("[,;\"\r\n]", " ", x) })
+```
+
+Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL):
+```R
+stations$Manufacturer <- manufacturers$OrganizationName[match(stations$ManufacturerID, manufacturers$ManufacturerID)]
 ```
 
 Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:

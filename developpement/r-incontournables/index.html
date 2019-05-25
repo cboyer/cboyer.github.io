@@ -141,10 +141,10 @@ code span.wa { color: #bf0303; } /* Warning */
 </header>
 <p>Cet article recense les opérations incontournables avec R:</p>
 <h2 id="options-dexécution">Options d’exécution</h2>
-<p>Augmenter la taille des messages d’erreur au maximum (permet les erreurs à la fin de longues requêtes SQL):</p>
+<p>Augmenter la taille des messages d’erreur au maximum (permet d’afficher les erreurs à la fin de longues requêtes SQL):</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">options</span>(<span class="dt">warning.length =</span> <span class="dv">8170</span>)</a></code></pre></div>
 <p>Ne pas utiliser la notation scientifique pour les entiers de grande taille (s’applique lors de l’écriture de fichiers CSV):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">options</span>(<span class="dt">scipen=</span><span class="dv">999</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">options</span>(<span class="dt">scipen =</span> <span class="dv">999</span>)</a></code></pre></div>
 <p>Ajuster la mémoire allouée à Java pour les appels externes (par exemple les requêtes SQL avec JDBC):</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="st">&quot;-Xmx1024m&quot;</span>)</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="kw">c</span>(<span class="st">&quot;-XX:+UseConcMarkSweepGC&quot;</span>, <span class="st">&quot;-Xmx1024m&quot;</span>))</a></code></pre></div>
@@ -202,13 +202,15 @@ code span.wa { color: #bf0303; } /* Warning */
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span><span class="kw">ifelse</span>(stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span>, stations<span class="op">$</span>BSSID, stations<span class="op">$</span>Network)</a></code></pre></div>
 <p>Traiter une colonne (chaîne de caractères) pour remplacer certains caractères par un espace:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">users<span class="op">$</span>Descriptions &lt;-<span class="st"> </span><span class="kw">sapply</span>(users<span class="op">$</span>Descriptions, <span class="cf">function</span>(x) { <span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, x) })</a></code></pre></div>
+<p>Compléter un dataframe en récupérant la colonne d’un autre dataframe selon une correspondance (comme une jointure SQL):</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>OrganizationName[<span class="kw">match</span>(stations<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>ManufacturerID)]</a></code></pre></div>
 <p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by=</span><span class="st">&quot;login&quot;</span>)</a>
-<a class="sourceLine" id="cb17-2" title="2"></a>
-<a class="sourceLine" id="cb17-3" title="3"><span class="co">#Avec deux colonnes dont les nom diffèrent:</span></a>
-<a class="sourceLine" id="cb17-4" title="4">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x=</span><span class="st">&quot;samAccount&quot;</span>, <span class="dt">by.y=</span><span class="st">&quot;login&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by=</span><span class="st">&quot;login&quot;</span>)</a>
+<a class="sourceLine" id="cb18-2" title="2"></a>
+<a class="sourceLine" id="cb18-3" title="3"><span class="co">#Avec deux colonnes dont les nom diffèrent:</span></a>
+<a class="sourceLine" id="cb18-4" title="4">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x=</span><span class="st">&quot;samAccount&quot;</span>, <span class="dt">by.y=</span><span class="st">&quot;login&quot;</span>)</a></code></pre></div>
 <p>Associer deux dataframes verticalement (l’un à la suite de l’autre, doivent avoir les mêmes colonnes):</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">users_windows &lt;-<span class="st"> </span><span class="kw">rbind</span>(users_windowsNT, users_windowsXP)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">users_windows &lt;-<span class="st"> </span><span class="kw">rbind</span>(users_windowsNT, users_windowsXP)</a></code></pre></div>
 </article>
 
 <div id="footer">
