@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2019-05-25T10:09:13-04:00"
+updated: "2019-06-19T18:21:11-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -22,14 +22,16 @@ Augmenter la taille des messages d'erreur au maximum (permet d'afficher les erre
 options(warning.length = 8170)
 ```
 
-Ne pas utiliser la notation scientifique pour les entiers de grande taille (s'applique lors de l'écriture de fichiers CSV):
+Ne pas utiliser la notation scientifique pour les entiers de grande taille (s'applique également lors de l'écriture de fichiers CSV):
 ```R
 options(scipen = 999)
 ```
 
-Ajuster la mémoire allouée à Java pour les appels externes (par exemple les requêtes SQL avec JDBC):
+Ajuster la mémoire allouée à Java pour les appels externes (par exemple les requêtes SQL avec JDBC, doit être placé avant `require` et `librairy`):
 ```R
 options(java.parameters = "-Xmx1024m")
+
+#Pour également utiliser le Garbage Collector
 options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx1024m"))
 ```
 

@@ -2,32 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://cboyer.github.io</loc>
-        <lastmod>2019-05-25T14:32:18-04:00</lastmod>
+        <lastmod>2019-06-19T18:59:18-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/linux.html</loc>
-        <lastmod>2019-05-25T14:32:18-04:00</lastmod>
+        <lastmod>2019-06-19T18:59:18-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/electronique.html</loc>
-        <lastmod>2019-05-25T14:32:18-04:00</lastmod>
+        <lastmod>2019-06-19T18:59:18-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/apropos.html</loc>
-        <lastmod>2019-05-25T14:32:18-04:00</lastmod>
+        <lastmod>2019-06-19T18:59:18-04:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
+        <loc>https://cboyer.github.io/developpement/premiers-pas-avec-elixir/</loc>
+        <lastmod>2019-06-10T16:32:11-04:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
         <loc>https://cboyer.github.io/developpement/r-incontournables/</loc>
-        <lastmod>2019-05-25T10:09:13-04:00</lastmod>
+        <lastmod>2019-06-10T19:52:11-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>

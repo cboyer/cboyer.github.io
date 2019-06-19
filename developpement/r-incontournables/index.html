@@ -15,9 +15,9 @@
   <meta property="og:description" content="Opérations incontournables avec le langage R." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2019-05-25T10:09:13-04:00" />
+  <meta property="og:updated_time" content="2019-06-10T19:52:11-04:00" />
   <meta property="article:published_time" content="2019-05-25T10:09:13-04:00" />
-  <meta property="article:modified_time" content="2019-05-25T10:09:13-04:00" />
+  <meta property="article:modified_time" content="2019-06-10T19:52:11-04:00" />
   <meta name="generator" content="pandoc" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -143,11 +143,13 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 id="options-dexécution">Options d’exécution</h2>
 <p>Augmenter la taille des messages d’erreur au maximum (permet d’afficher les erreurs à la fin de longues requêtes SQL):</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">options</span>(<span class="dt">warning.length =</span> <span class="dv">8170</span>)</a></code></pre></div>
-<p>Ne pas utiliser la notation scientifique pour les entiers de grande taille (s’applique lors de l’écriture de fichiers CSV):</p>
+<p>Ne pas utiliser la notation scientifique pour les entiers de grande taille (s’applique également lors de l’écriture de fichiers CSV):</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">options</span>(<span class="dt">scipen =</span> <span class="dv">999</span>)</a></code></pre></div>
-<p>Ajuster la mémoire allouée à Java pour les appels externes (par exemple les requêtes SQL avec JDBC):</p>
+<p>Ajuster la mémoire allouée à Java pour les appels externes (par exemple les requêtes SQL avec JDBC, doit être placé avant <code>require</code> et <code>librairy</code>):</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="st">&quot;-Xmx1024m&quot;</span>)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="kw">c</span>(<span class="st">&quot;-XX:+UseConcMarkSweepGC&quot;</span>, <span class="st">&quot;-Xmx1024m&quot;</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">#Pour également utiliser le Garbage Collector</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="kw">c</span>(<span class="st">&quot;-XX:+UseConcMarkSweepGC&quot;</span>, <span class="st">&quot;-Xmx1024m&quot;</span>))</a></code></pre></div>
 <h2 id="base-de-données-sql">Base de données SQL</h2>
 <p>Utilisation de ODBC avec des sources configurées dans Windows (utile pour la gestion de l’authentification)</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">require</span>(odbc)</a>
