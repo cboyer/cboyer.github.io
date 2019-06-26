@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2019-06-19T18:21:11-04:00"
+updated: "2019-06-26T18:54:13-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -14,8 +14,14 @@ abstract: |
 
 Cet article recense les opérations incontournables avec R:
 
+- [Options d'exécution](#optionsexec)
+- [Base de données](#db)
+- [Opérations sur les fichiers](#files)
+- [Statistiques](#stats)
+- [Opérations sur les données](#data)
 
-## Options d'exécution
+
+## <a name="optionsexec"></a>Options d'exécution
 
 Augmenter la taille des messages d'erreur au maximum (permet d'afficher les erreurs à la fin de longues requêtes SQL):
 ```R
@@ -36,7 +42,7 @@ options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx1024m"))
 ```
 
 
-## Base de données SQL
+## <a name="db"></a>Base de données SQL
 
 Utilisation de ODBC avec des sources configurées dans Windows (utile pour la gestion de l'authentification)
 ```R
@@ -69,7 +75,7 @@ userids <- dbGetQuery(conn, sql)
 dbDisconnect(conn)
 ```
 
-## Opérations sur les fichiers
+## <a name="files"></a>Opérations sur les fichiers
 
 Charger un fichier CSV:
 ```R
@@ -90,7 +96,29 @@ close(fileConn)
 ```
 
 
-## Opérations sur les données
+## <a name="stats"></a>Statistiques
+
+Factoriser des valeurs:
+```R
+ventes$annee <- as.factor(ventes$annee)
+```
+
+Statistiques descriptives générales (pour les valeurs de type char, il est nécessaire d'utiliser des facteurs)
+```R
+summary(ventes)
+```
+
+Fréquence des valeurs d'une colonne en fonction d'une autre (produits vendus en fonction des années)
+```R
+tapply(ventes$produit, ventes$annee, summary)
+```
+
+## <a name="data"></a>Opérations sur les données
+
+Reformater une date:
+```R
+ventes$annee_expedition <- format(as.Date(ventes$date_expedition, format="%Y-%m-%d"),"%Y")
+```
 
 Extraire les lignes en fonction de la valeur d'une colonne:
 ```R
@@ -99,7 +127,7 @@ users_without_email <- subset(users, is.na(email))
 users_with_email <- subset(users, !is.na(email))
 ```
 
-Lister les duplicats:
+Lister les lignes dont une valeur est dupliquée:
 ```R
 duplicats <- users[duplicated(users$UserID) | duplicated(users$UserID, fromLast=TRUE),]
 
@@ -113,12 +141,12 @@ Déterminer les données manquantes d'un dataframe à un autre en fonction d'une
 utilisateurs_manquants <- users[!(users$UserID %in% all_users$UserID), ]
 ```
 
-Supprimer les duplicats (lignes) dont la valeur d'une colonne spécifique se répète:
+Supprimer les lignes dont la valeur d'une colonne spécifique se répète:
 ```R
 users <- duplicats[!duplicated(duplicats$UserID),]
 ```
 
-Supprimer les duplicats (lignes similaires):
+Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre):
 ```R
 users <- duplicats[!duplicated(duplicats),]
 ```

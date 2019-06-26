@@ -11,7 +11,6 @@ abstract: |
   Premiers pas avec Elixir.
 ---
 
-Nous ne nous attarderons pas sur une introduction à Erlang/Elixir/BEAM ni sur le paradigme fonctionnel, le soin est laissé au lecteur de s'informer sur les concepts propres à ces technologies.
 Voici une application Elixir très simple en deux modules: un principal`ElixirApp.Application` chargé de superviser le second `ElixirApp.Worker` qui permet de manipuler (lire/écrire) une valeur en mémoire.
 
 
@@ -24,7 +23,7 @@ mix new --sup elixir_app
 
 Le code de l'application se trouve alors dans `elixir_app/lib/elixir_app/application.ex`
 
-Fichier `application.ex`
+Fichier `application.ex`:
 ```Elixir
 defmodule ElixirApp.Application do
   use Supervisor
@@ -48,7 +47,7 @@ end
 
 ```
 
-Fichier `worker.ex`
+Fichier `worker.ex`:
 ```Elixir
 defmodule ElixirApp.Worker do
   use GenServer
@@ -135,6 +134,26 @@ mix run
 ```
 
 ## Annexes
+
+### Mix et les dépendances
+
+Pour ajouter une dépendance, il faut passer par le fichier `mix.exs` en modifiant le bloc suivant:
+```Elixir
+defp deps do
+  [
+    {:input_event, git: "https://github.com/LeToteTeam/input_event.git", tag: "master"}
+  ]
+end
+```
+
+Pour la suite depuis le shell:
+```Console
+mix deps.get
+```
+
+Compiler une dépendance: `mix deps.compile input_event`
+Mettre à jour une dépendance: `mix deps.update input_event`
+Pour la supprimer: `mix deps.clean input_event`
 
 ### Observer
 

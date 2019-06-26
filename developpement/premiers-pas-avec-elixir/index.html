@@ -139,12 +139,12 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 class="title">Premiers pas avec Elixir</h2>
  <span class="author">C. Boyer</span>,   <span class="date">2019-06-19 19:04:11 (UTC-04:00)</span>
 </header>
-<p>Nous ne nous attarderons pas sur une introduction à Erlang/Elixir/BEAM ni sur le paradigme fonctionnel, le soin est laissé au lecteur de s’informer sur les concepts propres à ces technologies. Voici une application Elixir très simple en deux modules: un principal<code>ElixirApp.Application</code> chargé de superviser le second <code>ElixirApp.Worker</code> qui permet de manipuler (lire/écrire) une valeur en mémoire.</p>
+<p>Voici une application Elixir très simple en deux modules: un principal<code>ElixirApp.Application</code> chargé de superviser le second <code>ElixirApp.Worker</code> qui permet de manipuler (lire/écrire) une valeur en mémoire.</p>
 <h2 id="création-du-projet">Création du projet</h2>
 <p>Créer un projet avec un superviseur (<code>--sup</code>):</p>
 <pre class="console"><code>mix new --sup elixir_app</code></pre>
 <p>Le code de l’application se trouve alors dans <code>elixir_app/lib/elixir_app/application.ex</code></p>
-<p>Fichier <code>application.ex</code></p>
+<p>Fichier <code>application.ex</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode elixir"><code class="sourceCode elixir"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">defmodule</span> <span class="cn">ElixirApp</span><span class="op">.</span><span class="cn">Application</span> <span class="kw">do</span></a>
 <a class="sourceLine" id="cb2-2" title="2">  <span class="im">use</span> <span class="cn">Supervisor</span></a>
 <a class="sourceLine" id="cb2-3" title="3"></a>
@@ -164,7 +164,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb2-17" title="17">    <span class="cn">Supervisor</span><span class="op">.</span>start_link(children, opts)</a>
 <a class="sourceLine" id="cb2-18" title="18">  <span class="kw">end</span></a>
 <a class="sourceLine" id="cb2-19" title="19"><span class="kw">end</span></a></code></pre></div>
-<p>Fichier <code>worker.ex</code></p>
+<p>Fichier <code>worker.ex</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode elixir"><code class="sourceCode elixir"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">defmodule</span> <span class="cn">ElixirApp</span><span class="op">.</span><span class="cn">Worker</span> <span class="kw">do</span></a>
 <a class="sourceLine" id="cb3-2" title="2">  <span class="im">use</span> <span class="cn">GenServer</span></a>
 <a class="sourceLine" id="cb3-3" title="3"></a>
@@ -235,9 +235,19 @@ Call: get
 <p>Pour l’exécuter de façon non interactive (depuis le dossier racine <code>elixir_app</code>):</p>
 <pre class="console"><code>mix run</code></pre>
 <h2 id="annexes">Annexes</h2>
+<h3 id="mix-et-les-dépendances">Mix et les dépendances</h3>
+<p>Pour ajouter une dépendance, il faut passer par le fichier <code>mix.exs</code> en modifiant le bloc suivant:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode elixir"><code class="sourceCode elixir"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">defp</span> deps <span class="kw">do</span></a>
+<a class="sourceLine" id="cb8-2" title="2">  [</a>
+<a class="sourceLine" id="cb8-3" title="3">    {<span class="va">:input_event</span>, <span class="va">git:</span> <span class="st">&quot;https://github.com/LeToteTeam/input_event.git&quot;</span>, <span class="va">tag:</span> <span class="st">&quot;master&quot;</span>}</a>
+<a class="sourceLine" id="cb8-4" title="4">  ]</a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="kw">end</span></a></code></pre></div>
+<p>Pour la suite depuis le shell:</p>
+<pre class="console"><code>mix deps.get</code></pre>
+<p>Compiler une dépendance: <code>mix deps.compile input_event</code> Mettre à jour une dépendance: <code>mix deps.update input_event</code> Pour la supprimer: <code>mix deps.clean input_event</code></p>
 <h3 id="observer">Observer</h3>
 <p>Pour visualiser les toutes les caractéristiques de notre application (dans <code>iex</code>, en ayant au préalable installé le package <code>erlang-observer</code>):</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode elixir"><code class="sourceCode elixir"><a class="sourceLine" id="cb8-1" title="1"><span class="va">:observer</span><span class="op">.</span>start</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode elixir"><code class="sourceCode elixir"><a class="sourceLine" id="cb10-1" title="1"><span class="va">:observer</span><span class="op">.</span>start</a></code></pre></div>
 <h3 id="compilation-manuelle">Compilation manuelle</h3>
 <p>Pour le compiler manuellement et obtenir un binaire (bytecode pour la machine virtuelle BEAM):</p>
 <pre class="console"><code>elixirc elixir_app/lib/elixir_app/application.ex
