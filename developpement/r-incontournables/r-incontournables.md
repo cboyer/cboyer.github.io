@@ -79,7 +79,7 @@ dbDisconnect(conn)
 
 Charger un fichier CSV:
 ```R
-mon_dataframe <- read.csv("C:/Users/monLogin/Desktop/fichier.csv", header = TRUE, sep = ";")
+mon_dataframe <- read.csv("C:/Users/monLogin/Desktop/fichier.csv", header = TRUE, sep = ";", encoding = "UTF-8")
 ```
 
 Écrire le contenu d'un dataframe dans un fichier CSV:
