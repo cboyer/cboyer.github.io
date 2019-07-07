@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2019-06-26T18:54:13-04:00"
+updated: "2019-07-07T11:17:13-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -115,6 +115,11 @@ tapply(ventes$produit, ventes$annee, summary)
 
 ## <a name="data"></a>Opérations sur les données
 
+Remplacer toutes les valeurs d'un colonne répondant à un critère:
+```R
+users$email[users$email == "unknown"] <- ""
+```
+
 Reformater une date:
 ```R
 ventes$annee_expedition <- format(as.Date(ventes$date_expedition, format="%Y-%m-%d"),"%Y")
@@ -123,6 +128,7 @@ ventes$annee_expedition <- format(as.Date(ventes$date_expedition, format="%Y-%m-
 Extraire les lignes en fonction de la valeur d'une colonne:
 ```R
 users_active <- subset(users, isactive == 1)
+users_active <- users[users$isactive == 1,]
 users_without_email <- subset(users, is.na(email))
 users_with_email <- subset(users, !is.na(email))
 ```
@@ -170,8 +176,11 @@ Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiq
 ```R
 all_users <- merge(users_windows, user_linux, by="login")
 
-#Avec deux colonnes dont les nom diffèrent:
+#Avec deux colonnes dont les noms diffèrent:
 all_users <- merge(users_windows, user_linux, by.x="samAccount", by.y="login")
+
+#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances comme un left join en SQL):
+all_users <- merge(users_windows, user_linux, by.x=c("samAccount","email"), by.y=c("login","mail"), all.x = TRUE)
 ```
 
 Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avoir les mêmes colonnes):
