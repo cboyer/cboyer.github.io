@@ -3,12 +3,32 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2019-07-07T11:33:41-04:00</updated>
+    <updated>2019-08-02T21:55:50-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
     <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <entry>
+        <title>Création d’un web service SOAP avec Mirth</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/mirth-webservice-soap/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:efaf4ae5-1f0e-5bf2-b5b8-de9129cdc406</id>
+        <published>2019-08-02T19:34:21-04:00</published>
+        <updated>2019-08-02T19:34:21-04:00</updated>
+        <summary>Création d’un web service SOAP avec Mirth.</summary>
+    </entry>
+    <entry>
+        <title>Dupliquer le signal d'une télécommande pour porte de garage</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://backup/emetteur-porte-garage/" hreflang="fr"/>
+        <category term="Électronique"/>
+        <id>urn:uuid:7babedbd-91e2-5b9b-aa1b-eb4f46081e9b</id>
+        <published>2019-07-12T17:32:45-04:00</published>
+        <updated>2019-07-12T17:32:45-04:00</updated>
+        <summary>Identifier le code d'ouverture/fermeture d'une porte de garage depuis le signal de sa télécommande afin de le réutiliser.</summary>
+    </entry>
     <entry>
         <title>Premiers pas avec Elixir</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
