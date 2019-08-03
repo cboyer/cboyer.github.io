@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://cboyer.github.io</loc>
-        <lastmod>2019-08-02T21:55:50-04:00</lastmod>
+        <lastmod>2019-08-02T22:02:45-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/linux.html</loc>
-        <lastmod>2019-08-02T21:55:50-04:00</lastmod>
+        <lastmod>2019-08-02T22:02:45-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/electronique.html</loc>
-        <lastmod>2019-08-02T21:55:50-04:00</lastmod>
+        <lastmod>2019-08-02T22:02:45-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/apropos.html</loc>
-        <lastmod>2019-08-02T21:55:50-04:00</lastmod>
+        <lastmod>2019-08-02T22:02:45-04:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.2</priority>
     </url>
@@ -28,12 +28,6 @@
     <url>
         <loc>https://cboyer.github.io/developpement/mirth-webservice-soap/</loc>
         <lastmod>2019-08-02T19:34:21-04:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.9</priority>
-    </url>
-    <url>
-        <loc>https://backup/emetteur-porte-garage/</loc>
-        <lastmod>2019-07-12T17:32:45-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
