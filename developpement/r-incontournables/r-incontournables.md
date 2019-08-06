@@ -167,6 +167,21 @@ Traiter une colonne (chaîne de caractères) pour remplacer certains caractères
 users$Descriptions <- sapply(users$Descriptions, function(x) { gsub("[,;\"\r\n]", " ", x) })
 ```
 
+Traiter un dataframe (plusieurs colonnes) en itérant sur chaque ligne (retourne un dataframe à 3 colonnes depuis un dataframe `x` à 2 colonnes):
+```R
+result <- apply(mydataframe, 1, function(x, y) {
+
+  #x[1] = première colonne de mydataframe, x[2] la seconde
+  data.frame(table=x[1], column=x[2], res=1)
+
+}, y = additionnal_arg)
+
+#Transforme result en dataframe
+result <- do.call(rbind, result)
+```
+
+
+
 Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL):
 ```R
 stations$Manufacturer <- manufacturers$OrganizationName[match(stations$ManufacturerID, manufacturers$ManufacturerID)]
