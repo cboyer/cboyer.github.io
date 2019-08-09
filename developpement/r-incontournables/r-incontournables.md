@@ -79,7 +79,7 @@ dbDisconnect(conn)
 
 Charger un fichier CSV:
 ```R
-mon_dataframe <- read.csv("C:/Users/monLogin/Desktop/fichier.csv", header = TRUE, sep = ";", encoding = "UTF-8")
+mon_dataframe <- read.csv("C:/Users/monLogin/Desktop/fichier.csv", header = TRUE, sep = ";", encoding = "UTF-8", stringsAsFactors = FALSE)
 ```
 
 Écrire le contenu d'un dataframe dans un fichier CSV:
@@ -147,6 +147,11 @@ Déterminer les données manquantes d'un dataframe à un autre en fonction d'une
 utilisateurs_manquants <- users[!(users$UserID %in% all_users$UserID), ]
 ```
 
+Récupère les lignes de dataframe1 dont LOGIN et LAST_DATE sont dans dataframe2
+```R
+intersection <- dataframe1[with(dataframe1, paste(LOGIN, LAST_DATE, sep=".")) %in% with(dataframe2, paste(LOGIN, LAST_DATE, sep=".")), ]
+```
+
 Supprimer les lignes dont la valeur d'une colonne spécifique se répète:
 ```R
 users <- duplicats[!duplicated(duplicats$UserID),]
@@ -180,7 +185,15 @@ result <- apply(mydataframe, 1, function(x, y) {
 result <- do.call(rbind, result)
 ```
 
+Regroupe les `login` et récupère max(last_login_date) (équivaut à Group By en SQL)
+```R
+aggregate(last_login_date ~ login, data=users, FUN=max)
+```
 
+Regroupe toutes les autres colonnes et récupère max(last_login_date)
+```R
+aggregate(last_login_date ~ ., data=users, FUN=max)
+```
 
 Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL):
 ```R
