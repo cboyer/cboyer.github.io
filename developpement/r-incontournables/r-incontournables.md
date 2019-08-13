@@ -46,13 +46,24 @@ options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx1024m"))
 
 Utilisation de ODBC avec des sources configurées dans Windows (utile pour la gestion de l'authentification)
 ```R
-require(odbc)
+require(DBI)
 con <- dbConnect(odbc::odbc(), "MonDataSourceWindows")
 sql <- "SELECT UserID FROM User"
 queryResults <- dbSendQuery(con, sql)
 userids <- dbFetch(queryResults)
 dbClearResult(queryResults)
 dbDisconnect(con)
+```
+
+Sans sources configurées (MSSQL)
+```R
+require(DBI)
+con <- dbConnect(odbc::odbc(),
+                 Driver = "SQL Server",
+                 Server = "1.2.3.4",
+                 Database = "mydb",
+                 User = "domaine\\login",
+                 Password = "password")
 ```
 
 Utilisation du pilote JDBC pour Oracle
@@ -73,6 +84,23 @@ conn <- dbConnect(drv, "jdbc:sqlserver://mssqlserver.corp.ca;databaseName=MyData
 sql <- "SELECT UserID FROM User"
 userids <- dbGetQuery(conn, sql)
 dbDisconnect(conn)
+```
+
+Lister les tables et colonnes d'une base de données
+```R
+require(DBI)
+con <- dbConnect(odbc::odbc(),
+                 Driver = "SQL Server",
+                 Server = "1.2.3.4",
+                 Database = "mydb",
+                 User = "domaine\\login",
+                 Password = "password")
+
+tables <- dbListTables(con)
+describe <- lapply(tables, function(x, conn) {
+  data.frame(table=x, column=as.vector(dbListFields(conn, x)))
+}, conn = con)
+schema <- do.call(rbind, describe)
 ```
 
 ## <a name="files"></a>Opérations sur les fichiers
