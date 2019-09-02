@@ -3,7 +3,7 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2019-08-13T19:32:31-04:00</updated>
+    <updated>2019-09-02T16:23:31-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
@@ -12,9 +12,9 @@
     <entry>
         <title>Création d’un web service SOAP avec Mirth</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/mirth-webservice-soap/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://developpement/mirth-webservice-soap/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:efaf4ae5-1f0e-5bf2-b5b8-de9129cdc406</id>
+        <id>urn:uuid:e543b6e5-b1a7-5643-8186-11ea416b31ef</id>
         <published>2019-08-02T19:34:21-04:00</published>
         <updated>2019-08-02T19:34:21-04:00</updated>
         <summary>Création d’un web service SOAP avec Mirth.</summary>
@@ -22,9 +22,9 @@
     <entry>
         <title>Premiers pas avec Elixir</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/premiers-pas-avec-elixir/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://developpement/premiers-pas-avec-elixir/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:2db7cea1-b29f-5faa-bee2-3426d8c0ecc1</id>
+        <id>urn:uuid:d16ebf86-ef20-50c9-8cf7-0e5b1f777646</id>
         <published>2019-06-19T19:04:11-04:00</published>
         <updated>2019-06-19T19:04:11-04:00</updated>
         <summary>Premiers pas avec Elixir.</summary>
@@ -32,19 +32,19 @@
     <entry>
         <title>R: les incontournables</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/r-incontournables/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://developpement/r-incontournables/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:48d29d28-f09d-5e23-baed-7073729aeb3d</id>
+        <id>urn:uuid:0e0e0c88-a12c-5ee2-9ee0-221cb143a110</id>
         <published>2019-05-25T10:09:13-04:00</published>
-        <updated>2019-07-07T11:17:13-04:00</updated>
+        <updated>2019-09-002T12:43:21-04:00</updated>
         <summary>Opérations incontournables avec le langage R.</summary>
     </entry>
     <entry>
         <title>Analyse du trafic WiFi avec Airodump-ng et R</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/analyse-wifi-airmonng-r/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://developpement/analyse-wifi-airmonng-r/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:c4465176-e0c8-5705-8be3-0b0714fe57cf</id>
+        <id>urn:uuid:f012da63-9b07-5054-92bb-7e099d18d73b</id>
         <published>2019-03-04T14:22:12-04:00</published>
         <updated>2019-03-04T14:22:12-04:00</updated>
         <summary>Analyse du trafic WiFi avec Airodump-ng et R.</summary>
@@ -52,9 +52,9 @@
     <entry>
         <title>Implémentation du protocole Zabbix dans Mirth Connect</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/zabbix-protocole-mirth/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://developpement/zabbix-protocole-mirth/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:6a162e5c-d592-5b90-8251-7f904b7f1a9a</id>
+        <id>urn:uuid:5827d514-6595-56df-861d-253a8a381814</id>
         <published>2018-12-08T18:23:15-04:00</published>
         <updated>2019-03-03T17:39:47-04:00</updated>
         <summary>Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener.</summary>
@@ -62,9 +62,9 @@
     <entry>
         <title>Confidentialité et paramètres avancés dans Firefox</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/firefox-parametres-confidentialite/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://linux/firefox-parametres-confidentialite/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:3fb1dda1-db8b-54e8-9e56-cb4515f0dacc</id>
+        <id>urn:uuid:7bca27a4-ec8c-5892-9124-4911c46bbf41</id>
         <published>2018-11-17T11:58:22-04:00</published>
         <updated>2018-11-17T11:58:22-04:00</updated>
         <summary>Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance.</summary>
@@ -72,9 +72,9 @@
     <entry>
         <title>Automobile, bus CAN et norme OBD2</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/automobile-bus-can-obd2/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://electronique/automobile-bus-can-obd2/" hreflang="fr"/>
         <category term="Électronique"/>
-        <id>urn:uuid:51d7eac3-665e-5201-9605-43aea61a38f3</id>
+        <id>urn:uuid:d9838c5b-e9a3-5988-a849-2f5a2ff9d37b</id>
         <published>2018-11-01T18:08:32-04:00</published>
         <updated>2018-11-01T18:08:32-04:00</updated>
         <summary>Dialoguer avec l'ordinateur de bord d'un véhicule automobile via OBD2.</summary>
@@ -82,9 +82,9 @@
     <entry>
         <title>Système embarqué Linux avec Buildroot</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/systeme-embarque-linux-buildroot/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://linux/systeme-embarque-linux-buildroot/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:2ac30941-2388-5665-bfde-17e8d32ba124</id>
+        <id>urn:uuid:af737e87-92a8-5982-9630-c1f03019e652</id>
         <published>2018-08-09T11:29:00-04:00</published>
         <updated>2018-11-04T12:42:12-05:00</updated>
         <summary>Création d'un système embarqué Linux avec Buildroot pour Raspberry Pi 2.</summary>
@@ -92,9 +92,9 @@
     <entry>
         <title>Ajouter l'authentification LDAP à NGINX</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/nginx-authentification-ldap/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://linux/nginx-authentification-ldap/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:120d7776-422d-5f73-8603-0e25425c6bde</id>
+        <id>urn:uuid:c7b7a9a4-5279-5264-8408-5539600b37ae</id>
         <published>2018-05-31T19:14:12-04:00</published>
         <updated>2018-11-01T18:08:32-04:00</updated>
         <summary>Ajout du support LDAP en compilant le module d'authentification LDAP avec la version open source d'NGINX.</summary>
@@ -102,9 +102,9 @@
     <entry>
         <title>Implémentation du protocole Dreamscreen en C</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/dreamscreen-protocole/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://developpement/dreamscreen-protocole/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:abc901c6-c2e2-5c01-9396-150370cc45f4</id>
+        <id>urn:uuid:2fbd2097-ec4f-57b0-ae2e-8ceddc72ca33</id>
         <published>2018-05-29T19:36:04-04:00</published>
         <updated>2019-01-10T18:25:32-04:00</updated>
         <summary>Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen.</summary>
@@ -112,9 +112,9 @@
     <entry>
         <title>Page d'authentification personnalisée pour Grafana avec NGINX</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/page-authentification-grafana/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://linux/page-authentification-grafana/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:a0f3108b-795b-5cf9-91e2-0a8b245cb977</id>
+        <id>urn:uuid:d5f88802-c3ee-52fc-a02b-4fff73eec4d2</id>
         <published>2018-05-06T21:23:46-04:00</published>
         <updated>2018-11-01T18:08:32-04:00</updated>
         <summary>Utilisation de NGINX en reverse proxy comme "man in the middle" pour rediriger vers une page d'authentification personnalisée.</summary>
@@ -122,9 +122,9 @@
     <entry>
         <title>Filtrer les publicités avec un serveur DNS Unbound</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/filtrer-publicites-dns-unbound/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://linux/filtrer-publicites-dns-unbound/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:c790f5b1-24ff-54d2-a68e-346d7e78ff9f</id>
+        <id>urn:uuid:6fedde25-e6f3-57bd-8aa7-d8139abdca59</id>
         <published>2018-05-04T17:56:14-04:00</published>
         <updated>2018-11-01T18:08:32-04:00</updated>
         <summary>Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires.</summary>
@@ -132,9 +132,9 @@
     <entry>
         <title>FPGA et afficheur 7 segments: compteur à afficheurs multiples</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteurs-multiples/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://electronique/fpga-afficheur-7-segments-compteurs-multiples/" hreflang="fr"/>
         <category term="Électronique"/>
-        <id>urn:uuid:39815594-5031-5059-a56c-c38e8d7d931c</id>
+        <id>urn:uuid:ad6971cf-bd52-5d5d-a770-56aae6eddca1</id>
         <published>2018-04-27T20:02:50-04:00</published>
         <updated>2018-11-01T18:08:32-04:00</updated>
         <summary>Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments.</summary>
@@ -142,9 +142,9 @@
     <entry>
         <title>FPGA et afficheur 7 segments: compteur à afficheur unique</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteur-unique/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://electronique/fpga-afficheur-7-segments-compteur-unique/" hreflang="fr"/>
         <category term="Électronique"/>
-        <id>urn:uuid:3724657b-6ef8-505d-b337-510117cbf789</id>
+        <id>urn:uuid:a96954f0-e942-5c5b-aea8-17c300786cbf</id>
         <published>2018-04-25T20:00:50-04:00</published>
         <updated>2018-11-01T18:08:32-04:00</updated>
         <summary>Implémentation en Verilog d'un compteur sur un afficheur 7 segments.</summary>
@@ -152,9 +152,9 @@
     <entry>
         <title>Récepteur infrarouge USB avec un ATmega32u4</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/recepteur-infrarouge-usb-atmega32u4/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://electronique/recepteur-infrarouge-usb-atmega32u4/" hreflang="fr"/>
         <category term="Électronique"/>
-        <id>urn:uuid:74e08c26-8970-5fe0-b96c-5033173d2ef8</id>
+        <id>urn:uuid:f138f6b1-66d2-5b40-bba7-ffcbd7f450dc</id>
         <published>2018-04-20T18:45:18-04:00</published>
         <updated>2018-11-01T18:08:32-04:00</updated>
         <summary>Utilisation des fonctions HID du microcontrôleur ATmega32u4 et un capteur infrarouge pour contrôler des systèmes/applications avec une télécommande.</summary>
@@ -162,9 +162,9 @@
     <entry>
         <title>FPGA et afficheur 7 segments: introduction</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-introduction/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://electronique/fpga-afficheur-7-segments-introduction/" hreflang="fr"/>
         <category term="Électronique"/>
-        <id>urn:uuid:b274ea6f-eea9-5ca1-8893-718f430463dc</id>
+        <id>urn:uuid:3bc07039-c5a8-5b10-901b-5c6b3d6f4b22</id>
         <published>2018-04-20T15:32:12-04:00</published>
         <updated>2019-01-06T15:23:31-04:00</updated>
         <summary>Pilotage d'un afficheur 7 segments avec un FPGA et Verilog.</summary>
@@ -172,9 +172,9 @@
     <entry>
         <title>Système de fichiers distribué GlusterFS</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/systeme-fichiers-distribue-glusterfs/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://linux/systeme-fichiers-distribue-glusterfs/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:50369ec3-e56b-5476-9322-95a7cf25ad6b</id>
+        <id>urn:uuid:41e7c109-934a-5b20-8183-e25cc303bbd8</id>
         <published>2016-10-30T14:24:16-04:00</published>
         <updated>2018-11-04T11:04:32-05:00</updated>
         <summary>Configuration d'un volume GlusterFS sous CentOS.</summary>
@@ -182,9 +182,9 @@
     <entry>
         <title>Création manuelle d'un LPAR AIX depuis le VIOS</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/creation-lpar-aix/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://linux/creation-lpar-aix/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:71fc9f4a-4ed5-592c-9aee-a6e0271a810c</id>
+        <id>urn:uuid:b8f7c86b-885a-5815-9c57-4bb6c865dea2</id>
         <published>2015-07-09T13:23:14-04:00</published>
         <updated>2018-11-17T13:09:10-04:00</updated>
         <summary>Monter manuellement un LPAR AIX 7.1 depuis le VIOS.</summary>

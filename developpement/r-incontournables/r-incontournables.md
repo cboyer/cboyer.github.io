@@ -1,12 +1,12 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2019-07-07T11:17:13-04:00"
+updated: "2019-09-002T12:43:21-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
-keywords: [R, code snippets, RStudio, développement]
+keywords: [R, RStudio, ODBC, SQL, MSSQL, Oracle, code snippets, développement]
 abstract: |
   Opérations incontournables avec le langage R.
 ---
@@ -42,9 +42,9 @@ options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx1024m"))
 ```
 
 
-## <a name="db"></a>Base de données SQL
+## <a name="db"></a>Base de données
 
-Utilisation de ODBC avec des sources configurées dans Windows (utile pour la gestion de l'authentification)
+Utilisation de ODBC avec des sources configurées (DSN) dans Windows (utile pour la gestion de l'authentification):
 ```R
 require(DBI)
 con <- dbConnect(odbc::odbc(), "MonDataSourceWindows")
@@ -55,7 +55,7 @@ dbClearResult(queryResults)
 dbDisconnect(con)
 ```
 
-Sans sources configurées (MSSQL)
+MSSQL via ODBC sans sources configurées (DSN):
 ```R
 require(DBI)
 con <- dbConnect(odbc::odbc(),
@@ -66,7 +66,17 @@ con <- dbConnect(odbc::odbc(),
                  Password = "password")
 ```
 
-Utilisation du pilote JDBC pour Oracle
+Oracle via ODBC sans sources configurées (DSN):
+```R
+require(DBI)
+con <- dbConnect(odbc::odbc(),
+                 Driver = "Oracle dans OraClient12Home1",
+                 DBQ = "//1.2.3.4:1521/mydatabase",
+                 UID = "login",
+                 PWD = "password")
+```
+
+Oracle via JDBC:
 ```R
 require(RJDBC)
 drv <- JDBC(driverClass="oracle.jdbc.OracleDriver", classPath="C:/Users/monLogin/Documents/Developpement/JDBC/ojdbc8.jar")
@@ -76,7 +86,7 @@ userids <- dbGetQuery(conn, sql)
 dbDisconnect(conn)
 ```
 
-Utilisation du pilote JDBC pour MSSQL
+MSSQL via JDBC:
 ```R
 require(RJDBC)
 drv <- JDBC("com.microsoft.sqlserver.jdbc.SQLServerDriver", "C:/Users/monLogin/Documents/Developpement/JDBC/sqljdbc42.jar")
