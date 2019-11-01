@@ -207,6 +207,9 @@ stations$Network <- ifelse(stations$Network == "", stations$BSSID, stations$Netw
 
 Traiter une colonne (chaîne de caractères) pour remplacer certains caractères par un espace:
 ```R
+users <- within(users,  Descriptions <- gsub("[,;\"\r\n]", " ", x) )
+
+#Autre possibilité:
 users$Descriptions <- sapply(users$Descriptions, function(x) { gsub("[,;\"\r\n]", " ", x) })
 ```
 
