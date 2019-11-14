@@ -179,7 +179,7 @@ yum install unbound</code></pre>
 <a class="sourceLine" id="cb2-31" title="31">    forward-ssl-upstream:yes</a>
 <a class="sourceLine" id="cb2-32" title="32">    <span class="co">#forward-addr: 80.67.169.12</span></a>
 <a class="sourceLine" id="cb2-33" title="33">    <span class="co">#forward-addr: 80.67.169.40</span></a></code></pre></div>
-<p>Vous trouverez la description de tous ces paramètres dans la documentation officielle d’Unbound: <a href="https://www.unbound.net/documentation/unbound.conf.html" class="uri">https://www.unbound.net/documentation/unbound.conf.html</a></p>
+<p>Vous trouverez la description de tous ces paramètres dans la documentation officielle d’Unbound: <a href="https://www.unbound.net/documentation/unbound.conf.html">https://www.unbound.net/documentation/unbound.conf.html</a></p>
 <p>Pour résumer, Unbound fait office de cache DNS en résolvant les requêtes avec les DNS Cloudflare (connexion sécurisée par TLS). Les deux autres adresses commentées correspondent aux serveurs DNS de la <a href="https://www.fdn.fr/actions/dns">FDN</a> dans le cas où vous ne feriez pas confiance à Cloudflare. Les DNS de Google sont vraiment à éviter pour des raisons évidentes.</p>
 <p>Le fichier <code>/etc/unbound/local.conf</code> contiendra nos entrées locales, par exemple:</p>
 <pre class="console"><code>local-zone: &quot;serveur&quot; redirect
@@ -187,7 +187,7 @@ local-data: &quot;serveur A 192.168.10.100&quot;
 
 local-zone: &quot;patate&quot; redirect
 local-data: &quot;patate A 192.168.10.12&quot;</code></pre>
-<p>Le fichier <code>/etc/unbound/blacklist.conf</code> contiendra les domaines à bloquer. Pour cela, je vous propose les listes de Steven Black qui sont tenues à jour fréquemment et disponibles sur son dépôt Github: <a href="https://github.com/StevenBlack/hosts" class="uri">https://github.com/StevenBlack/hosts</a>. Le problème est que le formatage de cette liste est adapté pour un fichier hosts et non pour Unbound. Remédions à la situation avec un simple script Bash:</p>
+<p>Le fichier <code>/etc/unbound/blacklist.conf</code> contiendra les domaines à bloquer. Pour cela, je vous propose les listes de Steven Black qui sont tenues à jour fréquemment et disponibles sur son dépôt Github: <a href="https://github.com/StevenBlack/hosts">https://github.com/StevenBlack/hosts</a>. Le problème est que le formatage de cette liste est adapté pour un fichier hosts et non pour Unbound. Remédions à la situation avec un simple script Bash:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="co">#!/bin/bash</span></a>
 <a class="sourceLine" id="cb4-2" title="2"></a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="fu">wget</span> https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts</a>
@@ -199,10 +199,10 @@ local-data: &quot;patate A 192.168.10.12&quot;</code></pre>
 <p>Il ne reste plus qu’à faire pointer vos clients vers le serveur DNS en ajoutant l’adresse IP dans la configuration de vos machines et/ou dans votre DHCP (routeur).</p>
 <h2 id="sources">Sources:</h2>
 <ul>
-<li><a href="https://etherarp.net/build-an-adblocking-dns-server/index.html" class="uri">https://etherarp.net/build-an-adblocking-dns-server/index.html</a></li>
-<li><a href="https://wiki.archlinux.org/index.php/unbound" class="uri">https://wiki.archlinux.org/index.php/unbound</a></li>
-<li><a href="https://www.unbound.net/documentation/unbound-control.html" class="uri">https://www.unbound.net/documentation/unbound-control.html</a></li>
-<li><a href="https://github.com/StevenBlasck/hosts" class="uri">https://github.com/StevenBlasck/hosts</a></li>
+<li><a href="https://etherarp.net/build-an-adblocking-dns-server/index.html">https://etherarp.net/build-an-adblocking-dns-server/index.html</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/unbound">https://wiki.archlinux.org/index.php/unbound</a></li>
+<li><a href="https://www.unbound.net/documentation/unbound-control.html">https://www.unbound.net/documentation/unbound-control.html</a></li>
+<li><a href="https://github.com/StevenBlasck/hosts">https://github.com/StevenBlasck/hosts</a></li>
 </ul>
 </article>
 

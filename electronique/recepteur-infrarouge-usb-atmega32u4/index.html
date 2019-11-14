@@ -141,7 +141,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </header>
 <p>Beaucoup utilisent Kodi comme système multimédia avec leur TV. Que ce soit sur un Raspberry Pi, un mini PC ou bien un laptop, le besoin d’interagir à distance depuis son divan nous amène à considérer l’achat d’une télécommande USB. Bien que la norme HDMI intègre la fonction CEC pour commander des équipements avec la même télécommande, cette fonction n’est pas toujours présente sur les TV et équipement multimédia.</p>
 <p>Voyons comment créer son propre récepteur USB pour télécommande infrarouge avec un microcontrôleur ATmega32u4, un vieux décodeur Vidéotron dont nous allons récupérer le capteur et la télécommande.</p>
-<p>Les mises à jour de ce projet sont disponibles sur Github: <a href="https://github.com/cboyer/remote-arduino" class="uri">https://github.com/cboyer/remote-arduino</a>.</p>
+<p>Les mises à jour de ce projet sont disponibles sur Github: <a href="https://github.com/cboyer/remote-arduino">https://github.com/cboyer/remote-arduino</a>.</p>
 <h2 id="principe-de-fonctionnement">Principe de fonctionnement</h2>
 <p>ATmega32u4 possède des fonctionnalités HID: il peut nativement se faire passer pour un périphérique USB comme une souris ou encore un clavier. Nous allons l’utiliser pour simuler les touches d’un clavier en fonction des codes infrarouge reçus de la télécommande. L’avantage d’utiliser un microcontrôleur et l’USB au lieu du capteur infrarouge directement sur des entrée GPIO est la portabilité: aucun pilote, configuration ou logiciel (comme Lircd) n’est requis. Vous pouvez même interagir avec le système d’exploitation et n’importe quelle application pouvant être contrôlée par le clavier. Dans le cadre d’une utilisation avec Kodi, nous utiliserons les touches configurées par défaut sur Kodi afin de le contrôler.</p>
 <p>Sachant que la télécommande et le capteur infrarouge proviennent du même équipement, nous sommes assurés que ces deux éléments fonctionnent sur la même fréquence.</p>
@@ -277,8 +277,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Les touches <code>MEDIA_*</code> fonctionnent uniquement sur un système Linux, Windows ne les reconnait pas. Ceci n’est donc pas un problème pour les utilisateurs de <a href="https://libreelec.tv/">LibreELEC</a>/<a href="https://www.openelec.tv/">OpenELEC</a>.</p>
 <h2 id="sources">Sources</h2>
 <ul>
-<li><a href="https://github.com/z3t0/Arduino-IRremote" class="uri">https://github.com/z3t0/Arduino-IRremote</a></li>
-<li><a href="https://github.com/NicoHood/HID" class="uri">https://github.com/NicoHood/HID</a></li>
+<li><a href="https://github.com/z3t0/Arduino-IRremote">https://github.com/z3t0/Arduino-IRremote</a></li>
+<li><a href="https://github.com/NicoHood/HID">https://github.com/NicoHood/HID</a></li>
 </ul>
 </article>
 

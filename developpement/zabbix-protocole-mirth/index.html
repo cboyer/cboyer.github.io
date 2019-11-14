@@ -139,7 +139,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 class="title">Implémentation du protocole Zabbix dans Mirth Connect</h2>
  <span class="author">C. Boyer</span>,   <span class="date">2018-12-08 18:23:15 (UTC-04:00)</span>
 </header>
-<p>L’objectif est d’implémenter un agent <a href="https://www.zabbix.com/">Zabbix</a> dans <a href="https://www.nextgen.com/products-and-services/NextGen-Connect-Integration-Engine-Downloads">Mirth Connect</a> comme n’importe quel autre échange de données afin de monitorer l’activité de ce dernier (erreurs, statuts, volumes de transactions, etc.). L’intégralité du code source de ce projet est disponible sur Github (licence GPLv3): <a href="https://github.com/cboyer/mirth-zabbix" class="uri">https://github.com/cboyer/mirth-zabbix</a>.</p>
+<p>L’objectif est d’implémenter un agent <a href="https://www.zabbix.com/">Zabbix</a> dans <a href="https://www.nextgen.com/products-and-services/NextGen-Connect-Integration-Engine-Downloads">Mirth Connect</a> comme n’importe quel autre échange de données afin de monitorer l’activité de ce dernier (erreurs, statuts, volumes de transactions, etc.). L’intégralité du code source de ce projet est disponible sur Github (licence GPLv3): <a href="https://github.com/cboyer/mirth-zabbix">https://github.com/cboyer/mirth-zabbix</a>.</p>
 <p>Le monitoring avec Zabbix repose sur un serveur chargé de collecter les données auprès des équipements notamment via un agent (Zabbix peut également utiliser d’autres standards comme SNMP). Cette stratégie de “polling” implique dans un premier temps une connexion à l’agent pour l’interroger concernant la valeur d’une métrique (clé) que ce dernier lui retournera.</p>
 <h2 id="le-protocole-zabbix">Le protocole Zabbix</h2>
 <p>Zabbix utilise un protocole relativement simple: il repose sur des échanges de données au format JSON sur TCP. Étant une technologie libre et open source nous disposons du code source de l’agent Zabbix ainsi qu’une excellente documentation pour en comprendre le fonctionnement (cf. sources en bas de page).</p>
@@ -175,7 +175,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </tr>
 </tbody>
 </table>
-<p>L’entête est une chaîne de caractères fixe: <code>&quot;ZBXD\x01&quot;</code>. Elle est composée de la chaîne <code>ZBXD</code> et de l’octet <code>0x01</code>. La quantité de données est un entier non signé sur 8 octets en little-endian qui représente la longueur de la chaîne contenant les données JSON. Zabbix est limité à une quantité maximale de 134217728 octets. Les données envoyées sont en texte clair au format JSON (Zabbix peut crypter ses échanges, cas que nous ne traiterons pas ici).</p>
+<p>L’entête est une chaîne de caractères fixe: <code>"ZBXD\x01"</code>. Elle est composée de la chaîne <code>ZBXD</code> et de l’octet <code>0x01</code>. La quantité de données est un entier non signé sur 8 octets en little-endian qui représente la longueur de la chaîne contenant les données JSON. Zabbix est limité à une quantité maximale de 134217728 octets. Les données envoyées sont en texte clair au format JSON (Zabbix peut crypter ses échanges, cas que nous ne traiterons pas ici).</p>
 <h2 id="mirth-connect">Mirth Connect</h2>
 <p>Pour imiter le fonctionnement de l’agent Zabbix avec un canal Mirth un connecteur source de type TCP Listener est nécessaire afin d’accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu’ils soient altérés par les standards d’encodage (UTF-8, etc.) liés aux chaînes de caractères. Le caractère <code>0x0A</code> (LF) sera utilisé comme indicateur de fin de message. Tous ces paramètres sont configurables directement dans Mirth sans la moindre ligne de code.</p>
 <figure>
@@ -224,8 +224,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Notons qu’il est nécessaire d’encoder le message en base 64 pour fonctionner en mode binaire dans Mirth. Coté Zabbix toute la configuration s’effectue via un <a href="https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml">template</a> pour la définition des items/clés à monitorer.</p>
 <h2 id="sources">Sources</h2>
 <ul>
-<li><a href="https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive" class="uri">https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive</a></li>
-<li><a href="https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen" class="uri">https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen</a></li>
+<li><a href="https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive">https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive</a></li>
+<li><a href="https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen">https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen</a></li>
 </ul>
 </article>
 

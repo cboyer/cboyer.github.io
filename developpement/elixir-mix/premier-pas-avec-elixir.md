@@ -1,40 +1,20 @@
 ---
 title: "Premiers pas avec Elixir"
-date: "2019-06-19T19:04:11-04:00"
+date: "2019-11-13T19:07:11-05:00"
 updated: "2019-11-13T19:07:11-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
-keywords: [Elixir, mix, iex, Supervisor, GenServer, développement]
+keywords: [Elixir, mix, iex, développement]
 abstract: |
   Premiers pas avec Elixir.
 ---
 
-## Mix
-
-Mix est l'outil principal d'Elixir:
-
-
-|Commande           | Description                                       |
-|-------------------|---------------------------------------------------|
-|mix new `myapp`    | Créer une nouvelle application                    |
-|mix new --sup `myapp`| Créer une nouvelle application avec superviseur |
-|mix deps.get       | Télécharger les dépendances                       |
-|mix deps.update    | Mettre à jour les dépendances                     |
-|mix deps.clean `circuits_uart` | Supprimer une dépendance              |
-|mix deps.clean --all | Supprimer toutes les dépendances                |
-|mix deps.compile `input_event`| Compiler une dependance                |
-|MIX_ENV=prod mix release | Générer une release (Elixir 1.9)            |
-|mix run            | Exécuter l'application (non interactif)           |
-|iex -S mix         | Exécuter l'application (interactif)               |
-|mix clean --deps   | Nettoyage tous les objets compilés (_build/*)     |
-
-
-
-## Création d'un projet
-
 Voici une application Elixir très simple en deux modules: un principal`ElixirApp.Application` chargé de superviser le second `ElixirApp.Worker` qui permet de manipuler (lire/écrire) une valeur en mémoire.
+
+
+## Création du projet
 
 Créer un projet avec un superviseur (`--sup`):
 ```Console
@@ -113,27 +93,6 @@ defmodule ElixirApp.Worker do
 end
 ```
 
-## Gestion des dépendances avec Mix
-
-Pour ajouter une dépendance, il faut passer par le fichier `mix.exs` en modifiant le bloc suivant:
-
-```Elixir
-defp deps do
-  [
-    {:input_event, git: "https://github.com/LeToteTeam/input_event.git", tag: "master"}
-  ]
-end
-```
-
-Pour la suite depuis le shell:
-```Console
-mix deps.get
-```
-
-Compiler une dépendance: `mix deps.compile input_event`
-Mettre à jour une dépendance: `mix deps.update input_event`
-Pour la supprimer: `mix deps.clean input_event`
-
 ## Lancement de l'application
 
 Il est possible d'exécuter l'application de façon interactive depuis `iex` (toujours depuis le dossier racine `elixir_app`) ce qui permet d'appeler n'importe quelle fonction ou d'utiliser l'Observer avec `:observer.start` :
@@ -174,16 +133,36 @@ Pour l'exécuter de façon non interactive (depuis le dossier racine `elixir_app
 mix run
 ```
 
+## Annexes
 
+### Mix et les dépendances
 
-## Observer
+Pour ajouter une dépendance, il faut passer par le fichier `mix.exs` en modifiant le bloc suivant:
+```Elixir
+defp deps do
+  [
+    {:input_event, git: "https://github.com/LeToteTeam/input_event.git", tag: "master"}
+  ]
+end
+```
+
+Pour la suite depuis le shell:
+```Console
+mix deps.get
+```
+
+Compiler une dépendance: `mix deps.compile input_event`
+Mettre à jour une dépendance: `mix deps.update input_event`
+Pour la supprimer: `mix deps.clean input_event`
+
+### Observer
 
 Pour visualiser les toutes les caractéristiques de notre application (dans `iex`, en ayant au préalable installé le package `erlang-observer`):
 ```elixir
 :observer.start
 ```
 
-## Compilation manuelle de fichiers source
+### Compilation manuelle
 
 Pour le compiler manuellement et obtenir un binaire (bytecode pour la machine virtuelle BEAM):
 ```Console

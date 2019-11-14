@@ -165,8 +165,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb1-13" title="13"><span class="kw">&lt;/xs:schema&gt;</span></a></code></pre></div>
 <p>Le WSDL et XSD sont disponibles aux adresses suivantes:</p>
 <ul>
-<li><a href="http://localhost:8081/services/query?wsdl" class="uri">http://localhost:8081/services/query?wsdl</a></li>
-<li><a href="http://localhost:8081/services/query?xsd=1" class="uri">http://localhost:8081/services/query?xsd=1</a></li>
+<li><a href="http://localhost:8081/services/query?wsdl">http://localhost:8081/services/query?wsdl</a></li>
+<li><a href="http://localhost:8081/services/query?xsd=1">http://localhost:8081/services/query?xsd=1</a></li>
 </ul>
 <h3 id="scénario-écho">Scénario Écho</h3>
 <p>Démonstration de l’utilisation du connecteur source “Web Service Listener”:</p>
@@ -238,7 +238,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Il faut bien utiliser <code>package com.mirth.connect.connectors.ws;</code> pour étendre la classe <code>AcceptMessage</code> qui est dans <code>com.mirth.connect.connectors.ws</code> sans quoi le web service retournera l’erreur: &gt; Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</p>
 <p>Il est possible de définir le targetNamespace (par défaut sa valeur est <code>http://ws.connectors.connect.mirth.com/</code>), le serviceName et le portName en remplaçant l’annotation <code>@WebService</code> par:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode java"><code class="sourceCode java"><a class="sourceLine" id="cb6-1" title="1"><span class="at">@WebService</span>(portName = <span class="st">&quot;SDDCwsPort&quot;</span>, serviceName = <span class="st">&quot;SDDCws&quot;</span>, targetNamespace = <span class="st">&quot;https://monurl.qc.ca/monservice&quot;</span>)</a></code></pre></div>
-<p>La requête SOAP devra mentionner le bon targetNamespace (<code>xmlns:ws=&quot;https://monurl.qc.ca/monservice&quot;</code>) dans l’enveloppe sinon nous obtiendrons l’erreur:</p>
+<p>La requête SOAP devra mentionner le bon targetNamespace (<code>xmlns:ws="https://monurl.qc.ca/monservice"</code>) dans l’enveloppe sinon nous obtiendrons l’erreur:</p>
 <blockquote>
 <p>Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</p>
 </blockquote>
@@ -343,7 +343,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb12-56" title="56">    <span class="kw">return</span> patient;</a>
 <a class="sourceLine" id="cb12-57" title="57">  }</a>
 <a class="sourceLine" id="cb12-58" title="58">}</a></code></pre></div>
-<p>Par défaut ces paramètres ne sont pas obligatoires, si une requête SOAP est envoyée sans certains de ces paramètres il seront ajoutés mais inialisés à <code>null</code> (Mirth les verra comme la chaîne <code>&quot;null&quot;</code>). Il est possible de les rendre obligatoire en utilisant <code>@XmlElement(required=true)</code> en plus de <code>@WebParam</code>.</p>
+<p>Par défaut ces paramètres ne sont pas obligatoires, si une requête SOAP est envoyée sans certains de ces paramètres il seront ajoutés mais inialisés à <code>null</code> (Mirth les verra comme la chaîne <code>"null"</code>). Il est possible de les rendre obligatoire en utilisant <code>@XmlElement(required=true)</code> en plus de <code>@WebParam</code>.</p>
 <p>Ici nous parsons les données de <code>response</code> (données issues du connecteur de destination) pour obtenir un objet <code>patient</code> qui sera retourné via web service. Si des élément supplémentaires sont présents dans le XML à parser (non présents dans la classe <code>Patient</code>) ils seront simplement ignorés.</p>
 <p>En effet pour fournir en sortie plusieurs paramètres dans notre réponse SOAP, nous devrons faire appel aux binding Java XML (annotations JAXB) avec <code>javax.xml.bind.annotation</code> car retourner simplement un objet <code>Patient</code> ne fonctionnera pas (aucune donnée ne sera retournée).</p>
 <p>Fichier <code>Patient.java</code>:</p>
@@ -605,10 +605,10 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <a class="sourceLine" id="cb23-24" title="24"><span class="kw">&lt;/S:Envelope&gt;</span></a></code></pre></div>
 <h2 id="sources">Sources</h2>
 <ul>
-<li><a href="http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1" class="uri">http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1</a></li>
-<li><a href="https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java" class="uri">https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java</a></li>
-<li><a href="https://howtodoinjava.com/jaxb/jaxb-annotations" class="uri">https://howtodoinjava.com/jaxb/jaxb-annotations</a></li>
-<li><a href="https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/" class="uri">https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/</a></li>
+<li><a href="http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1">http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1</a></li>
+<li><a href="https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java">https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java</a></li>
+<li><a href="https://howtodoinjava.com/jaxb/jaxb-annotations">https://howtodoinjava.com/jaxb/jaxb-annotations</a></li>
+<li><a href="https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/">https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/</a></li>
 </ul>
 </article>
 

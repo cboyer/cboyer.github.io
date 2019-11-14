@@ -3,12 +3,22 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2019-11-01T17:05:41-04:00</updated>
+    <updated>2019-11-13T19:48:10-05:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
     <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <entry>
+        <title>Premiers pas avec Elixir</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-mix/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:ef66190a-3a50-5019-aa15-08254795a805</id>
+        <published>2019-11-13T19:07:11-05:00</published>
+        <updated>2019-11-13T19:07:11-05:00</updated>
+        <summary>Premiers pas avec Elixir.</summary>
+    </entry>
     <entry>
         <title>Création d’un web service SOAP avec Mirth</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
@@ -26,7 +36,7 @@
         <category term="Développement"/>
         <id>urn:uuid:2db7cea1-b29f-5faa-bee2-3426d8c0ecc1</id>
         <published>2019-06-19T19:04:11-04:00</published>
-        <updated>2019-06-19T19:04:11-04:00</updated>
+        <updated>2019-11-13T19:07:11-05:00</updated>
         <summary>Premiers pas avec Elixir.</summary>
     </entry>
     <entry>

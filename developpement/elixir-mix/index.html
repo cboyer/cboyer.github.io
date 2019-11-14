@@ -8,15 +8,15 @@
   <title>Premiers pas avec Elixir - C. Boyer</title>
   <meta name="description" content="Premiers pas avec Elixir." />
   <meta name="author" content="C. Boyer" />
-  <meta name="keywords" content="Elixir, mix, iex, Supervisor, GenServer, développement" />
-  <link rel="canonical" href="https://cboyer.github.io/developpement/premiers-pas-avec-elixir" />
+  <meta name="keywords" content="Elixir, mix, iex, développement" />
+  <link rel="canonical" href="https://cboyer.github.io/developpement/elixir-mix" />
   <meta property="og:title" content="Premiers pas avec Elixir - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
   <meta property="og:description" content="Premiers pas avec Elixir." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2019-11-13T19:07:11-05:00" />
-  <meta property="article:published_time" content="2019-06-19T19:04:11-04:00" />
+  <meta property="article:published_time" content="2019-11-13T19:07:11-05:00" />
   <meta property="article:modified_time" content="2019-11-13T19:07:11-05:00" />
   <meta name="generator" content="pandoc" />
   <meta name="robots" content="index,follow">
@@ -137,66 +137,10 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h2 class="title">Premiers pas avec Elixir</h2>
- <span class="author">C. Boyer</span>,   <span class="date">2019-06-19 19:04:11 (UTC-04:00)</span>
+ <span class="author">C. Boyer</span>,   <span class="date">2019-11-13 19:07:11 (UTC-05:00)</span>
 </header>
-<h2 id="mix">Mix</h2>
-<p>Mix est l’outil principal d’Elixir:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Commande</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>mix new <code>myapp</code></td>
-<td>Créer une nouvelle application</td>
-</tr>
-<tr class="even">
-<td>mix new –sup <code>myapp</code></td>
-<td>Créer une nouvelle application avec superviseur</td>
-</tr>
-<tr class="odd">
-<td>mix deps.get</td>
-<td>Télécharger les dépendances</td>
-</tr>
-<tr class="even">
-<td>mix deps.update</td>
-<td>Mettre à jour les dépendances</td>
-</tr>
-<tr class="odd">
-<td>mix deps.clean <code>circuits_uart</code></td>
-<td>Supprimer une dépendance</td>
-</tr>
-<tr class="even">
-<td>mix deps.clean –all</td>
-<td>Supprimer toutes les dépendances</td>
-</tr>
-<tr class="odd">
-<td>mix deps.compile <code>input_event</code></td>
-<td>Compiler une dependance</td>
-</tr>
-<tr class="even">
-<td>MIX_ENV=prod mix release</td>
-<td>Générer une release (Elixir 1.9)</td>
-</tr>
-<tr class="odd">
-<td>mix run</td>
-<td>Exécuter l’application (non interactif)</td>
-</tr>
-<tr class="even">
-<td>iex -S mix</td>
-<td>Exécuter l’application (interactif)</td>
-</tr>
-<tr class="odd">
-<td>mix clean –deps</td>
-<td>Nettoyage tous les objets compilés (_build/*)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="création-dun-projet">Création d’un projet</h2>
 <p>Voici une application Elixir très simple en deux modules: un principal<code>ElixirApp.Application</code> chargé de superviser le second <code>ElixirApp.Worker</code> qui permet de manipuler (lire/écrire) une valeur en mémoire.</p>
+<h2 id="création-du-projet">Création du projet</h2>
 <p>Créer un projet avec un superviseur (<code>--sup</code>):</p>
 <pre class="console"><code>mix new --sup elixir_app</code></pre>
 <p>Le code de l’application se trouve alors dans <code>elixir_app/lib/elixir_app/application.ex</code></p>
@@ -263,16 +207,6 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb3-40" title="40">  <span class="kw">end</span></a>
 <a class="sourceLine" id="cb3-41" title="41"></a>
 <a class="sourceLine" id="cb3-42" title="42"><span class="kw">end</span></a></code></pre></div>
-<h2 id="gestion-des-dépendances-avec-mix">Gestion des dépendances avec Mix</h2>
-<p>Pour ajouter une dépendance, il faut passer par le fichier <code>mix.exs</code> en modifiant le bloc suivant:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode elixir"><code class="sourceCode elixir"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">defp</span> deps <span class="kw">do</span></a>
-<a class="sourceLine" id="cb4-2" title="2">  [</a>
-<a class="sourceLine" id="cb4-3" title="3">    {<span class="va">:input_event</span>, <span class="va">git:</span> <span class="st">&quot;https://github.com/LeToteTeam/input_event.git&quot;</span>, <span class="va">tag:</span> <span class="st">&quot;master&quot;</span>}</a>
-<a class="sourceLine" id="cb4-4" title="4">  ]</a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="kw">end</span></a></code></pre></div>
-<p>Pour la suite depuis le shell:</p>
-<pre class="console"><code>mix deps.get</code></pre>
-<p>Compiler une dépendance: <code>mix deps.compile input_event</code> Mettre à jour une dépendance: <code>mix deps.update input_event</code> Pour la supprimer: <code>mix deps.clean input_event</code></p>
 <h2 id="lancement-de-lapplication">Lancement de l’application</h2>
 <p>Il est possible d’exécuter l’application de façon interactive depuis <code>iex</code> (toujours depuis le dossier racine <code>elixir_app</code>) ce qui permet d’appeler n’importe quelle fonction ou d’utiliser l’Observer avec <code>:observer.start</code> :</p>
 <pre class="console"><code>iex -S mix</code></pre>
@@ -300,10 +234,21 @@ Call: get
 1354</code></pre>
 <p>Pour l’exécuter de façon non interactive (depuis le dossier racine <code>elixir_app</code>):</p>
 <pre class="console"><code>mix run</code></pre>
-<h2 id="observer">Observer</h2>
+<h2 id="annexes">Annexes</h2>
+<h3 id="mix-et-les-dépendances">Mix et les dépendances</h3>
+<p>Pour ajouter une dépendance, il faut passer par le fichier <code>mix.exs</code> en modifiant le bloc suivant:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode elixir"><code class="sourceCode elixir"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">defp</span> deps <span class="kw">do</span></a>
+<a class="sourceLine" id="cb8-2" title="2">  [</a>
+<a class="sourceLine" id="cb8-3" title="3">    {<span class="va">:input_event</span>, <span class="va">git:</span> <span class="st">&quot;https://github.com/LeToteTeam/input_event.git&quot;</span>, <span class="va">tag:</span> <span class="st">&quot;master&quot;</span>}</a>
+<a class="sourceLine" id="cb8-4" title="4">  ]</a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="kw">end</span></a></code></pre></div>
+<p>Pour la suite depuis le shell:</p>
+<pre class="console"><code>mix deps.get</code></pre>
+<p>Compiler une dépendance: <code>mix deps.compile input_event</code> Mettre à jour une dépendance: <code>mix deps.update input_event</code> Pour la supprimer: <code>mix deps.clean input_event</code></p>
+<h3 id="observer">Observer</h3>
 <p>Pour visualiser les toutes les caractéristiques de notre application (dans <code>iex</code>, en ayant au préalable installé le package <code>erlang-observer</code>):</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode elixir"><code class="sourceCode elixir"><a class="sourceLine" id="cb10-1" title="1"><span class="va">:observer</span><span class="op">.</span>start</a></code></pre></div>
-<h2 id="compilation-manuelle-de-fichiers-source">Compilation manuelle de fichiers source</h2>
+<h3 id="compilation-manuelle">Compilation manuelle</h3>
 <p>Pour le compiler manuellement et obtenir un binaire (bytecode pour la machine virtuelle BEAM):</p>
 <pre class="console"><code>elixirc elixir_app/lib/elixir_app/application.ex
 elixirc elixir_app/lib/elixir_app/worker.ex</code></pre>
