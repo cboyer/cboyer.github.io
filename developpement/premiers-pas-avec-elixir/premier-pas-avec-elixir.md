@@ -1,7 +1,7 @@
 ---
 title: "Premiers pas avec Elixir"
 date: "2019-06-19T19:04:11-04:00"
-updated: "2019-11-13T19:07:11-05:00"
+updated: "2019-11-14T21:40:11-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -13,7 +13,8 @@ abstract: |
 
 ## Mix
 
-Mix est l'outil principal d'Elixir:
+Mix est l'outil principal d'Elixir. Il permet d'effectuer toutes les opérations liées au développement d'une application.
+Liste non exhaustive des commandes `mix`:
 
 
 |Commande           | Description                                       |

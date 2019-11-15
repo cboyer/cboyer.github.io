@@ -139,13 +139,13 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 class="title">Filtrer les publicités avec un serveur DNS Unbound</h2>
  <span class="author">C. Boyer</span>,   <span class="date">2018-05-04 17:56:14 (UTC-04:00)</span>
 </header>
-<p>Les publicités sont devenues depuis quelques années une véritable plaie sur Internet. Rares sont les sites et autres blogues qui en sont exempts, l’appât du gain ouvrant grand les portes à la monétisation. Ce qui est d’autant plus dérangeant c’est qu’elles ne se limitent plus à afficher (de manière intempestive ou non) un produit quelconque: les régies publicitaires ciblent des annonces en fonctions des données accessibles depuis votre navigateur (cookies, user-agent, recoupement avec d’autres données, etc.).</p>
-<p>Il existe des moyens de contrer ce fléau avec des plugins s’installant dans votre navigateur comme AdBlock, uBlock Origin ou encore Disconnect. Une autre alternative est possible: filtrer la source de ces annonces avec un serveur de noms (DNS) local. Une suite d’outils pour Raspberry Pi reposant sur ce concept à même vu le jour: <a href="https://pi-hole.net">Pi-Hole</a>. Ainsi, vous accélérez votre navigation en ne téléchargeant plus les données associées aux publicités.</p>
+<p>Les publicités sont devenues depuis quelques années une véritable plaie sur Internet. Rares sont les sites et autres blogues qui en sont exempts, l'appât du gain ouvrant grand les portes à la monétisation. Ce qui est d'autant plus dérangeant c'est qu'elles ne se limitent plus à afficher (de manière intempestive ou non) un produit quelconque: les régies publicitaires ciblent des annonces en fonctions des données accessibles depuis votre navigateur (cookies, user-agent, recoupement avec d'autres données, etc.).</p>
+<p>Il existe des moyens de contrer ce fléau avec des plugins s'installant dans votre navigateur comme AdBlock, uBlock Origin ou encore Disconnect. Une autre alternative est possible: filtrer la source de ces annonces avec un serveur de noms (DNS) local. Une suite d'outils pour Raspberry Pi reposant sur ce concept à même vu le jour: <a href="https://pi-hole.net">Pi-Hole</a>. Ainsi, vous accélérez votre navigation en ne téléchargeant plus les données associées aux publicités.</p>
 <p>Nous allons voir comment monter son propre serveur DNS local avec Unbound pour filtrer les indésirables. Commençons par installer le package Unbound dépendamment de votre distribution (en root):</p>
 <pre class="console"><code>dnf install unbound
 apt-get install unbound
 yum install unbound</code></pre>
-<p>La configuration d’Unbound <code>/etc/unbound/unbound.conf</code>:</p>
+<p>La configuration d'Unbound <code>/etc/unbound/unbound.conf</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb2-1" title="1"><span class="fu">server:</span></a>
 <a class="sourceLine" id="cb2-2" title="2">    <span class="fu">interface:</span><span class="at"> </span><span class="fl">0.0.0.0</span></a>
 <a class="sourceLine" id="cb2-3" title="3">    <span class="fu">verbosity:</span><span class="at"> </span><span class="dv">1</span></a>
@@ -179,7 +179,7 @@ yum install unbound</code></pre>
 <a class="sourceLine" id="cb2-31" title="31">    forward-ssl-upstream:yes</a>
 <a class="sourceLine" id="cb2-32" title="32">    <span class="co">#forward-addr: 80.67.169.12</span></a>
 <a class="sourceLine" id="cb2-33" title="33">    <span class="co">#forward-addr: 80.67.169.40</span></a></code></pre></div>
-<p>Vous trouverez la description de tous ces paramètres dans la documentation officielle d’Unbound: <a href="https://www.unbound.net/documentation/unbound.conf.html">https://www.unbound.net/documentation/unbound.conf.html</a></p>
+<p>Vous trouverez la description de tous ces paramètres dans la documentation officielle d'Unbound: <a href="https://www.unbound.net/documentation/unbound.conf.html">https://www.unbound.net/documentation/unbound.conf.html</a></p>
 <p>Pour résumer, Unbound fait office de cache DNS en résolvant les requêtes avec les DNS Cloudflare (connexion sécurisée par TLS). Les deux autres adresses commentées correspondent aux serveurs DNS de la <a href="https://www.fdn.fr/actions/dns">FDN</a> dans le cas où vous ne feriez pas confiance à Cloudflare. Les DNS de Google sont vraiment à éviter pour des raisons évidentes.</p>
 <p>Le fichier <code>/etc/unbound/local.conf</code> contiendra nos entrées locales, par exemple:</p>
 <pre class="console"><code>local-zone: &quot;serveur&quot; redirect
@@ -193,10 +193,10 @@ local-data: &quot;patate A 192.168.10.12&quot;</code></pre>
 <a class="sourceLine" id="cb4-3" title="3"><span class="fu">wget</span> https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts</a>
 <a class="sourceLine" id="cb4-4" title="4"><span class="fu">egrep</span> <span class="st">&#39;^0.0.0.0&#39;</span> hosts <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $2}&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;1d&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> -e <span class="st">&#39;s/^/local-zone: &quot;/&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> -e <span class="st">&#39;s/$/&quot; refuse/&#39;</span> <span class="op">&gt;</span> /etc/unbound/blacklist.conf</a>
 <a class="sourceLine" id="cb4-5" title="5"><span class="fu">rm</span> -f hosts</a></code></pre></div>
-<p>Adaptez l’URL selon votre choix parmi les différentes listes disponibles. Ce script peut parfaitement être ajouté dans la crontab pour une synchronisation régulière: pour cela ajoutez un redémarrage du service en dernière ligne.</p>
+<p>Adaptez l'URL selon votre choix parmi les différentes listes disponibles. Ce script peut parfaitement être ajouté dans la crontab pour une synchronisation régulière: pour cela ajoutez un redémarrage du service en dernière ligne.</p>
 <p>Pour redémarrer Unbound:</p>
 <pre class="console"><code>systemctl restart unbound</code></pre>
-<p>Il ne reste plus qu’à faire pointer vos clients vers le serveur DNS en ajoutant l’adresse IP dans la configuration de vos machines et/ou dans votre DHCP (routeur).</p>
+<p>Il ne reste plus qu'à faire pointer vos clients vers le serveur DNS en ajoutant l'adresse IP dans la configuration de vos machines et/ou dans votre DHCP (routeur).</p>
 <h2 id="sources">Sources:</h2>
 <ul>
 <li><a href="https://etherarp.net/build-an-adblocking-dns-server/index.html">https://etherarp.net/build-an-adblocking-dns-server/index.html</a></li>

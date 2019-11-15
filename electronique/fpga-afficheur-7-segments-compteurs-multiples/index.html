@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>FPGA et afficheur 7 segments: compteur à afficheurs multiples - C. Boyer</title>
-  <meta name="description" content="Implémentation en Verilog d’un compteur sur plusieurs afficheurs 7 segments." />
+  <meta name="description" content="Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="fpga, afficheur, led, verilog" />
   <link rel="canonical" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteurs-multiples" />
   <meta property="og:title" content="FPGA et afficheur 7 segments: compteur à afficheurs multiples - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Implémentation en Verilog d’un compteur sur plusieurs afficheurs 7 segments." />
+  <meta property="og:description" content="Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2018-11-01T18:08:32-04:00" />
@@ -140,7 +140,7 @@ code span.wa { color: #bf0303; } /* Warning */
  <span class="author">C. Boyer</span>,   <span class="date">2018-04-27 20:02:50 (UTC-04:00)</span>
 </header>
 <p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>, <a href="../fpga-afficheur-7-segments-compteur-unique/">partie 2</a>, partie 3</p>
-<p>Nous avons vu dans <a href="../fpga-afficheur-7-segments-introduction/">la partie 1</a> comment afficher un chiffre sur l’afficheur le plus à droite et dans <a href="../fpga-afficheur-7-segments-compteur-unique/">la partie 2</a> comment implémenter un compteur avec ce même afficheur. L’objectif de cette troisième partie est d’implémenter un compteur sur plusieurs afficheurs. Nous commencerons par un compteur à deux afficheurs afin d’introduire les dizaines dans notre compteur et d’afficher des valeurs de 0 à 99. Par la suite, nous étendrons notre compteur aux quatre afficheurs.</p>
+<p>Nous avons vu dans <a href="../fpga-afficheur-7-segments-introduction/">la partie 1</a> comment afficher un chiffre sur l'afficheur le plus à droite et dans <a href="../fpga-afficheur-7-segments-compteur-unique/">la partie 2</a> comment implémenter un compteur avec ce même afficheur. L'objectif de cette troisième partie est d'implémenter un compteur sur plusieurs afficheurs. Nous commencerons par un compteur à deux afficheurs afin d’introduire les dizaines dans notre compteur et d’afficher des valeurs de 0 à 99. Par la suite, nous étendrons notre compteur aux quatre afficheurs.</p>
 <h2 id="compteur-à-deux-afficheurs">Compteur à deux afficheurs</h2>
 <p>Étant limité a une valeur maximale de 9, ajouter un afficheur supplémentaire va nous permettre de rehausser cette valeur à 99. Un problème se dessine à l’horizon: comment pouvons nous piloter un afficheur supplémentaire indépendamment du premier alors qu’ils partagent les mêmes cathodes?</p>
 <p>Rappelons nous notre schéma :</p>
@@ -160,7 +160,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <pre class="console"><code>{B6, B7, B3, B1, BD, BC}
 {E6, E7, E3, E1, ED, EC}</code></pre>
 <p>Comment éviter ce comportement? Le seul paramètre indépendant entre nos deux afficheurs est l’anode (respectivement B et E). Cependant l’anode seule ne permet pas de contrôler un segment. L’astuce ici est d’afficher le chiffre 2 sur le second afficheur et alternativement le chiffre 1 sur le premier afficheur. Ces affichages consécutifs à une fréquence suffisamment élevée vont créer l’illusion d’avoir les deux afficheurs fonctionnant simultanément (phénomène de persistance rétinienne, que nous utilisons déjà pour les segments). Pour cela nous réutiliserons notre compteur <code>counter</code>.</p>
-<p>Nous allons commencer par remanier notre code pour isoler les anodes des cathodes afin de contrôler chaque afficheur séparément (par leur anode respective) et les segments à afficher (par les cathodes). Pour cela nous aurons besoin de deux sorties avec <code>output [1:0] DISPLAYS</code> pour l’anode de chacun des deux afficheurs et 8 autres sorties avec <code>output [7:0] SEGMENTS</code> pour la cathodes de chaque segment (en comptant le point).</p>
+<p>Nous allons commencer par remanier notre code pour isoler les anodes des cathodes afin de contrôler chaque afficheur séparément (par leur anode respective) et les segments à afficher (par les cathodes). Pour cela nous aurons besoin de deux sorties avec <code>output [1:0] DISPLAYS</code> pour l'anode de chacun des deux afficheurs et 8 autres sorties avec <code>output [7:0] SEGMENTS</code> pour la cathodes de chaque segment (en comptant le point).</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb4-1" title="1"><span class="co">/* module */</span></a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="kw">module</span> SevenSegment (</a>
 <a class="sourceLine" id="cb4-3" title="3">    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</a>
@@ -242,10 +242,10 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb4-79" title="79">    <span class="kw">end</span></a>
 <a class="sourceLine" id="cb4-80" title="80"></a>
 <a class="sourceLine" id="cb4-81" title="81"><span class="kw">endmodule</span></a></code></pre></div>
-<p>Nous avons fait le choix ici d’utiliser un vecteur de 4 bits <code>displayed_value</code> dédié pour l’affichage dans lequel nous copions alternativement la valeur de chacun des afficheurs <code>display_1_value</code> et <code>display_2_value</code>. Nous aurions pu ajouter directement un bloc <code>case</code> sur <code>display_1_value</code> et <code>display_2_value</code> dans chacun des <code>if</code> pour économiser l’espace occupé par <code>displayed_value</code>. En revanche cette solution aurait mobilisé davantage d’éléments logiques dans le FPGA (deux blocs <code>case</code> au lieu d’un seul).</p>
+<p>Nous avons fait le choix ici d’utiliser un vecteur de 4 bits <code>displayed_value</code> dédié pour l’affichage dans lequel nous copions alternativement la valeur de chacun des afficheurs <code>display_1_value</code> et <code>display_2_value</code>. Nous aurions pu ajouter directement un bloc <code>case</code> sur <code>display_1_value</code> et <code>display_2_value</code> dans chacun des <code>if</code> pour économiser l’espace occupé par <code>displayed_value</code>. En revanche cette solution aurait mobilisé davantage d'éléments logiques dans le FPGA (deux blocs <code>case</code> au lieu d’un seul).</p>
 <h2 id="compteur-à-quatre-afficheurs">Compteur à quatre afficheurs</h2>
 <p>Maintenant que nous sommes capable de piloter deux afficheurs, il ne reste qu’un pas à franchir pour contrôler les quatre. En utilisant toujours la même technique, nous pouvons étendre facilement le contrôle aux deux afficheurs restant.</p>
-<p>Pour alterner l’affichage sur 4 afficheurs nous avons besoin de 2 bits de <code>counter</code> pour les identifier individuellement. La position de ces 2 bits dans <code>counter</code> permet de définir la fréquence à laquelle l’alternance est effectuée.</p>
+<p>Pour alterner l'affichage sur 4 afficheurs nous avons besoin de 2 bits de <code>counter</code> pour les identifier individuellement. La position de ces 2 bits dans <code>counter</code> permet de définir la fréquence à laquelle l'alternance est effectuée.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb5-1" title="1"><span class="co">/* module */</span></a>
 <a class="sourceLine" id="cb5-2" title="2"><span class="kw">module</span> SevenSegment (</a>
 <a class="sourceLine" id="cb5-3" title="3">    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</a>
@@ -330,7 +330,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb5-82" title="82">    <span class="kw">end</span></a>
 <a class="sourceLine" id="cb5-83" title="83"></a>
 <a class="sourceLine" id="cb5-84" title="84"><span class="kw">endmodule</span></a></code></pre></div>
-<p>Le bloc <code>case</code> nous permet de comparer <code>counter[18:17]</code> de manière élégante bien qu’une série de 4 <code>if</code> aurait parfaitement fonctionné.</p>
+<p>Le bloc <code>case</code> nous permet de comparer <code>counter[18:17]</code> de manière élégante bien qu'une série de 4 <code>if</code> aurait parfaitement fonctionné.</p>
 <p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>, <a href="../fpga-afficheur-7-segments-compteur-unique/">partie 2</a>, partie 3</p>
 </article>
 

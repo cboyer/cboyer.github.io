@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>FPGA et afficheur 7 segments: compteur à afficheur unique - C. Boyer</title>
-  <meta name="description" content="Implémentation en Verilog d’un compteur sur un afficheur 7 segments." />
+  <meta name="description" content="Implémentation en Verilog d'un compteur sur un afficheur 7 segments." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="fpga, afficheur, led, verilog" />
   <link rel="canonical" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteur-unique" />
   <meta property="og:title" content="FPGA et afficheur 7 segments: compteur à afficheur unique - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Implémentation en Verilog d’un compteur sur un afficheur 7 segments." />
+  <meta property="og:description" content="Implémentation en Verilog d'un compteur sur un afficheur 7 segments." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2018-11-01T18:08:32-04:00" />
@@ -140,10 +140,10 @@ code span.wa { color: #bf0303; } /* Warning */
  <span class="author">C. Boyer</span>,   <span class="date">2018-04-25 20:00:50 (UTC-04:00)</span>
 </header>
 <p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>, partie 2, <a href="../fpga-afficheur-7-segments-compteurs-multiples/">partie 3</a></p>
-<p>Nous avons vu dans <a href="../fpga-afficheur-7-segments-introduction/">la partie 1</a> comment afficher un chiffre sur l’afficheur le plus à droite. L’objectif de cette seconde partie est d’implémenter un compteur pour afficher les chiffres de 0 à 9. Avant de continuer, rappelons quelques éléments importants de la partie précédente:</p>
+<p>Nous avons vu dans <a href="../fpga-afficheur-7-segments-introduction/">la partie 1</a> comment afficher un chiffre sur l'afficheur le plus à droite. L'objectif de cette seconde partie est d'implémenter un compteur pour afficher les chiffres de 0 à 9. Avant de continuer, rappelons quelques éléments importants de la partie précédente:</p>
 <p>La nomenclature des segments:</p>
 <ul>
-<li>le premier caractère représente l’anode (pôle positif)</li>
+<li>le premier caractère représente l'anode (pôle positif)</li>
 <li>le deuxième caractère représente la cathode (pôle négatif)</li>
 </ul>
 <figure>
@@ -159,7 +159,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb1-7" title="7"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">6</span>] = display_<span class="dv">1</span>_leds[<span class="dv">6</span>]; <span class="co">//6</span></a>
 <a class="sourceLine" id="cb1-8" title="8"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">7</span>] = display_<span class="dv">1</span>_leds[<span class="dv">7</span>]; <span class="co">//7</span></a>
 <a class="sourceLine" id="cb1-9" title="9"><span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">8</span>] = display_<span class="dv">1</span>_leds[<span class="dv">8</span>]; <span class="co">//D</span></a></code></pre></div>
-<p>Attardons nous sur le signal issu de l’horloge. L’ensemble d’un circuit logique implémenté sur un FPGA peut être “asservi” par un signal de référence: l’horloge. Techniquement il s’agit d’un signal carré (le plus souvent de 50 MHz) qui va entrainer l’exécution des instruction dans le bloc <code>always</code> dépendamment de son état (posedge dans notre cas).</p>
+<p>Attardons nous sur le signal issu de l’horloge. L’ensemble d’un circuit logique implémenté sur un FPGA peut être "asservi" par un signal de référence: l’horloge. Techniquement il s’agit d’un signal carré (le plus souvent de 50 MHz) qui va entrainer l'exécution des instruction dans le bloc <code>always</code> dépendamment de son état (posedge dans notre cas).</p>
 <p>Dans notre circuit, c’est ce signal qui permet d’allumer les segments. En réalité, chaque segment s’allume et s’éteint à raison de 50 MHz ce qui est bien trop rapide pour l’œil humain qui voit les segment allumé en permanence (phénomène de persistance rétinienne).</p>
 <p>Utilisons ce signal afin de compter des intervalles de temps suffisamment conséquents pour en afficher la valeur à une fréquence perceptible par l’œil. Pour cela, nous allons utiliser un registre <code>counter</code> de 26 bits pour incrémenter un second registre <code>display_1_value</code> de 4 bits qui contiendra une valeur comprise entre 0 et 9. Le FPGA va incrémenter ce registre à raison de 50 millions de fois par seconde (50 MHz), nous prendrons donc une valeur suffisamment grande (les 25 premiers bits à 1 par exemple) pour que le FPGA ne soit pas trop rapide pour incrémenter notre compteur dont la valeur sera affichée.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb2-1" title="1"><span class="co">/* module */</span></a>
@@ -210,14 +210,14 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb2-46" title="46">    <span class="kw">end</span></a>
 <a class="sourceLine" id="cb2-47" title="47"></a>
 <a class="sourceLine" id="cb2-48" title="48"><span class="kw">endmodule</span></a></code></pre></div>
-<p>Pour ne rien afficher, il suffit que <code>display_1_leds[0]</code> qui est l’anode commune (broche E sur le schéma) soit à 0. <code>display_1_leds[5]</code> est toujours à 0 car il s’agit de la cathode du point (segment E5) qui n’est pas utilisé.</p>
-<p>Pour diminuer la fréquence d’incrémentation, il suffit de passer d’une comparaison des 25 premiers bits de <code>counter</code> à l’ensemble des 26 bits. Le FPGA mettra plus de temps à arriver à 26 bits à 1 que 25. Pour cela, il est nécessaire de changer la ligne:</p>
+<p>Pour ne rien afficher, il suffit que <code>display_1_leds[0]</code> qui est l'anode commune (broche E sur le schéma) soit à 0. <code>display_1_leds[5]</code> est toujours à 0 car il s'agit de la cathode du point (segment E5) qui n'est pas utilisé.</p>
+<p>Pour diminuer la fréquence d'incrémentation, il suffit de passer d'une comparaison des 25 premiers bits de <code>counter</code> à l'ensemble des 26 bits. Le FPGA mettra plus de temps à arriver à 26 bits à 1 que 25. Pour cela, il est nécessaire de changer la ligne:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">if</span>(counter[<span class="dv">24</span>:<span class="dv">0</span>] == <span class="bn">25&#39;b1</span>) <span class="kw">begin</span></a></code></pre></div>
 <p>Pour:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">if</span>(counter[<span class="dv">25</span>:<span class="dv">0</span>] == <span class="bn">26&#39;b1</span>) <span class="kw">begin</span></a></code></pre></div>
-<p>Et pour l’augmenter, nous pouvons réduire la comparaison à 24 bits ou moins:</p>
+<p>Et pour l'augmenter, nous pouvons réduire la comparaison à 24 bits ou moins:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">if</span>(counter[<span class="dv">23</span>:<span class="dv">0</span>] == <span class="bn">24&#39;b1</span>) <span class="kw">begin</span></a></code></pre></div>
-<p>Il est très important de prendre un intervalle de 0 à N bits et non un seul bit en particulier (à l’exception du bit de poids faible) car la condition s’avèrera vraie aussi longtemps qu’incrémenter les bits précédents ne change pas le bit comparé. Ceci aura pour effet d’incrémenter <code>display_1_value</code> à 50 MHz et d’afficher le chiffre correspondant beaucoup trop rapidement (notre oeil percevra le chiffre 8 à cause de la persistance rétinienne).</p>
+<p>Il est très important de prendre un intervalle de 0 à N bits et non un seul bit en particulier (à l'exception du bit de poids faible) car la condition s'avèrera vraie aussi longtemps qu'incrémenter les bits précédents ne change pas le bit comparé. Ceci aura pour effet d'incrémenter <code>display_1_value</code> à 50 MHz et d'afficher le chiffre correspondant beaucoup trop rapidement (notre oeil percevra le chiffre 8 à cause de la persistance rétinienne).</p>
 <p>Dans <a href="../fpga-afficheur-7-segments-compteurs-multiples/">la partie 3</a>, nous verrons comment utiliser un afficheur supplémentaire afin d’introduire les dizaines dans notre compteur et d’afficher des valeurs de 0 à 99.</p>
 <p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>, partie 2, <a href="../fpga-afficheur-7-segments-compteurs-multiples/">partie 3</a></p>
 </article>

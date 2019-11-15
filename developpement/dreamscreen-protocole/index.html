@@ -73,8 +73,8 @@
 <h2 class="title">Implémentation du protocole Dreamscreen en C</h2>
  <span class="author">C. Boyer</span>,   <span class="date">2018-05-29 19:36:04 (UTC-04:00)</span>
 </header>
-<p>Le <a href="https://www.dreamscreentv.com">Dreamscreen</a> est un équipement multimédia du type “ambilight”. Cet équipement utilise une application Android/IPhone pour être configuré et contrôlé par Wifi mais pas de télécommande. L’application en question est uniquement disponible sur Google Play (pour Android), ce qui est ennuyant lorsqu’on utilise un téléphone “dé-google-isé” avec <a href="https://www.lineageos.org">LineageOS</a>.</p>
-<p>Pour palier à ce manque, j’ai donc écrit un simple programme en C pour Linux (disponible sur <a href="https://github.com/cboyer/dreamscreen-daemon">Github</a>) afin contrôler un dreamscreen depuis un <a href="../../electronique/recepteur-infrarouge-usb-atmega32u4/index.html">système de télécommande</a> maison, que j’utilise avec Kodi. Ce programme est compatible avec n’importe quel autre périphérique de type clavier. Techniquement il s’agit d’une implémentation en C du protocole dreamscreen qui envoie des message via UDP en fonction d’évènements clavier. Ce programme peut facilement être intégré dans des systèmes comme <a href="https://libreelec.tv">LibreELEC</a> ou encore <a href="https://openelec.tv">OpenELEC</a>.</p>
+<p>Le <a href="https://www.dreamscreentv.com">Dreamscreen</a> est un équipement multimédia du type "ambilight". Cet équipement utilise une application Android/IPhone pour être configuré et contrôlé par Wifi mais pas de télécommande. L'application en question est uniquement disponible sur Google Play (pour Android), ce qui est ennuyant lorsqu'on utilise un téléphone "dé-google-isé" avec <a href="https://www.lineageos.org">LineageOS</a>.</p>
+<p>Pour palier à ce manque, j'ai donc écrit un simple programme en C pour Linux (disponible sur <a href="https://github.com/cboyer/dreamscreen-daemon">Github</a>) afin contrôler un dreamscreen depuis un <a href="../../electronique/recepteur-infrarouge-usb-atmega32u4/index.html">système de télécommande</a> maison, que j'utilise avec Kodi. Ce programme est compatible avec n'importe quel autre périphérique de type clavier. Techniquement il s'agit d'une implémentation en C du protocole dreamscreen qui envoie des message via UDP en fonction d'évènements clavier. Ce programme peut facilement être intégré dans des systèmes comme <a href="https://libreelec.tv">LibreELEC</a> ou encore <a href="https://openelec.tv">OpenELEC</a>.</p>
 <h2 id="structure-du-message">Structure du message</h2>
 <p>Dreamscreen utilise le port 8888 en UDP sur son interface WiFi pour envoyer et recevoir des messages binaires.</p>
 <table style="width:100%;">
@@ -121,8 +121,8 @@
 <p><strong>Adresse de groupe:</strong> Adresse identifiant le groupe auquel l’équipement est associé. <code>0x00</code> pour aucun groupe, <code>0x01</code> pour le groupe 1, <code>0x02</code> pour le groupe 2 etc. Dans le cas où l’adresse de groupe est incorrect, le message sera ignoré.</p>
 <p><strong>Drapeau:</strong> Défini le contexte pour d’interprétation du message. Utiliser <code>0x11</code> pour commander le dreamscreen.</p>
 <p><strong>Commande:</strong> Défini la commande, utiliser <code>0x03</code> pour commander le Dreamscreen.</p>
-<p><strong>Paramètre:</strong> Identifie l’élément à paramétrer (cf. tableau plus bas).</p>
-<p><strong>Payload:</strong> Valeur à affecter au paramètre (cf. tableau plus bas).</p>
+<p><strong>Paramètre:</strong> Identifie l’élément à paramétrer (cf. tableau plus bas).</p>
+<p><strong>Payload:</strong> Valeur à affecter au paramètre (cf. tableau plus bas).</p>
 <p><strong>CRC:</strong> CRC sur 8 bits pour valider l’intégrité du message. S’il est incorrect, le message sera ignoré.</p>
 <h2 id="commandes-et-paramètres">Commandes et paramètres</h2>
 <table>

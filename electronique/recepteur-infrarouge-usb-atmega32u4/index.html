@@ -139,18 +139,18 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 class="title">Récepteur infrarouge USB avec un ATmega32u4</h2>
  <span class="author">C. Boyer</span>,   <span class="date">2018-04-20 18:45:18 (UTC-04:00)</span>
 </header>
-<p>Beaucoup utilisent Kodi comme système multimédia avec leur TV. Que ce soit sur un Raspberry Pi, un mini PC ou bien un laptop, le besoin d’interagir à distance depuis son divan nous amène à considérer l’achat d’une télécommande USB. Bien que la norme HDMI intègre la fonction CEC pour commander des équipements avec la même télécommande, cette fonction n’est pas toujours présente sur les TV et équipement multimédia.</p>
+<p>Beaucoup utilisent Kodi comme système multimédia avec leur TV. Que ce soit sur un Raspberry Pi, un mini PC ou bien un laptop, le besoin d'interagir à distance depuis son divan nous amène à considérer l'achat d'une télécommande USB. Bien que la norme HDMI intègre la fonction CEC pour commander des équipements avec la même télécommande, cette fonction n'est pas toujours présente sur les TV et équipement multimédia.</p>
 <p>Voyons comment créer son propre récepteur USB pour télécommande infrarouge avec un microcontrôleur ATmega32u4, un vieux décodeur Vidéotron dont nous allons récupérer le capteur et la télécommande.</p>
 <p>Les mises à jour de ce projet sont disponibles sur Github: <a href="https://github.com/cboyer/remote-arduino">https://github.com/cboyer/remote-arduino</a>.</p>
 <h2 id="principe-de-fonctionnement">Principe de fonctionnement</h2>
-<p>ATmega32u4 possède des fonctionnalités HID: il peut nativement se faire passer pour un périphérique USB comme une souris ou encore un clavier. Nous allons l’utiliser pour simuler les touches d’un clavier en fonction des codes infrarouge reçus de la télécommande. L’avantage d’utiliser un microcontrôleur et l’USB au lieu du capteur infrarouge directement sur des entrée GPIO est la portabilité: aucun pilote, configuration ou logiciel (comme Lircd) n’est requis. Vous pouvez même interagir avec le système d’exploitation et n’importe quelle application pouvant être contrôlée par le clavier. Dans le cadre d’une utilisation avec Kodi, nous utiliserons les touches configurées par défaut sur Kodi afin de le contrôler.</p>
+<p>ATmega32u4 possède des fonctionnalités HID: il peut nativement se faire passer pour un périphérique USB comme une souris ou encore un clavier. Nous allons l'utiliser pour simuler les touches d'un clavier en fonction des codes infrarouge reçus de la télécommande. L'avantage d'utiliser un microcontrôleur et l'USB au lieu du capteur infrarouge directement sur des entrée GPIO est la portabilité: aucun pilote, configuration ou logiciel (comme Lircd) n'est requis. Vous pouvez même interagir avec le système d'exploitation et n'importe quelle application pouvant être contrôlée par le clavier. Dans le cadre d'une utilisation avec Kodi, nous utiliserons les touches configurées par défaut sur Kodi afin de le contrôler.</p>
 <p>Sachant que la télécommande et le capteur infrarouge proviennent du même équipement, nous sommes assurés que ces deux éléments fonctionnent sur la même fréquence.</p>
 <h2 id="le-montage">Le montage</h2>
-<p>Nous utiliserons un “CJMCU Beetle” pour ses dimensions particulièrement adaptées à notre utilisation:</p>
+<p>Nous utiliserons un "CJMCU Beetle" pour ses dimensions particulièrement adaptées à notre utilisation:</p>
 <figure>
 <img src="cjmcu.jpg" alt="Montage" /><figcaption>Montage</figcaption>
 </figure>
-<p>Pour programmer l’ATmega32u4 nous utiliserons l’IDE Arduino configuré pour une carte Arduino Leonardo et les librairies IRremote, HID-Project:</p>
+<p>Pour programmer l'ATmega32u4 nous utiliserons l'IDE Arduino configuré pour une carte Arduino Leonardo et les librairies IRremote, HID-Project:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><a class="sourceLine" id="cb1-1" title="1"><span class="pp">#include </span><span class="im">&lt;IRremote.h&gt;</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="pp">#include </span><span class="im">&lt;HID-Project.h&gt;</span></a>
 <a class="sourceLine" id="cb1-3" title="3"></a>
@@ -272,9 +272,9 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb1-119" title="119">  }</a>
 <a class="sourceLine" id="cb1-120" title="120">  delay(<span class="dv">10</span>);</a>
 <a class="sourceLine" id="cb1-121" title="121">}</a></code></pre></div>
-<p>Dans le cas où votre télécommande n’utiliserai pas les mêmes codes infrarouge, décommentez les lignes indiquées pour qu’ils soient affichés dans la console de l’IDE. Remplacez les codes correspondant à la touche clavier voulue (exemple: <code>MEDIA_STOP</code>).</p>
+<p>Dans le cas où votre télécommande n'utiliserai pas les mêmes codes infrarouge, décommentez les lignes indiquées pour qu'ils soient affichés dans la console de l'IDE. Remplacez les codes correspondant à la touche clavier voulue (exemple: <code>MEDIA_STOP</code>).</p>
 <h2 id="limites">Limites</h2>
-<p>Les touches <code>MEDIA_*</code> fonctionnent uniquement sur un système Linux, Windows ne les reconnait pas. Ceci n’est donc pas un problème pour les utilisateurs de <a href="https://libreelec.tv/">LibreELEC</a>/<a href="https://www.openelec.tv/">OpenELEC</a>.</p>
+<p>Les touches <code>MEDIA_*</code> fonctionnent uniquement sur un système Linux, Windows ne les reconnait pas. Ceci n'est donc pas un problème pour les utilisateurs de <a href="https://libreelec.tv/">LibreELEC</a>/<a href="https://www.openelec.tv/">OpenELEC</a>.</p>
 <h2 id="sources">Sources</h2>
 <ul>
 <li><a href="https://github.com/z3t0/Arduino-IRremote">https://github.com/z3t0/Arduino-IRremote</a></li>

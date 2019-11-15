@@ -3,7 +3,7 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2019-11-13T19:56:31-05:00</updated>
+    <updated>2019-11-14T21:42:03-05:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
@@ -26,7 +26,7 @@
         <category term="Développement"/>
         <id>urn:uuid:2db7cea1-b29f-5faa-bee2-3426d8c0ecc1</id>
         <published>2019-06-19T19:04:11-04:00</published>
-        <updated>2019-11-13T19:07:11-05:00</updated>
+        <updated>2019-11-14T21:40:11-05:00</updated>
         <summary>Premiers pas avec Elixir.</summary>
     </entry>
     <entry>
