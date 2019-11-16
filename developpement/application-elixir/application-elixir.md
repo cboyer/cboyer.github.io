@@ -1,5 +1,5 @@
 ---
-title: "Premiers pas avec Elixir"
+title: "Exemple d'application Elixir"
 date: "2019-06-19T19:04:11-04:00"
 updated: "2019-11-14T21:40:11-05:00"
 author: "C. Boyer"
@@ -8,36 +8,16 @@ website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [Elixir, mix, iex, Supervisor, GenServer, développement]
 abstract: |
-  Premiers pas avec Elixir.
+  Exemple d'application Elixir.
 ---
-
-## Mix
-
-Mix est l'outil principal d'Elixir. Il permet d'effectuer toutes les opérations liées au développement d'une application.
-Liste non exhaustive des commandes `mix`:
-
-
-|Commande           | Description                                       |
-|-------------------|---------------------------------------------------|
-|mix new `myapp`    | Créer une nouvelle application                    |
-|mix new --sup `myapp`| Créer une nouvelle application avec superviseur |
-|mix deps.get       | Télécharger les dépendances                       |
-|mix deps.update    | Mettre à jour les dépendances                     |
-|mix deps.clean `circuits_uart` | Supprimer une dépendance              |
-|mix deps.clean --all | Supprimer toutes les dépendances                |
-|mix deps.compile `input_event`| Compiler une dependance                |
-|MIX_ENV=prod mix release | Générer une release (Elixir 1.9)            |
-|mix run            | Exécuter l'application (non interactif)           |
-|iex -S mix         | Exécuter l'application (interactif)               |
-|mix clean --deps   | Nettoyage tous les objets compilés (_build/*)     |
-
 
 
 ## Création d'un projet
 
-Voici une application Elixir très simple en deux modules: un principal`ElixirApp.Application` chargé de superviser le second `ElixirApp.Worker` qui permet de manipuler (lire/écrire) une valeur en mémoire.
+Une application Elixir très simple en deux modules: un principal`ElixirApp.Application` chargé de superviser le second `ElixirApp.Worker` qui permet de manipuler (lire/écrire) une valeur en mémoire.
 
 Créer un projet avec un superviseur (`--sup`):
+
 ```Console
 mix new --sup elixir_app
 ```
@@ -127,6 +107,7 @@ end
 ```
 
 Pour la suite depuis le shell:
+
 ```Console
 mix deps.get
 ```
@@ -143,6 +124,7 @@ iex -S mix
 ```
 
 Nous pouvons appeler les fonctions depuis `iex`
+
 ```Console
 iex(8)> ElixirApp.Worker.get_number()
 Call: get
@@ -158,6 +140,7 @@ Call: get
 ```
 
 Il est possible de recharger le module après modification sans perdre l'état actuelle de `state` :
+
 ```Console
 iex(11)> r ElixirApp.Worker
 warning: redefining module ElixirApp.Worker (current version loaded from _build/dev/lib/elixir_app/ebin/ElixirApp.Worker.beam)
@@ -171,6 +154,7 @@ Call: get
 ```
 
 Pour l'exécuter de façon non interactive (depuis le dossier racine `elixir_app`):
+
 ```Console
 mix run
 ```
@@ -180,24 +164,11 @@ mix run
 ## Observer
 
 Pour visualiser les toutes les caractéristiques de notre application (dans `iex`, en ayant au préalable installé le package `erlang-observer`):
+
 ```elixir
 :observer.start
 ```
 
-## Compilation manuelle de fichiers source
-
-Pour le compiler manuellement et obtenir un binaire (bytecode pour la machine virtuelle BEAM):
-```Console
-elixirc elixir_app/lib/elixir_app/application.ex
-elixirc elixir_app/lib/elixir_app/worker.ex
-```
-
-On obtient alors les fichiers `Elixir.ElixirApp.Application.beam` et `Elixir.ElixirApp.Worker.beam`
-
-Pour l'exécuter depuis le shell (en se plaçant dans le même dossier que `Elixir.ElixirApp.Application.beam`):
-```Console
-elixir -e "ElixirApp.Application.start(:ok, [])"
-```
 
 ### Sources
 

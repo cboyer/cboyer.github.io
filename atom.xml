@@ -3,12 +3,22 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2019-11-14T21:42:03-05:00</updated>
+    <updated>2019-11-16T13:08:37-05:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
     <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <entry>
+        <title>Les outils Elixir</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/outils-elixir/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:b4351106-0b65-583e-9040-6f38efeeb04a</id>
+        <published>2019-11-16T13:24:27-05:00</published>
+        <updated>2019-11-16T13:24:27-05:00</updated>
+        <summary>Aide mémoire Elixir: les outils.</summary>
+    </entry>
     <entry>
         <title>Création d’un web service SOAP avec Mirth</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
@@ -20,14 +30,14 @@
         <summary>Création d’un web service SOAP avec Mirth.</summary>
     </entry>
     <entry>
-        <title>Premiers pas avec Elixir</title>
+        <title>Exemple d'application Elixir</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/premiers-pas-avec-elixir/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/application-elixir/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:2db7cea1-b29f-5faa-bee2-3426d8c0ecc1</id>
+        <id>urn:uuid:04579599-738f-58f5-9851-b220f1f28348</id>
         <published>2019-06-19T19:04:11-04:00</published>
         <updated>2019-11-14T21:40:11-05:00</updated>
-        <summary>Premiers pas avec Elixir.</summary>
+        <summary>Exemple d'application Elixir.</summary>
     </entry>
     <entry>
         <title>R: les incontournables</title>
@@ -36,7 +46,7 @@
         <category term="Développement"/>
         <id>urn:uuid:48d29d28-f09d-5e23-baed-7073729aeb3d</id>
         <published>2019-05-25T10:09:13-04:00</published>
-        <updated>2019-09-002T12:43:21-04:00</updated>
+        <updated>2019-11-16T12:39:21-05:00</updated>
         <summary>Opérations incontournables avec le langage R.</summary>
     </entry>
     <entry>

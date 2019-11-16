@@ -5,14 +5,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
-  <title>Premiers pas avec Elixir - C. Boyer</title>
-  <meta name="description" content="Premiers pas avec Elixir." />
+  <title>Exemple d'application Elixir - C. Boyer</title>
+  <meta name="description" content="Exemple d'application Elixir." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Elixir, mix, iex, Supervisor, GenServer, développement" />
-  <link rel="canonical" href="https://cboyer.github.io/developpement/premiers-pas-avec-elixir" />
-  <meta property="og:title" content="Premiers pas avec Elixir - C. Boyer" />
+  <link rel="canonical" href="https://cboyer.github.io/developpement/application-elixir" />
+  <meta property="og:title" content="Exemple d'application Elixir - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Premiers pas avec Elixir." />
+  <meta property="og:description" content="Exemple d'application Elixir." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2019-11-14T21:40:11-05:00" />
@@ -136,67 +136,11 @@ code span.wa { color: #bf0303; } /* Warning */
   <div id="container">
 <article>
 <header id="title-block-header">
-<h2 class="title">Premiers pas avec Elixir</h2>
+<h2 class="title">Exemple d'application Elixir</h2>
  <span class="author">C. Boyer</span>,   <span class="date">2019-06-19 19:04:11 (UTC-04:00)</span>
 </header>
-<h2 id="mix">Mix</h2>
-<p>Mix est l'outil principal d'Elixir. Il permet d'effectuer toutes les opérations liées au développement d'une application. Liste non exhaustive des commandes <code>mix</code>:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Commande</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>mix new <code>myapp</code></td>
-<td>Créer une nouvelle application</td>
-</tr>
-<tr class="even">
-<td>mix new --sup <code>myapp</code></td>
-<td>Créer une nouvelle application avec superviseur</td>
-</tr>
-<tr class="odd">
-<td>mix deps.get</td>
-<td>Télécharger les dépendances</td>
-</tr>
-<tr class="even">
-<td>mix deps.update</td>
-<td>Mettre à jour les dépendances</td>
-</tr>
-<tr class="odd">
-<td>mix deps.clean <code>circuits_uart</code></td>
-<td>Supprimer une dépendance</td>
-</tr>
-<tr class="even">
-<td>mix deps.clean --all</td>
-<td>Supprimer toutes les dépendances</td>
-</tr>
-<tr class="odd">
-<td>mix deps.compile <code>input_event</code></td>
-<td>Compiler une dependance</td>
-</tr>
-<tr class="even">
-<td>MIX_ENV=prod mix release</td>
-<td>Générer une release (Elixir 1.9)</td>
-</tr>
-<tr class="odd">
-<td>mix run</td>
-<td>Exécuter l'application (non interactif)</td>
-</tr>
-<tr class="even">
-<td>iex -S mix</td>
-<td>Exécuter l'application (interactif)</td>
-</tr>
-<tr class="odd">
-<td>mix clean --deps</td>
-<td>Nettoyage tous les objets compilés (_build/*)</td>
-</tr>
-</tbody>
-</table>
 <h2 id="création-dun-projet">Création d'un projet</h2>
-<p>Voici une application Elixir très simple en deux modules: un principal<code>ElixirApp.Application</code> chargé de superviser le second <code>ElixirApp.Worker</code> qui permet de manipuler (lire/écrire) une valeur en mémoire.</p>
+<p>Une application Elixir très simple en deux modules: un principal<code>ElixirApp.Application</code> chargé de superviser le second <code>ElixirApp.Worker</code> qui permet de manipuler (lire/écrire) une valeur en mémoire.</p>
 <p>Créer un projet avec un superviseur (<code>--sup</code>):</p>
 <pre class="console"><code>mix new --sup elixir_app</code></pre>
 <p>Le code de l'application se trouve alors dans <code>elixir_app/lib/elixir_app/application.ex</code></p>
@@ -303,13 +247,6 @@ Call: get
 <h2 id="observer">Observer</h2>
 <p>Pour visualiser les toutes les caractéristiques de notre application (dans <code>iex</code>, en ayant au préalable installé le package <code>erlang-observer</code>):</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode elixir"><code class="sourceCode elixir"><a class="sourceLine" id="cb10-1" title="1"><span class="va">:observer</span><span class="op">.</span>start</a></code></pre></div>
-<h2 id="compilation-manuelle-de-fichiers-source">Compilation manuelle de fichiers source</h2>
-<p>Pour le compiler manuellement et obtenir un binaire (bytecode pour la machine virtuelle BEAM):</p>
-<pre class="console"><code>elixirc elixir_app/lib/elixir_app/application.ex
-elixirc elixir_app/lib/elixir_app/worker.ex</code></pre>
-<p>On obtient alors les fichiers <code>Elixir.ElixirApp.Application.beam</code> et <code>Elixir.ElixirApp.Worker.beam</code></p>
-<p>Pour l'exécuter depuis le shell (en se plaçant dans le même dossier que <code>Elixir.ElixirApp.Application.beam</code>):</p>
-<pre class="console"><code>elixir -e &quot;ElixirApp.Application.start(:ok, [])&quot;</code></pre>
 <h3 id="sources">Sources</h3>
 <ul>
 <li><a href="https://elixir-lang.org/getting-started/mix-otp/supervisor-and-application.html">elixir-lang.org: Supervisor and application</a></li>

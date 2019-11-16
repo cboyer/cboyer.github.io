@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2019-09-002T12:43:21-04:00"
+updated: "2019-11-16T12:39:21-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -33,6 +33,11 @@ Ne pas utiliser la notation scientifique pour les entiers de grande taille (s'ap
 options(scipen = 999)
 ```
 
+Ne pas utiliser la factorisation pour les chaîne de caractères:
+```R
+options(stringsAsFactors = FALSE)
+```
+
 Ajuster la mémoire allouée à Java pour les appels externes (par exemple les requêtes SQL avec JDBC, doit être placé avant `require` et `librairy`):
 ```R
 options(java.parameters = "-Xmx1024m")
@@ -49,9 +54,7 @@ Utilisation de ODBC avec des sources configurées (DSN) dans Windows (utile pour
 require(DBI)
 con <- dbConnect(odbc::odbc(), "MonDataSourceWindows")
 sql <- "SELECT UserID FROM User"
-queryResults <- dbSendQuery(con, sql)
-userids <- dbFetch(queryResults)
-dbClearResult(queryResults)
+userids <- dbGetQuery(con, sql)
 dbDisconnect(con)
 ```
 
