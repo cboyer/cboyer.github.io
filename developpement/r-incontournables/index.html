@@ -15,9 +15,9 @@
   <meta property="og:description" content="Opérations incontournables avec le langage R." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2019-11-16T12:39:21-05:00" />
+  <meta property="og:updated_time" content="2019-12-02T20:20:21-05:00" />
   <meta property="article:published_time" content="2019-05-25T10:09:13-04:00" />
-  <meta property="article:modified_time" content="2019-11-16T12:39:21-05:00" />
+  <meta property="article:modified_time" content="2019-12-02T20:20:21-05:00" />
   <meta name="generator" content="pandoc" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -171,9 +171,10 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb6-2" title="2">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(),</a>
 <a class="sourceLine" id="cb6-3" title="3">                 <span class="dt">Driver =</span> <span class="st">&quot;SQL Server&quot;</span>,</a>
 <a class="sourceLine" id="cb6-4" title="4">                 <span class="dt">Server =</span> <span class="st">&quot;1.2.3.4&quot;</span>,</a>
-<a class="sourceLine" id="cb6-5" title="5">                 <span class="dt">Database =</span> <span class="st">&quot;mydb&quot;</span>,</a>
-<a class="sourceLine" id="cb6-6" title="6">                 <span class="dt">User =</span> <span class="st">&quot;domaine</span><span class="ch">\\</span><span class="st">login&quot;</span>,</a>
-<a class="sourceLine" id="cb6-7" title="7">                 <span class="dt">Password =</span> <span class="st">&quot;password&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb6-5" title="5">                 <span class="dt">Port =</span> <span class="st">&quot;1433&quot;</span>,</a>
+<a class="sourceLine" id="cb6-6" title="6">                 <span class="dt">Database =</span> <span class="st">&quot;mydb&quot;</span>,</a>
+<a class="sourceLine" id="cb6-7" title="7">                 <span class="dt">UID =</span> <span class="st">&quot;Interface&quot;</span>,</a>
+<a class="sourceLine" id="cb6-8" title="8">                 <span class="dt">PWD =</span> <span class="st">&quot;Integration&quot;</span>)</a></code></pre></div>
 <p>Oracle via ODBC sans sources configurées (DSN):</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">require</span>(DBI)</a>
 <a class="sourceLine" id="cb7-2" title="2">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(),</a>
@@ -247,9 +248,9 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Récupère les lignes de dataframe1 dont LOGIN et LAST_DATE sont dans dataframe2</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">intersection &lt;-<span class="st"> </span>dataframe1[<span class="kw">with</span>(dataframe1, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%in%</span><span class="st"> </span><span class="kw">with</span>(dataframe2, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)), ]</a></code></pre></div>
 <p>Supprimer les lignes dont la valeur d'une colonne spécifique se répète:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span><span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID),]</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ),]</a></code></pre></div>
 <p>Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre):</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span><span class="kw">duplicated</span>(duplicats),]</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ) ,]</a></code></pre></div>
 <p>Copier la valeur d'une colonne dans une autre en fonction d'une condition:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span><span class="kw">ifelse</span>(stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span>, stations<span class="op">$</span>BSSID, stations<span class="op">$</span>Network)</a></code></pre></div>
 <p>Traiter une colonne (chaîne de caractères) pour remplacer certains caractères par un espace:</p>
@@ -283,6 +284,11 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb31-7" title="7">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x=</span><span class="kw">c</span>(<span class="st">&quot;samAccount&quot;</span>,<span class="st">&quot;email&quot;</span>), <span class="dt">by.y=</span><span class="kw">c</span>(<span class="st">&quot;login&quot;</span>,<span class="st">&quot;mail&quot;</span>), <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avoir les mêmes colonnes):</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">users_windows &lt;-<span class="st"> </span><span class="kw">rbind</span>(users_windowsNT, users_windowsXP)</a></code></pre></div>
+<h3 id="sources">Sources</h3>
+<ul>
+<li><a href="https://db.rstudio.com/databases/microsoft-sql-server/">SQLServer</a></li>
+<li><a href="https://db.rstudio.com/databases/oracle/">Oracle</a></li>
+</ul>
 </article>
 
 <div id="footer">

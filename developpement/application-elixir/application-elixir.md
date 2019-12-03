@@ -96,7 +96,7 @@ end
 
 ## Gestion des dépendances avec Mix
 
-Pour ajouter une dépendance, il faut passer par le fichier `mix.exs` en modifiant le bloc suivant:
+Pour ajouter une dépendance depuis les dépôts Hex (https://hex.pm), il faut passer par le fichier `mix.exs` en modifiant le bloc suivant:
 
 ```Elixir
 defp deps do

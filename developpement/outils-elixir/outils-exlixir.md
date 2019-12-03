@@ -19,7 +19,7 @@ Mix est l'outil de gestion pour les applications Elixir.
 |-------------------------------------------|---------------------------------------------------------------------------------------------------------------|
 |mix new `myapp`                            | Créer une nouvelle application `myapp`                                                                        |
 |mix new --sup `myapp`                      | Créer une nouvelle application `myapp` avec superviseur                                                       |
-|mix deps.get                               | Télécharger les dépendances listées dans mix.exs                                                              |
+|mix deps.get                               | Télécharger les dépendances listées dans mix.exs depuis les dépôts Hex                                        |
 |mix deps.update                            | Mettre à jour les dépendances listées dans mix.exs                                                            |
 |mix deps.clean `circuits_uart`             | Supprimer une dépendance (ici `circuits_uart`)                                                                |
 |mix deps.clean --all                       | Supprimer toutes les dépendances téléchargées/compilées                                                       |

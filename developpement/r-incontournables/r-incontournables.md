@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2019-11-16T12:39:21-05:00"
+updated: "2019-12-02T20:20:21-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -64,9 +64,10 @@ require(DBI)
 con <- dbConnect(odbc::odbc(),
                  Driver = "SQL Server",
                  Server = "1.2.3.4",
+                 Port = "1433",
                  Database = "mydb",
-                 User = "domaine\\login",
-                 Password = "password")
+                 UID = "Interface",
+                 PWD = "Integration")
 ```
 
 Oracle via ODBC sans sources configurées (DSN):
@@ -195,12 +196,12 @@ intersection <- dataframe1[with(dataframe1, paste(LOGIN, LAST_DATE, sep=".")) %i
 
 Supprimer les lignes dont la valeur d'une colonne spécifique se répète:
 ```R
-users <- duplicats[!duplicated(duplicats$UserID),]
+users <- duplicats[!( duplicated(duplicats$UserID) | duplicated(duplicats$UserID, fromLast = TRUE) ),]
 ```
 
 Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre):
 ```R
-users <- duplicats[!duplicated(duplicats),]
+users <- duplicats[!( duplicated(duplicats) | duplicated(duplicats, fromLast = TRUE) ) ,]
 ```
 
 Copier la valeur d'une colonne dans une autre en fonction d'une condition:
@@ -259,3 +260,9 @@ Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avo
 ```R
 users_windows <- rbind(users_windowsNT, users_windowsXP)
 ```
+
+
+### Sources
+
+- [SQLServer](https://db.rstudio.com/databases/microsoft-sql-server/)
+- [Oracle](https://db.rstudio.com/databases/oracle/)
