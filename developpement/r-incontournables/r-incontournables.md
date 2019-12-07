@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2019-12-02T20:20:21-05:00"
+updated: "2019-12-07T18:40:21-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -157,6 +157,18 @@ tapply(ventes$produit, ventes$annee, summary)
 
 ## <a name="data"></a>Opérations sur les données
 
+Extraire les lignes en fonction de la valeur d'une colonne:
+```R
+users_active <- subset(users, isactive == 1)
+users_active <- users[users$isactive == 1,]
+users_without_email <- subset(users, is.na(email))
+users_with_email <- subset(users, !is.na(email))
+
+#Avec plusieurs critères ( | signifie OR, & signifie AND):
+users[ which(users$Active == "1" & !is.na(users$email) & users$OS %in% c("Linux", "Solaris") ), ]
+```
+
+
 Remplacer toutes les valeurs d'un colonne répondant à un critère:
 ```R
 users$email[users$email == "unknown"] <- ""
@@ -165,14 +177,6 @@ users$email[users$email == "unknown"] <- ""
 Reformater une date:
 ```R
 ventes$annee_expedition <- format(as.Date(ventes$date_expedition, format="%Y-%m-%d"),"%Y")
-```
-
-Extraire les lignes en fonction de la valeur d'une colonne:
-```R
-users_active <- subset(users, isactive == 1)
-users_active <- users[users$isactive == 1,]
-users_without_email <- subset(users, is.na(email))
-users_with_email <- subset(users, !is.na(email))
 ```
 
 Lister les lignes dont une valeur est dupliquée:
@@ -264,5 +268,6 @@ users_windows <- rbind(users_windowsNT, users_windowsXP)
 
 ### Sources
 
-- [SQLServer](https://db.rstudio.com/databases/microsoft-sql-server/)
-- [Oracle](https://db.rstudio.com/databases/oracle/)
+- [DB: SQLServer](https://db.rstudio.com/databases/microsoft-sql-server/)
+- [DB: Oracle](https://db.rstudio.com/databases/oracle/)
+- [Subset](https://www.statmethods.net/management/subset.html)
