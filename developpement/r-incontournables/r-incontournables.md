@@ -132,9 +132,9 @@ write.table(mon_dataframe, file = "C:/Users/monLogin/Desktop/fichier.csv", row.n
 Écrire une variable dans un fichier texte:
 ```R
 text <- "String example"
-fileConn<-file("C:/Users/monLogin/Desktop/fichier.txt")
-writeLines(text, fileConn)
-close(fileConn)
+fd <- file("C:/Users/monLogin/Desktop/fichier.txt")
+writeLines(text, fd)
+close(fd)
 ```
 
 
@@ -176,12 +176,12 @@ users$email[users$email == "unknown"] <- ""
 
 Reformater une date:
 ```R
-ventes$annee_expedition <- format(as.Date(ventes$date_expedition, format="%Y-%m-%d"),"%Y")
+ventes$annee_expedition <- format( as.Date(ventes$date_expedition, format = "%Y-%m-%d"),"%Y")
 ```
 
 Lister les lignes dont une valeur est dupliquée:
 ```R
-duplicats <- users[duplicated(users$UserID) | duplicated(users$UserID, fromLast=TRUE),]
+duplicats <- users[duplicated(users$UserID) | duplicated(users$UserID, fromLast = TRUE),]
 
 #Autre possibilité (moins performante)
 decompte <- data.frame(table(users$UserID))
@@ -195,7 +195,7 @@ utilisateurs_manquants <- users[!(users$UserID %in% all_users$UserID), ]
 
 Récupère les lignes de dataframe1 dont LOGIN et LAST_DATE sont dans dataframe2
 ```R
-intersection <- dataframe1[with(dataframe1, paste(LOGIN, LAST_DATE, sep=".")) %in% with(dataframe2, paste(LOGIN, LAST_DATE, sep=".")), ]
+intersection <- dataframe1[with(dataframe1, paste(LOGIN, LAST_DATE, sep = ".")) %in% with(dataframe2, paste(LOGIN, LAST_DATE, sep = ".")), ]
 ```
 
 Supprimer les lignes dont la valeur d'une colonne spécifique se répète:
@@ -226,7 +226,7 @@ Traiter un dataframe (plusieurs colonnes) en itérant sur chaque ligne (retourne
 result <- apply(mydataframe, 1, function(x, y) {
 
   #x[1] = première colonne de mydataframe, x[2] la seconde
-  data.frame(table=x[1], column=x[2], res=1)
+  data.frame(table = x[1], column = x[2], res = 1)
 
 }, y = additionnal_arg)
 
@@ -236,12 +236,12 @@ result <- do.call(rbind, result)
 
 Regroupe les `login` et récupère max(last_login_date) (équivaut à Group By en SQL)
 ```R
-aggregate(last_login_date ~ login, data=users, FUN=max)
+aggregate(last_login_date ~ login, data = users, FUN = max)
 ```
 
 Regroupe toutes les autres colonnes et récupère max(last_login_date)
 ```R
-aggregate(last_login_date ~ ., data=users, FUN=max)
+aggregate(last_login_date ~ ., data = users, FUN = max)
 ```
 
 Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL):
@@ -251,13 +251,13 @@ stations$Manufacturer <- manufacturers$OrganizationName[match(stations$Manufactu
 
 Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:
 ```R
-all_users <- merge(users_windows, user_linux, by="login")
+all_users <- merge(users_windows, user_linux, by = "login")
 
 #Avec deux colonnes dont les noms diffèrent:
-all_users <- merge(users_windows, user_linux, by.x="samAccount", by.y="login")
+all_users <- merge(users_windows, user_linux, by.x = "samAccount", by.y = "login")
 
 #Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances comme un left join en SQL):
-all_users <- merge(users_windows, user_linux, by.x=c("samAccount","email"), by.y=c("login","mail"), all.x = TRUE)
+all_users <- merge(users_windows, user_linux, by.x = c("samAccount","email"), by.y = c("login","mail"), all.x = TRUE)
 ```
 
 Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avoir les mêmes colonnes):
