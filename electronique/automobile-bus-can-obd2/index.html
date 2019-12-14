@@ -164,22 +164,22 @@ code span.wa { color: #bf0303; } /* Warning */
 <thead>
 <tr class="header">
 <th style="text-align: center;">ID</th>
-<th style="text-align: center;">Longueur du message CAN</th>
-<th style="text-align: center;">[ Longueur du message OBD2/UDS</th>
+<th style="text-align: center;">Longueur</th>
+<th style="text-align: center;">[Longueur</th>
 <th style="text-align: center;">Service</th>
 <th style="text-align: center;">PID</th>
-<th style="text-align: center;">Bourrage</th>
-<th style="text-align: center;">Bourrage</th>
-<th style="text-align: center;">Bourrage</th>
-<th style="text-align: center;">Bourrage</th>
-<th style="text-align: center;">Bourrage ]</th>
+<th style="text-align: center;">Donnée</th>
+<th style="text-align: center;">Donnée</th>
+<th style="text-align: center;">Donnée</th>
+<th style="text-align: center;">Donnée</th>
+<th style="text-align: center;">Donnée]</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">destinataire sur 11 bits</td>
-<td style="text-align: center;">nombre d'octets (max. 8)</td>
-<td style="text-align: center;">nombre d'octets (max. 8)</td>
+<td style="text-align: center;">Destinataire sur 11 bits</td>
+<td style="text-align: center;">Longueur du message CAN en nombre d'octets (max. 8)</td>
+<td style="text-align: center;">Longueur du message OBD2/UDS en nombre d'octets (max. 8)</td>
 <td style="text-align: center;">1 octet</td>
 <td style="text-align: center;">1 octet</td>
 <td style="text-align: center;">1 octet</td>
@@ -187,18 +187,6 @@ code span.wa { color: #bf0303; } /* Warning */
 <td style="text-align: center;">1 octet</td>
 <td style="text-align: center;">1 octet</td>
 <td style="text-align: center;">1 octet</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">0x7E0</td>
-<td style="text-align: center;">8</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">0x01</td>
-<td style="text-align: center;">0x5C</td>
-<td style="text-align: center;">0x00</td>
-<td style="text-align: center;">0x00</td>
-<td style="text-align: center;">0x00</td>
-<td style="text-align: center;">0x00</td>
-<td style="text-align: center;">0x00</td>
 </tr>
 </tbody>
 </table>
@@ -207,7 +195,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb1-2" title="2">[<span class="bn">0x7E0</span><span class="op">,</span> <span class="dv">8</span>       <span class="op">,</span> [<span class="dv">2</span>       <span class="op">,</span> <span class="bn">0x01</span>   <span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    ]]</a></code></pre></div>
 <p>En réponse l'ECU devrait émettre le message suivant (avec la clé de contact):</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb2-1" title="1">[id   <span class="op">,</span> longueur<span class="op">,</span> [longueur<span class="op">,</span> service<span class="op">,</span> pid <span class="op">,</span> donnée<span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage]]</a>
-<a class="sourceLine" id="cb2-2" title="2">[<span class="bn">0x7E0</span><span class="op">,</span> <span class="dv">8</span>       <span class="op">,</span> [<span class="dv">2</span>       <span class="op">,</span> <span class="bn">0x41</span>   <span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x32</span>  <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    ]]</a></code></pre></div>
+<a class="sourceLine" id="cb2-2" title="2">[<span class="bn">0x7E8</span><span class="op">,</span> <span class="dv">8</span>       <span class="op">,</span> [<span class="dv">2</span>       <span class="op">,</span> <span class="bn">0x41</span>   <span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x32</span>  <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    ]]</a></code></pre></div>
 <p>Remarquons que le service est passé de <code>0x01</code> à <code>0x41</code> car l'ECU ajoute 40 à la valeur de service pour signifier un succès.</p>
 <p>Notons que la représentation hexadécimale utilisée ici pour les octets composant le message peut être remplacée pour utiliser directement des entiers. Nous utiliserons ici l'interface de scripting comme moyen d'interroger l'ECU bien que SavvyCAN possède déjà cette fonctionnalité via l'interface graphique en envoyant des messages dont le contenu est saisi sans code JavaScript. Voici un exemple de script SavvyCAN (JavaScript) pour récupérer la température de l'huile moteur et le régime moteur toutes les secondes:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">var</span> FROM_ECU <span class="op">=</span> <span class="bn">0x7E8</span><span class="op">;</span></a>

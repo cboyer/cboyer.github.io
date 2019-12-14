@@ -34,10 +34,9 @@ Bien que de nombreux exemples en C/C++ soient disponibles pour interroger l'ECU,
 L'ECU devrait écouter sur `0x7E0` et répondre avec l'identifiant `0x7E8`.
 Exemple de message permettant d'interroger l'ECU concernant la température de l'huile du moteur:
 
-| ID              | Longueur du message CAN      | [ Longueur du message OBD2/UDS   | Service | PID  | Bourrage    | Bourrage    | Bourrage    | Bourrage    | Bourrage ]  |
+| ID              | Longueur     | [Longueur   | Service | PID  | Donnée    | Donnée    | Donnée    | Donnée    | Donnée]  |
 | :----------------------: | :----------------------: | :----------------------: | :--------------------: | :----------------------: | :-----: | :-----: | :-----: | :-----: | :-----: |
-| destinataire sur 11 bits | nombre d'octets (max. 8) | nombre d'octets (max. 8) | 1 octet                | 1 octet                  | 1 octet | 1 octet | 1 octet | 1 octet | 1 octet |
-| 0x7E0                    | 8                        | 2                        | 0x01                   | 0x5C                     | 0x00    | 0x00    | 0x00    | 0x00    | 0x00    |
+| Destinataire sur 11 bits | Longueur du message CAN en nombre d'octets (max. 8) | Longueur du message OBD2/UDS en nombre d'octets (max. 8) | 1 octet                | 1 octet                  | 1 octet | 1 octet | 1 octet | 1 octet | 1 octet |
 
 
 L'équivalent sous forme de code:
@@ -52,7 +51,7 @@ En réponse l'ECU devrait émettre le message suivant (avec la clé de contact):
 
 ```Javascript
 [id   , longueur, [longueur, service, pid , donnée, bourrage, bourrage, bourrage, bourrage]]
-[0x7E0, 8       , [2       , 0x41   , 0x5C, 0x32  , 0x00    , 0x00    , 0x00    , 0x00    ]]
+[0x7E8, 8       , [2       , 0x41   , 0x5C, 0x32  , 0x00    , 0x00    , 0x00    , 0x00    ]]
 ```
 
 Remarquons que le service est passé de `0x01` à `0x41` car l'ECU ajoute 40 à la valeur de service pour signifier un succès.
