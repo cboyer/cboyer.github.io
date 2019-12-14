@@ -1,7 +1,7 @@
 ---
 title: "Automobile, bus CAN et norme OBD2"
 date: "2018-11-01T18:08:32-04:00"
-updated: "2018-11-01T18:08:32-04:00"
+updated: "2019-12-14T15:29:32-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -34,7 +34,7 @@ Bien que de nombreux exemples en C/C++ soient disponibles pour interroger l'ECU,
 L'ECU devrait écouter sur `0x7E0` et répondre avec l'identifiant `0x7E8`.
 Exemple de message permettant d'interroger l'ECU concernant la température de l'huile du moteur:
 
-| Identifiant              | Longueur du message      | [ Longueur du message    | Identifiant de service | Identifiant de métrique  | Vide    | Vide    | Vide    | Vide    | Vide ]  |
+| ID              | Longueur du message CAN      | [ Longueur du message OBD2/UDS   | Service | PID  | Bourrage    | Bourrage    | Bourrage    | Bourrage    | Bourrage ]  |
 | :----------------------: | :----------------------: | :----------------------: | :--------------------: | :----------------------: | :-----: | :-----: | :-----: | :-----: | :-----: |
 | destinataire sur 11 bits | nombre d'octets (max. 8) | nombre d'octets (max. 8) | 1 octet                | 1 octet                  | 1 octet | 1 octet | 1 octet | 1 octet | 1 octet |
 | 0x7E0                    | 8                        | 2                        | 0x01                   | 0x5C                     | 0x00    | 0x00    | 0x00    | 0x00    | 0x00    |
@@ -42,56 +42,75 @@ Exemple de message permettant d'interroger l'ECU concernant la température de l
 
 L'équivalent sous forme de code:
 
-```javascript
-[0x7E0, 8, [2, 0x01, 0x5C, 0x00, 0x00, 0x00, 0x00, 0x00]]
+```Javascript
+[id   , longueur, [longueur, service, pid , bourrage, bourrage, bourrage, bourrage, bourrage]]
+[0x7E0, 8       , [2       , 0x01   , 0x5C, 0x00    , 0x00    , 0x00    , 0x00    , 0x00    ]]
 ```
+
 
 En réponse l'ECU devrait émettre le message suivant (avec la clé de contact):
 
-```javascript
-[0x7E8, 8, [3, 0x01, 0x5C, 0x41, 0x00, 0x00, 0x00, 0x00]]
+```Javascript
+[id   , longueur, [longueur, service, pid , donnée, bourrage, bourrage, bourrage, bourrage]]
+[0x7E0, 8       , [2       , 0x41   , 0x5C, 0x32  , 0x00    , 0x00    , 0x00    , 0x00    ]]
 ```
+
+Remarquons que le service est passé de `0x01` à `0x41` car l'ECU ajoute 40 à la valeur de service pour signifier un succès.
+
 
 Notons que la représentation hexadécimale utilisée ici pour les octets composant le message peut être remplacée pour utiliser directement des entiers.
 Nous utiliserons ici l'interface de scripting comme moyen d'interroger l'ECU bien que SavvyCAN possède déjà cette fonctionnalité via l'interface graphique en envoyant des messages dont le contenu est saisi sans code JavaScript.
 Voici un exemple de script SavvyCAN (JavaScript) pour récupérer la température de l'huile moteur et le régime moteur toutes les secondes:
 
 ```javascript
+var FROM_ECU = 0x7E8;
+var TO_ECU = 0x7E0;
+
+//Pour afficher le contenu du message en hexadecimal
+function toHexString(byteArray) {
+	return Array.from(byteArray, function(byte) {
+		return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+	}).join(' : ')
+}
+
 //Configuration initiale
 function setup(){
   //Fréquence d'exécution de la fonction tick() à 1 seconde
   host.setTickInterval(1000);
 
   //Accepte uniquement les réponses de l'ECU (0x7E8)
-  uds.setFilter(0x7E8, 0x7E8, 0);
+  can.setFilter(FROM_ECU, FROM_ECU, 0);
 }
 
 //Callback exécuté lors de la réception d'un message
-function gotUDSMessage(bus, id, service, subFunc, len, data){
+function gotCANFrame (bus, id, len, data) {
   //Affiche tout le message
-  //host.log("Bus: " + bus + " id: " + id.toString(16) + " service: " + service.toString(16) + " data: " + data.toString(16));
+  host.log("gotCANFrame: " + toHexString(data));
 
-  //S'il s'agit de l'huile moteur
-  if(data[0] == 0x5C){
-    var temperature = data[1] - 40;
-    host.log("Huile moteur: " + temperature.toString() + " °C");
+  switch(data[2]) {
+    //Température de l'huile moteur
+    case 0x5C:
+      var temperature = data[3] - 40;
+      host.log("Huile moteur: " + temperature.toString() + " °C");
 
-    //Demande le régime moteur RPM (0x0C) sur le bus 0
-    can.sendFrame(0, 0x7E0, 8, [2, 0x01, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00]);
-  }
+      //Demande le régime moteur RPM (0x0C) sur le bus 0
+      can.sendFrame(0, TO_ECU, 8, [2, 0x01, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00]);
+      break;
 
-  //S'il s'agit du régime moteur
-  if(data[0] == 0x0C){
-    var rpm = (256 * data[1] + data[2]) / 4;
-    host.log("Régime moteur: " + rpm.toString() + " RPM");
+    //Régime moteur
+    case 0x0C:
+      var rpm = (256 * data[3] + data[4]) / 4;
+      host.log("Régime moteur: " + rpm.toString() + " RPM");
+      break;
   }
 }
 
 //Fonction exécutée périodiquement
 function tick(){
   //Demande la température de l'huile moteur (0x5C) sur le bus 0
-  can.sendFrame(0, 0x7E0, 8, [2, 0x01, 0x5C, 0x00, 0x00, 0x00, 0x00, 0x00]);
+  can.sendFrame(0, TO_ECU, 8, [2, 0x01, 0x5C, 0x00, 0x00, 0x00, 0x00, 0x00]);
 }
+
 ```
 
 Notons que la fonction `can.sendFrame()` pour récupérer le régime moteur `0x0C` est exécutée à la réception de la température de l'huile moteur `0x5C` car l'exécuter dans `tick()` directement à la suite de l'autre `can.sendFrame()` ne nous permet pas d'obtenir une réponse de l'ECU, probablement car il faut un délais entre les deux.
