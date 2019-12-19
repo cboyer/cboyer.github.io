@@ -201,6 +201,14 @@ intersection <- dataframe1[with(dataframe1, paste(LOGIN, LAST_DATE, sep = ".")) 
 intersection <- dataframe1[match( paste(dataframe1$LOGIN, dataframe1$LAST_DATE), paste(dataframe2$LOGIN, dataframe2$LAST_DATE) ), ]
 ```
 
+Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL):
+```R
+stations$Manufacturer <- manufacturers$OrganizationName[match(stations$ManufacturerID, manufacturers$ManufacturerID)]
+
+#Sur plusieurs colonnes:
+stations$Manufacturer <- manufacturers$OrganizationName[match( paste(stations$ManufacturerID, stations$ManufacturerName), paste(manufacturers$ManufacturerID, manufacturers$ManufacturerName) )]
+```
+
 Supprimer les lignes dont la valeur d'une colonne spécifique se répète:
 ```R
 users <- duplicats[!( duplicated(duplicats$UserID) | duplicated(duplicats$UserID, fromLast = TRUE) ),]
@@ -245,14 +253,6 @@ aggregate(last_login_date ~ login, data = users, FUN = max)
 Regroupe toutes les autres colonnes et récupère max(last_login_date)
 ```R
 aggregate(last_login_date ~ ., data = users, FUN = max)
-```
-
-Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL):
-```R
-stations$Manufacturer <- manufacturers$OrganizationName[match(stations$ManufacturerID, manufacturers$ManufacturerID)]
-
-#Sur plusieurs colonnes:
-stations$Manufacturer <- manufacturers$OrganizationName[match( paste(stations$ManufacturerID, stations$ManufacturerName), paste(manufacturers$ManufacturerID, manufacturers$ManufacturerName) )]
 ```
 
 Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:
