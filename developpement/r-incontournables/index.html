@@ -15,9 +15,9 @@
   <meta property="og:description" content="Opérations incontournables avec le langage R." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2019-12-07T18:40:21-05:00" />
+  <meta property="og:updated_time" content="2019-12-19T17:57:21-05:00" />
   <meta property="article:published_time" content="2019-05-25T10:09:13-04:00" />
-  <meta property="article:modified_time" content="2019-12-07T18:40:21-05:00" />
+  <meta property="article:modified_time" content="2019-12-19T17:57:21-05:00" />
   <meta name="generator" content="pandoc" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -249,7 +249,10 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Déterminer les données manquantes d'un dataframe à un autre en fonction d'une colonne:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">utilisateurs_manquants &lt;-<span class="st"> </span>users[<span class="op">!</span>(users<span class="op">$</span>UserID <span class="op">%in%</span><span class="st"> </span>all_users<span class="op">$</span>UserID), ]</a></code></pre></div>
 <p>Récupère les lignes de dataframe1 dont LOGIN et LAST_DATE sont dans dataframe2</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">intersection &lt;-<span class="st"> </span>dataframe1[<span class="kw">with</span>(dataframe1, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)) <span class="op">%in%</span><span class="st"> </span><span class="kw">with</span>(dataframe2, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)), ]</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">intersection &lt;-<span class="st"> </span>dataframe1[<span class="kw">with</span>(dataframe1, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)) <span class="op">%in%</span><span class="st"> </span><span class="kw">with</span>(dataframe2, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)), ]</a>
+<a class="sourceLine" id="cb22-2" title="2"></a>
+<a class="sourceLine" id="cb22-3" title="3"><span class="co">#Autre possibilité:</span></a>
+<a class="sourceLine" id="cb22-4" title="4">intersection &lt;-<span class="st"> </span>dataframe1[<span class="kw">match</span>( <span class="kw">paste</span>(dataframe1<span class="op">$</span>LOGIN, dataframe1<span class="op">$</span>LAST_DATE), <span class="kw">paste</span>(dataframe2<span class="op">$</span>LOGIN, dataframe2<span class="op">$</span>LAST_DATE) ), ]</a></code></pre></div>
 <p>Supprimer les lignes dont la valeur d'une colonne spécifique se répète:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ),]</a></code></pre></div>
 <p>Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre):</p>
@@ -276,7 +279,10 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Regroupe toutes les autres colonnes et récupère max(last_login_date)</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
 <p>Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL):</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>OrganizationName[<span class="kw">match</span>(stations<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>ManufacturerID)]</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>OrganizationName[<span class="kw">match</span>(stations<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>ManufacturerID)]</a>
+<a class="sourceLine" id="cb30-2" title="2"></a>
+<a class="sourceLine" id="cb30-3" title="3"><span class="co">#Sur plusieurs colonnes:</span></a>
+<a class="sourceLine" id="cb30-4" title="4">stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>OrganizationName[<span class="kw">match</span>( <span class="kw">paste</span>(stations<span class="op">$</span>ManufacturerID, stations<span class="op">$</span>ManufacturerName), <span class="kw">paste</span>(manufacturers<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>ManufacturerName) )]</a></code></pre></div>
 <p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by =</span> <span class="st">&quot;login&quot;</span>)</a>
 <a class="sourceLine" id="cb31-2" title="2"></a>

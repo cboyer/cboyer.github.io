@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2019-12-07T18:40:21-05:00"
+updated: "2019-12-19T17:57:21-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -196,6 +196,9 @@ utilisateurs_manquants <- users[!(users$UserID %in% all_users$UserID), ]
 Récupère les lignes de dataframe1 dont LOGIN et LAST_DATE sont dans dataframe2
 ```R
 intersection <- dataframe1[with(dataframe1, paste(LOGIN, LAST_DATE, sep = ".")) %in% with(dataframe2, paste(LOGIN, LAST_DATE, sep = ".")), ]
+
+#Autre possibilité:
+intersection <- dataframe1[match( paste(dataframe1$LOGIN, dataframe1$LAST_DATE), paste(dataframe2$LOGIN, dataframe2$LAST_DATE) ), ]
 ```
 
 Supprimer les lignes dont la valeur d'une colonne spécifique se répète:
@@ -247,6 +250,9 @@ aggregate(last_login_date ~ ., data = users, FUN = max)
 Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL):
 ```R
 stations$Manufacturer <- manufacturers$OrganizationName[match(stations$ManufacturerID, manufacturers$ManufacturerID)]
+
+#Sur plusieurs colonnes:
+stations$Manufacturer <- manufacturers$OrganizationName[match( paste(stations$ManufacturerID, stations$ManufacturerName), paste(manufacturers$ManufacturerID, manufacturers$ManufacturerName) )]
 ```
 
 Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:
