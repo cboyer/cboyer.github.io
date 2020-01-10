@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2019-12-19T17:57:21-05:00"
+updated: "2020-01-10T17:35:21-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -64,7 +64,6 @@ require(DBI)
 con <- dbConnect(odbc::odbc(),
                  Driver = "SQL Server",
                  Server = "1.2.3.4",
-                 Port = "1433",
                  Database = "mydb",
                  UID = "Interface",
                  PWD = "Integration")
@@ -253,6 +252,9 @@ aggregate(last_login_date ~ login, data = users, FUN = max)
 Regroupe toutes les autres colonnes et récupère max(last_login_date)
 ```R
 aggregate(last_login_date ~ ., data = users, FUN = max)
+
+#Autre possibilité en listant les colonnes:
+aggregate(last_login_date ~ login + type, data = users, FUN = max)
 ```
 
 Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:

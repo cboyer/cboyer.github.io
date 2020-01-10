@@ -15,9 +15,9 @@
   <meta property="og:description" content="Opérations incontournables avec le langage R." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2019-12-19T17:57:21-05:00" />
+  <meta property="og:updated_time" content="2020-01-10T17:35:21-05:00" />
   <meta property="article:published_time" content="2019-05-25T10:09:13-04:00" />
-  <meta property="article:modified_time" content="2019-12-19T17:57:21-05:00" />
+  <meta property="article:modified_time" content="2020-01-10T17:35:21-05:00" />
   <meta name="generator" content="pandoc" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -171,10 +171,9 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb6-2" title="2">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(),</a>
 <a class="sourceLine" id="cb6-3" title="3">                 <span class="dt">Driver =</span> <span class="st">&quot;SQL Server&quot;</span>,</a>
 <a class="sourceLine" id="cb6-4" title="4">                 <span class="dt">Server =</span> <span class="st">&quot;1.2.3.4&quot;</span>,</a>
-<a class="sourceLine" id="cb6-5" title="5">                 <span class="dt">Port =</span> <span class="st">&quot;1433&quot;</span>,</a>
-<a class="sourceLine" id="cb6-6" title="6">                 <span class="dt">Database =</span> <span class="st">&quot;mydb&quot;</span>,</a>
-<a class="sourceLine" id="cb6-7" title="7">                 <span class="dt">UID =</span> <span class="st">&quot;Interface&quot;</span>,</a>
-<a class="sourceLine" id="cb6-8" title="8">                 <span class="dt">PWD =</span> <span class="st">&quot;Integration&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb6-5" title="5">                 <span class="dt">Database =</span> <span class="st">&quot;mydb&quot;</span>,</a>
+<a class="sourceLine" id="cb6-6" title="6">                 <span class="dt">UID =</span> <span class="st">&quot;Interface&quot;</span>,</a>
+<a class="sourceLine" id="cb6-7" title="7">                 <span class="dt">PWD =</span> <span class="st">&quot;Integration&quot;</span>)</a></code></pre></div>
 <p>Oracle via ODBC sans sources configurées (DSN):</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">require</span>(DBI)</a>
 <a class="sourceLine" id="cb7-2" title="2">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(),</a>
@@ -282,7 +281,10 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Regroupe les <code>login</code> et récupère max(last_login_date) (équivaut à Group By en SQL)</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
 <p>Regroupe toutes les autres colonnes et récupère max(last_login_date)</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a>
+<a class="sourceLine" id="cb30-2" title="2"></a>
+<a class="sourceLine" id="cb30-3" title="3"><span class="co">#Autre possibilité en listant les colonnes:</span></a>
+<a class="sourceLine" id="cb30-4" title="4"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
 <p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by =</span> <span class="st">&quot;login&quot;</span>)</a>
 <a class="sourceLine" id="cb31-2" title="2"></a>

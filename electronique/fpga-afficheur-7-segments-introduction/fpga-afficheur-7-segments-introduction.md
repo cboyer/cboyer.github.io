@@ -228,3 +228,8 @@ Nous sommes maintenant en mesure d’afficher n’importe quel chiffre sur notre
 Dans [la partie 2](../fpga-afficheur-7-segments-compteur-unique/), nous irons un peu plus loin en implémentant un compteur pour afficher les chiffres de 0 à 9.
 
 Partie 1, [partie 2](../fpga-afficheur-7-segments-compteur-unique/), [partie 3](../fpga-afficheur-7-segments-compteurs-multiples/)
+
+
+### Sources
+
+[https://zipcpu.com/tutorial/](https://zipcpu.com/tutorial/)

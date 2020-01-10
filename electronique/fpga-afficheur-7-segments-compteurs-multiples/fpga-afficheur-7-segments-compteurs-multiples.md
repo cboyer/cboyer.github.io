@@ -245,3 +245,7 @@ Le bloc `case` nous permet de comparer `counter[18:17]` de manière élégante b
 
 
 [Partie 1](../fpga-afficheur-7-segments-introduction/), [partie 2](../fpga-afficheur-7-segments-compteur-unique/), partie 3
+
+### Sources
+
+[https://zipcpu.com/tutorial/](https://zipcpu.com/tutorial/)

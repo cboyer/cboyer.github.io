@@ -118,3 +118,7 @@ Dans [la partie 3](../fpga-afficheur-7-segments-compteurs-multiples/), nous verr
 
 
 [Partie 1](../fpga-afficheur-7-segments-introduction/), partie 2, [partie 3](../fpga-afficheur-7-segments-compteurs-multiples/)
+
+### Sources
+
+[https://zipcpu.com/tutorial/](https://zipcpu.com/tutorial/)
