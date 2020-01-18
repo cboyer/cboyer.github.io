@@ -211,3 +211,8 @@ Il existe d'autres outils pour construire un système embarqué Linux: [Yocto](h
 Citons le très intéressant [Nerves](https://nerves-project.org/) qui utilise Buildroot afin de créer un système extrêmement optimisée/minimaliste pour exécuter une machine virtuelle BEAM et des applications Elixir.
 
 Notons également qu'il existe l'équivalent de Buildroot pour FreeBSD: [Crochet](https://github.com/freebsd/crochet).
+
+
+### Articles connexes
+
+-[https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc](https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc)

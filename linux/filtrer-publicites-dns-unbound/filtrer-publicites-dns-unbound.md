@@ -58,7 +58,7 @@ forward-zone:
 	name: "."
 	forward-addr: 1.1.1.1@853
 	forward-addr: 1.0.0.1@853
-   	forward-ssl-upstream:yes
+   	forward-ssl-upstream: yes
 	#forward-addr: 80.67.169.12
 	#forward-addr: 80.67.169.40
 ```
