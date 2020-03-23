@@ -136,6 +136,17 @@ writeLines(text, fd)
 close(fd)
 ```
 
+Charger un fichier Excel (XSLX/XLS):
+```R
+require(xlsx)
+liste <- read.xlsx("./mon_fichier.xlsx", sheetName = 1, encoding="UTF-8")
+
+#Cleanup colonnes avec style mais vides
+drops <- as.vector(paste("NA..", seq(1:20000), sep = '' ))
+drops <- c('NA.', drops)
+liste <- liste[ , !(names(liste) %in% drops)]
+```
+
 
 ## <a name="stats"></a>Statistiques
 
@@ -244,17 +255,22 @@ result <- apply(mydataframe, 1, function(x, y) {
 result <- do.call(rbind, result)
 ```
 
-Regroupe les `login` et récupère max(last_login_date) (équivaut à Group By en SQL)
+Regrouper les `login` et récupère max(last_login_date) (équivaut à Group By en SQL)
 ```R
 aggregate(last_login_date ~ login, data = users, FUN = max)
 ```
 
-Regroupe toutes les autres colonnes et récupère max(last_login_date)
+Regrouper toutes les autres colonnes et récupère max(last_login_date)
 ```R
 aggregate(last_login_date ~ ., data = users, FUN = max)
 
 #Autre possibilité en listant les colonnes:
 aggregate(last_login_date ~ login + type, data = users, FUN = max)
+```
+
+Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)
+```R
+aggregate(login_date ~ login, data = users, FUN = toString)
 ```
 
 Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:
@@ -274,8 +290,9 @@ users_windows <- rbind(users_windowsNT, users_windowsXP)
 ```
 
 
-### Sources
+### Liens utiles
 
 - [DB: SQLServer](https://db.rstudio.com/databases/microsoft-sql-server/)
 - [DB: Oracle](https://db.rstudio.com/databases/oracle/)
 - [Subset](https://www.statmethods.net/management/subset.html)
+- [Statistiques en sciences humaines et sociales avec R, Jean-Herman Guay](http://dimension.usherbrooke.ca/dimension/v2ssrcadre.html)
