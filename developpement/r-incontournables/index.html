@@ -295,10 +295,10 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb31-4" title="4"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
 <p>Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> toString)</a></code></pre></div>
-<p>Séparer les dates concaténées précédemment (crée un vecteur dans cette ligne/colonne:</p>
+<p>Séparer les dates concaténées précédemment (crée un vecteur dans cette ligne/colonne):</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">users<span class="op">$</span>dateList &lt;-<span class="st"> </span><span class="kw">strsplit</span>(users<span class="op">$</span>login_date, <span class="st">&#39;,&#39;</span>) <span class="co">#Pour rechercher directement dans dateList: unlist(users$dateList)</span></a>
 <a class="sourceLine" id="cb33-2" title="2"></a>
-<a class="sourceLine" id="cb33-3" title="3"><span class="co">#Duplique les ligne avec chaque date:</span></a>
+<a class="sourceLine" id="cb33-3" title="3"><span class="co">#Dupliquer les lignes pour chaque date:</span></a>
 <a class="sourceLine" id="cb33-4" title="4"><span class="kw">library</span>(tidyr)</a>
 <a class="sourceLine" id="cb33-5" title="5">users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(<span class="dt">cols =</span> dateList)</a></code></pre></div>
 <p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:</p>

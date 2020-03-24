@@ -273,11 +273,11 @@ Regrouper les dates par login sur une même ligne (concatène les valeurs sépar
 aggregate(login_date ~ login, data = users, FUN = toString)
 ```
 
-Séparer les dates concaténées précédemment (crée un vecteur dans cette ligne/colonne:
+Séparer les dates concaténées précédemment (crée un vecteur dans cette ligne/colonne):
 ```R
 users$dateList <- strsplit(users$login_date, ',') #Pour rechercher directement dans dateList: unlist(users$dateList)
 
-#Duplique les ligne avec chaque date:
+#Dupliquer les lignes pour chaque date:
 library(tidyr)
 users <- users %>% unnest(cols = dateList)
 ```
