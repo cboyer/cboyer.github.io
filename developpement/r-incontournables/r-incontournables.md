@@ -82,7 +82,7 @@ con <- dbConnect(odbc::odbc(),
 Oracle via JDBC:
 ```R
 require(RJDBC)
-drv <- JDBC(driverClass="oracle.jdbc.OracleDriver", classPath="C:/Users/monLogin/Documents/Developpement/JDBC/ojdbc8.jar")
+drv <- JDBC(driverClass="oracle.jdbc.OracleDriver", classPath="C:/JDBC/ojdbc8.jar")
 conn <- dbConnect(drv, "jdbc:oracle:thin:@//10.10.10.10:1521/database", "login", "password")
 sql <- "SELECT UserID FROM User"
 userids <- dbGetQuery(conn, sql)
@@ -92,7 +92,7 @@ dbDisconnect(conn)
 MSSQL via JDBC:
 ```R
 require(RJDBC)
-drv <- JDBC("com.microsoft.sqlserver.jdbc.SQLServerDriver", "C:/Users/monLogin/Documents/Developpement/JDBC/sqljdbc42.jar")
+drv <- JDBC("com.microsoft.sqlserver.jdbc.SQLServerDriver", "C:/JDBC/sqljdbc42.jar")
 conn <- dbConnect(drv, "jdbc:sqlserver://mssqlserver.corp.ca;databaseName=MyDatabase", "login", "password")
 sql <- "SELECT UserID FROM User"
 userids <- dbGetQuery(conn, sql)
@@ -120,18 +120,18 @@ schema <- do.call(rbind, describe)
 
 Charger un fichier CSV:
 ```R
-mon_dataframe <- read.csv("C:/Users/monLogin/Desktop/fichier.csv", header = TRUE, sep = ";", encoding = "UTF-8", stringsAsFactors = FALSE)
+mon_dataframe <- read.csv("C:/fichier.csv", header = TRUE, sep = ";", encoding = "UTF-8", stringsAsFactors = FALSE)
 ```
 
 Écrire le contenu d'un dataframe dans un fichier CSV:
 ```R
-write.table(mon_dataframe, file = "C:/Users/monLogin/Desktop/fichier.csv", row.names = FALSE, quote = FALSE, sep = ',')
+write.table(mon_dataframe, file = "C:/fichier.csv", row.names = FALSE, quote = FALSE, sep = ',')
 ```
 
 Écrire une variable dans un fichier texte:
 ```R
 text <- "String example"
-fd <- file("C:/Users/monLogin/Desktop/fichier.txt")
+fd <- file("C:/fichier.txt")
 writeLines(text, fd)
 close(fd)
 ```
@@ -271,6 +271,15 @@ aggregate(last_login_date ~ login + type, data = users, FUN = max)
 Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)
 ```R
 aggregate(login_date ~ login, data = users, FUN = toString)
+```
+
+Séparer les dates concaténées précédemment (crée un vecteur dans cette ligne/colonne:
+```R
+users$dateList <- strsplit(users$login_date, ',') #Pour rechercher directement dans dateList: unlist(users$dateList)
+
+#Duplique les ligne avec chaque date:
+library(tidyr)
+users <- users %>% unnest(cols = dateList)
 ```
 
 Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:

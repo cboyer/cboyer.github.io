@@ -183,14 +183,14 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb7-6" title="6">                 <span class="dt">PWD =</span> <span class="st">&quot;password&quot;</span>)</a></code></pre></div>
 <p>Oracle via JDBC:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">require</span>(RJDBC)</a>
-<a class="sourceLine" id="cb8-2" title="2">drv &lt;-<span class="st"> </span><span class="kw">JDBC</span>(<span class="dt">driverClass=</span><span class="st">&quot;oracle.jdbc.OracleDriver&quot;</span>, <span class="dt">classPath=</span><span class="st">&quot;C:/Users/monLogin/Documents/Developpement/JDBC/ojdbc8.jar&quot;</span>)</a>
+<a class="sourceLine" id="cb8-2" title="2">drv &lt;-<span class="st"> </span><span class="kw">JDBC</span>(<span class="dt">driverClass=</span><span class="st">&quot;oracle.jdbc.OracleDriver&quot;</span>, <span class="dt">classPath=</span><span class="st">&quot;C:/JDBC/ojdbc8.jar&quot;</span>)</a>
 <a class="sourceLine" id="cb8-3" title="3">conn &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(drv, <span class="st">&quot;jdbc:oracle:thin:@//10.10.10.10:1521/database&quot;</span>, <span class="st">&quot;login&quot;</span>, <span class="st">&quot;password&quot;</span>)</a>
 <a class="sourceLine" id="cb8-4" title="4">sql &lt;-<span class="st"> &quot;SELECT UserID FROM User&quot;</span></a>
 <a class="sourceLine" id="cb8-5" title="5">userids &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(conn, sql)</a>
 <a class="sourceLine" id="cb8-6" title="6"><span class="kw">dbDisconnect</span>(conn)</a></code></pre></div>
 <p>MSSQL via JDBC:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">require</span>(RJDBC)</a>
-<a class="sourceLine" id="cb9-2" title="2">drv &lt;-<span class="st"> </span><span class="kw">JDBC</span>(<span class="st">&quot;com.microsoft.sqlserver.jdbc.SQLServerDriver&quot;</span>, <span class="st">&quot;C:/Users/monLogin/Documents/Developpement/JDBC/sqljdbc42.jar&quot;</span>)</a>
+<a class="sourceLine" id="cb9-2" title="2">drv &lt;-<span class="st"> </span><span class="kw">JDBC</span>(<span class="st">&quot;com.microsoft.sqlserver.jdbc.SQLServerDriver&quot;</span>, <span class="st">&quot;C:/JDBC/sqljdbc42.jar&quot;</span>)</a>
 <a class="sourceLine" id="cb9-3" title="3">conn &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(drv, <span class="st">&quot;jdbc:sqlserver://mssqlserver.corp.ca;databaseName=MyDatabase&quot;</span>, <span class="st">&quot;login&quot;</span>, <span class="st">&quot;password&quot;</span>)</a>
 <a class="sourceLine" id="cb9-4" title="4">sql &lt;-<span class="st"> &quot;SELECT UserID FROM User&quot;</span></a>
 <a class="sourceLine" id="cb9-5" title="5">userids &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(conn, sql)</a>
@@ -211,12 +211,12 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb10-13" title="13">schema &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, describe)</a></code></pre></div>
 <h2 id="opérations-sur-les-fichiers"><a name="files"></a>Opérations sur les fichiers</h2>
 <p>Charger un fichier CSV:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">mon_dataframe &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;C:/Users/monLogin/Desktop/fichier.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;;&quot;</span>, <span class="dt">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">mon_dataframe &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;;&quot;</span>, <span class="dt">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <p>Écrire le contenu d'un dataframe dans un fichier CSV:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">write.table</span>(mon_dataframe, <span class="dt">file =</span> <span class="st">&quot;C:/Users/monLogin/Desktop/fichier.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>, <span class="dt">sep =</span> <span class="st">&#39;,&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">write.table</span>(mon_dataframe, <span class="dt">file =</span> <span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>, <span class="dt">sep =</span> <span class="st">&#39;,&#39;</span>)</a></code></pre></div>
 <p>Écrire une variable dans un fichier texte:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">text &lt;-<span class="st"> &quot;String example&quot;</span></a>
-<a class="sourceLine" id="cb13-2" title="2">fd &lt;-<span class="st"> </span><span class="kw">file</span>(<span class="st">&quot;C:/Users/monLogin/Desktop/fichier.txt&quot;</span>)</a>
+<a class="sourceLine" id="cb13-2" title="2">fd &lt;-<span class="st"> </span><span class="kw">file</span>(<span class="st">&quot;C:/fichier.txt&quot;</span>)</a>
 <a class="sourceLine" id="cb13-3" title="3"><span class="kw">writeLines</span>(text, fd)</a>
 <a class="sourceLine" id="cb13-4" title="4"><span class="kw">close</span>(fd)</a></code></pre></div>
 <p>Charger un fichier Excel (XSLX/XLS):</p>
@@ -295,16 +295,22 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb31-4" title="4"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
 <p>Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> toString)</a></code></pre></div>
-<p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by =</span> <span class="st">&quot;login&quot;</span>)</a>
+<p>Séparer les dates concaténées précédemment (crée un vecteur dans cette ligne/colonne:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">users<span class="op">$</span>dateList &lt;-<span class="st"> </span><span class="kw">strsplit</span>(users<span class="op">$</span>login_date, <span class="st">&#39;,&#39;</span>) <span class="co">#Pour rechercher directement dans dateList: unlist(users$dateList)</span></a>
 <a class="sourceLine" id="cb33-2" title="2"></a>
-<a class="sourceLine" id="cb33-3" title="3"><span class="co">#Avec deux colonnes dont les noms diffèrent:</span></a>
-<a class="sourceLine" id="cb33-4" title="4">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="st">&quot;samAccount&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;login&quot;</span>)</a>
-<a class="sourceLine" id="cb33-5" title="5"></a>
-<a class="sourceLine" id="cb33-6" title="6"><span class="co">#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances comme un left join en SQL):</span></a>
-<a class="sourceLine" id="cb33-7" title="7">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="kw">c</span>(<span class="st">&quot;samAccount&quot;</span>,<span class="st">&quot;email&quot;</span>), <span class="dt">by.y =</span> <span class="kw">c</span>(<span class="st">&quot;login&quot;</span>,<span class="st">&quot;mail&quot;</span>), <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb33-3" title="3"><span class="co">#Duplique les ligne avec chaque date:</span></a>
+<a class="sourceLine" id="cb33-4" title="4"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb33-5" title="5">users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(<span class="dt">cols =</span> dateList)</a></code></pre></div>
+<p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by =</span> <span class="st">&quot;login&quot;</span>)</a>
+<a class="sourceLine" id="cb34-2" title="2"></a>
+<a class="sourceLine" id="cb34-3" title="3"><span class="co">#Avec deux colonnes dont les noms diffèrent:</span></a>
+<a class="sourceLine" id="cb34-4" title="4">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="st">&quot;samAccount&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;login&quot;</span>)</a>
+<a class="sourceLine" id="cb34-5" title="5"></a>
+<a class="sourceLine" id="cb34-6" title="6"><span class="co">#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances comme un left join en SQL):</span></a>
+<a class="sourceLine" id="cb34-7" title="7">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="kw">c</span>(<span class="st">&quot;samAccount&quot;</span>,<span class="st">&quot;email&quot;</span>), <span class="dt">by.y =</span> <span class="kw">c</span>(<span class="st">&quot;login&quot;</span>,<span class="st">&quot;mail&quot;</span>), <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avoir les mêmes colonnes):</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">users_windows &lt;-<span class="st"> </span><span class="kw">rbind</span>(users_windowsNT, users_windowsXP)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">users_windows &lt;-<span class="st"> </span><span class="kw">rbind</span>(users_windowsNT, users_windowsXP)</a></code></pre></div>
 <h3 id="liens-utiles">Liens utiles</h3>
 <ul>
 <li><a href="https://db.rstudio.com/databases/microsoft-sql-server/">DB: SQLServer</a></li>
