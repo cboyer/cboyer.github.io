@@ -219,12 +219,17 @@ stations$Manufacturer <- manufacturers$OrganizationName[match(stations$Manufactu
 stations$Manufacturer <- manufacturers$OrganizationName[match( paste(stations$ManufacturerID, stations$ManufacturerName), paste(manufacturers$ManufacturerID, manufacturers$ManufacturerName) )]
 ```
 
-Supprimer les lignes dont la valeur d'une colonne spécifique se répète:
+Supprimer les lignes dont la valeur d'une colonne spécifique se répète (conserve un seul des éléments dédoublés):
+```R
+users <- duplicats[! duplicated(duplicats$UserID),]
+```
+
+Supprimer les lignes dont la valeur d'une colonne spécifique se répète (ne conserve aucun des éléments dédoublés):
 ```R
 users <- duplicats[!( duplicated(duplicats$UserID) | duplicated(duplicats$UserID, fromLast = TRUE) ),]
 ```
 
-Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre):
+Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre, ne conserve aucun des éléments dédoublés):
 ```R
 users <- duplicats[!( duplicated(duplicats) | duplicated(duplicats, fromLast = TRUE) ) ,]
 ```
@@ -280,6 +285,16 @@ users$dateList <- strsplit(users$login_date, ',') #Pour rechercher directement d
 #Dupliquer les lignes pour chaque date:
 library(tidyr)
 users <- users %>% unnest(cols = dateList)
+```
+
+Séparer les dates concaténées précédemment en colonnes distinctes (avec plusieurs séparateurs):
+```R
+library(tidyr)
+users <- users %>% separate(Email, c("Email", "Email2", "Email3"), "[;-,]")
+
+#Autre possibilité:
+library(stringr)
+str_split_fixed(users$Email, "[;-,]", 3)
 ```
 
 Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:

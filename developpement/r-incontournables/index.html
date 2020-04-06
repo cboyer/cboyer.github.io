@@ -265,52 +265,61 @@ code span.wa { color: #bf0303; } /* Warning */
 <a class="sourceLine" id="cb24-2" title="2"></a>
 <a class="sourceLine" id="cb24-3" title="3"><span class="co">#Sur plusieurs colonnes:</span></a>
 <a class="sourceLine" id="cb24-4" title="4">stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>OrganizationName[<span class="kw">match</span>( <span class="kw">paste</span>(stations<span class="op">$</span>ManufacturerID, stations<span class="op">$</span>ManufacturerName), <span class="kw">paste</span>(manufacturers<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>ManufacturerName) )]</a></code></pre></div>
-<p>Supprimer les lignes dont la valeur d'une colonne spécifique se répète:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ),]</a></code></pre></div>
-<p>Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre):</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ) ,]</a></code></pre></div>
+<p>Supprimer les lignes dont la valeur d'une colonne spécifique se répète (conserve un seul des éléments dédoublés):</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID),]</a></code></pre></div>
+<p>Supprimer les lignes dont la valeur d'une colonne spécifique se répète (ne conserve aucun des éléments dédoublés):</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ),]</a></code></pre></div>
+<p>Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre, ne conserve aucun des éléments dédoublés):</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ) ,]</a></code></pre></div>
 <p>Copier la valeur d'une colonne dans une autre en fonction d'une condition:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span><span class="kw">ifelse</span>(stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span>, stations<span class="op">$</span>BSSID, stations<span class="op">$</span>Network)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span><span class="kw">ifelse</span>(stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span>, stations<span class="op">$</span>BSSID, stations<span class="op">$</span>Network)</a></code></pre></div>
 <p>Traiter une colonne (chaîne de caractères) pour remplacer certains caractères par un espace:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">users &lt;-<span class="st"> </span><span class="kw">within</span>(users,  Descriptions &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, Descriptions) )</a>
-<a class="sourceLine" id="cb28-2" title="2"></a>
-<a class="sourceLine" id="cb28-3" title="3"><span class="co">#Autre possibilité:</span></a>
-<a class="sourceLine" id="cb28-4" title="4">users<span class="op">$</span>Descriptions &lt;-<span class="st"> </span><span class="kw">sapply</span>(users<span class="op">$</span>Descriptions, <span class="cf">function</span>(x) { <span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, x) })</a></code></pre></div>
-<p>Traiter un dataframe (plusieurs colonnes) en itérant sur chaque ligne (retourne un dataframe à 3 colonnes depuis un dataframe <code>x</code> à 2 colonnes):</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">result &lt;-<span class="st"> </span><span class="kw">apply</span>(mydataframe, <span class="dv">1</span>, <span class="cf">function</span>(x, y) {</a>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">users &lt;-<span class="st"> </span><span class="kw">within</span>(users,  Descriptions &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, Descriptions) )</a>
 <a class="sourceLine" id="cb29-2" title="2"></a>
-<a class="sourceLine" id="cb29-3" title="3">  <span class="co">#x[1] = première colonne de mydataframe, x[2] la seconde</span></a>
-<a class="sourceLine" id="cb29-4" title="4">  <span class="kw">data.frame</span>(<span class="dt">table =</span> x[<span class="dv">1</span>], <span class="dt">column =</span> x[<span class="dv">2</span>], <span class="dt">res =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb29-5" title="5"></a>
-<a class="sourceLine" id="cb29-6" title="6">}, <span class="dt">y =</span> additionnal_arg)</a>
-<a class="sourceLine" id="cb29-7" title="7"></a>
-<a class="sourceLine" id="cb29-8" title="8"><span class="co">#Transforme result en dataframe</span></a>
-<a class="sourceLine" id="cb29-9" title="9">result &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, result)</a></code></pre></div>
+<a class="sourceLine" id="cb29-3" title="3"><span class="co">#Autre possibilité:</span></a>
+<a class="sourceLine" id="cb29-4" title="4">users<span class="op">$</span>Descriptions &lt;-<span class="st"> </span><span class="kw">sapply</span>(users<span class="op">$</span>Descriptions, <span class="cf">function</span>(x) { <span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, x) })</a></code></pre></div>
+<p>Traiter un dataframe (plusieurs colonnes) en itérant sur chaque ligne (retourne un dataframe à 3 colonnes depuis un dataframe <code>x</code> à 2 colonnes):</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">result &lt;-<span class="st"> </span><span class="kw">apply</span>(mydataframe, <span class="dv">1</span>, <span class="cf">function</span>(x, y) {</a>
+<a class="sourceLine" id="cb30-2" title="2"></a>
+<a class="sourceLine" id="cb30-3" title="3">  <span class="co">#x[1] = première colonne de mydataframe, x[2] la seconde</span></a>
+<a class="sourceLine" id="cb30-4" title="4">  <span class="kw">data.frame</span>(<span class="dt">table =</span> x[<span class="dv">1</span>], <span class="dt">column =</span> x[<span class="dv">2</span>], <span class="dt">res =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb30-5" title="5"></a>
+<a class="sourceLine" id="cb30-6" title="6">}, <span class="dt">y =</span> additionnal_arg)</a>
+<a class="sourceLine" id="cb30-7" title="7"></a>
+<a class="sourceLine" id="cb30-8" title="8"><span class="co">#Transforme result en dataframe</span></a>
+<a class="sourceLine" id="cb30-9" title="9">result &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, result)</a></code></pre></div>
 <p>Regrouper les <code>login</code> et récupère max(last_login_date) (équivaut à Group By en SQL)</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
 <p>Regrouper toutes les autres colonnes et récupère max(last_login_date)</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a>
-<a class="sourceLine" id="cb31-2" title="2"></a>
-<a class="sourceLine" id="cb31-3" title="3"><span class="co">#Autre possibilité en listant les colonnes:</span></a>
-<a class="sourceLine" id="cb31-4" title="4"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a>
+<a class="sourceLine" id="cb32-2" title="2"></a>
+<a class="sourceLine" id="cb32-3" title="3"><span class="co">#Autre possibilité en listant les colonnes:</span></a>
+<a class="sourceLine" id="cb32-4" title="4"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
 <p>Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> toString)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> toString)</a></code></pre></div>
 <p>Séparer les dates concaténées précédemment (crée un vecteur dans cette ligne/colonne):</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">users<span class="op">$</span>dateList &lt;-<span class="st"> </span><span class="kw">strsplit</span>(users<span class="op">$</span>login_date, <span class="st">&#39;,&#39;</span>) <span class="co">#Pour rechercher directement dans dateList: unlist(users$dateList)</span></a>
-<a class="sourceLine" id="cb33-2" title="2"></a>
-<a class="sourceLine" id="cb33-3" title="3"><span class="co">#Dupliquer les lignes pour chaque date:</span></a>
-<a class="sourceLine" id="cb33-4" title="4"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb33-5" title="5">users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(<span class="dt">cols =</span> dateList)</a></code></pre></div>
-<p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by =</span> <span class="st">&quot;login&quot;</span>)</a>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">users<span class="op">$</span>dateList &lt;-<span class="st"> </span><span class="kw">strsplit</span>(users<span class="op">$</span>login_date, <span class="st">&#39;,&#39;</span>) <span class="co">#Pour rechercher directement dans dateList: unlist(users$dateList)</span></a>
 <a class="sourceLine" id="cb34-2" title="2"></a>
-<a class="sourceLine" id="cb34-3" title="3"><span class="co">#Avec deux colonnes dont les noms diffèrent:</span></a>
-<a class="sourceLine" id="cb34-4" title="4">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="st">&quot;samAccount&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;login&quot;</span>)</a>
-<a class="sourceLine" id="cb34-5" title="5"></a>
-<a class="sourceLine" id="cb34-6" title="6"><span class="co">#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances comme un left join en SQL):</span></a>
-<a class="sourceLine" id="cb34-7" title="7">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="kw">c</span>(<span class="st">&quot;samAccount&quot;</span>,<span class="st">&quot;email&quot;</span>), <span class="dt">by.y =</span> <span class="kw">c</span>(<span class="st">&quot;login&quot;</span>,<span class="st">&quot;mail&quot;</span>), <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb34-3" title="3"><span class="co">#Dupliquer les lignes pour chaque date:</span></a>
+<a class="sourceLine" id="cb34-4" title="4"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb34-5" title="5">users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(<span class="dt">cols =</span> dateList)</a></code></pre></div>
+<p>Séparer les dates concaténées précédemment en colonnes distinctes (avec plusieurs séparateurs):</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb35-2" title="2">users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">separate</span>(Email, <span class="kw">c</span>(<span class="st">&quot;Email&quot;</span>, <span class="st">&quot;Email2&quot;</span>, <span class="st">&quot;Email3&quot;</span>), <span class="st">&quot;[;-,]&quot;</span>)</a>
+<a class="sourceLine" id="cb35-3" title="3"></a>
+<a class="sourceLine" id="cb35-4" title="4"><span class="co">#Autre possibilité:</span></a>
+<a class="sourceLine" id="cb35-5" title="5"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb35-6" title="6"><span class="kw">str_split_fixed</span>(users<span class="op">$</span>Email, <span class="st">&quot;[;-,]&quot;</span>, <span class="dv">3</span>)</a></code></pre></div>
+<p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by =</span> <span class="st">&quot;login&quot;</span>)</a>
+<a class="sourceLine" id="cb36-2" title="2"></a>
+<a class="sourceLine" id="cb36-3" title="3"><span class="co">#Avec deux colonnes dont les noms diffèrent:</span></a>
+<a class="sourceLine" id="cb36-4" title="4">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="st">&quot;samAccount&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;login&quot;</span>)</a>
+<a class="sourceLine" id="cb36-5" title="5"></a>
+<a class="sourceLine" id="cb36-6" title="6"><span class="co">#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances comme un left join en SQL):</span></a>
+<a class="sourceLine" id="cb36-7" title="7">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="kw">c</span>(<span class="st">&quot;samAccount&quot;</span>,<span class="st">&quot;email&quot;</span>), <span class="dt">by.y =</span> <span class="kw">c</span>(<span class="st">&quot;login&quot;</span>,<span class="st">&quot;mail&quot;</span>), <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avoir les mêmes colonnes):</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">users_windows &lt;-<span class="st"> </span><span class="kw">rbind</span>(users_windowsNT, users_windowsXP)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">users_windows &lt;-<span class="st"> </span><span class="kw">rbind</span>(users_windowsNT, users_windowsXP)</a></code></pre></div>
 <h3 id="liens-utiles">Liens utiles</h3>
 <ul>
 <li><a href="https://db.rstudio.com/databases/microsoft-sql-server/">DB: SQLServer</a></li>
