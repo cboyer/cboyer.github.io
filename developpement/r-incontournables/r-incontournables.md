@@ -182,6 +182,9 @@ users[ which(users$Active == "1" & !is.na(users$email) & users$OS %in% c("Linux"
 Remplacer toutes les valeurs d'un colonne répondant à un critère:
 ```R
 users$email[users$email == "unknown"] <- ""
+
+#Pour une ligne (toutes les colonnes):
+erreur[erreur == 'NA'] <- NA
 ```
 
 Reformater une date:
