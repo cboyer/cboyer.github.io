@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2020-01-10T17:35:21-05:00"
+updated: "2020-04-17T16:56:21-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -65,8 +65,8 @@ con <- dbConnect(odbc::odbc(),
                  Driver = "SQL Server",
                  Server = "1.2.3.4",
                  Database = "mydb",
-                 UID = "Interface",
-                 PWD = "Integration")
+                 User = "login",
+                 Password = "password")
 ```
 
 Oracle via ODBC sans sources configurées (DSN):
@@ -116,6 +116,12 @@ describe <- lapply(tables, function(x, conn) {
 schema <- do.call(rbind, describe)
 ```
 
+Requête avec une liste formée depuis une colonne:
+```R
+client_id <- toString(sprintf("'%s'", liste$client_id))
+sql <- paste('SELECT client_id FROM myTable WHERE client_id IN (', client_id, ')', sep="")
+```
+
 ## <a name="files"></a>Opérations sur les fichiers
 
 Charger un fichier CSV:
@@ -125,7 +131,7 @@ mon_dataframe <- read.csv("C:/fichier.csv", header = TRUE, sep = ";", encoding =
 
 Écrire le contenu d'un dataframe dans un fichier CSV:
 ```R
-write.table(mon_dataframe, file = "C:/fichier.csv", row.names = FALSE, quote = FALSE, sep = ',')
+write.table(mon_dataframe, file = "C:/fichier.csv", row.names = FALSE, quote = FALSE, sep = ',', na = '')
 ```
 
 Écrire une variable dans un fichier texte:
@@ -185,6 +191,11 @@ users$email[users$email == "unknown"] <- ""
 
 #Pour une ligne (toutes les colonnes):
 erreur[erreur == 'NA'] <- NA
+```
+
+Changer l'encodage d'une colonne de type `character`:
+```R
+Encoding(users$firstname) <- "ISO-8859-1"
 ```
 
 Reformater une date:
@@ -248,6 +259,9 @@ users <- within(users,  Descriptions <- gsub("[,;\"\r\n]", " ", Descriptions) )
 
 #Autre possibilité:
 users$Descriptions <- sapply(users$Descriptions, function(x) { gsub("[,;\"\r\n]", " ", x) })
+
+#Pour les espaces de début/fin:
+users <- within(users,  Descriptions <- trimws(Descriptions) )
 ```
 
 Traiter un dataframe (plusieurs colonnes) en itérant sur chaque ligne (retourne un dataframe à 3 colonnes depuis un dataframe `x` à 2 colonnes):
