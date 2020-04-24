@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2020-04-17T16:56:21-04:00"
+updated: "2020-04-23T20:05:21-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -19,6 +19,7 @@ Cet article recense les opérations incontournables avec R:
 - [Opérations sur les fichiers](#files)
 - [Statistiques](#stats)
 - [Opérations sur les données](#data)
+- [Graphiques](#graphiques)
 
 
 ## <a name="optionsexec"></a>Options d'exécution
@@ -329,6 +330,42 @@ Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avo
 ```R
 users_windows <- rbind(users_windowsNT, users_windowsXP)
 ```
+
+## <a name="graphiques"></a>Graphiques
+
+Histogramme horizontal avec palette de couleurs adaptée (données issues de `table()`):
+```R
+library(ggplot2)
+library(RColorBrewer)
+nbcolors <- length(unique(FreqAnomaly$Var1))
+customPalette <- colorRampPalette(brewer.pal(9, "Blues"))(nbcolors)
+customPalette[customPalette == '#F7FBFF'] <- '#498fd1' #Pour remplacer une couleur
+
+ggplot(FreqAnomaly,
+       aes(x = reorder(Var1, Freq), y = Freq, fill = Var1, label = Freq)) + 
+       geom_bar(stat="identity",position='dodge') +
+       geom_text(size = 3, position=position_dodge(width=0.0), vjust=+0.25, hjust=-0.25) +
+       theme_minimal() +
+       labs(title = "Octopus: anomalies dans les données utilisateurs", x = "", y = "", color = "") +
+       #scale_fill_brewer(palette="Blues") + 
+       scale_fill_manual(values = customPalette) +
+       theme(legend.position="none", plot.title = element_text(hjust = 0.5)) + 
+       coord_flip()
+```
+
+Histogramme vertical avec palette de couleurs adaptée et labels inclinés (données issues de `table()`):
+```R
+ggplot(FreqAnomalyComb,
+       aes(x = reorder(Var1, -Freq), y = Freq, fill = Var1, label = Freq)) + 
+       geom_bar(stat="identity",position='dodge') +
+       geom_text(size = 3, position=position_dodge(width=0.9), vjust=-0.25) +
+       theme_minimal() +
+       labs(title = "Octopus: anomalies dans les données utilisateurs", x = "", y = "", color = "") +
+       #scale_fill_brewer(palette="Blues") + 
+       scale_fill_manual(values = customPalette) + 
+       theme(legend.position="none", plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
 
 
 ### Liens utiles
