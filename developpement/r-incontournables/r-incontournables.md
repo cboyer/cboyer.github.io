@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2020-04-23T20:05:21-04:00"
+updated: "2020-04-25T14:34:29-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -12,7 +12,7 @@ abstract: |
 ---
 
 
-Cet article recense les opérations incontournables avec R:
+Cet article recense les opérations incontournables avec R
 
 - [Options d'exécution](#optionsexec)
 - [Base de données](#db)
@@ -24,22 +24,22 @@ Cet article recense les opérations incontournables avec R:
 
 ## <a name="optionsexec"></a>Options d'exécution
 
-Augmenter la taille des messages d'erreur au maximum (permet d'afficher les erreurs à la fin de longues requêtes SQL):
+Augmenter la taille des messages d'erreur au maximum (permet d'afficher les erreurs à la fin de longues requêtes SQL)
 ```R
 options(warning.length = 8170)
 ```
 
-Ne pas utiliser la notation scientifique pour les entiers de grande taille (s'applique également lors de l'écriture de fichiers CSV):
+Ne pas utiliser la notation scientifique pour les entiers de grande taille (s'applique également lors de l'écriture de fichiers CSV)
 ```R
 options(scipen = 999)
 ```
 
-Ne pas utiliser la factorisation pour les chaîne de caractères:
+Ne pas utiliser la factorisation pour les chaîne de caractères (par défaut depuis R 4.0)
 ```R
 options(stringsAsFactors = FALSE)
 ```
 
-Ajuster la mémoire allouée à Java pour les appels externes (par exemple les requêtes SQL avec JDBC, doit être placé avant `require` et `librairy`):
+Ajuster la mémoire allouée à Java pour les appels externes (par exemple les requêtes SQL avec JDBC, doit être placé avant `require` et `librairy`)
 ```R
 options(java.parameters = "-Xmx1024m")
 
@@ -50,7 +50,7 @@ options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx1024m"))
 
 ## <a name="db"></a>Base de données
 
-Utilisation de ODBC avec des sources configurées (DSN) dans Windows (utile pour la gestion de l'authentification):
+Utilisation de ODBC avec des sources configurées (DSN) dans Windows (utile pour la gestion de l'authentification)
 ```R
 require(DBI)
 con <- dbConnect(odbc::odbc(), "MonDataSourceWindows")
@@ -59,7 +59,7 @@ userids <- dbGetQuery(con, sql)
 dbDisconnect(con)
 ```
 
-MSSQL via ODBC sans sources configurées (DSN):
+MSSQL via ODBC sans sources configurées (DSN)
 ```R
 require(DBI)
 con <- dbConnect(odbc::odbc(),
@@ -70,7 +70,7 @@ con <- dbConnect(odbc::odbc(),
                  Password = "password")
 ```
 
-Oracle via ODBC sans sources configurées (DSN):
+Oracle via ODBC sans sources configurées (DSN)
 ```R
 require(DBI)
 con <- dbConnect(odbc::odbc(),
@@ -80,7 +80,7 @@ con <- dbConnect(odbc::odbc(),
                  PWD = "password")
 ```
 
-Oracle via JDBC:
+Oracle via JDBC
 ```R
 require(RJDBC)
 drv <- JDBC(driverClass="oracle.jdbc.OracleDriver", classPath="C:/JDBC/ojdbc8.jar")
@@ -90,7 +90,7 @@ userids <- dbGetQuery(conn, sql)
 dbDisconnect(conn)
 ```
 
-MSSQL via JDBC:
+MSSQL via JDBC
 ```R
 require(RJDBC)
 drv <- JDBC("com.microsoft.sqlserver.jdbc.SQLServerDriver", "C:/JDBC/sqljdbc42.jar")
@@ -117,7 +117,7 @@ describe <- lapply(tables, function(x, conn) {
 schema <- do.call(rbind, describe)
 ```
 
-Requête avec une liste formée depuis une colonne:
+Requête avec une liste formée depuis une colonne
 ```R
 client_id <- toString(sprintf("'%s'", liste$client_id))
 sql <- paste('SELECT client_id FROM myTable WHERE client_id IN (', client_id, ')', sep="")
@@ -125,17 +125,17 @@ sql <- paste('SELECT client_id FROM myTable WHERE client_id IN (', client_id, ')
 
 ## <a name="files"></a>Opérations sur les fichiers
 
-Charger un fichier CSV:
+Charger un fichier CSV
 ```R
 mon_dataframe <- read.csv("C:/fichier.csv", header = TRUE, sep = ";", encoding = "UTF-8", stringsAsFactors = FALSE)
 ```
 
-Écrire le contenu d'un dataframe dans un fichier CSV:
+Écrire le contenu d'un dataframe dans un fichier CSV
 ```R
 write.table(mon_dataframe, file = "C:/fichier.csv", row.names = FALSE, quote = FALSE, sep = ',', na = '')
 ```
 
-Écrire une variable dans un fichier texte:
+Écrire une variable dans un fichier texte
 ```R
 text <- "String example"
 fd <- file("C:/fichier.txt")
@@ -143,7 +143,7 @@ writeLines(text, fd)
 close(fd)
 ```
 
-Charger un fichier Excel (XSLX/XLS):
+Charger un fichier Excel (XSLX/XLS)
 ```R
 require(xlsx)
 liste <- read.xlsx("./mon_fichier.xlsx", sheetName = 1, encoding="UTF-8")
@@ -157,7 +157,7 @@ liste <- liste[ , !(names(liste) %in% drops)]
 
 ## <a name="stats"></a>Statistiques
 
-Factoriser des valeurs:
+Factoriser des valeurs
 ```R
 ventes$annee <- as.factor(ventes$annee)
 ```
@@ -174,37 +174,41 @@ tapply(ventes$produit, ventes$annee, summary)
 
 ## <a name="data"></a>Opérations sur les données
 
-Extraire les lignes en fonction de la valeur d'une colonne:
+Extraire les lignes en fonction de la valeur d'une colonne
 ```R
 users_active <- subset(users, isactive == 1)
 users_active <- users[users$isactive == 1,]
 users_without_email <- subset(users, is.na(email))
 users_with_email <- subset(users, !is.na(email))
 
-#Avec plusieurs critères ( | signifie OR, & signifie AND):
+#Avec plusieurs critères ( | signifie OR, & signifie AND)
 users[ which(users$Active == "1" & !is.na(users$email) & users$OS %in% c("Linux", "Solaris") ), ]
 ```
 
+Trier sur plusieurs colonnes (colonne 1 à 3)
+```R
+k <- k[order(k[,1], k[,2], k[,3] ), ]
+```
 
-Remplacer toutes les valeurs d'un colonne répondant à un critère:
+Remplacer toutes les valeurs d'un colonne répondant à un critère
 ```R
 users$email[users$email == "unknown"] <- ""
 
-#Pour une ligne (toutes les colonnes):
+#Pour une ligne (toutes les colonnes)
 erreur[erreur == 'NA'] <- NA
 ```
 
-Changer l'encodage d'une colonne de type `character`:
+Changer l'encodage d'une colonne de type `character`
 ```R
 Encoding(users$firstname) <- "ISO-8859-1"
 ```
 
-Reformater une date:
+Reformater une date
 ```R
 ventes$annee_expedition <- format( as.Date(ventes$date_expedition, format = "%Y-%m-%d"),"%Y")
 ```
 
-Lister les lignes dont une valeur est dupliquée:
+Lister les lignes dont une valeur est dupliquée
 ```R
 duplicats <- users[duplicated(users$UserID) | duplicated(users$UserID, fromLast = TRUE),]
 
@@ -213,7 +217,7 @@ decompte <- data.frame(table(users$UserID))
 duplicats <- users[users$UserID %in% decompte$Var1[decompte$Freq > 1], ]
 ```
 
-Déterminer les données manquantes d'un dataframe à un autre en fonction d'une colonne:
+Déterminer les données manquantes d'un dataframe à un autre en fonction d'une colonne
 ```R
 utilisateurs_manquants <- users[!(users$UserID %in% all_users$UserID), ]
 ```
@@ -222,50 +226,50 @@ Récupère les lignes de dataframe1 dont LOGIN et LAST_DATE sont dans dataframe2
 ```R
 intersection <- dataframe1[with(dataframe1, paste(LOGIN, LAST_DATE, sep = ".")) %in% with(dataframe2, paste(LOGIN, LAST_DATE, sep = ".")), ]
 
-#Autre possibilité:
+#Autre possibilité
 intersection <- dataframe1[match( paste(dataframe1$LOGIN, dataframe1$LAST_DATE), paste(dataframe2$LOGIN, dataframe2$LAST_DATE) ), ]
 ```
 
-Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL):
+Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL)
 ```R
 stations$Manufacturer <- manufacturers$OrganizationName[match(stations$ManufacturerID, manufacturers$ManufacturerID)]
 
-#Sur plusieurs colonnes:
+#Sur plusieurs colonnes
 stations$Manufacturer <- manufacturers$OrganizationName[match( paste(stations$ManufacturerID, stations$ManufacturerName), paste(manufacturers$ManufacturerID, manufacturers$ManufacturerName) )]
 ```
 
-Supprimer les lignes dont la valeur d'une colonne spécifique se répète (conserve un seul des éléments dédoublés):
+Supprimer les lignes dont la valeur d'une colonne spécifique se répète (conserve un seul des éléments dédoublés)
 ```R
 users <- duplicats[! duplicated(duplicats$UserID),]
 ```
 
-Supprimer les lignes dont la valeur d'une colonne spécifique se répète (ne conserve aucun des éléments dédoublés):
+Supprimer les lignes dont la valeur d'une colonne spécifique se répète (ne conserve aucun des éléments dédoublés)
 ```R
 users <- duplicats[!( duplicated(duplicats$UserID) | duplicated(duplicats$UserID, fromLast = TRUE) ),]
 ```
 
-Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre, ne conserve aucun des éléments dédoublés):
+Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre, ne conserve aucun des éléments dédoublés)
 ```R
 users <- duplicats[!( duplicated(duplicats) | duplicated(duplicats, fromLast = TRUE) ) ,]
 ```
 
-Copier la valeur d'une colonne dans une autre en fonction d'une condition:
+Copier la valeur d'une colonne dans une autre en fonction d'une condition
 ```R
 stations$Network <- ifelse(stations$Network == "", stations$BSSID, stations$Network)
 ```
 
-Traiter une colonne (chaîne de caractères) pour remplacer certains caractères par un espace:
+Traiter une colonne (chaîne de caractères) pour remplacer certains caractères par un espace
 ```R
 users <- within(users,  Descriptions <- gsub("[,;\"\r\n]", " ", Descriptions) )
 
-#Autre possibilité:
+#Autre possibilité
 users$Descriptions <- sapply(users$Descriptions, function(x) { gsub("[,;\"\r\n]", " ", x) })
 
-#Pour les espaces de début/fin:
+#Pour les espaces de début/fin
 users <- within(users,  Descriptions <- trimws(Descriptions) )
 ```
 
-Traiter un dataframe (plusieurs colonnes) en itérant sur chaque ligne (retourne un dataframe à 3 colonnes depuis un dataframe `x` à 2 colonnes):
+Traiter un dataframe (plusieurs colonnes) en itérant sur chaque ligne (retourne un dataframe à 3 colonnes depuis un dataframe `x` à 2 colonnes)
 ```R
 result <- apply(mydataframe, 1, function(x, y) {
 
@@ -278,16 +282,14 @@ result <- apply(mydataframe, 1, function(x, y) {
 result <- do.call(rbind, result)
 ```
 
-Regrouper les `login` et récupère max(last_login_date) (équivaut à Group By en SQL)
+Récupérer `max(last_login_date)` en fonction de `login` (à Group By en SQL), les *NA* sont ignorés par `aggregate()`
 ```R
 aggregate(last_login_date ~ login, data = users, FUN = max)
-```
 
-Regrouper toutes les autres colonnes et récupère max(last_login_date)
-```R
+#En fonction de toutes les autres colonnes
 aggregate(last_login_date ~ ., data = users, FUN = max)
 
-#Autre possibilité en listant les colonnes:
+#En fonction d'une liste de colonnes
 aggregate(last_login_date ~ login + type, data = users, FUN = max)
 ```
 
@@ -296,74 +298,79 @@ Regrouper les dates par login sur une même ligne (concatène les valeurs sépar
 aggregate(login_date ~ login, data = users, FUN = toString)
 ```
 
-Séparer les dates concaténées précédemment (crée une liste dans cette ligne/colonne):
+Pivot des valeurs d'une colonne `timevar` en nouvelles colonnes avec pour valeurs la colonne `Valeur` (implicite) pour chaque ligne identifiée par `idvar`
+```R
+reshape(inventaire, direction = "wide", idvar = c("ItemID", "Item", "Type", "Categorie"), timevar = "Champs")
+```
+
+Séparer les dates concaténées précédemment (crée une liste dans cette ligne/colonne)
 ```R
 users$dateList <- strsplit(users$login_date, ',') #Pour rechercher directement dans dateList: unlist(users$dateList)
 
-#Dupliquer les lignes pour chaque date:
+#Dupliquer les lignes pour chaque date
 library(tidyr)
 users <- users %>% unnest(cols = dateList)
 ```
 
-Séparer les dates concaténées précédemment en colonnes distinctes (avec plusieurs séparateurs):
+Séparer les dates concaténées précédemment en colonnes distinctes (avec plusieurs séparateurs)
 ```R
 library(tidyr)
 users <- users %>% separate(Email, c("Email", "Email2", "Email3"), "[;-,]")
 
-#Autre possibilité:
+#Autre possibilité
 library(stringr)
 str_split_fixed(users$Email, "[;-,]", 3)
 ```
 
-Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques:
+Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques
 ```R
 all_users <- merge(users_windows, user_linux, by = "login")
 
-#Avec deux colonnes dont les noms diffèrent:
+#Avec deux colonnes dont les noms diffèrent
 all_users <- merge(users_windows, user_linux, by.x = "samAccount", by.y = "login")
 
-#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances comme un left join en SQL):
+#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances comme un left join en SQL)
 all_users <- merge(users_windows, user_linux, by.x = c("samAccount","email"), by.y = c("login","mail"), all.x = TRUE)
 ```
 
-Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avoir les mêmes colonnes):
+Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avoir les mêmes colonnes)
 ```R
 users_windows <- rbind(users_windowsNT, users_windowsXP)
 ```
 
 ## <a name="graphiques"></a>Graphiques
 
-Histogramme horizontal avec palette de couleurs adaptée (données issues de `table()`):
+Histogramme horizontal avec palette de couleurs adaptée (données issues de `table()`)
 ```R
 library(ggplot2)
 library(RColorBrewer)
 nbcolors <- length(unique(FreqAnomaly$Var1))
 customPalette <- colorRampPalette(brewer.pal(9, "Blues"))(nbcolors)
-customPalette[customPalette == '#F7FBFF'] <- '#498fd1' #Pour remplacer une couleur
+customPalette[customPalette == "#F7FBFF"] <- "#498fd1" #Pour remplacer une couleur
 
 ggplot(FreqAnomaly,
        aes(x = reorder(Var1, Freq), y = Freq, fill = Var1, label = Freq)) + 
-       geom_bar(stat="identity",position='dodge') +
-       geom_text(size = 3, position=position_dodge(width=0.0), vjust=+0.25, hjust=-0.25) +
+       geom_bar(stat = "identity", position = "dodge") +
+       geom_text(size = 3, position = position_dodge(width = 0.0), vjust = +0.25, hjust = -0.25) +
        theme_minimal() +
-       labs(title = "Octopus: anomalies dans les données utilisateurs", x = "", y = "", color = "") +
+       labs(title = "Titre", x = "", y = "", color = "") +
        #scale_fill_brewer(palette="Blues") + 
        scale_fill_manual(values = customPalette) +
-       theme(legend.position="none", plot.title = element_text(hjust = 0.5)) + 
+       theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) + 
        coord_flip()
 ```
 
-Histogramme vertical avec palette de couleurs adaptée et labels inclinés (données issues de `table()`):
+Histogramme vertical avec palette de couleurs adaptée et labels inclinés (données issues de `table()`)
 ```R
 ggplot(FreqAnomalyComb,
        aes(x = reorder(Var1, -Freq), y = Freq, fill = Var1, label = Freq)) + 
-       geom_bar(stat="identity",position='dodge') +
-       geom_text(size = 3, position=position_dodge(width=0.9), vjust=-0.25) +
+       geom_bar(stat = "identity", position = "dodge") +
+       geom_text(size = 3, position = position_dodge(width = 0.9), vjust = -0.25) +
        theme_minimal() +
-       labs(title = "Octopus: anomalies dans les données utilisateurs", x = "", y = "", color = "") +
+       labs(title = "Titre", x = "", y = "", color = "") +
        #scale_fill_brewer(palette="Blues") + 
        scale_fill_manual(values = customPalette) + 
-       theme(legend.position="none", plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 45, hjust = 1))
+       theme(legend.position = "none", plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 
