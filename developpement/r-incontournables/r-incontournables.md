@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2020-04-25T14:34:29-04:00"
+updated: "2020-04-27T21:43:29-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -195,7 +195,7 @@ Remplacer toutes les valeurs d'un colonne répondant à un critère
 users$email[users$email == "unknown"] <- ""
 
 #Pour une ligne (toutes les colonnes)
-erreur[erreur == 'NA'] <- NA
+erreur[erreur == "NA"] <- NA
 ```
 
 Changer l'encodage d'une colonne de type `character`
@@ -282,11 +282,11 @@ result <- apply(mydataframe, 1, function(x, y) {
 result <- do.call(rbind, result)
 ```
 
-Récupérer `max(last_login_date)` en fonction de `login` (à Group By en SQL), les *NA* sont ignorés par `aggregate()`
+Récupérer `max(last_login_date)` en fonction de `login` (Group By en SQL), les *NA* sont ignorés par `aggregate()`
 ```R
 aggregate(last_login_date ~ login, data = users, FUN = max)
 
-#En fonction de toutes les autres colonnes
+#En fonction de toutes les autres colonnes (permet de les obtenirs en sortie)
 aggregate(last_login_date ~ ., data = users, FUN = max)
 
 #En fonction d'une liste de colonnes
@@ -329,7 +329,7 @@ all_users <- merge(users_windows, user_linux, by = "login")
 #Avec deux colonnes dont les noms diffèrent
 all_users <- merge(users_windows, user_linux, by.x = "samAccount", by.y = "login")
 
-#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances comme un left join en SQL)
+#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances, Left Join en SQL)
 all_users <- merge(users_windows, user_linux, by.x = c("samAccount","email"), by.y = c("login","mail"), all.x = TRUE)
 ```
 
