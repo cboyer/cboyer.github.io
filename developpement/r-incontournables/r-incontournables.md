@@ -286,7 +286,7 @@ Récupérer `max(last_login_date)` en fonction de `login` (Group By en SQL), les
 ```R
 aggregate(last_login_date ~ login, data = users, FUN = max)
 
-#En fonction de toutes les autres colonnes (permet de les obtenirs en sortie)
+#En fonction de toutes les autres colonnes (permet de les conserver en sortie)
 aggregate(last_login_date ~ ., data = users, FUN = max)
 
 #En fonction d'une liste de colonnes
@@ -375,9 +375,10 @@ ggplot(FreqAnomalyComb,
 
 
 
-### Liens utiles
+### Liens complémentaires
 
 - [DB: SQLServer](https://db.rstudio.com/databases/microsoft-sql-server/)
 - [DB: Oracle](https://db.rstudio.com/databases/oracle/)
 - [Subset](https://www.statmethods.net/management/subset.html)
 - [Statistiques en sciences humaines et sociales avec R, Jean-Herman Guay](http://dimension.usherbrooke.ca/dimension/v2ssrcadre.html)
+- [Harvard R Graphics](https://tutorials.iq.harvard.edu/R/Rgraphics/Rgraphics.html)

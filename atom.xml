@@ -3,12 +3,22 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2020-04-27T21:44:11-04:00</updated>
+    <updated>2020-05-03T19:15:32-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
     <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <entry>
+        <title>Accélération matérielle 2D avec OpenVG sur Raspberry Pi</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/rpi-openvg/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:18ef72b3-5f41-5049-835c-48da994651ae</id>
+        <published>2020-05-03T19:14:27-04:00</published>
+        <updated>2020-05-03T19:14:27-04:00</updated>
+        <summary>Générer des images en 2D avec l'accélération matérielle sur Raspberry Pi via OpenVG.</summary>
+    </entry>
     <entry>
         <title>Les outils Elixir</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>

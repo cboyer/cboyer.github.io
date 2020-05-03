@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>Création d’un web service SOAP avec Mirth - C. Boyer</title>
-  <meta name="description" content="Création d’un web service SOAP avec Mirth." />
+  <meta name="description" content="<p>Création d’un web service SOAP avec Mirth.</p>" />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Mirth, SOAP, web service, XML, java, JAXB, JAR, WSDL, XSD" />
   <link rel="canonical" href="https://cboyer.github.io/developpement/mirth-webservice-soap" />
   <meta property="og:title" content="Création d’un web service SOAP avec Mirth - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Création d’un web service SOAP avec Mirth." />
+  <meta property="og:description" content="<p>Création d’un web service SOAP avec Mirth.</p>" />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2019-08-02T19:34:21-04:00" />
@@ -30,26 +30,27 @@
       div.column{display: inline-block; vertical-align: top; width: 50%;}
   </style>
   <style>
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -61,7 +62,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-le
 div.sourceCode
   { color: #1f1c1b; background-color: #ffffff; }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span. { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
@@ -150,19 +151,19 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 id="le-web-service-listener-de-mirth">Le Web Service Listener de Mirth</h2>
 <p>Mirth propose par défaut un connecteur Source pour implémenter facilement un web service SOAP. En revanche les possibilités de configuration sont très limitées car les méthodes, paramètres et type de données (WSDL/XSD) sont générés directement depuis la classe Java <a href="https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java">com.mirth.connect.connectors.ws.DefaultAcceptMessage</a>. Cette classe étends la classe interne <code>com.mirth.connect.connectors.ws.AcceptMessage</code>.</p>
 <p>Le XSD généré par Mirth:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode xml"><code class="sourceCode xml"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">&lt;xs:schema</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> targetNamespace=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb1-2" title="2">  <span class="kw">&lt;xs:element</span><span class="ot"> name=</span><span class="st">&quot;acceptMessage&quot;</span><span class="ot"> type=</span><span class="st">&quot;tns:acceptMessage&quot;</span><span class="kw">/&gt;</span></a>
-<a class="sourceLine" id="cb1-3" title="3">  <span class="kw">&lt;xs:element</span><span class="ot"> name=</span><span class="st">&quot;acceptMessageResponse&quot;</span><span class="ot"> type=</span><span class="st">&quot;tns:acceptMessageResponse&quot;</span><span class="kw">/&gt;</span></a>
-<a class="sourceLine" id="cb1-4" title="4">  <span class="kw">&lt;xs:complexType</span><span class="ot"> name=</span><span class="st">&quot;acceptMessage&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb1-5" title="5">    <span class="kw">&lt;xs:sequence&gt;</span></a>
-<a class="sourceLine" id="cb1-6" title="6">      <span class="kw">&lt;xs:element</span><span class="ot"> name=</span><span class="st">&quot;arg0&quot;</span><span class="ot"> type=</span><span class="st">&quot;xs:string&quot;</span><span class="ot"> minOccurs=</span><span class="st">&quot;0&quot;</span><span class="kw">/&gt;&lt;/xs:sequence&gt;</span></a>
-<a class="sourceLine" id="cb1-7" title="7">    <span class="kw">&lt;/xs:complexType&gt;</span></a>
-<a class="sourceLine" id="cb1-8" title="8">  <span class="kw">&lt;xs:complexType</span><span class="ot"> name=</span><span class="st">&quot;acceptMessageResponse&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb1-9" title="9">    <span class="kw">&lt;xs:sequence&gt;</span></a>
-<a class="sourceLine" id="cb1-10" title="10">      <span class="kw">&lt;xs:element</span><span class="ot"> name=</span><span class="st">&quot;return&quot;</span><span class="ot"> type=</span><span class="st">&quot;xs:string&quot;</span><span class="ot"> minOccurs=</span><span class="st">&quot;0&quot;</span><span class="kw">/&gt;</span></a>
-<a class="sourceLine" id="cb1-11" title="11">    <span class="kw">&lt;/xs:sequence&gt;</span></a>
-<a class="sourceLine" id="cb1-12" title="12">  <span class="kw">&lt;/xs:complexType&gt;</span></a>
-<a class="sourceLine" id="cb1-13" title="13"><span class="kw">&lt;/xs:schema&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">&lt;xs:schema</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> targetNamespace=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="kw">&lt;xs:element</span><span class="ot"> name=</span><span class="st">&quot;acceptMessage&quot;</span><span class="ot"> type=</span><span class="st">&quot;tns:acceptMessage&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="kw">&lt;xs:element</span><span class="ot"> name=</span><span class="st">&quot;acceptMessageResponse&quot;</span><span class="ot"> type=</span><span class="st">&quot;tns:acceptMessageResponse&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="kw">&lt;xs:complexType</span><span class="ot"> name=</span><span class="st">&quot;acceptMessage&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="kw">&lt;xs:sequence&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>      <span class="kw">&lt;xs:element</span><span class="ot"> name=</span><span class="st">&quot;arg0&quot;</span><span class="ot"> type=</span><span class="st">&quot;xs:string&quot;</span><span class="ot"> minOccurs=</span><span class="st">&quot;0&quot;</span><span class="kw">/&gt;&lt;/xs:sequence&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="kw">&lt;/xs:complexType&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>  <span class="kw">&lt;xs:complexType</span><span class="ot"> name=</span><span class="st">&quot;acceptMessageResponse&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="kw">&lt;xs:sequence&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>      <span class="kw">&lt;xs:element</span><span class="ot"> name=</span><span class="st">&quot;return&quot;</span><span class="ot"> type=</span><span class="st">&quot;xs:string&quot;</span><span class="ot"> minOccurs=</span><span class="st">&quot;0&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>    <span class="kw">&lt;/xs:sequence&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>  <span class="kw">&lt;/xs:complexType&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="kw">&lt;/xs:schema&gt;</span></span></code></pre></div>
 <p>Le WSDL et XSD sont disponibles aux adresses suivantes:</p>
 <ul>
 <li><a href="http://localhost:8081/services/query?wsdl">http://localhost:8081/services/query?wsdl</a></li>
@@ -171,33 +172,33 @@ code span.wa { color: #bf0303; } /* Warning */
 <h3 id="scénario-écho">Scénario Écho</h3>
 <p>Démonstration de l'utilisation du connecteur source "Web Service Listener":</p>
 <figure>
-<img src="source_wslistener_default.jpg" alt="Connecteur source" /><figcaption>Connecteur source</figcaption>
+<img src="source_wslistener_default.jpg" alt="" /><figcaption>Connecteur source</figcaption>
 </figure>
 <p>Le connecteur de destination retourne simplement ce qu'il reçoit:</p>
 <figure>
-<img src="destination_wslistener.jpg" alt="Connecteur de destination" /><figcaption>Connecteur de destination</figcaption>
+<img src="destination_wslistener.jpg" alt="" /><figcaption>Connecteur de destination</figcaption>
 </figure>
 <p>Pour tester le canal nous devons envoyer notre requête SOAP avec la méthode <code>AcceptMessage</code> et le paramètre <code>arg0</code> (fichier soap.xml):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode xml"><code class="sourceCode xml"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">&lt;soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb2-2" title="2">  <span class="kw">&lt;soapenv:Header/&gt;</span></a>
-<a class="sourceLine" id="cb2-3" title="3">  <span class="kw">&lt;soapenv:Body&gt;</span></a>
-<a class="sourceLine" id="cb2-4" title="4">    <span class="kw">&lt;ws:acceptMessage&gt;</span></a>
-<a class="sourceLine" id="cb2-5" title="5">      <span class="kw">&lt;arg0&gt;</span>test cyril<span class="kw">&lt;/arg0&gt;</span></a>
-<a class="sourceLine" id="cb2-6" title="6">    <span class="kw">&lt;/ws:acceptMessage&gt;</span></a>
-<a class="sourceLine" id="cb2-7" title="7">  <span class="kw">&lt;/soapenv:Body&gt;</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="kw">&lt;/soapenv:Envelope&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">&lt;soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="kw">&lt;soapenv:Header/&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="kw">&lt;soapenv:Body&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="kw">&lt;ws:acceptMessage&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>      <span class="kw">&lt;arg0&gt;</span>test cyril<span class="kw">&lt;/arg0&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>    <span class="kw">&lt;/ws:acceptMessage&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>  <span class="kw">&lt;/soapenv:Body&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="kw">&lt;/soapenv:Envelope&gt;</span></span></code></pre></div>
 <p>Pour l'envoi de la requête nous utiliserons curl:</p>
 <pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous retourne alors:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode xml"><code class="sourceCode xml"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; <span class="kw">?&gt;</span></a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="kw">&lt;S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb4-3" title="3">  <span class="kw">&lt;SOAP-ENV:Header&gt;&lt;/SOAP-ENV:Header&gt;</span></a>
-<a class="sourceLine" id="cb4-4" title="4">  <span class="kw">&lt;S:Body&gt;</span></a>
-<a class="sourceLine" id="cb4-5" title="5">    <span class="kw">&lt;ns2:acceptMessageResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb4-6" title="6">      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span>test cyril<span class="kw">&lt;/return&gt;</span></a>
-<a class="sourceLine" id="cb4-7" title="7">    <span class="kw">&lt;/ns2:acceptMessageResponse&gt;</span></a>
-<a class="sourceLine" id="cb4-8" title="8">  <span class="kw">&lt;/S:Body&gt;</span></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="kw">&lt;/S:Envelope&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; <span class="kw">?&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">&lt;S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="kw">&lt;SOAP-ENV:Header&gt;&lt;/SOAP-ENV:Header&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="kw">&lt;S:Body&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>    <span class="kw">&lt;ns2:acceptMessageResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span>test cyril<span class="kw">&lt;/return&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>    <span class="kw">&lt;/ns2:acceptMessageResponse&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="kw">&lt;/S:Body&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="kw">&lt;/S:Envelope&gt;</span></span></code></pre></div>
 <h3 id="problématiques">Problématiques</h3>
 <ul>
 <li>L'enveloppe XML/WSDL/XSD est imposée par <code>com.mirth.connect.connectors.ws.DefaultAcceptMessage</code> (par exemple <code>arg0</code>, <code>AcceptMessage</code> dans la requête SOAP).</li>
@@ -206,38 +207,38 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 id="créer-son-web-service-à-laide-dune-classe-java-archive-jar">Créer son web service à l'aide d'une classe Java (archive JAR)</h2>
 <p>Pour utiliser notre propre WSDL et XSD, nous pouvons étendre nous même la classe <code>com.mirth.connect.connectors.ws.acceptMessage</code>. Pour cela nous aurons besoin du JDK pour compiler et générer l'archive JAR.</p>
 <p>Code source (<code>SDDCws.java</code>, le fichier doit avoir le même nom que la classe sinon le compilateur vous le fera savoir!):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode java"><code class="sourceCode java"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">package</span><span class="im"> com.mirth.connect.connectors.ws;</span></a>
-<a class="sourceLine" id="cb5-2" title="2"></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="kw">import</span><span class="im"> javax.jws.WebMethod;</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="kw">import</span><span class="im"> javax.jws.WebParam;</span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="kw">import</span><span class="im"> javax.jws.WebService;</span></a>
-<a class="sourceLine" id="cb5-6" title="6"></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.AcceptMessage;</span></a>
-<a class="sourceLine" id="cb5-8" title="8"><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.WebServiceReceiver;</span></a>
-<a class="sourceLine" id="cb5-9" title="9"></a>
-<a class="sourceLine" id="cb5-10" title="10"></a>
-<a class="sourceLine" id="cb5-11" title="11"><span class="at">@WebService</span></a>
-<a class="sourceLine" id="cb5-12" title="12"><span class="kw">public</span> <span class="kw">class</span> SDDCws <span class="kw">extends</span> AcceptMessage {</a>
-<a class="sourceLine" id="cb5-13" title="13"></a>
-<a class="sourceLine" id="cb5-14" title="14">  <span class="kw">public</span> <span class="fu">SDDCws</span>(WebServiceReceiver webServiceReceiver){</a>
-<a class="sourceLine" id="cb5-15" title="15">    <span class="kw">super</span>(webServiceReceiver);</a>
-<a class="sourceLine" id="cb5-16" title="16">  }</a>
-<a class="sourceLine" id="cb5-17" title="17"></a>
-<a class="sourceLine" id="cb5-18" title="18">  <span class="at">@WebMethod</span>(operationName = <span class="st">&quot;hello&quot;</span>)</a>
-<a class="sourceLine" id="cb5-19" title="19">  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">hello</span>(<span class="at">@WebParam</span>(name = <span class="st">&quot;name&quot;</span>) <span class="bu">String</span> txt) {</a>
-<a class="sourceLine" id="cb5-20" title="20">    txt = <span class="st">&quot;Hello &quot;</span> + txt + <span class="st">&quot; !&quot;</span>;</a>
-<a class="sourceLine" id="cb5-21" title="21">    <span class="bu">String</span> response = webServiceReceiver.<span class="fu">processData</span>(txt);</a>
-<a class="sourceLine" id="cb5-22" title="22"></a>
-<a class="sourceLine" id="cb5-23" title="23">    <span class="kw">if</span> (response != <span class="kw">null</span>) {</a>
-<a class="sourceLine" id="cb5-24" title="24">      <span class="kw">return</span> response;</a>
-<a class="sourceLine" id="cb5-25" title="25">    }</a>
-<a class="sourceLine" id="cb5-26" title="26"></a>
-<a class="sourceLine" id="cb5-27" title="27">    <span class="kw">return</span> <span class="kw">null</span>;</a>
-<a class="sourceLine" id="cb5-28" title="28">  }</a>
-<a class="sourceLine" id="cb5-29" title="29">}</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">package</span><span class="im"> com.mirth.connect.connectors.ws;</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="kw">import</span><span class="im"> javax.jws.WebMethod;</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">import</span><span class="im"> javax.jws.WebParam;</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">import</span><span class="im"> javax.jws.WebService;</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.AcceptMessage;</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.WebServiceReceiver;</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="at">@WebService</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="kw">public</span> <span class="kw">class</span> SDDCws <span class="kw">extends</span> AcceptMessage {</span>
+<span id="cb5-13"><a href="#cb5-13"></a></span>
+<span id="cb5-14"><a href="#cb5-14"></a>  <span class="kw">public</span> <span class="fu">SDDCws</span>(WebServiceReceiver webServiceReceiver){</span>
+<span id="cb5-15"><a href="#cb5-15"></a>    <span class="kw">super</span>(webServiceReceiver);</span>
+<span id="cb5-16"><a href="#cb5-16"></a>  }</span>
+<span id="cb5-17"><a href="#cb5-17"></a></span>
+<span id="cb5-18"><a href="#cb5-18"></a>  <span class="at">@WebMethod</span>(operationName = <span class="st">&quot;hello&quot;</span>)</span>
+<span id="cb5-19"><a href="#cb5-19"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">hello</span>(<span class="at">@WebParam</span>(name = <span class="st">&quot;name&quot;</span>) <span class="bu">String</span> txt) {</span>
+<span id="cb5-20"><a href="#cb5-20"></a>    txt = <span class="st">&quot;Hello &quot;</span> + txt + <span class="st">&quot; !&quot;</span>;</span>
+<span id="cb5-21"><a href="#cb5-21"></a>    <span class="bu">String</span> response = webServiceReceiver.<span class="fu">processData</span>(txt);</span>
+<span id="cb5-22"><a href="#cb5-22"></a></span>
+<span id="cb5-23"><a href="#cb5-23"></a>    <span class="kw">if</span> (response != <span class="kw">null</span>) {</span>
+<span id="cb5-24"><a href="#cb5-24"></a>      <span class="kw">return</span> response;</span>
+<span id="cb5-25"><a href="#cb5-25"></a>    }</span>
+<span id="cb5-26"><a href="#cb5-26"></a></span>
+<span id="cb5-27"><a href="#cb5-27"></a>    <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb5-28"><a href="#cb5-28"></a>  }</span>
+<span id="cb5-29"><a href="#cb5-29"></a>}</span></code></pre></div>
 <p>Il faut bien utiliser <code>package com.mirth.connect.connectors.ws;</code> pour étendre la classe <code>AcceptMessage</code> qui est dans <code>com.mirth.connect.connectors.ws</code> sans quoi le web service retournera l'erreur: &gt; Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</p>
 <p>Il est possible de définir le targetNamespace (par défaut sa valeur est <code>http://ws.connectors.connect.mirth.com/</code>), le serviceName et le portName en remplaçant l'annotation <code>@WebService</code> par:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode java"><code class="sourceCode java"><a class="sourceLine" id="cb6-1" title="1"><span class="at">@WebService</span>(portName = <span class="st">&quot;SDDCwsPort&quot;</span>, serviceName = <span class="st">&quot;SDDCws&quot;</span>, targetNamespace = <span class="st">&quot;https://monurl.qc.ca/monservice&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a><span class="at">@WebService</span>(portName = <span class="st">&quot;SDDCwsPort&quot;</span>, serviceName = <span class="st">&quot;SDDCws&quot;</span>, targetNamespace = <span class="st">&quot;https://monurl.qc.ca/monservice&quot;</span>)</span></code></pre></div>
 <p>La requête SOAP devra mentionner le bon targetNamespace (<code>xmlns:ws="https://monurl.qc.ca/monservice"</code>) dans l'enveloppe sinon nous obtiendrons l'erreur:</p>
 <blockquote>
 <p>Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</p>
@@ -252,166 +253,166 @@ code span.wa { color: #bf0303; } /* Warning */
 <h3 id="installation">Installation</h3>
 <p>Copier <code>SDDCws.jar</code> dans <code>C:\Program Files\Mirth Connect\custom-lib</code>. Dans Mirth, aller dans Settings &gt; Resources &gt; Reload Resource <code>SDDCws.jar</code> doit apparaître dans la liste « Loaded Librairies » :</p>
 <figure>
-<img src="resources.jpg" alt="SDDCws.jar apparaît dans la liste" /><figcaption>SDDCws.jar apparaît dans la liste</figcaption>
+<img src="resources.jpg" alt="" /><figcaption>SDDCws.jar apparaît dans la liste</figcaption>
 </figure>
 <h3 id="paramétrer-le-canal">Paramétrer le canal</h3>
 <figure>
-<img src="source_wslistener_custom.jpg" alt="Connecteur source avec com.mirth.connect.connectors.ws.SDDCws" /><figcaption>Connecteur source avec com.mirth.connect.connectors.ws.SDDCws</figcaption>
+<img src="source_wslistener_custom.jpg" alt="" /><figcaption>Connecteur source avec com.mirth.connect.connectors.ws.SDDCws</figcaption>
 </figure>
 <p>Après démarrage on peut vérifier le WSDL et XSD: - http://localhost:8081/services/query?wsdl - http://localhost:8081/services/query?xsd=1</p>
 <h3 id="test-du-canal">Test du canal</h3>
 <p>Le fichier soap.xml à envoyer avec curl:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode xml"><code class="sourceCode xml"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;<span class="kw">?&gt;</span></a>
-<a class="sourceLine" id="cb9-2" title="2"><span class="kw">&lt;soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb9-3" title="3">  <span class="kw">&lt;soapenv:Header/&gt;</span></a>
-<a class="sourceLine" id="cb9-4" title="4">  <span class="kw">&lt;soapenv:Body&gt;</span></a>
-<a class="sourceLine" id="cb9-5" title="5">    <span class="kw">&lt;ws:hello&gt;</span></a>
-<a class="sourceLine" id="cb9-6" title="6">      <span class="kw">&lt;name&gt;</span>Cyril<span class="kw">&lt;/name&gt;</span></a>
-<a class="sourceLine" id="cb9-7" title="7">    <span class="kw">&lt;/ws:hello&gt;</span></a>
-<a class="sourceLine" id="cb9-8" title="8">  <span class="kw">&lt;/soapenv:Body&gt;</span></a>
-<a class="sourceLine" id="cb9-9" title="9"><span class="kw">&lt;/soapenv:Envelope&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;<span class="kw">?&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">&lt;soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="kw">&lt;soapenv:Header/&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="kw">&lt;soapenv:Body&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>    <span class="kw">&lt;ws:hello&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>      <span class="kw">&lt;name&gt;</span>Cyril<span class="kw">&lt;/name&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>    <span class="kw">&lt;/ws:hello&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a>  <span class="kw">&lt;/soapenv:Body&gt;</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="kw">&lt;/soapenv:Envelope&gt;</span></span></code></pre></div>
 <p>Pour envoyer la requête:</p>
 <pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous répond alors:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode xml"><code class="sourceCode xml"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; <span class="kw">?&gt;</span></a>
-<a class="sourceLine" id="cb11-2" title="2"><span class="kw">&lt;S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb11-3" title="3">  <span class="kw">&lt;SOAP-ENV:Header&gt;&lt;/SOAP-ENV:Header&gt;</span></a>
-<a class="sourceLine" id="cb11-4" title="4">  <span class="kw">&lt;S:Body&gt;</span></a>
-<a class="sourceLine" id="cb11-5" title="5">    <span class="kw">&lt;ns2:helloResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb11-6" title="6">      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span>Hello Cyril !<span class="kw">&lt;/return&gt;</span></a>
-<a class="sourceLine" id="cb11-7" title="7">    <span class="kw">&lt;/ns2:helloResponse&gt;</span></a>
-<a class="sourceLine" id="cb11-8" title="8">  <span class="kw">&lt;/S:Body&gt;</span></a>
-<a class="sourceLine" id="cb11-9" title="9"><span class="kw">&lt;/S:Envelope&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; <span class="kw">?&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">&lt;S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="kw">&lt;SOAP-ENV:Header&gt;&lt;/SOAP-ENV:Header&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="kw">&lt;S:Body&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>    <span class="kw">&lt;ns2:helloResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a>      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span>Hello Cyril !<span class="kw">&lt;/return&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>    <span class="kw">&lt;/ns2:helloResponse&gt;</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a>  <span class="kw">&lt;/S:Body&gt;</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="kw">&lt;/S:Envelope&gt;</span></span></code></pre></div>
 <h2 id="web-service-avancé-avec-plusieurs-paramètres-en-entréesortie">Web service avancé avec plusieurs paramètres en entrée/sortie</h2>
 <p>Pour accepter plusieurs paramètres fournis par la requête SOAP, nous allons définir plusieurs paramètres (patseq et name) dans notre classe:</p>
 <p>Fichier <code>SDDCws.java</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode java"><code class="sourceCode java"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">package</span><span class="im"> com.mirth.connect.connectors.ws;</span></a>
-<a class="sourceLine" id="cb12-2" title="2"></a>
-<a class="sourceLine" id="cb12-3" title="3"><span class="kw">import</span><span class="im"> javax.jws.WebMethod;</span></a>
-<a class="sourceLine" id="cb12-4" title="4"><span class="kw">import</span><span class="im"> javax.jws.WebParam;</span></a>
-<a class="sourceLine" id="cb12-5" title="5"><span class="kw">import</span><span class="im"> javax.jws.WebService;</span></a>
-<a class="sourceLine" id="cb12-6" title="6"><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.AcceptMessage;</span></a>
-<a class="sourceLine" id="cb12-7" title="7"><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.WebServiceReceiver;</span></a>
-<a class="sourceLine" id="cb12-8" title="8"></a>
-<a class="sourceLine" id="cb12-9" title="9"><span class="co">/* Pour parser le XML */</span></a>
-<a class="sourceLine" id="cb12-10" title="10"><span class="kw">import</span><span class="im"> java.io.StringReader;</span></a>
-<a class="sourceLine" id="cb12-11" title="11"><span class="kw">import</span><span class="im"> javax.xml.bind.JAXBContext;</span></a>
-<a class="sourceLine" id="cb12-12" title="12"><span class="kw">import</span><span class="im"> javax.xml.bind.JAXBException;</span></a>
-<a class="sourceLine" id="cb12-13" title="13"><span class="kw">import</span><span class="im"> javax.xml.bind.Unmarshaller;</span></a>
-<a class="sourceLine" id="cb12-14" title="14"></a>
-<a class="sourceLine" id="cb12-15" title="15"></a>
-<a class="sourceLine" id="cb12-16" title="16"><span class="at">@WebService</span></a>
-<a class="sourceLine" id="cb12-17" title="17"><span class="kw">public</span> <span class="kw">class</span> SDDCws <span class="kw">extends</span> AcceptMessage {</a>
-<a class="sourceLine" id="cb12-18" title="18"></a>
-<a class="sourceLine" id="cb12-19" title="19">  <span class="kw">public</span> <span class="fu">SDDCws</span>(WebServiceReceiver webServiceReceiver){</a>
-<a class="sourceLine" id="cb12-20" title="20">    <span class="kw">super</span>(webServiceReceiver);</a>
-<a class="sourceLine" id="cb12-21" title="21">  }</a>
-<a class="sourceLine" id="cb12-22" title="22"></a>
-<a class="sourceLine" id="cb12-23" title="23">  <span class="co">/* Méthode &quot;getPatient&quot; et ses paramètres en entrée */</span></a>
-<a class="sourceLine" id="cb12-24" title="24">  <span class="at">@WebMethod</span>(operationName = <span class="st">&quot;getPatient&quot;</span>)</a>
-<a class="sourceLine" id="cb12-25" title="25">  <span class="kw">public</span> Patient <span class="fu">getPatient</span>(<span class="at">@WebParam</span>(name = <span class="st">&quot;patseq&quot;</span>) <span class="bu">String</span> patseq,</a>
-<a class="sourceLine" id="cb12-26" title="26">                            <span class="at">@WebParam</span>(name = <span class="st">&quot;name&quot;</span>) <span class="bu">String</span> name,</a>
-<a class="sourceLine" id="cb12-27" title="27">                            <span class="at">@WebParam</span>(name = <span class="st">&quot;firstName&quot;</span>) <span class="bu">String</span> firstName,</a>
-<a class="sourceLine" id="cb12-28" title="28">                            <span class="at">@WebParam</span>(name = <span class="st">&quot;birthDate&quot;</span>) <span class="bu">String</span> birthDate,</a>
-<a class="sourceLine" id="cb12-29" title="29">                            <span class="at">@WebParam</span>(name = <span class="st">&quot;ramqId&quot;</span>) <span class="bu">String</span> ramqId){</a>
-<a class="sourceLine" id="cb12-30" title="30"></a>
-<a class="sourceLine" id="cb12-31" title="31">    <span class="co">/* Prépare le XML pour le connecteur Source */</span></a>
-<a class="sourceLine" id="cb12-32" title="32">    <span class="bu">String</span> data = <span class="st">&quot;&lt;?xml version=</span><span class="sc">\&quot;</span><span class="st">1.0</span><span class="sc">\&quot;</span><span class="st"> encoding=</span><span class="sc">\&quot;</span><span class="st">UTF-8</span><span class="sc">\&quot;</span><span class="st">?&gt;&lt;patient&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb12-33" title="33">    data += <span class="st">&quot;&lt;patseq&gt;&quot;</span> + patseq + <span class="st">&quot;&lt;/patseq&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb12-34" title="34">    data += <span class="st">&quot;&lt;name&gt;&quot;</span> + name + <span class="st">&quot;&lt;/name&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb12-35" title="35">    data += <span class="st">&quot;&lt;firstName&gt;&quot;</span> + firstName + <span class="st">&quot;&lt;/firstName&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb12-36" title="36">    data += <span class="st">&quot;&lt;birthDate&gt;&quot;</span> + birthDate + <span class="st">&quot;&lt;/birthDate&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb12-37" title="37">    data += <span class="st">&quot;&lt;ramqId&gt;&quot;</span> + ramqId + <span class="st">&quot;&lt;/ramqId&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb12-38" title="38">    data += <span class="st">&quot;&lt;/patient&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb12-39" title="39"></a>
-<a class="sourceLine" id="cb12-40" title="40">    <span class="co">/* Envoie le XML pour traitement */</span></a>
-<a class="sourceLine" id="cb12-41" title="41">    <span class="bu">String</span> response = webServiceReceiver.<span class="fu">processData</span>(data);</a>
-<a class="sourceLine" id="cb12-42" title="42">    Patient patient = <span class="kw">new</span> <span class="fu">Patient</span>();</a>
-<a class="sourceLine" id="cb12-43" title="43"></a>
-<a class="sourceLine" id="cb12-44" title="44">    <span class="co">/* Parse le XML retourné par le canal pour un objet Patient */</span></a>
-<a class="sourceLine" id="cb12-45" title="45">    <span class="kw">if</span> (response != <span class="kw">null</span>) {</a>
-<a class="sourceLine" id="cb12-46" title="46">      <span class="kw">try</span> {</a>
-<a class="sourceLine" id="cb12-47" title="47">        <span class="bu">JAXBContext</span> jaxbContext = <span class="bu">JAXBContext</span>.<span class="fu">newInstance</span>(Patient.<span class="fu">class</span>);</a>
-<a class="sourceLine" id="cb12-48" title="48">        <span class="bu">Unmarshaller</span> unmarshaller = jaxbContext.<span class="fu">createUnmarshaller</span>();</a>
-<a class="sourceLine" id="cb12-49" title="49">        <span class="bu">StringReader</span> reader = <span class="kw">new</span> <span class="bu">StringReader</span>(response);</a>
-<a class="sourceLine" id="cb12-50" title="50">        patient = (Patient) unmarshaller.<span class="fu">unmarshal</span>(reader);</a>
-<a class="sourceLine" id="cb12-51" title="51">      } <span class="kw">catch</span> (<span class="bu">JAXBException</span> e) {</a>
-<a class="sourceLine" id="cb12-52" title="52">        e.<span class="fu">printStackTrace</span>();</a>
-<a class="sourceLine" id="cb12-53" title="53">      }</a>
-<a class="sourceLine" id="cb12-54" title="54">    }</a>
-<a class="sourceLine" id="cb12-55" title="55"></a>
-<a class="sourceLine" id="cb12-56" title="56">    <span class="kw">return</span> patient;</a>
-<a class="sourceLine" id="cb12-57" title="57">  }</a>
-<a class="sourceLine" id="cb12-58" title="58">}</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">package</span><span class="im"> com.mirth.connect.connectors.ws;</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="kw">import</span><span class="im"> javax.jws.WebMethod;</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="kw">import</span><span class="im"> javax.jws.WebParam;</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="kw">import</span><span class="im"> javax.jws.WebService;</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.AcceptMessage;</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.WebServiceReceiver;</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">/* Pour parser le XML */</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="kw">import</span><span class="im"> java.io.StringReader;</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="kw">import</span><span class="im"> javax.xml.bind.JAXBContext;</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="kw">import</span><span class="im"> javax.xml.bind.JAXBException;</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="kw">import</span><span class="im"> javax.xml.bind.Unmarshaller;</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a></span>
+<span id="cb12-15"><a href="#cb12-15"></a></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="at">@WebService</span></span>
+<span id="cb12-17"><a href="#cb12-17"></a><span class="kw">public</span> <span class="kw">class</span> SDDCws <span class="kw">extends</span> AcceptMessage {</span>
+<span id="cb12-18"><a href="#cb12-18"></a></span>
+<span id="cb12-19"><a href="#cb12-19"></a>  <span class="kw">public</span> <span class="fu">SDDCws</span>(WebServiceReceiver webServiceReceiver){</span>
+<span id="cb12-20"><a href="#cb12-20"></a>    <span class="kw">super</span>(webServiceReceiver);</span>
+<span id="cb12-21"><a href="#cb12-21"></a>  }</span>
+<span id="cb12-22"><a href="#cb12-22"></a></span>
+<span id="cb12-23"><a href="#cb12-23"></a>  <span class="co">/* Méthode &quot;getPatient&quot; et ses paramètres en entrée */</span></span>
+<span id="cb12-24"><a href="#cb12-24"></a>  <span class="at">@WebMethod</span>(operationName = <span class="st">&quot;getPatient&quot;</span>)</span>
+<span id="cb12-25"><a href="#cb12-25"></a>  <span class="kw">public</span> Patient <span class="fu">getPatient</span>(<span class="at">@WebParam</span>(name = <span class="st">&quot;patseq&quot;</span>) <span class="bu">String</span> patseq,</span>
+<span id="cb12-26"><a href="#cb12-26"></a>                            <span class="at">@WebParam</span>(name = <span class="st">&quot;name&quot;</span>) <span class="bu">String</span> name,</span>
+<span id="cb12-27"><a href="#cb12-27"></a>                            <span class="at">@WebParam</span>(name = <span class="st">&quot;firstName&quot;</span>) <span class="bu">String</span> firstName,</span>
+<span id="cb12-28"><a href="#cb12-28"></a>                            <span class="at">@WebParam</span>(name = <span class="st">&quot;birthDate&quot;</span>) <span class="bu">String</span> birthDate,</span>
+<span id="cb12-29"><a href="#cb12-29"></a>                            <span class="at">@WebParam</span>(name = <span class="st">&quot;ramqId&quot;</span>) <span class="bu">String</span> ramqId){</span>
+<span id="cb12-30"><a href="#cb12-30"></a></span>
+<span id="cb12-31"><a href="#cb12-31"></a>    <span class="co">/* Prépare le XML pour le connecteur Source */</span></span>
+<span id="cb12-32"><a href="#cb12-32"></a>    <span class="bu">String</span> data = <span class="st">&quot;&lt;?xml version=</span><span class="sc">\&quot;</span><span class="st">1.0</span><span class="sc">\&quot;</span><span class="st"> encoding=</span><span class="sc">\&quot;</span><span class="st">UTF-8</span><span class="sc">\&quot;</span><span class="st">?&gt;&lt;patient&gt;&quot;</span>;</span>
+<span id="cb12-33"><a href="#cb12-33"></a>    data += <span class="st">&quot;&lt;patseq&gt;&quot;</span> + patseq + <span class="st">&quot;&lt;/patseq&gt;&quot;</span>;</span>
+<span id="cb12-34"><a href="#cb12-34"></a>    data += <span class="st">&quot;&lt;name&gt;&quot;</span> + name + <span class="st">&quot;&lt;/name&gt;&quot;</span>;</span>
+<span id="cb12-35"><a href="#cb12-35"></a>    data += <span class="st">&quot;&lt;firstName&gt;&quot;</span> + firstName + <span class="st">&quot;&lt;/firstName&gt;&quot;</span>;</span>
+<span id="cb12-36"><a href="#cb12-36"></a>    data += <span class="st">&quot;&lt;birthDate&gt;&quot;</span> + birthDate + <span class="st">&quot;&lt;/birthDate&gt;&quot;</span>;</span>
+<span id="cb12-37"><a href="#cb12-37"></a>    data += <span class="st">&quot;&lt;ramqId&gt;&quot;</span> + ramqId + <span class="st">&quot;&lt;/ramqId&gt;&quot;</span>;</span>
+<span id="cb12-38"><a href="#cb12-38"></a>    data += <span class="st">&quot;&lt;/patient&gt;&quot;</span>;</span>
+<span id="cb12-39"><a href="#cb12-39"></a></span>
+<span id="cb12-40"><a href="#cb12-40"></a>    <span class="co">/* Envoie le XML pour traitement */</span></span>
+<span id="cb12-41"><a href="#cb12-41"></a>    <span class="bu">String</span> response = webServiceReceiver.<span class="fu">processData</span>(data);</span>
+<span id="cb12-42"><a href="#cb12-42"></a>    Patient patient = <span class="kw">new</span> <span class="fu">Patient</span>();</span>
+<span id="cb12-43"><a href="#cb12-43"></a></span>
+<span id="cb12-44"><a href="#cb12-44"></a>    <span class="co">/* Parse le XML retourné par le canal pour un objet Patient */</span></span>
+<span id="cb12-45"><a href="#cb12-45"></a>    <span class="kw">if</span> (response != <span class="kw">null</span>) {</span>
+<span id="cb12-46"><a href="#cb12-46"></a>      <span class="kw">try</span> {</span>
+<span id="cb12-47"><a href="#cb12-47"></a>        <span class="bu">JAXBContext</span> jaxbContext = <span class="bu">JAXBContext</span>.<span class="fu">newInstance</span>(Patient.<span class="fu">class</span>);</span>
+<span id="cb12-48"><a href="#cb12-48"></a>        <span class="bu">Unmarshaller</span> unmarshaller = jaxbContext.<span class="fu">createUnmarshaller</span>();</span>
+<span id="cb12-49"><a href="#cb12-49"></a>        <span class="bu">StringReader</span> reader = <span class="kw">new</span> <span class="bu">StringReader</span>(response);</span>
+<span id="cb12-50"><a href="#cb12-50"></a>        patient = (Patient) unmarshaller.<span class="fu">unmarshal</span>(reader);</span>
+<span id="cb12-51"><a href="#cb12-51"></a>      } <span class="kw">catch</span> (<span class="bu">JAXBException</span> e) {</span>
+<span id="cb12-52"><a href="#cb12-52"></a>        e.<span class="fu">printStackTrace</span>();</span>
+<span id="cb12-53"><a href="#cb12-53"></a>      }</span>
+<span id="cb12-54"><a href="#cb12-54"></a>    }</span>
+<span id="cb12-55"><a href="#cb12-55"></a></span>
+<span id="cb12-56"><a href="#cb12-56"></a>    <span class="kw">return</span> patient;</span>
+<span id="cb12-57"><a href="#cb12-57"></a>  }</span>
+<span id="cb12-58"><a href="#cb12-58"></a>}</span></code></pre></div>
 <p>Par défaut ces paramètres ne sont pas obligatoires, si une requête SOAP est envoyée sans certains de ces paramètres il seront ajoutés mais inialisés à <code>null</code> (Mirth les verra comme la chaîne <code>"null"</code>). Il est possible de les rendre obligatoire en utilisant <code>@XmlElement(required=true)</code> en plus de <code>@WebParam</code>.</p>
 <p>Ici nous parsons les données de <code>response</code> (données issues du connecteur de destination) pour obtenir un objet <code>patient</code> qui sera retourné via web service. Si des élément supplémentaires sont présents dans le XML à parser (non présents dans la classe <code>Patient</code>) ils seront simplement ignorés.</p>
 <p>En effet pour fournir en sortie plusieurs paramètres dans notre réponse SOAP, nous devrons faire appel aux binding Java XML (annotations JAXB) avec <code>javax.xml.bind.annotation</code> car retourner simplement un objet <code>Patient</code> ne fonctionnera pas (aucune donnée ne sera retournée).</p>
 <p>Fichier <code>Patient.java</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode java"><code class="sourceCode java"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">package</span><span class="im"> com.mirth.connect.connectors.ws;</span></a>
-<a class="sourceLine" id="cb13-2" title="2"></a>
-<a class="sourceLine" id="cb13-3" title="3"><span class="kw">import</span><span class="im"> java.io.Serializable;</span></a>
-<a class="sourceLine" id="cb13-4" title="4"><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlElement;</span></a>
-<a class="sourceLine" id="cb13-5" title="5"><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlRootElement;</span></a>
-<a class="sourceLine" id="cb13-6" title="6"><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlType;</span></a>
-<a class="sourceLine" id="cb13-7" title="7"><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlAccessorType;</span></a>
-<a class="sourceLine" id="cb13-8" title="8"><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlAccessType;</span></a>
-<a class="sourceLine" id="cb13-9" title="9"></a>
-<a class="sourceLine" id="cb13-10" title="10"><span class="at">@XmlRootElement</span>(name = <span class="st">&quot;patient&quot;</span>)</a>
-<a class="sourceLine" id="cb13-11" title="11"><span class="at">@XmlAccessorType</span>(<span class="bu">XmlAccessType</span>.<span class="fu">NONE</span>) <span class="co">//Pas de binding automatiques</span></a>
-<a class="sourceLine" id="cb13-12" title="12"><span class="at">@XmlType</span>(propOrder = { <span class="st">&quot;patseq&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="st">&quot;firstName&quot;</span>, <span class="st">&quot;birthDate&quot;</span>, <span class="st">&quot;ramqId&quot;</span> })</a>
-<a class="sourceLine" id="cb13-13" title="13"><span class="kw">public</span> <span class="kw">class</span> Patient <span class="kw">implements</span> <span class="bu">Serializable</span>{</a>
-<a class="sourceLine" id="cb13-14" title="14">  <span class="kw">private</span> <span class="bu">String</span> patseq;</a>
-<a class="sourceLine" id="cb13-15" title="15">  <span class="kw">private</span> <span class="bu">String</span> name;</a>
-<a class="sourceLine" id="cb13-16" title="16">  <span class="kw">private</span> <span class="bu">String</span> firstName;</a>
-<a class="sourceLine" id="cb13-17" title="17">  <span class="kw">private</span> <span class="bu">String</span> birthDate;</a>
-<a class="sourceLine" id="cb13-18" title="18">  <span class="kw">private</span> <span class="bu">String</span> ramqId;</a>
-<a class="sourceLine" id="cb13-19" title="19"></a>
-<a class="sourceLine" id="cb13-20" title="20"></a>
-<a class="sourceLine" id="cb13-21" title="21">  <span class="at">@XmlElement</span>(name = <span class="st">&quot;patseq&quot;</span>)</a>
-<a class="sourceLine" id="cb13-22" title="22">  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getPatseq</span>() {</a>
-<a class="sourceLine" id="cb13-23" title="23">    <span class="kw">return</span> patseq;</a>
-<a class="sourceLine" id="cb13-24" title="24">  }</a>
-<a class="sourceLine" id="cb13-25" title="25"></a>
-<a class="sourceLine" id="cb13-26" title="26">  <span class="at">@XmlElement</span>(name = <span class="st">&quot;name&quot;</span>)</a>
-<a class="sourceLine" id="cb13-27" title="27">  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getName</span>() {</a>
-<a class="sourceLine" id="cb13-28" title="28">    <span class="kw">return</span> name;</a>
-<a class="sourceLine" id="cb13-29" title="29">  }</a>
-<a class="sourceLine" id="cb13-30" title="30"></a>
-<a class="sourceLine" id="cb13-31" title="31">  <span class="at">@XmlElement</span>(name = <span class="st">&quot;firstName&quot;</span>)</a>
-<a class="sourceLine" id="cb13-32" title="32">  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getFirstName</span>() {</a>
-<a class="sourceLine" id="cb13-33" title="33">    <span class="kw">return</span> firstName;</a>
-<a class="sourceLine" id="cb13-34" title="34">  }</a>
-<a class="sourceLine" id="cb13-35" title="35"></a>
-<a class="sourceLine" id="cb13-36" title="36">  <span class="at">@XmlElement</span>(name = <span class="st">&quot;birthDate&quot;</span>)</a>
-<a class="sourceLine" id="cb13-37" title="37">  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getBirthDate</span>() {</a>
-<a class="sourceLine" id="cb13-38" title="38">    <span class="kw">return</span> birthDate;</a>
-<a class="sourceLine" id="cb13-39" title="39">  }</a>
-<a class="sourceLine" id="cb13-40" title="40"></a>
-<a class="sourceLine" id="cb13-41" title="41">  <span class="at">@XmlElement</span>(name = <span class="st">&quot;ramqId&quot;</span>)</a>
-<a class="sourceLine" id="cb13-42" title="42">  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getRamqId</span>() {</a>
-<a class="sourceLine" id="cb13-43" title="43">    <span class="kw">return</span> ramqId;</a>
-<a class="sourceLine" id="cb13-44" title="44">  }</a>
-<a class="sourceLine" id="cb13-45" title="45"></a>
-<a class="sourceLine" id="cb13-46" title="46">  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setPatseq</span>(<span class="bu">String</span> newPatseq) {</a>
-<a class="sourceLine" id="cb13-47" title="47">    patseq = newPatseq;</a>
-<a class="sourceLine" id="cb13-48" title="48">  }</a>
-<a class="sourceLine" id="cb13-49" title="49"></a>
-<a class="sourceLine" id="cb13-50" title="50">  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setName</span>(<span class="bu">String</span> newName) {</a>
-<a class="sourceLine" id="cb13-51" title="51">    name = newName;</a>
-<a class="sourceLine" id="cb13-52" title="52">  }</a>
-<a class="sourceLine" id="cb13-53" title="53"></a>
-<a class="sourceLine" id="cb13-54" title="54">  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setFirstName</span>(<span class="bu">String</span> newFirstName) {</a>
-<a class="sourceLine" id="cb13-55" title="55">    firstName = newFirstName;</a>
-<a class="sourceLine" id="cb13-56" title="56">  }</a>
-<a class="sourceLine" id="cb13-57" title="57"></a>
-<a class="sourceLine" id="cb13-58" title="58">  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setBirthDate</span>(<span class="bu">String</span> newBirthDate) {</a>
-<a class="sourceLine" id="cb13-59" title="59">    birthDate = newBirthDate;</a>
-<a class="sourceLine" id="cb13-60" title="60">  }</a>
-<a class="sourceLine" id="cb13-61" title="61"></a>
-<a class="sourceLine" id="cb13-62" title="62">  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setRamqId</span>(<span class="bu">String</span> newRamqId) {</a>
-<a class="sourceLine" id="cb13-63" title="63">    ramqId = newRamqId;</a>
-<a class="sourceLine" id="cb13-64" title="64">  }</a>
-<a class="sourceLine" id="cb13-65" title="65">}</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">package</span><span class="im"> com.mirth.connect.connectors.ws;</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="kw">import</span><span class="im"> java.io.Serializable;</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlElement;</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlRootElement;</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlType;</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlAccessorType;</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlAccessType;</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="at">@XmlRootElement</span>(name = <span class="st">&quot;patient&quot;</span>)</span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="at">@XmlAccessorType</span>(<span class="bu">XmlAccessType</span>.<span class="fu">NONE</span>) <span class="co">//Pas de binding automatiques</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="at">@XmlType</span>(propOrder = { <span class="st">&quot;patseq&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="st">&quot;firstName&quot;</span>, <span class="st">&quot;birthDate&quot;</span>, <span class="st">&quot;ramqId&quot;</span> })</span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="kw">public</span> <span class="kw">class</span> Patient <span class="kw">implements</span> <span class="bu">Serializable</span>{</span>
+<span id="cb13-14"><a href="#cb13-14"></a>  <span class="kw">private</span> <span class="bu">String</span> patseq;</span>
+<span id="cb13-15"><a href="#cb13-15"></a>  <span class="kw">private</span> <span class="bu">String</span> name;</span>
+<span id="cb13-16"><a href="#cb13-16"></a>  <span class="kw">private</span> <span class="bu">String</span> firstName;</span>
+<span id="cb13-17"><a href="#cb13-17"></a>  <span class="kw">private</span> <span class="bu">String</span> birthDate;</span>
+<span id="cb13-18"><a href="#cb13-18"></a>  <span class="kw">private</span> <span class="bu">String</span> ramqId;</span>
+<span id="cb13-19"><a href="#cb13-19"></a></span>
+<span id="cb13-20"><a href="#cb13-20"></a></span>
+<span id="cb13-21"><a href="#cb13-21"></a>  <span class="at">@XmlElement</span>(name = <span class="st">&quot;patseq&quot;</span>)</span>
+<span id="cb13-22"><a href="#cb13-22"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getPatseq</span>() {</span>
+<span id="cb13-23"><a href="#cb13-23"></a>    <span class="kw">return</span> patseq;</span>
+<span id="cb13-24"><a href="#cb13-24"></a>  }</span>
+<span id="cb13-25"><a href="#cb13-25"></a></span>
+<span id="cb13-26"><a href="#cb13-26"></a>  <span class="at">@XmlElement</span>(name = <span class="st">&quot;name&quot;</span>)</span>
+<span id="cb13-27"><a href="#cb13-27"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getName</span>() {</span>
+<span id="cb13-28"><a href="#cb13-28"></a>    <span class="kw">return</span> name;</span>
+<span id="cb13-29"><a href="#cb13-29"></a>  }</span>
+<span id="cb13-30"><a href="#cb13-30"></a></span>
+<span id="cb13-31"><a href="#cb13-31"></a>  <span class="at">@XmlElement</span>(name = <span class="st">&quot;firstName&quot;</span>)</span>
+<span id="cb13-32"><a href="#cb13-32"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getFirstName</span>() {</span>
+<span id="cb13-33"><a href="#cb13-33"></a>    <span class="kw">return</span> firstName;</span>
+<span id="cb13-34"><a href="#cb13-34"></a>  }</span>
+<span id="cb13-35"><a href="#cb13-35"></a></span>
+<span id="cb13-36"><a href="#cb13-36"></a>  <span class="at">@XmlElement</span>(name = <span class="st">&quot;birthDate&quot;</span>)</span>
+<span id="cb13-37"><a href="#cb13-37"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getBirthDate</span>() {</span>
+<span id="cb13-38"><a href="#cb13-38"></a>    <span class="kw">return</span> birthDate;</span>
+<span id="cb13-39"><a href="#cb13-39"></a>  }</span>
+<span id="cb13-40"><a href="#cb13-40"></a></span>
+<span id="cb13-41"><a href="#cb13-41"></a>  <span class="at">@XmlElement</span>(name = <span class="st">&quot;ramqId&quot;</span>)</span>
+<span id="cb13-42"><a href="#cb13-42"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getRamqId</span>() {</span>
+<span id="cb13-43"><a href="#cb13-43"></a>    <span class="kw">return</span> ramqId;</span>
+<span id="cb13-44"><a href="#cb13-44"></a>  }</span>
+<span id="cb13-45"><a href="#cb13-45"></a></span>
+<span id="cb13-46"><a href="#cb13-46"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setPatseq</span>(<span class="bu">String</span> newPatseq) {</span>
+<span id="cb13-47"><a href="#cb13-47"></a>    patseq = newPatseq;</span>
+<span id="cb13-48"><a href="#cb13-48"></a>  }</span>
+<span id="cb13-49"><a href="#cb13-49"></a></span>
+<span id="cb13-50"><a href="#cb13-50"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setName</span>(<span class="bu">String</span> newName) {</span>
+<span id="cb13-51"><a href="#cb13-51"></a>    name = newName;</span>
+<span id="cb13-52"><a href="#cb13-52"></a>  }</span>
+<span id="cb13-53"><a href="#cb13-53"></a></span>
+<span id="cb13-54"><a href="#cb13-54"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setFirstName</span>(<span class="bu">String</span> newFirstName) {</span>
+<span id="cb13-55"><a href="#cb13-55"></a>    firstName = newFirstName;</span>
+<span id="cb13-56"><a href="#cb13-56"></a>  }</span>
+<span id="cb13-57"><a href="#cb13-57"></a></span>
+<span id="cb13-58"><a href="#cb13-58"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setBirthDate</span>(<span class="bu">String</span> newBirthDate) {</span>
+<span id="cb13-59"><a href="#cb13-59"></a>    birthDate = newBirthDate;</span>
+<span id="cb13-60"><a href="#cb13-60"></a>  }</span>
+<span id="cb13-61"><a href="#cb13-61"></a></span>
+<span id="cb13-62"><a href="#cb13-62"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setRamqId</span>(<span class="bu">String</span> newRamqId) {</span>
+<span id="cb13-63"><a href="#cb13-63"></a>    ramqId = newRamqId;</span>
+<span id="cb13-64"><a href="#cb13-64"></a>  }</span>
+<span id="cb13-65"><a href="#cb13-65"></a>}</span></code></pre></div>
 <h3 id="compilation-packaging-et-installation">Compilation, packaging et installation</h3>
 <p>Accélérons les choses avec un petit script pour obtenir l'archive JAR.</p>
 <pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java Patient.java -cp &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;
@@ -425,137 +426,137 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <p>Dans Mirth, aller dans Settings &gt; Resources &gt; Reload Resource. Également faire undeploy/deploy sur le canal.</p>
 <h3 id="test-du-canal-1">Test du canal</h3>
 <p>Ajoutons un <code>transformer</code> simple sur le connecteur de destination pour s'assurer que l'ensemble canal + web service fonctionne:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb15-1" title="1"><span class="va">logger</span>.<span class="at">info</span>(<span class="st">&quot;IN: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></a>
-<a class="sourceLine" id="cb15-2" title="2">msg[<span class="st">&#39;patseq&#39;</span>] <span class="op">=</span> <span class="st">&quot;54980498&quot;</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb15-3" title="3">msg[<span class="st">&#39;name&#39;</span>] <span class="op">=</span> <span class="st">&quot;Bismuth&quot;</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb15-4" title="4">msg[<span class="st">&#39;firstName&#39;</span>]  <span class="op">=</span> <span class="st">&quot;Paul&quot;</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb15-5" title="5">msg[<span class="st">&#39;birthDate&#39;</span>] <span class="op">=</span> <span class="st">&quot;1961-04-21&quot;</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb15-6" title="6">msg[<span class="st">&#39;ramqId&#39;</span>] <span class="op">=</span> <span class="st">&quot;BISP1234567&quot;</span><span class="op">;</span></a>
-<a class="sourceLine" id="cb15-7" title="7"><span class="va">logger</span>.<span class="at">info</span>(<span class="st">&quot;OUT: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb15-1"><a href="#cb15-1"></a><span class="va">logger</span>.<span class="at">info</span>(<span class="st">&quot;IN: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>msg[<span class="st">&#39;patseq&#39;</span>] <span class="op">=</span> <span class="st">&quot;54980498&quot;</span><span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a>msg[<span class="st">&#39;name&#39;</span>] <span class="op">=</span> <span class="st">&quot;Bismuth&quot;</span><span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>msg[<span class="st">&#39;firstName&#39;</span>]  <span class="op">=</span> <span class="st">&quot;Paul&quot;</span><span class="op">;</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>msg[<span class="st">&#39;birthDate&#39;</span>] <span class="op">=</span> <span class="st">&quot;1961-04-21&quot;</span><span class="op">;</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a>msg[<span class="st">&#39;ramqId&#39;</span>] <span class="op">=</span> <span class="st">&quot;BISP1234567&quot;</span><span class="op">;</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="va">logger</span>.<span class="at">info</span>(<span class="st">&quot;OUT: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span></code></pre></div>
 <p>La requête SOAP (fichier <code>soap.xml</code>):</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode xml"><code class="sourceCode xml"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;<span class="kw">?&gt;</span></a>
-<a class="sourceLine" id="cb16-2" title="2"><span class="kw">&lt;soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb16-3" title="3">  <span class="kw">&lt;soapenv:Header/&gt;</span></a>
-<a class="sourceLine" id="cb16-4" title="4">  <span class="kw">&lt;soapenv:Body&gt;</span></a>
-<a class="sourceLine" id="cb16-5" title="5">    <span class="kw">&lt;ws:getPatient&gt;</span></a>
-<a class="sourceLine" id="cb16-6" title="6">         <span class="kw">&lt;patseq&gt;</span>mon patseq<span class="kw">&lt;/patseq&gt;</span></a>
-<a class="sourceLine" id="cb16-7" title="7">         <span class="kw">&lt;name&gt;</span>Cyril<span class="kw">&lt;/name&gt;</span></a>
-<a class="sourceLine" id="cb16-8" title="8">         <span class="kw">&lt;firstName&gt;</span>firstname<span class="kw">&lt;/firstName&gt;</span></a>
-<a class="sourceLine" id="cb16-9" title="9">         <span class="kw">&lt;birthDate&gt;</span>birthdate<span class="kw">&lt;/birthDate&gt;</span></a>
-<a class="sourceLine" id="cb16-10" title="10">         <span class="kw">&lt;ramqId&gt;</span>ramqid<span class="kw">&lt;/ramqId&gt;</span></a>
-<a class="sourceLine" id="cb16-11" title="11">    <span class="kw">&lt;/ws:getPatient&gt;</span></a>
-<a class="sourceLine" id="cb16-12" title="12">  <span class="kw">&lt;/soapenv:Body&gt;</span></a>
-<a class="sourceLine" id="cb16-13" title="13"><span class="kw">&lt;/soapenv:Envelope&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;<span class="kw">?&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="kw">&lt;soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="kw">&lt;soapenv:Header/&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>  <span class="kw">&lt;soapenv:Body&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>    <span class="kw">&lt;ws:getPatient&gt;</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>         <span class="kw">&lt;patseq&gt;</span>mon patseq<span class="kw">&lt;/patseq&gt;</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a>         <span class="kw">&lt;name&gt;</span>Cyril<span class="kw">&lt;/name&gt;</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a>         <span class="kw">&lt;firstName&gt;</span>firstname<span class="kw">&lt;/firstName&gt;</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a>         <span class="kw">&lt;birthDate&gt;</span>birthdate<span class="kw">&lt;/birthDate&gt;</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a>         <span class="kw">&lt;ramqId&gt;</span>ramqid<span class="kw">&lt;/ramqId&gt;</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a>    <span class="kw">&lt;/ws:getPatient&gt;</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a>  <span class="kw">&lt;/soapenv:Body&gt;</span></span>
+<span id="cb16-13"><a href="#cb16-13"></a><span class="kw">&lt;/soapenv:Envelope&gt;</span></span></code></pre></div>
 <p>Envoi avec curl:</p>
 <pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous retourne bien les données:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode xml"><code class="sourceCode xml"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; <span class="kw">?&gt;</span></a>
-<a class="sourceLine" id="cb18-2" title="2"><span class="kw">&lt;S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb18-3" title="3">  <span class="kw">&lt;SOAP-ENV:Header&gt;&lt;/SOAP-ENV:Header&gt;</span></a>
-<a class="sourceLine" id="cb18-4" title="4">  <span class="kw">&lt;S:Body&gt;</span></a>
-<a class="sourceLine" id="cb18-5" title="5">    <span class="kw">&lt;ns2:getPatientResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb18-6" title="6">      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb18-7" title="7">        <span class="kw">&lt;patseq&gt;</span>54980498<span class="kw">&lt;/patseq&gt;</span></a>
-<a class="sourceLine" id="cb18-8" title="8">        <span class="kw">&lt;name&gt;</span>Bismuth<span class="kw">&lt;/name&gt;</span></a>
-<a class="sourceLine" id="cb18-9" title="9">        <span class="kw">&lt;firstName&gt;</span>Paul<span class="kw">&lt;/firstName&gt;</span></a>
-<a class="sourceLine" id="cb18-10" title="10">        <span class="kw">&lt;birthDate&gt;</span>1961-04-21<span class="kw">&lt;/birthDate&gt;</span></a>
-<a class="sourceLine" id="cb18-11" title="11">        <span class="kw">&lt;ramqId&gt;</span>BISP1234567<span class="kw">&lt;/ramqId&gt;</span></a>
-<a class="sourceLine" id="cb18-12" title="12">      <span class="kw">&lt;/return&gt;</span></a>
-<a class="sourceLine" id="cb18-13" title="13">    <span class="kw">&lt;/ns2:getPatientResponse&gt;</span></a>
-<a class="sourceLine" id="cb18-14" title="14">  <span class="kw">&lt;/S:Body&gt;</span></a>
-<a class="sourceLine" id="cb18-15" title="15"><span class="kw">&lt;/S:Envelope&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; <span class="kw">?&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="kw">&lt;S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="kw">&lt;SOAP-ENV:Header&gt;&lt;/SOAP-ENV:Header&gt;</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="kw">&lt;S:Body&gt;</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a>    <span class="kw">&lt;ns2:getPatientResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a>      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a>        <span class="kw">&lt;patseq&gt;</span>54980498<span class="kw">&lt;/patseq&gt;</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a>        <span class="kw">&lt;name&gt;</span>Bismuth<span class="kw">&lt;/name&gt;</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a>        <span class="kw">&lt;firstName&gt;</span>Paul<span class="kw">&lt;/firstName&gt;</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a>        <span class="kw">&lt;birthDate&gt;</span>1961-04-21<span class="kw">&lt;/birthDate&gt;</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a>        <span class="kw">&lt;ramqId&gt;</span>BISP1234567<span class="kw">&lt;/ramqId&gt;</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a>      <span class="kw">&lt;/return&gt;</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a>    <span class="kw">&lt;/ns2:getPatientResponse&gt;</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a>  <span class="kw">&lt;/S:Body&gt;</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a><span class="kw">&lt;/S:Envelope&gt;</span></span></code></pre></div>
 <p>Entre temps les WSDL et le XSD sont générés conformément à la classe <code>SDDCws</code> et <code>Patient</code>.</p>
 <h3 id="retourner-une-liste-dobjet">Retourner une liste d'objet</h3>
 <p>Il est possible de retourner une liste d'objet <code>Patient</code>. Pour cela nous devons définir une nouvelle classe <code>PatientList</code> (dans le fichier <code>PatientList.java</code>) qui contiendra des objets <code>Patient</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode java"><code class="sourceCode java"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">package</span><span class="im"> com.mirth.connect.connectors.ws;</span></a>
-<a class="sourceLine" id="cb19-2" title="2"></a>
-<a class="sourceLine" id="cb19-3" title="3"><span class="kw">import</span><span class="im"> java.io.Serializable;</span></a>
-<a class="sourceLine" id="cb19-4" title="4"><span class="kw">import</span><span class="im"> java.util.ArrayList;</span></a>
-<a class="sourceLine" id="cb19-5" title="5"></a>
-<a class="sourceLine" id="cb19-6" title="6"><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlElement;</span></a>
-<a class="sourceLine" id="cb19-7" title="7"><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlRootElement;</span></a>
-<a class="sourceLine" id="cb19-8" title="8"><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlAccessorType;</span></a>
-<a class="sourceLine" id="cb19-9" title="9"><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlAccessType;</span></a>
-<a class="sourceLine" id="cb19-10" title="10"></a>
-<a class="sourceLine" id="cb19-11" title="11"></a>
-<a class="sourceLine" id="cb19-12" title="12"><span class="at">@XmlRootElement</span>(name = <span class="st">&quot;patientList&quot;</span>)</a>
-<a class="sourceLine" id="cb19-13" title="13"><span class="at">@XmlAccessorType</span>(<span class="bu">XmlAccessType</span>.<span class="fu">NONE</span>) <span class="co">//Pas de binding automatiques</span></a>
-<a class="sourceLine" id="cb19-14" title="14"><span class="kw">public</span> <span class="kw">class</span> PatientList <span class="kw">implements</span> <span class="bu">Serializable</span> {</a>
-<a class="sourceLine" id="cb19-15" title="15"></a>
-<a class="sourceLine" id="cb19-16" title="16">  <span class="at">@XmlElement</span>(name = <span class="st">&quot;patient&quot;</span>)</a>
-<a class="sourceLine" id="cb19-17" title="17">  <span class="kw">private</span> <span class="bu">ArrayList</span>&lt;Patient&gt; patientList = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;Patient&gt;();</a>
-<a class="sourceLine" id="cb19-18" title="18"></a>
-<a class="sourceLine" id="cb19-19" title="19">  <span class="kw">public</span> <span class="bu">ArrayList</span>&lt;Patient&gt; <span class="fu">getPatientsList</span>() {</a>
-<a class="sourceLine" id="cb19-20" title="20">    <span class="kw">return</span> patientList;</a>
-<a class="sourceLine" id="cb19-21" title="21">  }</a>
-<a class="sourceLine" id="cb19-22" title="22"></a>
-<a class="sourceLine" id="cb19-23" title="23">  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setPatientList</span>(<span class="bu">ArrayList</span>&lt;Patient&gt; newPatientList) {</a>
-<a class="sourceLine" id="cb19-24" title="24">    <span class="kw">this</span>.<span class="fu">patientList</span> = newPatientList;</a>
-<a class="sourceLine" id="cb19-25" title="25">  }</a>
-<a class="sourceLine" id="cb19-26" title="26"></a>
-<a class="sourceLine" id="cb19-27" title="27">  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">addPatient</span>(Patient newPatient) {</a>
-<a class="sourceLine" id="cb19-28" title="28">    <span class="kw">this</span>.<span class="fu">patientList</span>.<span class="fu">add</span>(newPatient);</a>
-<a class="sourceLine" id="cb19-29" title="29">  }</a>
-<a class="sourceLine" id="cb19-30" title="30">}</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">package</span><span class="im"> com.mirth.connect.connectors.ws;</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="kw">import</span><span class="im"> java.io.Serializable;</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="kw">import</span><span class="im"> java.util.ArrayList;</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlElement;</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlRootElement;</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlAccessorType;</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="kw">import</span><span class="im"> javax.xml.bind.annotation.XmlAccessType;</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a></span>
+<span id="cb19-11"><a href="#cb19-11"></a></span>
+<span id="cb19-12"><a href="#cb19-12"></a><span class="at">@XmlRootElement</span>(name = <span class="st">&quot;patientList&quot;</span>)</span>
+<span id="cb19-13"><a href="#cb19-13"></a><span class="at">@XmlAccessorType</span>(<span class="bu">XmlAccessType</span>.<span class="fu">NONE</span>) <span class="co">//Pas de binding automatiques</span></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="kw">public</span> <span class="kw">class</span> PatientList <span class="kw">implements</span> <span class="bu">Serializable</span> {</span>
+<span id="cb19-15"><a href="#cb19-15"></a></span>
+<span id="cb19-16"><a href="#cb19-16"></a>  <span class="at">@XmlElement</span>(name = <span class="st">&quot;patient&quot;</span>)</span>
+<span id="cb19-17"><a href="#cb19-17"></a>  <span class="kw">private</span> <span class="bu">ArrayList</span>&lt;Patient&gt; patientList = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;Patient&gt;();</span>
+<span id="cb19-18"><a href="#cb19-18"></a></span>
+<span id="cb19-19"><a href="#cb19-19"></a>  <span class="kw">public</span> <span class="bu">ArrayList</span>&lt;Patient&gt; <span class="fu">getPatientsList</span>() {</span>
+<span id="cb19-20"><a href="#cb19-20"></a>    <span class="kw">return</span> patientList;</span>
+<span id="cb19-21"><a href="#cb19-21"></a>  }</span>
+<span id="cb19-22"><a href="#cb19-22"></a></span>
+<span id="cb19-23"><a href="#cb19-23"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setPatientList</span>(<span class="bu">ArrayList</span>&lt;Patient&gt; newPatientList) {</span>
+<span id="cb19-24"><a href="#cb19-24"></a>    <span class="kw">this</span>.<span class="fu">patientList</span> = newPatientList;</span>
+<span id="cb19-25"><a href="#cb19-25"></a>  }</span>
+<span id="cb19-26"><a href="#cb19-26"></a></span>
+<span id="cb19-27"><a href="#cb19-27"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">addPatient</span>(Patient newPatient) {</span>
+<span id="cb19-28"><a href="#cb19-28"></a>    <span class="kw">this</span>.<span class="fu">patientList</span>.<span class="fu">add</span>(newPatient);</span>
+<span id="cb19-29"><a href="#cb19-29"></a>  }</span>
+<span id="cb19-30"><a href="#cb19-30"></a>}</span></code></pre></div>
 <p>La classe <code>Patient</code> (fichier <code>Patient.java</code>) n'a besoin d'aucune modification. En revanche il faut ajuster la classe <code>SDDCws</code> (fichier <code>SDDCws.java</code>) pour parser une liste <code>PatientList</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode java"><code class="sourceCode java"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">package</span><span class="im"> com.mirth.connect.connectors.ws;</span></a>
-<a class="sourceLine" id="cb20-2" title="2"></a>
-<a class="sourceLine" id="cb20-3" title="3"><span class="kw">import</span><span class="im"> javax.jws.WebMethod;</span></a>
-<a class="sourceLine" id="cb20-4" title="4"><span class="kw">import</span><span class="im"> javax.jws.WebParam;</span></a>
-<a class="sourceLine" id="cb20-5" title="5"><span class="kw">import</span><span class="im"> javax.jws.WebService;</span></a>
-<a class="sourceLine" id="cb20-6" title="6"><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.AcceptMessage;</span></a>
-<a class="sourceLine" id="cb20-7" title="7"><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.WebServiceReceiver;</span></a>
-<a class="sourceLine" id="cb20-8" title="8"></a>
-<a class="sourceLine" id="cb20-9" title="9"><span class="co">/* Pour parser le XML */</span></a>
-<a class="sourceLine" id="cb20-10" title="10"><span class="kw">import</span><span class="im"> java.io.StringReader;</span></a>
-<a class="sourceLine" id="cb20-11" title="11"><span class="kw">import</span><span class="im"> javax.xml.bind.JAXBContext;</span></a>
-<a class="sourceLine" id="cb20-12" title="12"><span class="kw">import</span><span class="im"> javax.xml.bind.JAXBException;</span></a>
-<a class="sourceLine" id="cb20-13" title="13"><span class="kw">import</span><span class="im"> javax.xml.bind.Unmarshaller;</span></a>
-<a class="sourceLine" id="cb20-14" title="14"></a>
-<a class="sourceLine" id="cb20-15" title="15"></a>
-<a class="sourceLine" id="cb20-16" title="16"><span class="at">@WebService</span></a>
-<a class="sourceLine" id="cb20-17" title="17"><span class="kw">public</span> <span class="kw">class</span> SDDCws <span class="kw">extends</span> AcceptMessage {</a>
-<a class="sourceLine" id="cb20-18" title="18"></a>
-<a class="sourceLine" id="cb20-19" title="19">  <span class="kw">public</span> <span class="fu">SDDCws</span>(WebServiceReceiver webServiceReceiver){</a>
-<a class="sourceLine" id="cb20-20" title="20">    <span class="kw">super</span>(webServiceReceiver);</a>
-<a class="sourceLine" id="cb20-21" title="21">  }</a>
-<a class="sourceLine" id="cb20-22" title="22"></a>
-<a class="sourceLine" id="cb20-23" title="23">  <span class="co">/* Méthode &quot;getPatient&quot; et ses paramètres en entrée */</span></a>
-<a class="sourceLine" id="cb20-24" title="24">  <span class="at">@WebMethod</span>(operationName = <span class="st">&quot;getPatient&quot;</span>)</a>
-<a class="sourceLine" id="cb20-25" title="25">  <span class="kw">public</span> PatientList <span class="fu">getPatient</span>(<span class="at">@WebParam</span>(name = <span class="st">&quot;patseq&quot;</span>) <span class="bu">String</span> patseq,</a>
-<a class="sourceLine" id="cb20-26" title="26">                                <span class="at">@WebParam</span>(name = <span class="st">&quot;name&quot;</span>) <span class="bu">String</span> name,</a>
-<a class="sourceLine" id="cb20-27" title="27">                                <span class="at">@WebParam</span>(name = <span class="st">&quot;firstName&quot;</span>) <span class="bu">String</span> firstName,</a>
-<a class="sourceLine" id="cb20-28" title="28">                                <span class="at">@WebParam</span>(name = <span class="st">&quot;birthDate&quot;</span>) <span class="bu">String</span> birthDate,</a>
-<a class="sourceLine" id="cb20-29" title="29">                                <span class="at">@WebParam</span>(name = <span class="st">&quot;ramqId&quot;</span>) <span class="bu">String</span> ramqId){</a>
-<a class="sourceLine" id="cb20-30" title="30"></a>
-<a class="sourceLine" id="cb20-31" title="31">    <span class="co">/* Prépare le XML pour le connecteur Source */</span></a>
-<a class="sourceLine" id="cb20-32" title="32">    <span class="bu">String</span> data = <span class="st">&quot;&lt;?xml version=</span><span class="sc">\&quot;</span><span class="st">1.0</span><span class="sc">\&quot;</span><span class="st"> encoding=</span><span class="sc">\&quot;</span><span class="st">UTF-8</span><span class="sc">\&quot;</span><span class="st">?&gt;&lt;patient&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb20-33" title="33">    data += <span class="st">&quot;&lt;patseq&gt;&quot;</span> + patseq + <span class="st">&quot;&lt;/patseq&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb20-34" title="34">    data += <span class="st">&quot;&lt;name&gt;&quot;</span> + name + <span class="st">&quot;&lt;/name&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb20-35" title="35">    data += <span class="st">&quot;&lt;firstName&gt;&quot;</span> + firstName + <span class="st">&quot;&lt;/firstName&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb20-36" title="36">    data += <span class="st">&quot;&lt;birthDate&gt;&quot;</span> + birthDate + <span class="st">&quot;&lt;/birthDate&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb20-37" title="37">    data += <span class="st">&quot;&lt;ramqId&gt;&quot;</span> + ramqId + <span class="st">&quot;&lt;/ramqId&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb20-38" title="38">    data += <span class="st">&quot;&lt;/patient&gt;&quot;</span>;</a>
-<a class="sourceLine" id="cb20-39" title="39"></a>
-<a class="sourceLine" id="cb20-40" title="40">    <span class="co">/* Envoie le XML pour traitement */</span></a>
-<a class="sourceLine" id="cb20-41" title="41">    <span class="bu">String</span> response = webServiceReceiver.<span class="fu">processData</span>(data);</a>
-<a class="sourceLine" id="cb20-42" title="42">    PatientList patientList = <span class="kw">new</span> <span class="fu">PatientList</span>();</a>
-<a class="sourceLine" id="cb20-43" title="43"></a>
-<a class="sourceLine" id="cb20-44" title="44">    <span class="co">/* Parse le XML retourné par le canal pour une liste d&#39;objet Patient */</span></a>
-<a class="sourceLine" id="cb20-45" title="45">    <span class="kw">if</span> (response != <span class="kw">null</span>) {</a>
-<a class="sourceLine" id="cb20-46" title="46">      <span class="kw">try</span> {</a>
-<a class="sourceLine" id="cb20-47" title="47">        <span class="bu">JAXBContext</span> jaxbContext = <span class="bu">JAXBContext</span>.<span class="fu">newInstance</span>(PatientList.<span class="fu">class</span>);</a>
-<a class="sourceLine" id="cb20-48" title="48">        <span class="bu">Unmarshaller</span> unmarshaller = jaxbContext.<span class="fu">createUnmarshaller</span>();</a>
-<a class="sourceLine" id="cb20-49" title="49">        <span class="bu">StringReader</span> reader = <span class="kw">new</span> <span class="bu">StringReader</span>(response);</a>
-<a class="sourceLine" id="cb20-50" title="50">        patientList = (PatientList) unmarshaller.<span class="fu">unmarshal</span>(reader);</a>
-<a class="sourceLine" id="cb20-51" title="51">      } <span class="kw">catch</span> (<span class="bu">JAXBException</span> e) {</a>
-<a class="sourceLine" id="cb20-52" title="52">        e.<span class="fu">printStackTrace</span>();</a>
-<a class="sourceLine" id="cb20-53" title="53">      }</a>
-<a class="sourceLine" id="cb20-54" title="54">    }</a>
-<a class="sourceLine" id="cb20-55" title="55"></a>
-<a class="sourceLine" id="cb20-56" title="56">    <span class="kw">return</span> patientList;</a>
-<a class="sourceLine" id="cb20-57" title="57">  }</a>
-<a class="sourceLine" id="cb20-58" title="58">}</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">package</span><span class="im"> com.mirth.connect.connectors.ws;</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="kw">import</span><span class="im"> javax.jws.WebMethod;</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="kw">import</span><span class="im"> javax.jws.WebParam;</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="kw">import</span><span class="im"> javax.jws.WebService;</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.AcceptMessage;</span></span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="kw">import</span><span class="im"> com.mirth.connect.connectors.ws.WebServiceReceiver;</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="co">/* Pour parser le XML */</span></span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="kw">import</span><span class="im"> java.io.StringReader;</span></span>
+<span id="cb20-11"><a href="#cb20-11"></a><span class="kw">import</span><span class="im"> javax.xml.bind.JAXBContext;</span></span>
+<span id="cb20-12"><a href="#cb20-12"></a><span class="kw">import</span><span class="im"> javax.xml.bind.JAXBException;</span></span>
+<span id="cb20-13"><a href="#cb20-13"></a><span class="kw">import</span><span class="im"> javax.xml.bind.Unmarshaller;</span></span>
+<span id="cb20-14"><a href="#cb20-14"></a></span>
+<span id="cb20-15"><a href="#cb20-15"></a></span>
+<span id="cb20-16"><a href="#cb20-16"></a><span class="at">@WebService</span></span>
+<span id="cb20-17"><a href="#cb20-17"></a><span class="kw">public</span> <span class="kw">class</span> SDDCws <span class="kw">extends</span> AcceptMessage {</span>
+<span id="cb20-18"><a href="#cb20-18"></a></span>
+<span id="cb20-19"><a href="#cb20-19"></a>  <span class="kw">public</span> <span class="fu">SDDCws</span>(WebServiceReceiver webServiceReceiver){</span>
+<span id="cb20-20"><a href="#cb20-20"></a>    <span class="kw">super</span>(webServiceReceiver);</span>
+<span id="cb20-21"><a href="#cb20-21"></a>  }</span>
+<span id="cb20-22"><a href="#cb20-22"></a></span>
+<span id="cb20-23"><a href="#cb20-23"></a>  <span class="co">/* Méthode &quot;getPatient&quot; et ses paramètres en entrée */</span></span>
+<span id="cb20-24"><a href="#cb20-24"></a>  <span class="at">@WebMethod</span>(operationName = <span class="st">&quot;getPatient&quot;</span>)</span>
+<span id="cb20-25"><a href="#cb20-25"></a>  <span class="kw">public</span> PatientList <span class="fu">getPatient</span>(<span class="at">@WebParam</span>(name = <span class="st">&quot;patseq&quot;</span>) <span class="bu">String</span> patseq,</span>
+<span id="cb20-26"><a href="#cb20-26"></a>                                <span class="at">@WebParam</span>(name = <span class="st">&quot;name&quot;</span>) <span class="bu">String</span> name,</span>
+<span id="cb20-27"><a href="#cb20-27"></a>                                <span class="at">@WebParam</span>(name = <span class="st">&quot;firstName&quot;</span>) <span class="bu">String</span> firstName,</span>
+<span id="cb20-28"><a href="#cb20-28"></a>                                <span class="at">@WebParam</span>(name = <span class="st">&quot;birthDate&quot;</span>) <span class="bu">String</span> birthDate,</span>
+<span id="cb20-29"><a href="#cb20-29"></a>                                <span class="at">@WebParam</span>(name = <span class="st">&quot;ramqId&quot;</span>) <span class="bu">String</span> ramqId){</span>
+<span id="cb20-30"><a href="#cb20-30"></a></span>
+<span id="cb20-31"><a href="#cb20-31"></a>    <span class="co">/* Prépare le XML pour le connecteur Source */</span></span>
+<span id="cb20-32"><a href="#cb20-32"></a>    <span class="bu">String</span> data = <span class="st">&quot;&lt;?xml version=</span><span class="sc">\&quot;</span><span class="st">1.0</span><span class="sc">\&quot;</span><span class="st"> encoding=</span><span class="sc">\&quot;</span><span class="st">UTF-8</span><span class="sc">\&quot;</span><span class="st">?&gt;&lt;patient&gt;&quot;</span>;</span>
+<span id="cb20-33"><a href="#cb20-33"></a>    data += <span class="st">&quot;&lt;patseq&gt;&quot;</span> + patseq + <span class="st">&quot;&lt;/patseq&gt;&quot;</span>;</span>
+<span id="cb20-34"><a href="#cb20-34"></a>    data += <span class="st">&quot;&lt;name&gt;&quot;</span> + name + <span class="st">&quot;&lt;/name&gt;&quot;</span>;</span>
+<span id="cb20-35"><a href="#cb20-35"></a>    data += <span class="st">&quot;&lt;firstName&gt;&quot;</span> + firstName + <span class="st">&quot;&lt;/firstName&gt;&quot;</span>;</span>
+<span id="cb20-36"><a href="#cb20-36"></a>    data += <span class="st">&quot;&lt;birthDate&gt;&quot;</span> + birthDate + <span class="st">&quot;&lt;/birthDate&gt;&quot;</span>;</span>
+<span id="cb20-37"><a href="#cb20-37"></a>    data += <span class="st">&quot;&lt;ramqId&gt;&quot;</span> + ramqId + <span class="st">&quot;&lt;/ramqId&gt;&quot;</span>;</span>
+<span id="cb20-38"><a href="#cb20-38"></a>    data += <span class="st">&quot;&lt;/patient&gt;&quot;</span>;</span>
+<span id="cb20-39"><a href="#cb20-39"></a></span>
+<span id="cb20-40"><a href="#cb20-40"></a>    <span class="co">/* Envoie le XML pour traitement */</span></span>
+<span id="cb20-41"><a href="#cb20-41"></a>    <span class="bu">String</span> response = webServiceReceiver.<span class="fu">processData</span>(data);</span>
+<span id="cb20-42"><a href="#cb20-42"></a>    PatientList patientList = <span class="kw">new</span> <span class="fu">PatientList</span>();</span>
+<span id="cb20-43"><a href="#cb20-43"></a></span>
+<span id="cb20-44"><a href="#cb20-44"></a>    <span class="co">/* Parse le XML retourné par le canal pour une liste d&#39;objet Patient */</span></span>
+<span id="cb20-45"><a href="#cb20-45"></a>    <span class="kw">if</span> (response != <span class="kw">null</span>) {</span>
+<span id="cb20-46"><a href="#cb20-46"></a>      <span class="kw">try</span> {</span>
+<span id="cb20-47"><a href="#cb20-47"></a>        <span class="bu">JAXBContext</span> jaxbContext = <span class="bu">JAXBContext</span>.<span class="fu">newInstance</span>(PatientList.<span class="fu">class</span>);</span>
+<span id="cb20-48"><a href="#cb20-48"></a>        <span class="bu">Unmarshaller</span> unmarshaller = jaxbContext.<span class="fu">createUnmarshaller</span>();</span>
+<span id="cb20-49"><a href="#cb20-49"></a>        <span class="bu">StringReader</span> reader = <span class="kw">new</span> <span class="bu">StringReader</span>(response);</span>
+<span id="cb20-50"><a href="#cb20-50"></a>        patientList = (PatientList) unmarshaller.<span class="fu">unmarshal</span>(reader);</span>
+<span id="cb20-51"><a href="#cb20-51"></a>      } <span class="kw">catch</span> (<span class="bu">JAXBException</span> e) {</span>
+<span id="cb20-52"><a href="#cb20-52"></a>        e.<span class="fu">printStackTrace</span>();</span>
+<span id="cb20-53"><a href="#cb20-53"></a>      }</span>
+<span id="cb20-54"><a href="#cb20-54"></a>    }</span>
+<span id="cb20-55"><a href="#cb20-55"></a></span>
+<span id="cb20-56"><a href="#cb20-56"></a>    <span class="kw">return</span> patientList;</span>
+<span id="cb20-57"><a href="#cb20-57"></a>  }</span>
+<span id="cb20-58"><a href="#cb20-58"></a>}</span></code></pre></div>
 <h3 id="compilation-packaging-et-installation-1">Compilation, packaging et installation</h3>
 <p>Il faut ajouter le fichier <code>PatientList.java</code>.</p>
 <pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java Patient.java PatientList.java -cp &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;
@@ -570,39 +571,39 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <p>Dans Mirth, aller dans Settings &gt; Resources &gt; Reload Resource Également faire undeploy/deploy sur le canal.</p>
 <h3 id="test-du-canal-2">Test du canal</h3>
 <p>Modifions le <code>transformer</code> sur le connecteur de destination pour retourner les données de deux objets <code>Patient</code> en XML:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb22-1" title="1"><span class="va">logger</span>.<span class="at">info</span>(<span class="st">&quot;IN: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></a>
-<a class="sourceLine" id="cb22-2" title="2"></a>
-<a class="sourceLine" id="cb22-3" title="3"><span class="kw">var</span> tmp <span class="op">=</span> <span class="kw">new</span> <span class="at">XML</span>(<span class="st">&#39;&lt;patientList&gt;&lt;/patientList&gt;&#39;</span>)<span class="op">;</span></a>
-<a class="sourceLine" id="cb22-4" title="4"><span class="va">tmp</span>.<span class="at">appendChild</span>(<span class="kw">new</span> <span class="at">XML</span>(<span class="st">&#39;&lt;patient&gt;&lt;patseq&gt;54980498&lt;/patseq&gt;&lt;name&gt;Bismuth&lt;/name&gt;&lt;firstName&gt;Paul&lt;/firstName&gt;&lt;birthDate&gt;1961-04-21&lt;/birthDate&gt;&lt;ramqId&gt;BISP1234567&lt;/ramqId&gt;&lt;/patient&gt;&#39;</span>))<span class="op">;</span></a>
-<a class="sourceLine" id="cb22-5" title="5"><span class="va">tmp</span>.<span class="at">appendChild</span>(<span class="kw">new</span> <span class="at">XML</span>(<span class="st">&#39;&lt;patient&gt;&lt;patseq&gt;97800135&lt;/patseq&gt;&lt;name&gt;Norris&lt;/name&gt;&lt;firstName&gt;Chuck&lt;/firstName&gt;&lt;birthDate&gt;1945-07-23&lt;/birthDate&gt;&lt;ramqId&gt;NORC9876541&lt;/ramqId&gt;&lt;/patient&gt;&#39;</span>))<span class="op">;</span></a>
-<a class="sourceLine" id="cb22-6" title="6"></a>
-<a class="sourceLine" id="cb22-7" title="7">msg <span class="op">=</span> tmp<span class="op">;</span></a>
-<a class="sourceLine" id="cb22-8" title="8"><span class="va">logger</span>.<span class="at">info</span>(<span class="st">&quot;OUT: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb22-1"><a href="#cb22-1"></a><span class="va">logger</span>.<span class="at">info</span>(<span class="st">&quot;IN: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="kw">var</span> tmp <span class="op">=</span> <span class="kw">new</span> <span class="at">XML</span>(<span class="st">&#39;&lt;patientList&gt;&lt;/patientList&gt;&#39;</span>)<span class="op">;</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="va">tmp</span>.<span class="at">appendChild</span>(<span class="kw">new</span> <span class="at">XML</span>(<span class="st">&#39;&lt;patient&gt;&lt;patseq&gt;54980498&lt;/patseq&gt;&lt;name&gt;Bismuth&lt;/name&gt;&lt;firstName&gt;Paul&lt;/firstName&gt;&lt;birthDate&gt;1961-04-21&lt;/birthDate&gt;&lt;ramqId&gt;BISP1234567&lt;/ramqId&gt;&lt;/patient&gt;&#39;</span>))<span class="op">;</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="va">tmp</span>.<span class="at">appendChild</span>(<span class="kw">new</span> <span class="at">XML</span>(<span class="st">&#39;&lt;patient&gt;&lt;patseq&gt;97800135&lt;/patseq&gt;&lt;name&gt;Norris&lt;/name&gt;&lt;firstName&gt;Chuck&lt;/firstName&gt;&lt;birthDate&gt;1945-07-23&lt;/birthDate&gt;&lt;ramqId&gt;NORC9876541&lt;/ramqId&gt;&lt;/patient&gt;&#39;</span>))<span class="op">;</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a></span>
+<span id="cb22-7"><a href="#cb22-7"></a>msg <span class="op">=</span> tmp<span class="op">;</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a><span class="va">logger</span>.<span class="at">info</span>(<span class="st">&quot;OUT: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span></code></pre></div>
 <p>En renvoyant la même requête que précédemment (les paramètres d'entrée n'ayant pas changé), le canal nous retourne les données suivantes:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode xml"><code class="sourceCode xml"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; <span class="kw">?&gt;</span></a>
-<a class="sourceLine" id="cb23-2" title="2"><span class="kw">&lt;S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb23-3" title="3">  <span class="kw">&lt;SOAP-ENV:Header&gt;&lt;/SOAP-ENV:Header&gt;</span></a>
-<a class="sourceLine" id="cb23-4" title="4">  <span class="kw">&lt;S:Body&gt;</span></a>
-<a class="sourceLine" id="cb23-5" title="5">    <span class="kw">&lt;ns2:getPatientResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb23-6" title="6">      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb23-7" title="7">        <span class="kw">&lt;patient&gt;</span></a>
-<a class="sourceLine" id="cb23-8" title="8">          <span class="kw">&lt;patseq&gt;</span>54980498<span class="kw">&lt;/patseq&gt;</span></a>
-<a class="sourceLine" id="cb23-9" title="9">          <span class="kw">&lt;name&gt;</span>Bismuth<span class="kw">&lt;/name&gt;</span></a>
-<a class="sourceLine" id="cb23-10" title="10">          <span class="kw">&lt;firstName&gt;</span>Paul<span class="kw">&lt;/firstName&gt;</span></a>
-<a class="sourceLine" id="cb23-11" title="11">          <span class="kw">&lt;birthDate&gt;</span>1961-04-21<span class="kw">&lt;/birthDate&gt;</span></a>
-<a class="sourceLine" id="cb23-12" title="12">          <span class="kw">&lt;ramqId&gt;</span>BISP1234567<span class="kw">&lt;/ramqId&gt;</span></a>
-<a class="sourceLine" id="cb23-13" title="13">        <span class="kw">&lt;/patient&gt;</span></a>
-<a class="sourceLine" id="cb23-14" title="14">        <span class="kw">&lt;patient&gt;</span></a>
-<a class="sourceLine" id="cb23-15" title="15">          <span class="kw">&lt;patseq&gt;</span>97800135<span class="kw">&lt;/patseq&gt;</span></a>
-<a class="sourceLine" id="cb23-16" title="16">          <span class="kw">&lt;name&gt;</span>Norris<span class="kw">&lt;/name&gt;</span></a>
-<a class="sourceLine" id="cb23-17" title="17">          <span class="kw">&lt;firstName&gt;</span>Chuck<span class="kw">&lt;/firstName&gt;</span></a>
-<a class="sourceLine" id="cb23-18" title="18">          <span class="kw">&lt;birthDate&gt;</span>1945-07-23<span class="kw">&lt;/birthDate&gt;</span></a>
-<a class="sourceLine" id="cb23-19" title="19">          <span class="kw">&lt;ramqId&gt;</span>NORC9876541<span class="kw">&lt;/ramqId&gt;</span></a>
-<a class="sourceLine" id="cb23-20" title="20">        <span class="kw">&lt;/patient&gt;</span></a>
-<a class="sourceLine" id="cb23-21" title="21">      <span class="kw">&lt;/return&gt;</span></a>
-<a class="sourceLine" id="cb23-22" title="22">    <span class="kw">&lt;/ns2:getPatientResponse&gt;</span></a>
-<a class="sourceLine" id="cb23-23" title="23">  <span class="kw">&lt;/S:Body&gt;</span></a>
-<a class="sourceLine" id="cb23-24" title="24"><span class="kw">&lt;/S:Envelope&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; <span class="kw">?&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="kw">&lt;S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="kw">&lt;SOAP-ENV:Header&gt;&lt;/SOAP-ENV:Header&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>  <span class="kw">&lt;S:Body&gt;</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a>    <span class="kw">&lt;ns2:getPatientResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb23-6"><a href="#cb23-6"></a>      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb23-7"><a href="#cb23-7"></a>        <span class="kw">&lt;patient&gt;</span></span>
+<span id="cb23-8"><a href="#cb23-8"></a>          <span class="kw">&lt;patseq&gt;</span>54980498<span class="kw">&lt;/patseq&gt;</span></span>
+<span id="cb23-9"><a href="#cb23-9"></a>          <span class="kw">&lt;name&gt;</span>Bismuth<span class="kw">&lt;/name&gt;</span></span>
+<span id="cb23-10"><a href="#cb23-10"></a>          <span class="kw">&lt;firstName&gt;</span>Paul<span class="kw">&lt;/firstName&gt;</span></span>
+<span id="cb23-11"><a href="#cb23-11"></a>          <span class="kw">&lt;birthDate&gt;</span>1961-04-21<span class="kw">&lt;/birthDate&gt;</span></span>
+<span id="cb23-12"><a href="#cb23-12"></a>          <span class="kw">&lt;ramqId&gt;</span>BISP1234567<span class="kw">&lt;/ramqId&gt;</span></span>
+<span id="cb23-13"><a href="#cb23-13"></a>        <span class="kw">&lt;/patient&gt;</span></span>
+<span id="cb23-14"><a href="#cb23-14"></a>        <span class="kw">&lt;patient&gt;</span></span>
+<span id="cb23-15"><a href="#cb23-15"></a>          <span class="kw">&lt;patseq&gt;</span>97800135<span class="kw">&lt;/patseq&gt;</span></span>
+<span id="cb23-16"><a href="#cb23-16"></a>          <span class="kw">&lt;name&gt;</span>Norris<span class="kw">&lt;/name&gt;</span></span>
+<span id="cb23-17"><a href="#cb23-17"></a>          <span class="kw">&lt;firstName&gt;</span>Chuck<span class="kw">&lt;/firstName&gt;</span></span>
+<span id="cb23-18"><a href="#cb23-18"></a>          <span class="kw">&lt;birthDate&gt;</span>1945-07-23<span class="kw">&lt;/birthDate&gt;</span></span>
+<span id="cb23-19"><a href="#cb23-19"></a>          <span class="kw">&lt;ramqId&gt;</span>NORC9876541<span class="kw">&lt;/ramqId&gt;</span></span>
+<span id="cb23-20"><a href="#cb23-20"></a>        <span class="kw">&lt;/patient&gt;</span></span>
+<span id="cb23-21"><a href="#cb23-21"></a>      <span class="kw">&lt;/return&gt;</span></span>
+<span id="cb23-22"><a href="#cb23-22"></a>    <span class="kw">&lt;/ns2:getPatientResponse&gt;</span></span>
+<span id="cb23-23"><a href="#cb23-23"></a>  <span class="kw">&lt;/S:Body&gt;</span></span>
+<span id="cb23-24"><a href="#cb23-24"></a><span class="kw">&lt;/S:Envelope&gt;</span></span></code></pre></div>
 <h2 id="sources">Sources</h2>
 <ul>
 <li><a href="http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1">http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1</a></li>

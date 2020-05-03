@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>FPGA et afficheur 7 segments: introduction - C. Boyer</title>
-  <meta name="description" content="Pilotage d'un afficheur 7 segments avec un FPGA et Verilog." />
+  <meta name="description" content="<p>Pilotage d'un afficheur 7 segments avec un FPGA et Verilog.</p>" />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="fpga, afficheur, led, verilog" />
   <link rel="canonical" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-introduction" />
   <meta property="og:title" content="FPGA et afficheur 7 segments: introduction - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Pilotage d'un afficheur 7 segments avec un FPGA et Verilog." />
+  <meta property="og:description" content="<p>Pilotage d'un afficheur 7 segments avec un FPGA et Verilog.</p>" />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2019-01-06T15:23:31-04:00" />
@@ -30,26 +30,27 @@
       div.column{display: inline-block; vertical-align: top; width: 50%;}
   </style>
   <style>
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -61,7 +62,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-le
 div.sourceCode
   { color: #1f1c1b; background-color: #ffffff; }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span. { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
@@ -145,14 +146,14 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 id="circuit-de-lafficheur-7-segments">Circuit de l’afficheur 7 segments</h2>
 <p>Pour utiliser un afficheur 7 segments, nous devons d’abord nous attarder sur le fonctionnement de celui-ci. Il s’agit d’un ensemble de diodes électroluminescentes (DEL ou LED en anglais) disposées de façon à pouvoir représenter un chiffre entre 0 et 9 ainsi que certaines lettres. La principale caractéristique d’une diode est qu’elle ne laisse passer le courant que dans un seul sens : de l’anode (pôle positif) vers la cathode (pole négatif). Les diodes électroluminescentes ont la particularité d’émettre un rayonnement lumineux lorsqu’elles sont traversées par un courant électrique.</p>
 <figure>
-<img src="7segments.jpg" alt="Afficheur 7 segments à quatre digits" /><figcaption>Afficheur 7 segments à quatre digits</figcaption>
+<img src="7segments.jpg" alt="" /><figcaption>Afficheur 7 segments à quatre digits</figcaption>
 </figure>
 <figure>
-<img src="7segments_back.jpg" alt="Arrière de l&#39;afficheur" /><figcaption>Arrière de l'afficheur</figcaption>
+<img src="7segments_back.jpg" alt="" /><figcaption>Arrière de l'afficheur</figcaption>
 </figure>
 <p>Nous avons donc à faire à un composant polarisé: ceci implique de différencier l’anode de la cathode pour chaque segments afin d’établir le schéma de l’afficheur et être en mesure de le faire fonctionner. Commençons par établir une nomenclature des broches de l’afficheur:</p>
 <figure>
-<img src="7segments_schema.png" alt="Brochage de l&#39;afficheur" /><figcaption>Brochage de l'afficheur</figcaption>
+<img src="7segments_schema.png" alt="" /><figcaption>Brochage de l'afficheur</figcaption>
 </figure>
 <p>Déterminons les paires de broches permettant d’activer chaque segment. Pour cela nous allons procéder par essai/erreur en appliquant une faible tension (1V suffira) depuis un multimètre ou une autre source de faible intensité comme le FPGA avec ses broches VCC et GND. Une plaque de prototypage avec des câbles Dupont est recommandée pour cette étape ainsi que pour connecter le FPGA à l'afficheur.</p>
 <p>Nous prendrons en note chacun de nos essais afin de nous assurer de tester toutes les combinaisons de broches et leur polarité. Dès qu’un segment s’allume, nous annoterons sur le schéma les broches correspondantes. Pour respecter le sens de déplacement des électrons (du pôle positif vers le pôle négatif) nous adopterons la convention suivante :</p>
@@ -161,7 +162,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <li>le deuxième caractère : cathode (pôle négatif)</li>
 </ul>
 <figure>
-<img src="7segments_schema_labels.png" alt="Brochage de l&#39;afficheur avec segments annotés" /><figcaption>Brochage de l'afficheur avec segments annotés</figcaption>
+<img src="7segments_schema_labels.png" alt="" /><figcaption>Brochage de l'afficheur avec segments annotés</figcaption>
 </figure>
 <p>Rappelons que par convention le premier caractère de chaque segment représente l’anode (pôle positif) et le deuxième la cathode (pôle négatif). Le schéma obtenu peut différer de celui des autres afficheurs et de celui du lecteur.</p>
 <p>Nous sommes maintenant en mesure d’utiliser l’afficheur car nous avons identifié l’anode et la cathode de chaque segment.</p>
@@ -169,139 +170,139 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Ce mode de fonctionnement va poser un problème de taille : un FPGA n’est pas capable de faire office d’interrupteur pour fermer ou ouvrir le circuit, il peu uniquement générer une tension ou non (un 1 ou un 0). Ce problème se poserait également dans le cas d’un afficheur à cathode commune mais dans une moindre mesure: il y aurait seulement 4 cathodes (une par afficheur) à gérer contre 8 dans notre cas (afficheurs à anode commune).</p>
 <p>Pour contourner ce problème, nous allons utiliser un transistor à jonction NPN, le 2N3904, pour chaque cathode. D'autres transistors NPN comme le 2N2222 peuvent être utilisés.</p>
 <figure>
-<img src="schema.png" alt="Schéma" /><figcaption>Schéma</figcaption>
+<img src="schema.png" alt="" /><figcaption>Schéma</figcaption>
 </figure>
 <p>Notez que nous utilisons certaines sorties du FPGA directement comme alimentation pour les anodes 2, A, B et E. Cette configuration n'est pas recommandée mais permet d'obtenir un montage très simple et fonctionnel pour travailler avec un FPGA et Verilog. L'idéal serait d'utiliser une source d'alimentation externe avec une résistance pour chaque cathode en les contrôlant avec un transistor, comme c'est le cas pour les cathodes. Également, nos 8 transistors pourrait être remplacés pour un circuit <a href="http://www.ti.com/lit/ds/symlink/uln2803a.pdf">ULN2803A</a> plus compact.</p>
 <figure>
-<img src="breadboard.jpg" alt="Montage" /><figcaption>Montage</figcaption>
+<img src="breadboard.jpg" alt="" /><figcaption>Montage</figcaption>
 </figure>
 <h2 id="pilotage-dun-afficheur">Pilotage d'un afficheur</h2>
 <p>Maintenant que nous connaissons l’anode et la cathode de chaque segment, il va falloir les relier aux broches du FPGA et implémenter la partie logique en Verilog qui permettra d’appliquer une tension ou non sur les segments voulus.</p>
 <p>Commençons par définir un module nommé SevenSegment avec pour entrée le signal issu de l’horloge du FPGA (50 MHz) et 9 sorties (1 cathode pour chacun des 7 segments, 1 pour l’anode commune et 1 pour la cathode du point). Nous détaillerons plus tard l'utilité du signal d'horloge.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb1-1" title="1"><span class="co">/* module */</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">module</span> SevenSegment (</a>
-<a class="sourceLine" id="cb1-3" title="3">    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb1-4" title="4">    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></a>
-<a class="sourceLine" id="cb1-5" title="5">);</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">/* module */</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">module</span> SevenSegment (</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>);</span></code></pre></div>
 <p>Remarquons que l'indexation de <code>DISPLAY_1</code> se fait dans le sens inverse des tableaux que l'on retrouve dans des langages tels que le C. Ainsi, l'indice 0 représente la valeur la plus à droite (bit de poids faible) et l'indice 8 la valeur la plus à gauche (bit de poids fort). On pourrait dire qu'un registre vectoriel se lit de gauche à droite. Maintenant que notre module est déclaré, il nous faut un registre capable de stocker 9 bits pour contrôler nos 9 sorties (1 bit par sortie) :</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb2-1" title="1"><span class="co">/* module */</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw">module</span> SevenSegment (</a>
-<a class="sourceLine" id="cb2-3" title="3">    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb2-4" title="4">    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></a>
-<a class="sourceLine" id="cb2-5" title="5">);</a>
-<a class="sourceLine" id="cb2-6" title="6"></a>
-<a class="sourceLine" id="cb2-7" title="7">    <span class="co">/* reg */</span></a>
-<a class="sourceLine" id="cb2-8" title="8">    <span class="co">//Désactive tout par défaut</span></a>
-<a class="sourceLine" id="cb2-9" title="9">    <span class="dt">reg</span> [<span class="dv">8</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_leds = <span class="bn">9&#39;b000000000</span>;</a>
-<a class="sourceLine" id="cb2-10" title="10"></a>
-<a class="sourceLine" id="cb2-11" title="11">    <span class="co">/* assign */</span></a>
-<a class="sourceLine" id="cb2-12" title="12">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">0</span>] = display_<span class="dv">1</span>_leds[<span class="dv">0</span>]; <span class="co">//E (anode commune)</span></a>
-<a class="sourceLine" id="cb2-13" title="13">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">1</span>] = display_<span class="dv">1</span>_leds[<span class="dv">1</span>]; <span class="co">//1</span></a>
-<a class="sourceLine" id="cb2-14" title="14">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">2</span>] = display_<span class="dv">1</span>_leds[<span class="dv">2</span>]; <span class="co">//C</span></a>
-<a class="sourceLine" id="cb2-15" title="15">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">3</span>] = display_<span class="dv">1</span>_leds[<span class="dv">3</span>]; <span class="co">//3</span></a>
-<a class="sourceLine" id="cb2-16" title="16">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">4</span>] = display_<span class="dv">1</span>_leds[<span class="dv">4</span>]; <span class="co">//4</span></a>
-<a class="sourceLine" id="cb2-17" title="17">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">5</span>] = display_<span class="dv">1</span>_leds[<span class="dv">5</span>]; <span class="co">//5 (le point)</span></a>
-<a class="sourceLine" id="cb2-18" title="18">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">6</span>] = display_<span class="dv">1</span>_leds[<span class="dv">6</span>]; <span class="co">//6</span></a>
-<a class="sourceLine" id="cb2-19" title="19">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">7</span>] = display_<span class="dv">1</span>_leds[<span class="dv">7</span>]; <span class="co">//7</span></a>
-<a class="sourceLine" id="cb2-20" title="20">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">8</span>] = display_<span class="dv">1</span>_leds[<span class="dv">8</span>]; <span class="co">//D</span></a>
-<a class="sourceLine" id="cb2-21" title="21"><span class="kw">endmodule</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">/* module */</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">module</span> SevenSegment (</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>);</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="co">/* reg */</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>    <span class="co">//Désactive tout par défaut</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    <span class="dt">reg</span> [<span class="dv">8</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_leds = <span class="bn">9&#39;b000000000</span>;</span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="co">/* assign */</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">0</span>] = display_<span class="dv">1</span>_leds[<span class="dv">0</span>]; <span class="co">//E (anode commune)</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">1</span>] = display_<span class="dv">1</span>_leds[<span class="dv">1</span>]; <span class="co">//1</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">2</span>] = display_<span class="dv">1</span>_leds[<span class="dv">2</span>]; <span class="co">//C</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">3</span>] = display_<span class="dv">1</span>_leds[<span class="dv">3</span>]; <span class="co">//3</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">4</span>] = display_<span class="dv">1</span>_leds[<span class="dv">4</span>]; <span class="co">//4</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">5</span>] = display_<span class="dv">1</span>_leds[<span class="dv">5</span>]; <span class="co">//5 (le point)</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">6</span>] = display_<span class="dv">1</span>_leds[<span class="dv">6</span>]; <span class="co">//6</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">7</span>] = display_<span class="dv">1</span>_leds[<span class="dv">7</span>]; <span class="co">//7</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">8</span>] = display_<span class="dv">1</span>_leds[<span class="dv">8</span>]; <span class="co">//D</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="kw">endmodule</span></span></code></pre></div>
 <p>Les assignations registre-sortie vont nous permettre de contrôler l’état des sorties du FPGA en affectant une valeur (0 ou 1) a chaque registre. Il va falloir indiquer à Quartus quelle sortie de notre module <code>DISPLAY_1</code> est assignée à quelle sortie physique du FPGA à l’aide du Pin Planner.</p>
 <p>Affichons maintenant le chiffre 0  en activant les sorties reliées aux segments E6, E7, EC, ED, E1 et E4:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb3-1" title="1"><span class="co">/* module */</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw">module</span> SevenSegment (</a>
-<a class="sourceLine" id="cb3-3" title="3">    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb3-4" title="4">    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></a>
-<a class="sourceLine" id="cb3-5" title="5">);</a>
-<a class="sourceLine" id="cb3-6" title="6"></a>
-<a class="sourceLine" id="cb3-7" title="7">    <span class="co">/* reg */</span></a>
-<a class="sourceLine" id="cb3-8" title="8">    <span class="co">//Désactive tout par défaut</span></a>
-<a class="sourceLine" id="cb3-9" title="9">    <span class="dt">reg</span> [<span class="dv">8</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_leds = <span class="bn">9&#39;b000000000</span>;</a>
-<a class="sourceLine" id="cb3-10" title="10"></a>
-<a class="sourceLine" id="cb3-11" title="11">    <span class="co">/* assign */</span></a>
-<a class="sourceLine" id="cb3-12" title="12">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">0</span>] = display_<span class="dv">1</span>_leds[<span class="dv">0</span>]; <span class="co">//E (anode commune)</span></a>
-<a class="sourceLine" id="cb3-13" title="13">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">1</span>] = display_<span class="dv">1</span>_leds[<span class="dv">1</span>]; <span class="co">//1</span></a>
-<a class="sourceLine" id="cb3-14" title="14">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">2</span>] = display_<span class="dv">1</span>_leds[<span class="dv">2</span>]; <span class="co">//C</span></a>
-<a class="sourceLine" id="cb3-15" title="15">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">3</span>] = display_<span class="dv">1</span>_leds[<span class="dv">3</span>]; <span class="co">//3</span></a>
-<a class="sourceLine" id="cb3-16" title="16">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">4</span>] = display_<span class="dv">1</span>_leds[<span class="dv">4</span>]; <span class="co">//4</span></a>
-<a class="sourceLine" id="cb3-17" title="17">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">5</span>] = display_<span class="dv">1</span>_leds[<span class="dv">5</span>]; <span class="co">//5 (le point)</span></a>
-<a class="sourceLine" id="cb3-18" title="18">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">6</span>] = display_<span class="dv">1</span>_leds[<span class="dv">6</span>]; <span class="co">//6</span></a>
-<a class="sourceLine" id="cb3-19" title="19">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">7</span>] = display_<span class="dv">1</span>_leds[<span class="dv">7</span>]; <span class="co">//7</span></a>
-<a class="sourceLine" id="cb3-20" title="20">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">8</span>] = display_<span class="dv">1</span>_leds[<span class="dv">8</span>]; <span class="co">//D</span></a>
-<a class="sourceLine" id="cb3-21" title="21"></a>
-<a class="sourceLine" id="cb3-22" title="22">    <span class="co">/* always */</span></a>
-<a class="sourceLine" id="cb3-23" title="23">    <span class="kw">always</span> @ (<span class="kw">posedge</span> CLOCK_<span class="dv">50</span>) <span class="kw">begin</span></a>
-<a class="sourceLine" id="cb3-24" title="24"></a>
-<a class="sourceLine" id="cb3-25" title="25">        <span class="co">//Active E (anode commune)</span></a>
-<a class="sourceLine" id="cb3-26" title="26">        display_<span class="dv">1</span>_leds[<span class="dv">0</span>] &lt;= <span class="bn">1&#39;b1</span>;</a>
-<a class="sourceLine" id="cb3-27" title="27"></a>
-<a class="sourceLine" id="cb3-28" title="28">        <span class="co">//Chiffre 0</span></a>
-<a class="sourceLine" id="cb3-29" title="29">        display_<span class="dv">1</span>_leds[<span class="dv">6</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active 6, E6 devient actif</span></a>
-<a class="sourceLine" id="cb3-30" title="30">        display_<span class="dv">1</span>_leds[<span class="dv">7</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active 7, E7 devient actif</span></a>
-<a class="sourceLine" id="cb3-31" title="31">        display_<span class="dv">1</span>_leds[<span class="dv">2</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active C, EC devient actif</span></a>
-<a class="sourceLine" id="cb3-32" title="32">        display_<span class="dv">1</span>_leds[<span class="dv">8</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active D, ED devient actif</span></a>
-<a class="sourceLine" id="cb3-33" title="33">        display_<span class="dv">1</span>_leds[<span class="dv">1</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active 1, E1 devient actif</span></a>
-<a class="sourceLine" id="cb3-34" title="34">        display_<span class="dv">1</span>_leds[<span class="dv">4</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active 4, E4 devient actif</span></a>
-<a class="sourceLine" id="cb3-35" title="35"></a>
-<a class="sourceLine" id="cb3-36" title="36">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb3-37" title="37"></a>
-<a class="sourceLine" id="cb3-38" title="38"><span class="kw">endmodule</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">/* module */</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">module</span> SevenSegment (</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>);</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="co">/* reg */</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a>    <span class="co">//Désactive tout par défaut</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a>    <span class="dt">reg</span> [<span class="dv">8</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_leds = <span class="bn">9&#39;b000000000</span>;</span>
+<span id="cb3-10"><a href="#cb3-10"></a></span>
+<span id="cb3-11"><a href="#cb3-11"></a>    <span class="co">/* assign */</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">0</span>] = display_<span class="dv">1</span>_leds[<span class="dv">0</span>]; <span class="co">//E (anode commune)</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">1</span>] = display_<span class="dv">1</span>_leds[<span class="dv">1</span>]; <span class="co">//1</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">2</span>] = display_<span class="dv">1</span>_leds[<span class="dv">2</span>]; <span class="co">//C</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">3</span>] = display_<span class="dv">1</span>_leds[<span class="dv">3</span>]; <span class="co">//3</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">4</span>] = display_<span class="dv">1</span>_leds[<span class="dv">4</span>]; <span class="co">//4</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">5</span>] = display_<span class="dv">1</span>_leds[<span class="dv">5</span>]; <span class="co">//5 (le point)</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">6</span>] = display_<span class="dv">1</span>_leds[<span class="dv">6</span>]; <span class="co">//6</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">7</span>] = display_<span class="dv">1</span>_leds[<span class="dv">7</span>]; <span class="co">//7</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span>[<span class="dv">8</span>] = display_<span class="dv">1</span>_leds[<span class="dv">8</span>]; <span class="co">//D</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a></span>
+<span id="cb3-22"><a href="#cb3-22"></a>    <span class="co">/* always */</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a>    <span class="kw">always</span> @ (<span class="kw">posedge</span> CLOCK_<span class="dv">50</span>) <span class="kw">begin</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a></span>
+<span id="cb3-25"><a href="#cb3-25"></a>        <span class="co">//Active E (anode commune)</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a>        display_<span class="dv">1</span>_leds[<span class="dv">0</span>] &lt;= <span class="bn">1&#39;b1</span>;</span>
+<span id="cb3-27"><a href="#cb3-27"></a></span>
+<span id="cb3-28"><a href="#cb3-28"></a>        <span class="co">//Chiffre 0</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a>        display_<span class="dv">1</span>_leds[<span class="dv">6</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active 6, E6 devient actif</span></span>
+<span id="cb3-30"><a href="#cb3-30"></a>        display_<span class="dv">1</span>_leds[<span class="dv">7</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active 7, E7 devient actif</span></span>
+<span id="cb3-31"><a href="#cb3-31"></a>        display_<span class="dv">1</span>_leds[<span class="dv">2</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active C, EC devient actif</span></span>
+<span id="cb3-32"><a href="#cb3-32"></a>        display_<span class="dv">1</span>_leds[<span class="dv">8</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active D, ED devient actif</span></span>
+<span id="cb3-33"><a href="#cb3-33"></a>        display_<span class="dv">1</span>_leds[<span class="dv">1</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active 1, E1 devient actif</span></span>
+<span id="cb3-34"><a href="#cb3-34"></a>        display_<span class="dv">1</span>_leds[<span class="dv">4</span>] &lt;= <span class="bn">1&#39;b1</span>; <span class="co">//Active 4, E4 devient actif</span></span>
+<span id="cb3-35"><a href="#cb3-35"></a></span>
+<span id="cb3-36"><a href="#cb3-36"></a>    <span class="kw">end</span></span>
+<span id="cb3-37"><a href="#cb3-37"></a></span>
+<span id="cb3-38"><a href="#cb3-38"></a><span class="kw">endmodule</span></span></code></pre></div>
 <p>Il est tout à fait possible de simplifier le code comme suit:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb4-1" title="1"><span class="co">/* module */</span></a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="kw">module</span> SevenSegment (</a>
-<a class="sourceLine" id="cb4-3" title="3">    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb4-4" title="4">    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></a>
-<a class="sourceLine" id="cb4-5" title="5">);</a>
-<a class="sourceLine" id="cb4-6" title="6"></a>
-<a class="sourceLine" id="cb4-7" title="7">    <span class="co">/* reg */</span></a>
-<a class="sourceLine" id="cb4-8" title="8">    <span class="co">//Désactive tout par défaut</span></a>
-<a class="sourceLine" id="cb4-9" title="9">    <span class="dt">reg</span> [<span class="dv">8</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_leds = <span class="bn">9&#39;b000000000</span>;</a>
-<a class="sourceLine" id="cb4-10" title="10"></a>
-<a class="sourceLine" id="cb4-11" title="11">    <span class="co">/* assign */</span></a>
-<a class="sourceLine" id="cb4-12" title="12">    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span> = display_<span class="dv">1</span>_leds;</a>
-<a class="sourceLine" id="cb4-13" title="13"></a>
-<a class="sourceLine" id="cb4-14" title="14">    <span class="co">/* always */</span></a>
-<a class="sourceLine" id="cb4-15" title="15">    <span class="kw">always</span> @ (<span class="kw">posedge</span> CLOCK_<span class="dv">50</span>) <span class="kw">begin</span></a>
-<a class="sourceLine" id="cb4-16" title="16"></a>
-<a class="sourceLine" id="cb4-17" title="17">        <span class="co">//Chiffre 0</span></a>
-<a class="sourceLine" id="cb4-18" title="18">        display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111010111</span>;</a>
-<a class="sourceLine" id="cb4-19" title="19"></a>
-<a class="sourceLine" id="cb4-20" title="20">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-21" title="21"></a>
-<a class="sourceLine" id="cb4-22" title="22"><span class="kw">endmodule</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">/* module */</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">module</span> SevenSegment (</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="dt">output</span> [<span class="dv">8</span>:<span class="dv">0</span>] DISPLAY_<span class="dv">1</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>);</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a>    <span class="co">/* reg */</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>    <span class="co">//Désactive tout par défaut</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>    <span class="dt">reg</span> [<span class="dv">8</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_leds = <span class="bn">9&#39;b000000000</span>;</span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a>    <span class="co">/* assign */</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>    <span class="kw">assign</span> DISPLAY_<span class="dv">1</span> = display_<span class="dv">1</span>_leds;</span>
+<span id="cb4-13"><a href="#cb4-13"></a></span>
+<span id="cb4-14"><a href="#cb4-14"></a>    <span class="co">/* always */</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>    <span class="kw">always</span> @ (<span class="kw">posedge</span> CLOCK_<span class="dv">50</span>) <span class="kw">begin</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a></span>
+<span id="cb4-17"><a href="#cb4-17"></a>        <span class="co">//Chiffre 0</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a>        display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111010111</span>;</span>
+<span id="cb4-19"><a href="#cb4-19"></a></span>
+<span id="cb4-20"><a href="#cb4-20"></a>    <span class="kw">end</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a></span>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="kw">endmodule</span></span></code></pre></div>
 <p>DISPLAY_1 et display_1_leds étant de même taille (9), l'assignation <code>assign DISPLAY_1 = display_1_leds</code> se fait bit à bit. Nous pouvons supprimer l’assignation <code>display_1_leds[0] &lt;= 1'b1</code> (anode commune) car nous avons le contrôle de cette valeur dans 11101011<strong>1</strong> (première valeur de <code>display_1_leds</code>, donc <code>display_1_leds[0]</code>).</p>
 <figure>
-<img src="schema_fpga_verilog.png" alt="Schématisation correspondant au chiffre 0" /><figcaption>Schématisation correspondant au chiffre 0</figcaption>
+<img src="schema_fpga_verilog.png" alt="" /><figcaption>Schématisation correspondant au chiffre 0</figcaption>
 </figure>
 <p>En suivant la même logique, on obtient la liste des segments actifs pour afficher respectivement chaque chiffre de 0 à 9 :</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode verilog"><code class="sourceCode verilog"><a class="sourceLine" id="cb5-1" title="1"><span class="co">//Chiffre 0, segments {ED, E7, E6, E4, EC, E1}</span></a>
-<a class="sourceLine" id="cb5-2" title="2">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111010111</span>;</a>
-<a class="sourceLine" id="cb5-3" title="3"></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="co">//Chiffre 1, segments {E7, EC}</span></a>
-<a class="sourceLine" id="cb5-5" title="5">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b010000101</span>;</a>
-<a class="sourceLine" id="cb5-6" title="6"></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="co">//Chiffre 2, segments {ED, E7, E6, E3, E1}</span></a>
-<a class="sourceLine" id="cb5-8" title="8">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111001011</span>;</a>
-<a class="sourceLine" id="cb5-9" title="9"></a>
-<a class="sourceLine" id="cb5-10" title="10"><span class="co">//Chiffre 3, segments {ED, E7, E6, E3, EC}</span></a>
-<a class="sourceLine" id="cb5-11" title="11">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111001101</span>;</a>
-<a class="sourceLine" id="cb5-12" title="12"></a>
-<a class="sourceLine" id="cb5-13" title="13"><span class="co">//Chiffre 4, segments {E7, E4, E3, EC}</span></a>
-<a class="sourceLine" id="cb5-14" title="14">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b010011101</span>;</a>
-<a class="sourceLine" id="cb5-15" title="15"></a>
-<a class="sourceLine" id="cb5-16" title="16"><span class="co">//Chiffre 5, segments {ED, E6, E4, E3, EC}</span></a>
-<a class="sourceLine" id="cb5-17" title="17">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b101011101</span>;</a>
-<a class="sourceLine" id="cb5-18" title="18"></a>
-<a class="sourceLine" id="cb5-19" title="19"><span class="co">//Chiffre 6, segments {ED, E6, E4, E3, EC, E1}</span></a>
-<a class="sourceLine" id="cb5-20" title="20">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b101011111</span>;</a>
-<a class="sourceLine" id="cb5-21" title="21"></a>
-<a class="sourceLine" id="cb5-22" title="22"><span class="co">//Chiffre 7, segments {E7, E6, EC}</span></a>
-<a class="sourceLine" id="cb5-23" title="23">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b011000101</span>;</a>
-<a class="sourceLine" id="cb5-24" title="24"></a>
-<a class="sourceLine" id="cb5-25" title="25"><span class="co">//Chiffre 8, segments {ED, E7, E6, E4, E3, EC, E1}</span></a>
-<a class="sourceLine" id="cb5-26" title="26">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111011111</span>;</a>
-<a class="sourceLine" id="cb5-27" title="27"></a>
-<a class="sourceLine" id="cb5-28" title="28"><span class="co">//Chiffre 9, segments {ED, E7, E6, E4, E3, EC}</span></a>
-<a class="sourceLine" id="cb5-29" title="29">display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111011101</span>;</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">//Chiffre 0, segments {ED, E7, E6, E4, EC, E1}</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111010111</span>;</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">//Chiffre 1, segments {E7, EC}</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b010000101</span>;</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">//Chiffre 2, segments {ED, E7, E6, E3, E1}</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111001011</span>;</span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">//Chiffre 3, segments {ED, E7, E6, E3, EC}</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111001101</span>;</span>
+<span id="cb5-12"><a href="#cb5-12"></a></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">//Chiffre 4, segments {E7, E4, E3, EC}</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b010011101</span>;</span>
+<span id="cb5-15"><a href="#cb5-15"></a></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co">//Chiffre 5, segments {ED, E6, E4, E3, EC}</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b101011101</span>;</span>
+<span id="cb5-18"><a href="#cb5-18"></a></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co">//Chiffre 6, segments {ED, E6, E4, E3, EC, E1}</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b101011111</span>;</span>
+<span id="cb5-21"><a href="#cb5-21"></a></span>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="co">//Chiffre 7, segments {E7, E6, EC}</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b011000101</span>;</span>
+<span id="cb5-24"><a href="#cb5-24"></a></span>
+<span id="cb5-25"><a href="#cb5-25"></a><span class="co">//Chiffre 8, segments {ED, E7, E6, E4, E3, EC, E1}</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111011111</span>;</span>
+<span id="cb5-27"><a href="#cb5-27"></a></span>
+<span id="cb5-28"><a href="#cb5-28"></a><span class="co">//Chiffre 9, segments {ED, E7, E6, E4, E3, EC}</span></span>
+<span id="cb5-29"><a href="#cb5-29"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b111011101</span>;</span></code></pre></div>
 <p>Nous sommes maintenant en mesure d’afficher n’importe quel chiffre sur notre afficheur 7 segments.</p>
 <p>Dans <a href="../fpga-afficheur-7-segments-compteur-unique/">la partie 2</a>, nous irons un peu plus loin en implémentant un compteur pour afficher les chiffres de 0 à 9.</p>
 <p>Partie 1, <a href="../fpga-afficheur-7-segments-compteur-unique/">partie 2</a>, <a href="../fpga-afficheur-7-segments-compteurs-multiples/">partie 3</a></p>

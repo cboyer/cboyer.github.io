@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>R: les incontournables - C. Boyer</title>
-  <meta name="description" content="Opérations incontournables avec le langage R." />
+  <meta name="description" content="<p>Opérations incontournables avec le langage R.</p>" />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="R, RStudio, ODBC, SQL, MSSQL, Oracle, code snippets, développement" />
   <link rel="canonical" href="https://cboyer.github.io/developpement/r-incontournables" />
   <meta property="og:title" content="R: les incontournables - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Opérations incontournables avec le langage R." />
+  <meta property="og:description" content="<p>Opérations incontournables avec le langage R.</p>" />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2020-04-27T21:43:29-04:00" />
@@ -30,26 +30,27 @@
       div.column{display: inline-block; vertical-align: top; width: 50%;}
   </style>
   <style>
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -61,7 +62,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-le
 div.sourceCode
   { color: #1f1c1b; background-color: #ffffff; }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span. { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
@@ -150,227 +151,228 @@ code span.wa { color: #bf0303; } /* Warning */
 </ul>
 <h2 id="options-dexécution"><a name="optionsexec"></a>Options d'exécution</h2>
 <p>Augmenter la taille des messages d'erreur au maximum (permet d'afficher les erreurs à la fin de longues requêtes SQL)</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">options</span>(<span class="dt">warning.length =</span> <span class="dv">8170</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">options</span>(<span class="dt">warning.length =</span> <span class="dv">8170</span>)</span></code></pre></div>
 <p>Ne pas utiliser la notation scientifique pour les entiers de grande taille (s'applique également lors de l'écriture de fichiers CSV)</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">options</span>(<span class="dt">scipen =</span> <span class="dv">999</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">options</span>(<span class="dt">scipen =</span> <span class="dv">999</span>)</span></code></pre></div>
 <p>Ne pas utiliser la factorisation pour les chaîne de caractères (par défaut depuis R 4.0)</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <p>Ajuster la mémoire allouée à Java pour les appels externes (par exemple les requêtes SQL avec JDBC, doit être placé avant <code>require</code> et <code>librairy</code>)</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="st">&quot;-Xmx1024m&quot;</span>)</a>
-<a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">#Pour également utiliser le Garbage Collector</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="kw">c</span>(<span class="st">&quot;-XX:+UseConcMarkSweepGC&quot;</span>, <span class="st">&quot;-Xmx1024m&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="st">&quot;-Xmx1024m&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#Pour également utiliser le Garbage Collector</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="kw">c</span>(<span class="st">&quot;-XX:+UseConcMarkSweepGC&quot;</span>, <span class="st">&quot;-Xmx1024m&quot;</span>))</span></code></pre></div>
 <h2 id="base-de-données"><a name="db"></a>Base de données</h2>
 <p>Utilisation de ODBC avec des sources configurées (DSN) dans Windows (utile pour la gestion de l'authentification)</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">require</span>(DBI)</a>
-<a class="sourceLine" id="cb5-2" title="2">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(), <span class="st">&quot;MonDataSourceWindows&quot;</span>)</a>
-<a class="sourceLine" id="cb5-3" title="3">sql &lt;-<span class="st"> &quot;SELECT UserID FROM User&quot;</span></a>
-<a class="sourceLine" id="cb5-4" title="4">userids &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(con, sql)</a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">require</span>(DBI)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(), <span class="st">&quot;MonDataSourceWindows&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>sql &lt;-<span class="st"> &quot;SELECT UserID FROM User&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>userids &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(con, sql)</span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">dbDisconnect</span>(con)</span></code></pre></div>
 <p>MSSQL via ODBC sans sources configurées (DSN)</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">require</span>(DBI)</a>
-<a class="sourceLine" id="cb6-2" title="2">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(),</a>
-<a class="sourceLine" id="cb6-3" title="3">                 <span class="dt">Driver =</span> <span class="st">&quot;SQL Server&quot;</span>,</a>
-<a class="sourceLine" id="cb6-4" title="4">                 <span class="dt">Server =</span> <span class="st">&quot;1.2.3.4&quot;</span>,</a>
-<a class="sourceLine" id="cb6-5" title="5">                 <span class="dt">Database =</span> <span class="st">&quot;mydb&quot;</span>,</a>
-<a class="sourceLine" id="cb6-6" title="6">                 <span class="dt">User =</span> <span class="st">&quot;login&quot;</span>,</a>
-<a class="sourceLine" id="cb6-7" title="7">                 <span class="dt">Password =</span> <span class="st">&quot;password&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">require</span>(DBI)</span>
+<span id="cb6-2"><a href="#cb6-2"></a>con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(),</span>
+<span id="cb6-3"><a href="#cb6-3"></a>                 <span class="dt">Driver =</span> <span class="st">&quot;SQL Server&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4"></a>                 <span class="dt">Server =</span> <span class="st">&quot;1.2.3.4&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5"></a>                 <span class="dt">Database =</span> <span class="st">&quot;mydb&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6"></a>                 <span class="dt">User =</span> <span class="st">&quot;login&quot;</span>,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>                 <span class="dt">Password =</span> <span class="st">&quot;password&quot;</span>)</span></code></pre></div>
 <p>Oracle via ODBC sans sources configurées (DSN)</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">require</span>(DBI)</a>
-<a class="sourceLine" id="cb7-2" title="2">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(),</a>
-<a class="sourceLine" id="cb7-3" title="3">                 <span class="dt">Driver =</span> <span class="st">&quot;Oracle dans OraClient12Home1&quot;</span>,</a>
-<a class="sourceLine" id="cb7-4" title="4">                 <span class="dt">DBQ =</span> <span class="st">&quot;//1.2.3.4:1521/mydatabase&quot;</span>,</a>
-<a class="sourceLine" id="cb7-5" title="5">                 <span class="dt">UID =</span> <span class="st">&quot;login&quot;</span>,</a>
-<a class="sourceLine" id="cb7-6" title="6">                 <span class="dt">PWD =</span> <span class="st">&quot;password&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">require</span>(DBI)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(),</span>
+<span id="cb7-3"><a href="#cb7-3"></a>                 <span class="dt">Driver =</span> <span class="st">&quot;Oracle dans OraClient12Home1&quot;</span>,</span>
+<span id="cb7-4"><a href="#cb7-4"></a>                 <span class="dt">DBQ =</span> <span class="st">&quot;//1.2.3.4:1521/mydatabase&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5"></a>                 <span class="dt">UID =</span> <span class="st">&quot;login&quot;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6"></a>                 <span class="dt">PWD =</span> <span class="st">&quot;password&quot;</span>)</span></code></pre></div>
 <p>Oracle via JDBC</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">require</span>(RJDBC)</a>
-<a class="sourceLine" id="cb8-2" title="2">drv &lt;-<span class="st"> </span><span class="kw">JDBC</span>(<span class="dt">driverClass=</span><span class="st">&quot;oracle.jdbc.OracleDriver&quot;</span>, <span class="dt">classPath=</span><span class="st">&quot;C:/JDBC/ojdbc8.jar&quot;</span>)</a>
-<a class="sourceLine" id="cb8-3" title="3">conn &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(drv, <span class="st">&quot;jdbc:oracle:thin:@//10.10.10.10:1521/database&quot;</span>, <span class="st">&quot;login&quot;</span>, <span class="st">&quot;password&quot;</span>)</a>
-<a class="sourceLine" id="cb8-4" title="4">sql &lt;-<span class="st"> &quot;SELECT UserID FROM User&quot;</span></a>
-<a class="sourceLine" id="cb8-5" title="5">userids &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(conn, sql)</a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="kw">dbDisconnect</span>(conn)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">require</span>(RJDBC)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>drv &lt;-<span class="st"> </span><span class="kw">JDBC</span>(<span class="dt">driverClass=</span><span class="st">&quot;oracle.jdbc.OracleDriver&quot;</span>, <span class="dt">classPath=</span><span class="st">&quot;C:/JDBC/ojdbc8.jar&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>conn &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(drv, <span class="st">&quot;jdbc:oracle:thin:@//10.10.10.10:1521/database&quot;</span>, <span class="st">&quot;login&quot;</span>, <span class="st">&quot;password&quot;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>sql &lt;-<span class="st"> &quot;SELECT UserID FROM User&quot;</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>userids &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(conn, sql)</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="kw">dbDisconnect</span>(conn)</span></code></pre></div>
 <p>MSSQL via JDBC</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">require</span>(RJDBC)</a>
-<a class="sourceLine" id="cb9-2" title="2">drv &lt;-<span class="st"> </span><span class="kw">JDBC</span>(<span class="st">&quot;com.microsoft.sqlserver.jdbc.SQLServerDriver&quot;</span>, <span class="st">&quot;C:/JDBC/sqljdbc42.jar&quot;</span>)</a>
-<a class="sourceLine" id="cb9-3" title="3">conn &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(drv, <span class="st">&quot;jdbc:sqlserver://mssqlserver.corp.ca;databaseName=MyDatabase&quot;</span>, <span class="st">&quot;login&quot;</span>, <span class="st">&quot;password&quot;</span>)</a>
-<a class="sourceLine" id="cb9-4" title="4">sql &lt;-<span class="st"> &quot;SELECT UserID FROM User&quot;</span></a>
-<a class="sourceLine" id="cb9-5" title="5">userids &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(conn, sql)</a>
-<a class="sourceLine" id="cb9-6" title="6"><span class="kw">dbDisconnect</span>(conn)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">require</span>(RJDBC)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>drv &lt;-<span class="st"> </span><span class="kw">JDBC</span>(<span class="st">&quot;com.microsoft.sqlserver.jdbc.SQLServerDriver&quot;</span>, <span class="st">&quot;C:/JDBC/sqljdbc42.jar&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>conn &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(drv, <span class="st">&quot;jdbc:sqlserver://mssqlserver.corp.ca;databaseName=MyDatabase&quot;</span>, <span class="st">&quot;login&quot;</span>, <span class="st">&quot;password&quot;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a>sql &lt;-<span class="st"> &quot;SELECT UserID FROM User&quot;</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>userids &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(conn, sql)</span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="kw">dbDisconnect</span>(conn)</span></code></pre></div>
 <p>Lister les tables et colonnes d'une base de données</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">require</span>(DBI)</a>
-<a class="sourceLine" id="cb10-2" title="2">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(),</a>
-<a class="sourceLine" id="cb10-3" title="3">                 <span class="dt">Driver =</span> <span class="st">&quot;SQL Server&quot;</span>,</a>
-<a class="sourceLine" id="cb10-4" title="4">                 <span class="dt">Server =</span> <span class="st">&quot;1.2.3.4&quot;</span>,</a>
-<a class="sourceLine" id="cb10-5" title="5">                 <span class="dt">Database =</span> <span class="st">&quot;mydb&quot;</span>,</a>
-<a class="sourceLine" id="cb10-6" title="6">                 <span class="dt">User =</span> <span class="st">&quot;domaine</span><span class="ch">\\</span><span class="st">login&quot;</span>,</a>
-<a class="sourceLine" id="cb10-7" title="7">                 <span class="dt">Password =</span> <span class="st">&quot;password&quot;</span>)</a>
-<a class="sourceLine" id="cb10-8" title="8"></a>
-<a class="sourceLine" id="cb10-9" title="9">tables &lt;-<span class="st"> </span><span class="kw">dbListTables</span>(con)</a>
-<a class="sourceLine" id="cb10-10" title="10">describe &lt;-<span class="st"> </span><span class="kw">lapply</span>(tables, <span class="cf">function</span>(x, conn) {</a>
-<a class="sourceLine" id="cb10-11" title="11">  <span class="kw">data.frame</span>(<span class="dt">table=</span>x, <span class="dt">column=</span><span class="kw">as.vector</span>(<span class="kw">dbListFields</span>(conn, x)))</a>
-<a class="sourceLine" id="cb10-12" title="12">}, <span class="dt">conn =</span> con)</a>
-<a class="sourceLine" id="cb10-13" title="13">schema &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, describe)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">require</span>(DBI)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(odbc<span class="op">::</span><span class="kw">odbc</span>(),</span>
+<span id="cb10-3"><a href="#cb10-3"></a>                 <span class="dt">Driver =</span> <span class="st">&quot;SQL Server&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4"></a>                 <span class="dt">Server =</span> <span class="st">&quot;1.2.3.4&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5"></a>                 <span class="dt">Database =</span> <span class="st">&quot;mydb&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6"></a>                 <span class="dt">User =</span> <span class="st">&quot;domaine</span><span class="ch">\\</span><span class="st">login&quot;</span>,</span>
+<span id="cb10-7"><a href="#cb10-7"></a>                 <span class="dt">Password =</span> <span class="st">&quot;password&quot;</span>)</span>
+<span id="cb10-8"><a href="#cb10-8"></a></span>
+<span id="cb10-9"><a href="#cb10-9"></a>tables &lt;-<span class="st"> </span><span class="kw">dbListTables</span>(con)</span>
+<span id="cb10-10"><a href="#cb10-10"></a>describe &lt;-<span class="st"> </span><span class="kw">lapply</span>(tables, <span class="cf">function</span>(x, conn) {</span>
+<span id="cb10-11"><a href="#cb10-11"></a>  <span class="kw">data.frame</span>(<span class="dt">table=</span>x, <span class="dt">column=</span><span class="kw">as.vector</span>(<span class="kw">dbListFields</span>(conn, x)))</span>
+<span id="cb10-12"><a href="#cb10-12"></a>}, <span class="dt">conn =</span> con)</span>
+<span id="cb10-13"><a href="#cb10-13"></a>schema &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, describe)</span></code></pre></div>
 <p>Requête avec une liste formée depuis une colonne</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">client_id &lt;-<span class="st"> </span><span class="kw">toString</span>(<span class="kw">sprintf</span>(<span class="st">&quot;&#39;%s&#39;&quot;</span>, liste<span class="op">$</span>client_id))</a>
-<a class="sourceLine" id="cb11-2" title="2">sql &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&#39;SELECT client_id FROM myTable WHERE client_id IN (&#39;</span>, client_id, <span class="st">&#39;)&#39;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>client_id &lt;-<span class="st"> </span><span class="kw">toString</span>(<span class="kw">sprintf</span>(<span class="st">&quot;&#39;%s&#39;&quot;</span>, liste<span class="op">$</span>client_id))</span>
+<span id="cb11-2"><a href="#cb11-2"></a>sql &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&#39;SELECT client_id FROM myTable WHERE client_id IN (&#39;</span>, client_id, <span class="st">&#39;)&#39;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <h2 id="opérations-sur-les-fichiers"><a name="files"></a>Opérations sur les fichiers</h2>
 <p>Charger un fichier CSV</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">mon_dataframe &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;;&quot;</span>, <span class="dt">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>mon_dataframe &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;;&quot;</span>, <span class="dt">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <p>Écrire le contenu d'un dataframe dans un fichier CSV</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">write.table</span>(mon_dataframe, <span class="dt">file =</span> <span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>, <span class="dt">sep =</span> <span class="st">&#39;,&#39;</span>, <span class="dt">na =</span> <span class="st">&#39;&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">write.table</span>(mon_dataframe, <span class="dt">file =</span> <span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>, <span class="dt">sep =</span> <span class="st">&#39;,&#39;</span>, <span class="dt">na =</span> <span class="st">&#39;&#39;</span>)</span></code></pre></div>
 <p>Écrire une variable dans un fichier texte</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">text &lt;-<span class="st"> &quot;String example&quot;</span></a>
-<a class="sourceLine" id="cb14-2" title="2">fd &lt;-<span class="st"> </span><span class="kw">file</span>(<span class="st">&quot;C:/fichier.txt&quot;</span>)</a>
-<a class="sourceLine" id="cb14-3" title="3"><span class="kw">writeLines</span>(text, fd)</a>
-<a class="sourceLine" id="cb14-4" title="4"><span class="kw">close</span>(fd)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>text &lt;-<span class="st"> &quot;String example&quot;</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>fd &lt;-<span class="st"> </span><span class="kw">file</span>(<span class="st">&quot;C:/fichier.txt&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="kw">writeLines</span>(text, fd)</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="kw">close</span>(fd)</span></code></pre></div>
 <p>Charger un fichier Excel (XSLX/XLS)</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">require</span>(xlsx)</a>
-<a class="sourceLine" id="cb15-2" title="2">liste &lt;-<span class="st"> </span><span class="kw">read.xlsx</span>(<span class="st">&quot;./mon_fichier.xlsx&quot;</span>, <span class="dt">sheetName =</span> <span class="dv">1</span>, <span class="dt">encoding=</span><span class="st">&quot;UTF-8&quot;</span>)</a>
-<a class="sourceLine" id="cb15-3" title="3"></a>
-<a class="sourceLine" id="cb15-4" title="4"><span class="co">#Cleanup colonnes avec style mais vides</span></a>
-<a class="sourceLine" id="cb15-5" title="5">drops &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">paste</span>(<span class="st">&quot;NA..&quot;</span>, <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">20000</span>), <span class="dt">sep =</span> <span class="st">&#39;&#39;</span> ))</a>
-<a class="sourceLine" id="cb15-6" title="6">drops &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;NA.&#39;</span>, drops)</a>
-<a class="sourceLine" id="cb15-7" title="7">liste &lt;-<span class="st"> </span>liste[ , <span class="op">!</span>(<span class="kw">names</span>(liste) <span class="op">%in%</span><span class="st"> </span>drops)]</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">require</span>(xlsx)</span>
+<span id="cb15-2"><a href="#cb15-2"></a>liste &lt;-<span class="st"> </span><span class="kw">read.xlsx</span>(<span class="st">&quot;./mon_fichier.xlsx&quot;</span>, <span class="dt">sheetName =</span> <span class="dv">1</span>, <span class="dt">encoding=</span><span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#Cleanup colonnes avec style mais vides</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>drops &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">paste</span>(<span class="st">&quot;NA..&quot;</span>, <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">20000</span>), <span class="dt">sep =</span> <span class="st">&#39;&#39;</span> ))</span>
+<span id="cb15-6"><a href="#cb15-6"></a>drops &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;NA.&#39;</span>, drops)</span>
+<span id="cb15-7"><a href="#cb15-7"></a>liste &lt;-<span class="st"> </span>liste[ , <span class="op">!</span>(<span class="kw">names</span>(liste) <span class="op">%in%</span><span class="st"> </span>drops)]</span></code></pre></div>
 <h2 id="statistiques"><a name="stats"></a>Statistiques</h2>
 <p>Factoriser des valeurs</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">ventes<span class="op">$</span>annee &lt;-<span class="st"> </span><span class="kw">as.factor</span>(ventes<span class="op">$</span>annee)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>ventes<span class="op">$</span>annee &lt;-<span class="st"> </span><span class="kw">as.factor</span>(ventes<span class="op">$</span>annee)</span></code></pre></div>
 <p>Statistiques descriptives générales (pour les valeurs de type char, il est nécessaire d'utiliser des facteurs)</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">summary</span>(ventes)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">summary</span>(ventes)</span></code></pre></div>
 <p>Fréquence des valeurs d'une colonne en fonction d'une autre (produits vendus en fonction des années)</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">tapply</span>(ventes<span class="op">$</span>produit, ventes<span class="op">$</span>annee, summary)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">tapply</span>(ventes<span class="op">$</span>produit, ventes<span class="op">$</span>annee, summary)</span></code></pre></div>
 <h2 id="opérations-sur-les-données"><a name="data"></a>Opérations sur les données</h2>
 <p>Extraire les lignes en fonction de la valeur d'une colonne</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">users_active &lt;-<span class="st"> </span><span class="kw">subset</span>(users, isactive <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb19-2" title="2">users_active &lt;-<span class="st"> </span>users[users<span class="op">$</span>isactive <span class="op">==</span><span class="st"> </span><span class="dv">1</span>,]</a>
-<a class="sourceLine" id="cb19-3" title="3">users_without_email &lt;-<span class="st"> </span><span class="kw">subset</span>(users, <span class="kw">is.na</span>(email))</a>
-<a class="sourceLine" id="cb19-4" title="4">users_with_email &lt;-<span class="st"> </span><span class="kw">subset</span>(users, <span class="op">!</span><span class="kw">is.na</span>(email))</a>
-<a class="sourceLine" id="cb19-5" title="5"></a>
-<a class="sourceLine" id="cb19-6" title="6"><span class="co">#Avec plusieurs critères ( | signifie OR, &amp; signifie AND)</span></a>
-<a class="sourceLine" id="cb19-7" title="7">users[ <span class="kw">which</span>(users<span class="op">$</span>Active <span class="op">==</span><span class="st"> &quot;1&quot;</span> <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(users<span class="op">$</span>email) <span class="op">&amp;</span><span class="st"> </span>users<span class="op">$</span>OS <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Linux&quot;</span>, <span class="st">&quot;Solaris&quot;</span>) ), ]</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>users_active &lt;-<span class="st"> </span><span class="kw">subset</span>(users, isactive <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb19-2"><a href="#cb19-2"></a>users_active &lt;-<span class="st"> </span>users[users<span class="op">$</span>isactive <span class="op">==</span><span class="st"> </span><span class="dv">1</span>,]</span>
+<span id="cb19-3"><a href="#cb19-3"></a>users_without_email &lt;-<span class="st"> </span><span class="kw">subset</span>(users, <span class="kw">is.na</span>(email))</span>
+<span id="cb19-4"><a href="#cb19-4"></a>users_with_email &lt;-<span class="st"> </span><span class="kw">subset</span>(users, <span class="op">!</span><span class="kw">is.na</span>(email))</span>
+<span id="cb19-5"><a href="#cb19-5"></a></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="co">#Avec plusieurs critères ( | signifie OR, &amp; signifie AND)</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a>users[ <span class="kw">which</span>(users<span class="op">$</span>Active <span class="op">==</span><span class="st"> &quot;1&quot;</span> <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(users<span class="op">$</span>email) <span class="op">&amp;</span><span class="st"> </span>users<span class="op">$</span>OS <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Linux&quot;</span>, <span class="st">&quot;Solaris&quot;</span>) ), ]</span></code></pre></div>
 <p>Trier sur plusieurs colonnes (colonne 1 à 3)</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">k &lt;-<span class="st"> </span>k[<span class="kw">order</span>(k[,<span class="dv">1</span>], k[,<span class="dv">2</span>], k[,<span class="dv">3</span>] ), ]</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>k &lt;-<span class="st"> </span>k[<span class="kw">order</span>(k[,<span class="dv">1</span>], k[,<span class="dv">2</span>], k[,<span class="dv">3</span>] ), ]</span></code></pre></div>
 <p>Remplacer toutes les valeurs d'un colonne répondant à un critère</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">users<span class="op">$</span>email[users<span class="op">$</span>email <span class="op">==</span><span class="st"> &quot;unknown&quot;</span>] &lt;-<span class="st"> &quot;&quot;</span></a>
-<a class="sourceLine" id="cb21-2" title="2"></a>
-<a class="sourceLine" id="cb21-3" title="3"><span class="co">#Pour une ligne (toutes les colonnes)</span></a>
-<a class="sourceLine" id="cb21-4" title="4">erreur[erreur <span class="op">==</span><span class="st"> &quot;NA&quot;</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>users<span class="op">$</span>email[users<span class="op">$</span>email <span class="op">==</span><span class="st"> &quot;unknown&quot;</span>] &lt;-<span class="st"> &quot;&quot;</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#Pour une ligne (toutes les colonnes)</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>erreur[erreur <span class="op">==</span><span class="st"> &quot;NA&quot;</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></span></code></pre></div>
 <p>Changer l'encodage d'une colonne de type <code>character</code></p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">Encoding</span>(users<span class="op">$</span>firstname) &lt;-<span class="st"> &quot;ISO-8859-1&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">Encoding</span>(users<span class="op">$</span>firstname) &lt;-<span class="st"> &quot;ISO-8859-1&quot;</span></span></code></pre></div>
 <p>Reformater une date</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">ventes<span class="op">$</span>annee_expedition &lt;-<span class="st"> </span><span class="kw">format</span>( <span class="kw">as.Date</span>(ventes<span class="op">$</span>date_expedition, <span class="dt">format =</span> <span class="st">&quot;%Y-%m-%d&quot;</span>),<span class="st">&quot;%Y&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>ventes<span class="op">$</span>annee_expedition &lt;-<span class="st"> </span><span class="kw">format</span>( <span class="kw">as.Date</span>(ventes<span class="op">$</span>date_expedition, <span class="dt">format =</span> <span class="st">&quot;%Y-%m-%d&quot;</span>),<span class="st">&quot;%Y&quot;</span>)</span></code></pre></div>
 <p>Lister les lignes dont une valeur est dupliquée</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">duplicats &lt;-<span class="st"> </span>users[<span class="kw">duplicated</span>(users<span class="op">$</span>UserID) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(users<span class="op">$</span>UserID, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>),]</a>
-<a class="sourceLine" id="cb24-2" title="2"></a>
-<a class="sourceLine" id="cb24-3" title="3"><span class="co">#Autre possibilité (moins performante)</span></a>
-<a class="sourceLine" id="cb24-4" title="4">decompte &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">table</span>(users<span class="op">$</span>UserID))</a>
-<a class="sourceLine" id="cb24-5" title="5">duplicats &lt;-<span class="st"> </span>users[users<span class="op">$</span>UserID <span class="op">%in%</span><span class="st"> </span>decompte<span class="op">$</span>Var1[decompte<span class="op">$</span>Freq <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>], ]</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>duplicats &lt;-<span class="st"> </span>users[<span class="kw">duplicated</span>(users<span class="op">$</span>UserID) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(users<span class="op">$</span>UserID, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>),]</span>
+<span id="cb24-2"><a href="#cb24-2"></a></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="co">#Autre possibilité (moins performante)</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a>decompte &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">table</span>(users<span class="op">$</span>UserID))</span>
+<span id="cb24-5"><a href="#cb24-5"></a>duplicats &lt;-<span class="st"> </span>users[users<span class="op">$</span>UserID <span class="op">%in%</span><span class="st"> </span>decompte<span class="op">$</span>Var1[decompte<span class="op">$</span>Freq <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>], ]</span></code></pre></div>
 <p>Déterminer les données manquantes d'un dataframe à un autre en fonction d'une colonne</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">utilisateurs_manquants &lt;-<span class="st"> </span>users[<span class="op">!</span>(users<span class="op">$</span>UserID <span class="op">%in%</span><span class="st"> </span>all_users<span class="op">$</span>UserID), ]</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>utilisateurs_manquants &lt;-<span class="st"> </span>users[<span class="op">!</span>(users<span class="op">$</span>UserID <span class="op">%in%</span><span class="st"> </span>all_users<span class="op">$</span>UserID), ]</span></code></pre></div>
 <p>Récupère les lignes de dataframe1 dont LOGIN et LAST_DATE sont dans dataframe2</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">intersection &lt;-<span class="st"> </span>dataframe1[<span class="kw">with</span>(dataframe1, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)) <span class="op">%in%</span><span class="st"> </span><span class="kw">with</span>(dataframe2, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)), ]</a>
-<a class="sourceLine" id="cb26-2" title="2"></a>
-<a class="sourceLine" id="cb26-3" title="3"><span class="co">#Autre possibilité</span></a>
-<a class="sourceLine" id="cb26-4" title="4">intersection &lt;-<span class="st"> </span>dataframe1[<span class="kw">match</span>( <span class="kw">paste</span>(dataframe1<span class="op">$</span>LOGIN, dataframe1<span class="op">$</span>LAST_DATE), <span class="kw">paste</span>(dataframe2<span class="op">$</span>LOGIN, dataframe2<span class="op">$</span>LAST_DATE) ), ]</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>intersection &lt;-<span class="st"> </span>dataframe1[<span class="kw">with</span>(dataframe1, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)) <span class="op">%in%</span><span class="st"> </span><span class="kw">with</span>(dataframe2, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)), ]</span>
+<span id="cb26-2"><a href="#cb26-2"></a></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="co">#Autre possibilité</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a>intersection &lt;-<span class="st"> </span>dataframe1[<span class="kw">match</span>( <span class="kw">paste</span>(dataframe1<span class="op">$</span>LOGIN, dataframe1<span class="op">$</span>LAST_DATE), <span class="kw">paste</span>(dataframe2<span class="op">$</span>LOGIN, dataframe2<span class="op">$</span>LAST_DATE) ), ]</span></code></pre></div>
 <p>Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL)</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>OrganizationName[<span class="kw">match</span>(stations<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>ManufacturerID)]</a>
-<a class="sourceLine" id="cb27-2" title="2"></a>
-<a class="sourceLine" id="cb27-3" title="3"><span class="co">#Sur plusieurs colonnes</span></a>
-<a class="sourceLine" id="cb27-4" title="4">stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>OrganizationName[<span class="kw">match</span>( <span class="kw">paste</span>(stations<span class="op">$</span>ManufacturerID, stations<span class="op">$</span>ManufacturerName), <span class="kw">paste</span>(manufacturers<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>ManufacturerName) )]</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>OrganizationName[<span class="kw">match</span>(stations<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>ManufacturerID)]</span>
+<span id="cb27-2"><a href="#cb27-2"></a></span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="co">#Sur plusieurs colonnes</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a>stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>OrganizationName[<span class="kw">match</span>( <span class="kw">paste</span>(stations<span class="op">$</span>ManufacturerID, stations<span class="op">$</span>ManufacturerName), <span class="kw">paste</span>(manufacturers<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>ManufacturerName) )]</span></code></pre></div>
 <p>Supprimer les lignes dont la valeur d'une colonne spécifique se répète (conserve un seul des éléments dédoublés)</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID),]</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID),]</span></code></pre></div>
 <p>Supprimer les lignes dont la valeur d'une colonne spécifique se répète (ne conserve aucun des éléments dédoublés)</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ),]</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats<span class="op">$</span>UserID, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ),]</span></code></pre></div>
 <p>Supprimer les lignes dupliquées (toutes les colonnes sont identiques d'une ligne à l'autre, ne conserve aucun des éléments dédoublés)</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ) ,]</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>users &lt;-<span class="st"> </span>duplicats[<span class="op">!</span>( <span class="kw">duplicated</span>(duplicats) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(duplicats, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>) ) ,]</span></code></pre></div>
 <p>Copier la valeur d'une colonne dans une autre en fonction d'une condition</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">stations<span class="op">$</span>Network &lt;-<span class="st"> </span><span class="kw">ifelse</span>(stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span>, stations<span class="op">$</span>BSSID, stations<span class="op">$</span>Network)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>stations<span class="op">$</span>Network &lt;-<span class="st"> </span><span class="kw">ifelse</span>(stations<span class="op">$</span>Network <span class="op">==</span><span class="st"> &quot;&quot;</span>, stations<span class="op">$</span>BSSID, stations<span class="op">$</span>Network)</span></code></pre></div>
 <p>Traiter une colonne (chaîne de caractères) pour remplacer certains caractères par un espace</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">users &lt;-<span class="st"> </span><span class="kw">within</span>(users,  Descriptions &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, Descriptions) )</a>
-<a class="sourceLine" id="cb32-2" title="2"></a>
-<a class="sourceLine" id="cb32-3" title="3"><span class="co">#Autre possibilité</span></a>
-<a class="sourceLine" id="cb32-4" title="4">users<span class="op">$</span>Descriptions &lt;-<span class="st"> </span><span class="kw">sapply</span>(users<span class="op">$</span>Descriptions, <span class="cf">function</span>(x) { <span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, x) })</a>
-<a class="sourceLine" id="cb32-5" title="5"></a>
-<a class="sourceLine" id="cb32-6" title="6"><span class="co">#Pour les espaces de début/fin</span></a>
-<a class="sourceLine" id="cb32-7" title="7">users &lt;-<span class="st"> </span><span class="kw">within</span>(users,  Descriptions &lt;-<span class="st"> </span><span class="kw">trimws</span>(Descriptions) )</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>users &lt;-<span class="st"> </span><span class="kw">within</span>(users,  Descriptions &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, Descriptions) )</span>
+<span id="cb32-2"><a href="#cb32-2"></a></span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="co">#Autre possibilité</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a>users<span class="op">$</span>Descriptions &lt;-<span class="st"> </span><span class="kw">sapply</span>(users<span class="op">$</span>Descriptions, <span class="cf">function</span>(x) { <span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, x) })</span>
+<span id="cb32-5"><a href="#cb32-5"></a></span>
+<span id="cb32-6"><a href="#cb32-6"></a><span class="co">#Pour les espaces de début/fin</span></span>
+<span id="cb32-7"><a href="#cb32-7"></a>users &lt;-<span class="st"> </span><span class="kw">within</span>(users,  Descriptions &lt;-<span class="st"> </span><span class="kw">trimws</span>(Descriptions) )</span></code></pre></div>
 <p>Traiter un dataframe (plusieurs colonnes) en itérant sur chaque ligne (retourne un dataframe à 3 colonnes depuis un dataframe <code>x</code> à 2 colonnes)</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">result &lt;-<span class="st"> </span><span class="kw">apply</span>(mydataframe, <span class="dv">1</span>, <span class="cf">function</span>(x, y) {</a>
-<a class="sourceLine" id="cb33-2" title="2"></a>
-<a class="sourceLine" id="cb33-3" title="3">  <span class="co">#x[1] = première colonne de mydataframe, x[2] la seconde</span></a>
-<a class="sourceLine" id="cb33-4" title="4">  <span class="kw">data.frame</span>(<span class="dt">table =</span> x[<span class="dv">1</span>], <span class="dt">column =</span> x[<span class="dv">2</span>], <span class="dt">res =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb33-5" title="5"></a>
-<a class="sourceLine" id="cb33-6" title="6">}, <span class="dt">y =</span> additionnal_arg)</a>
-<a class="sourceLine" id="cb33-7" title="7"></a>
-<a class="sourceLine" id="cb33-8" title="8"><span class="co">#Transforme result en dataframe</span></a>
-<a class="sourceLine" id="cb33-9" title="9">result &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, result)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>result &lt;-<span class="st"> </span><span class="kw">apply</span>(mydataframe, <span class="dv">1</span>, <span class="cf">function</span>(x, y) {</span>
+<span id="cb33-2"><a href="#cb33-2"></a></span>
+<span id="cb33-3"><a href="#cb33-3"></a>  <span class="co">#x[1] = première colonne de mydataframe, x[2] la seconde</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a>  <span class="kw">data.frame</span>(<span class="dt">table =</span> x[<span class="dv">1</span>], <span class="dt">column =</span> x[<span class="dv">2</span>], <span class="dt">res =</span> <span class="dv">1</span>)</span>
+<span id="cb33-5"><a href="#cb33-5"></a></span>
+<span id="cb33-6"><a href="#cb33-6"></a>}, <span class="dt">y =</span> additionnal_arg)</span>
+<span id="cb33-7"><a href="#cb33-7"></a></span>
+<span id="cb33-8"><a href="#cb33-8"></a><span class="co">#Transforme result en dataframe</span></span>
+<span id="cb33-9"><a href="#cb33-9"></a>result &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, result)</span></code></pre></div>
 <p>Récupérer <code>max(last_login_date)</code> en fonction de <code>login</code> (Group By en SQL), les <em>NA</em> sont ignorés par <code>aggregate()</code></p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a>
-<a class="sourceLine" id="cb34-2" title="2"></a>
-<a class="sourceLine" id="cb34-3" title="3"><span class="co">#En fonction de toutes les autres colonnes (permet de les obtenirs en sortie)</span></a>
-<a class="sourceLine" id="cb34-4" title="4"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a>
-<a class="sourceLine" id="cb34-5" title="5"></a>
-<a class="sourceLine" id="cb34-6" title="6"><span class="co">#En fonction d&#39;une liste de colonnes</span></a>
-<a class="sourceLine" id="cb34-7" title="7"><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</span>
+<span id="cb34-2"><a href="#cb34-2"></a></span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="co">#En fonction de toutes les autres colonnes (permet de les conserver en sortie)</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</span>
+<span id="cb34-5"><a href="#cb34-5"></a></span>
+<span id="cb34-6"><a href="#cb34-6"></a><span class="co">#En fonction d&#39;une liste de colonnes</span></span>
+<span id="cb34-7"><a href="#cb34-7"></a><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</span></code></pre></div>
 <p>Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> toString)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> toString)</span></code></pre></div>
 <p>Pivot des valeurs d'une colonne <code>timevar</code> en nouvelles colonnes avec pour valeurs la colonne <code>Valeur</code> (implicite) pour chaque ligne identifiée par <code>idvar</code></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="kw">reshape</span>(inventaire, <span class="dt">direction =</span> <span class="st">&quot;wide&quot;</span>, <span class="dt">idvar =</span> <span class="kw">c</span>(<span class="st">&quot;ItemID&quot;</span>, <span class="st">&quot;Item&quot;</span>, <span class="st">&quot;Type&quot;</span>, <span class="st">&quot;Categorie&quot;</span>), <span class="dt">timevar =</span> <span class="st">&quot;Champs&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">reshape</span>(inventaire, <span class="dt">direction =</span> <span class="st">&quot;wide&quot;</span>, <span class="dt">idvar =</span> <span class="kw">c</span>(<span class="st">&quot;ItemID&quot;</span>, <span class="st">&quot;Item&quot;</span>, <span class="st">&quot;Type&quot;</span>, <span class="st">&quot;Categorie&quot;</span>), <span class="dt">timevar =</span> <span class="st">&quot;Champs&quot;</span>)</span></code></pre></div>
 <p>Séparer les dates concaténées précédemment (crée une liste dans cette ligne/colonne)</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">users<span class="op">$</span>dateList &lt;-<span class="st"> </span><span class="kw">strsplit</span>(users<span class="op">$</span>login_date, <span class="st">&#39;,&#39;</span>) <span class="co">#Pour rechercher directement dans dateList: unlist(users$dateList)</span></a>
-<a class="sourceLine" id="cb37-2" title="2"></a>
-<a class="sourceLine" id="cb37-3" title="3"><span class="co">#Dupliquer les lignes pour chaque date</span></a>
-<a class="sourceLine" id="cb37-4" title="4"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb37-5" title="5">users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(<span class="dt">cols =</span> dateList)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>users<span class="op">$</span>dateList &lt;-<span class="st"> </span><span class="kw">strsplit</span>(users<span class="op">$</span>login_date, <span class="st">&#39;,&#39;</span>) <span class="co">#Pour rechercher directement dans dateList: unlist(users$dateList)</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="co">#Dupliquer les lignes pour chaque date</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb37-5"><a href="#cb37-5"></a>users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(<span class="dt">cols =</span> dateList)</span></code></pre></div>
 <p>Séparer les dates concaténées précédemment en colonnes distinctes (avec plusieurs séparateurs)</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb38-2" title="2">users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">separate</span>(Email, <span class="kw">c</span>(<span class="st">&quot;Email&quot;</span>, <span class="st">&quot;Email2&quot;</span>, <span class="st">&quot;Email3&quot;</span>), <span class="st">&quot;[;-,]&quot;</span>)</a>
-<a class="sourceLine" id="cb38-3" title="3"></a>
-<a class="sourceLine" id="cb38-4" title="4"><span class="co">#Autre possibilité</span></a>
-<a class="sourceLine" id="cb38-5" title="5"><span class="kw">library</span>(stringr)</a>
-<a class="sourceLine" id="cb38-6" title="6"><span class="kw">str_split_fixed</span>(users<span class="op">$</span>Email, <span class="st">&quot;[;-,]&quot;</span>, <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb38-2"><a href="#cb38-2"></a>users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">separate</span>(Email, <span class="kw">c</span>(<span class="st">&quot;Email&quot;</span>, <span class="st">&quot;Email2&quot;</span>, <span class="st">&quot;Email3&quot;</span>), <span class="st">&quot;[;-,]&quot;</span>)</span>
+<span id="cb38-3"><a href="#cb38-3"></a></span>
+<span id="cb38-4"><a href="#cb38-4"></a><span class="co">#Autre possibilité</span></span>
+<span id="cb38-5"><a href="#cb38-5"></a><span class="kw">library</span>(stringr)</span>
+<span id="cb38-6"><a href="#cb38-6"></a><span class="kw">str_split_fixed</span>(users<span class="op">$</span>Email, <span class="st">&quot;[;-,]&quot;</span>, <span class="dv">3</span>)</span></code></pre></div>
 <p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by =</span> <span class="st">&quot;login&quot;</span>)</a>
-<a class="sourceLine" id="cb39-2" title="2"></a>
-<a class="sourceLine" id="cb39-3" title="3"><span class="co">#Avec deux colonnes dont les noms diffèrent</span></a>
-<a class="sourceLine" id="cb39-4" title="4">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="st">&quot;samAccount&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;login&quot;</span>)</a>
-<a class="sourceLine" id="cb39-5" title="5"></a>
-<a class="sourceLine" id="cb39-6" title="6"><span class="co">#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances, Left Join en SQL)</span></a>
-<a class="sourceLine" id="cb39-7" title="7">all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="kw">c</span>(<span class="st">&quot;samAccount&quot;</span>,<span class="st">&quot;email&quot;</span>), <span class="dt">by.y =</span> <span class="kw">c</span>(<span class="st">&quot;login&quot;</span>,<span class="st">&quot;mail&quot;</span>), <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by =</span> <span class="st">&quot;login&quot;</span>)</span>
+<span id="cb39-2"><a href="#cb39-2"></a></span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="co">#Avec deux colonnes dont les noms diffèrent</span></span>
+<span id="cb39-4"><a href="#cb39-4"></a>all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="st">&quot;samAccount&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;login&quot;</span>)</span>
+<span id="cb39-5"><a href="#cb39-5"></a></span>
+<span id="cb39-6"><a href="#cb39-6"></a><span class="co">#Avec plusieurs colonnes dont les noms diffèrent (en completant avec NA si pas de correspondances, Left Join en SQL)</span></span>
+<span id="cb39-7"><a href="#cb39-7"></a>all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="kw">c</span>(<span class="st">&quot;samAccount&quot;</span>,<span class="st">&quot;email&quot;</span>), <span class="dt">by.y =</span> <span class="kw">c</span>(<span class="st">&quot;login&quot;</span>,<span class="st">&quot;mail&quot;</span>), <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avoir les mêmes colonnes)</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">users_windows &lt;-<span class="st"> </span><span class="kw">rbind</span>(users_windowsNT, users_windowsXP)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>users_windows &lt;-<span class="st"> </span><span class="kw">rbind</span>(users_windowsNT, users_windowsXP)</span></code></pre></div>
 <h2 id="graphiques"><a name="graphiques"></a>Graphiques</h2>
 <p>Histogramme horizontal avec palette de couleurs adaptée (données issues de <code>table()</code>)</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb41-2" title="2"><span class="kw">library</span>(RColorBrewer)</a>
-<a class="sourceLine" id="cb41-3" title="3">nbcolors &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(FreqAnomaly<span class="op">$</span>Var1))</a>
-<a class="sourceLine" id="cb41-4" title="4">customPalette &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Blues&quot;</span>))(nbcolors)</a>
-<a class="sourceLine" id="cb41-5" title="5">customPalette[customPalette <span class="op">==</span><span class="st"> &quot;#F7FBFF&quot;</span>] &lt;-<span class="st"> &quot;#498fd1&quot;</span> <span class="co">#Pour remplacer une couleur</span></a>
-<a class="sourceLine" id="cb41-6" title="6"></a>
-<a class="sourceLine" id="cb41-7" title="7"><span class="kw">ggplot</span>(FreqAnomaly,</a>
-<a class="sourceLine" id="cb41-8" title="8">       <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(Var1, Freq), <span class="dt">y =</span> Freq, <span class="dt">fill =</span> Var1, <span class="dt">label =</span> Freq)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-9" title="9"><span class="st">       </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-10" title="10"><span class="st">       </span><span class="kw">geom_text</span>(<span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.0</span>), <span class="dt">vjust =</span> <span class="fl">+0.25</span>, <span class="dt">hjust =</span> <span class="fl">-0.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-11" title="11"><span class="st">       </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-12" title="12"><span class="st">       </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-13" title="13"><span class="st">       </span><span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></a>
-<a class="sourceLine" id="cb41-14" title="14"><span class="st">       </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> customPalette) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-15" title="15"><span class="st">       </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-16" title="16"><span class="st">       </span><span class="kw">coord_flip</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="kw">library</span>(RColorBrewer)</span>
+<span id="cb41-3"><a href="#cb41-3"></a>nbcolors &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(FreqAnomaly<span class="op">$</span>Var1))</span>
+<span id="cb41-4"><a href="#cb41-4"></a>customPalette &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Blues&quot;</span>))(nbcolors)</span>
+<span id="cb41-5"><a href="#cb41-5"></a>customPalette[customPalette <span class="op">==</span><span class="st"> &quot;#F7FBFF&quot;</span>] &lt;-<span class="st"> &quot;#498fd1&quot;</span> <span class="co">#Pour remplacer une couleur</span></span>
+<span id="cb41-6"><a href="#cb41-6"></a></span>
+<span id="cb41-7"><a href="#cb41-7"></a><span class="kw">ggplot</span>(FreqAnomaly,</span>
+<span id="cb41-8"><a href="#cb41-8"></a>       <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(Var1, Freq), <span class="dt">y =</span> Freq, <span class="dt">fill =</span> Var1, <span class="dt">label =</span> Freq)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb41-9"><a href="#cb41-9"></a><span class="st">       </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
+<span id="cb41-10"><a href="#cb41-10"></a><span class="st">       </span><span class="kw">geom_text</span>(<span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.0</span>), <span class="dt">vjust =</span> <span class="fl">+0.25</span>, <span class="dt">hjust =</span> <span class="fl">-0.25</span>) <span class="op">+</span></span>
+<span id="cb41-11"><a href="#cb41-11"></a><span class="st">       </span><span class="kw">theme_minimal</span>() <span class="op">+</span></span>
+<span id="cb41-12"><a href="#cb41-12"></a><span class="st">       </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></span>
+<span id="cb41-13"><a href="#cb41-13"></a><span class="st">       </span><span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></span>
+<span id="cb41-14"><a href="#cb41-14"></a><span class="st">       </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> customPalette) <span class="op">+</span></span>
+<span id="cb41-15"><a href="#cb41-15"></a><span class="st">       </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb41-16"><a href="#cb41-16"></a><span class="st">       </span><span class="kw">coord_flip</span>()</span></code></pre></div>
 <p>Histogramme vertical avec palette de couleurs adaptée et labels inclinés (données issues de <code>table()</code>)</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="kw">ggplot</span>(FreqAnomalyComb,</a>
-<a class="sourceLine" id="cb42-2" title="2">       <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(Var1, <span class="op">-</span>Freq), <span class="dt">y =</span> Freq, <span class="dt">fill =</span> Var1, <span class="dt">label =</span> Freq)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb42-3" title="3"><span class="st">       </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb42-4" title="4"><span class="st">       </span><span class="kw">geom_text</span>(<span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.9</span>), <span class="dt">vjust =</span> <span class="fl">-0.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb42-5" title="5"><span class="st">       </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb42-6" title="6"><span class="st">       </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb42-7" title="7"><span class="st">       </span><span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></a>
-<a class="sourceLine" id="cb42-8" title="8"><span class="st">       </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> customPalette) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb42-9" title="9"><span class="st">       </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>), <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</a></code></pre></div>
-<h3 id="liens-utiles">Liens utiles</h3>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="kw">ggplot</span>(FreqAnomalyComb,</span>
+<span id="cb42-2"><a href="#cb42-2"></a>       <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(Var1, <span class="op">-</span>Freq), <span class="dt">y =</span> Freq, <span class="dt">fill =</span> Var1, <span class="dt">label =</span> Freq)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-3"><a href="#cb42-3"></a><span class="st">       </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
+<span id="cb42-4"><a href="#cb42-4"></a><span class="st">       </span><span class="kw">geom_text</span>(<span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.9</span>), <span class="dt">vjust =</span> <span class="fl">-0.25</span>) <span class="op">+</span></span>
+<span id="cb42-5"><a href="#cb42-5"></a><span class="st">       </span><span class="kw">theme_minimal</span>() <span class="op">+</span></span>
+<span id="cb42-6"><a href="#cb42-6"></a><span class="st">       </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></span>
+<span id="cb42-7"><a href="#cb42-7"></a><span class="st">       </span><span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></span>
+<span id="cb42-8"><a href="#cb42-8"></a><span class="st">       </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> customPalette) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-9"><a href="#cb42-9"></a><span class="st">       </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>), <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<h3 id="liens-complémentaires">Liens complémentaires</h3>
 <ul>
 <li><a href="https://db.rstudio.com/databases/microsoft-sql-server/">DB: SQLServer</a></li>
 <li><a href="https://db.rstudio.com/databases/oracle/">DB: Oracle</a></li>
 <li><a href="https://www.statmethods.net/management/subset.html">Subset</a></li>
 <li><a href="http://dimension.usherbrooke.ca/dimension/v2ssrcadre.html">Statistiques en sciences humaines et sociales avec R, Jean-Herman Guay</a></li>
+<li><a href="https://tutorials.iq.harvard.edu/R/Rgraphics/Rgraphics.html">Harvard R Graphics</a></li>
 </ul>
 </article>
 
