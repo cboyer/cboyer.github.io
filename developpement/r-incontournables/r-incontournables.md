@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2020-04-27T21:43:29-04:00"
+updated: "2020-05-12T17:03:29-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -10,9 +10,6 @@ keywords: [R, RStudio, ODBC, SQL, MSSQL, Oracle, code snippets, développement]
 abstract: |
   Opérations incontournables avec le langage R.
 ---
-
-
-Cet article recense les opérations incontournables avec R
 
 - [Options d'exécution](#optionsexec)
 - [Base de données](#db)
@@ -212,7 +209,7 @@ Lister les lignes dont une valeur est dupliquée
 ```R
 duplicats <- users[duplicated(users$UserID) | duplicated(users$UserID, fromLast = TRUE),]
 
-#Autre possibilité (moins performante)
+#Alternative (moins performante)
 decompte <- data.frame(table(users$UserID))
 duplicats <- users[users$UserID %in% decompte$Var1[decompte$Freq > 1], ]
 ```
@@ -226,7 +223,7 @@ Récupère les lignes de dataframe1 dont LOGIN et LAST_DATE sont dans dataframe2
 ```R
 intersection <- dataframe1[with(dataframe1, paste(LOGIN, LAST_DATE, sep = ".")) %in% with(dataframe2, paste(LOGIN, LAST_DATE, sep = ".")), ]
 
-#Autre possibilité
+#Alternative
 intersection <- dataframe1[match( paste(dataframe1$LOGIN, dataframe1$LAST_DATE), paste(dataframe2$LOGIN, dataframe2$LAST_DATE) ), ]
 ```
 
@@ -262,7 +259,7 @@ Traiter une colonne (chaîne de caractères) pour remplacer certains caractères
 ```R
 users <- within(users,  Descriptions <- gsub("[,;\"\r\n]", " ", Descriptions) )
 
-#Autre possibilité
+#Alternative
 users$Descriptions <- sapply(users$Descriptions, function(x) { gsub("[,;\"\r\n]", " ", x) })
 
 #Pour les espaces de début/fin
@@ -291,6 +288,10 @@ aggregate(last_login_date ~ ., data = users, FUN = max)
 
 #En fonction d'une liste de colonnes
 aggregate(last_login_date ~ login + type, data = users, FUN = max)
+
+#Alternative avec dplyr:
+users <- users %>% group_by(login, type) %>%
+                   summarize(max_login_date = max(last_login_date))
 ```
 
 Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)
@@ -298,14 +299,9 @@ Regrouper les dates par login sur une même ligne (concatène les valeurs sépar
 aggregate(login_date ~ login, data = users, FUN = toString)
 ```
 
-Pivot des valeurs d'une colonne `timevar` en nouvelles colonnes avec pour valeurs la colonne `Valeur` (implicite) pour chaque ligne identifiée par `idvar`
-```R
-reshape(inventaire, direction = "wide", idvar = c("ItemID", "Item", "Type", "Categorie"), timevar = "Champs")
-```
-
 Séparer les dates concaténées précédemment (crée une liste dans cette ligne/colonne)
 ```R
-users$dateList <- strsplit(users$login_date, ',') #Pour rechercher directement dans dateList: unlist(users$dateList)
+users$dateList <- strsplit(users$login_date, ", ") #Pour rechercher directement dans dateList: unlist(users$dateList)
 
 #Dupliquer les lignes pour chaque date
 library(tidyr)
@@ -317,9 +313,14 @@ Séparer les dates concaténées précédemment en colonnes distinctes (avec plu
 library(tidyr)
 users <- users %>% separate(Email, c("Email", "Email2", "Email3"), "[;-,]")
 
-#Autre possibilité
+#Alternative avec stringr
 library(stringr)
 str_split_fixed(users$Email, "[;-,]", 3)
+```
+
+Pivot des valeurs d'une colonne `timevar` en nouvelles colonnes avec pour valeurs la colonne `Valeur` (implicite) pour chaque ligne identifiée par `idvar`
+```R
+reshape(inventaire, direction = "wide", idvar = c("ItemID", "Item", "Type", "Categorie"), timevar = "Champs")
 ```
 
 Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques

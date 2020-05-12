@@ -15,9 +15,9 @@
   <meta property="og:description" content="<p>Opérations incontournables avec le langage R.</p>" />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2020-04-27T21:43:29-04:00" />
+  <meta property="og:updated_time" content="2020-05-12T17:03:29-04:00" />
   <meta property="article:published_time" content="2019-05-25T10:09:13-04:00" />
-  <meta property="article:modified_time" content="2020-04-27T21:43:29-04:00" />
+  <meta property="article:modified_time" content="2020-05-12T17:03:29-04:00" />
   <meta name="generator" content="pandoc" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -140,7 +140,6 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 class="title">R: les incontournables</h2>
  <span class="author">C. Boyer</span>,   <span class="date">2019-05-25 10:09:13 (UTC-04:00)</span>
 </header>
-<p>Cet article recense les opérations incontournables avec R</p>
 <ul>
 <li><a href="#optionsexec">Options d'exécution</a></li>
 <li><a href="#db">Base de données</a></li>
@@ -262,7 +261,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Lister les lignes dont une valeur est dupliquée</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>duplicats &lt;-<span class="st"> </span>users[<span class="kw">duplicated</span>(users<span class="op">$</span>UserID) <span class="op">|</span><span class="st"> </span><span class="kw">duplicated</span>(users<span class="op">$</span>UserID, <span class="dt">fromLast =</span> <span class="ot">TRUE</span>),]</span>
 <span id="cb24-2"><a href="#cb24-2"></a></span>
-<span id="cb24-3"><a href="#cb24-3"></a><span class="co">#Autre possibilité (moins performante)</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="co">#Alternative (moins performante)</span></span>
 <span id="cb24-4"><a href="#cb24-4"></a>decompte &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">table</span>(users<span class="op">$</span>UserID))</span>
 <span id="cb24-5"><a href="#cb24-5"></a>duplicats &lt;-<span class="st"> </span>users[users<span class="op">$</span>UserID <span class="op">%in%</span><span class="st"> </span>decompte<span class="op">$</span>Var1[decompte<span class="op">$</span>Freq <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>], ]</span></code></pre></div>
 <p>Déterminer les données manquantes d'un dataframe à un autre en fonction d'une colonne</p>
@@ -270,7 +269,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Récupère les lignes de dataframe1 dont LOGIN et LAST_DATE sont dans dataframe2</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>intersection &lt;-<span class="st"> </span>dataframe1[<span class="kw">with</span>(dataframe1, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)) <span class="op">%in%</span><span class="st"> </span><span class="kw">with</span>(dataframe2, <span class="kw">paste</span>(LOGIN, LAST_DATE, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)), ]</span>
 <span id="cb26-2"><a href="#cb26-2"></a></span>
-<span id="cb26-3"><a href="#cb26-3"></a><span class="co">#Autre possibilité</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="co">#Alternative</span></span>
 <span id="cb26-4"><a href="#cb26-4"></a>intersection &lt;-<span class="st"> </span>dataframe1[<span class="kw">match</span>( <span class="kw">paste</span>(dataframe1<span class="op">$</span>LOGIN, dataframe1<span class="op">$</span>LAST_DATE), <span class="kw">paste</span>(dataframe2<span class="op">$</span>LOGIN, dataframe2<span class="op">$</span>LAST_DATE) ), ]</span></code></pre></div>
 <p>Compléter un dataframe en récupérant la colonne d'un autre dataframe selon une correspondance (comme une jointure SQL)</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>stations<span class="op">$</span>Manufacturer &lt;-<span class="st"> </span>manufacturers<span class="op">$</span>OrganizationName[<span class="kw">match</span>(stations<span class="op">$</span>ManufacturerID, manufacturers<span class="op">$</span>ManufacturerID)]</span>
@@ -288,7 +287,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Traiter une colonne (chaîne de caractères) pour remplacer certains caractères par un espace</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>users &lt;-<span class="st"> </span><span class="kw">within</span>(users,  Descriptions &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, Descriptions) )</span>
 <span id="cb32-2"><a href="#cb32-2"></a></span>
-<span id="cb32-3"><a href="#cb32-3"></a><span class="co">#Autre possibilité</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="co">#Alternative</span></span>
 <span id="cb32-4"><a href="#cb32-4"></a>users<span class="op">$</span>Descriptions &lt;-<span class="st"> </span><span class="kw">sapply</span>(users<span class="op">$</span>Descriptions, <span class="cf">function</span>(x) { <span class="kw">gsub</span>(<span class="st">&quot;[,;</span><span class="ch">\&quot;\r\n</span><span class="st">]&quot;</span>, <span class="st">&quot; &quot;</span>, x) })</span>
 <span id="cb32-5"><a href="#cb32-5"></a></span>
 <span id="cb32-6"><a href="#cb32-6"></a><span class="co">#Pour les espaces de début/fin</span></span>
@@ -310,24 +309,28 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb34-4"><a href="#cb34-4"></a><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</span>
 <span id="cb34-5"><a href="#cb34-5"></a></span>
 <span id="cb34-6"><a href="#cb34-6"></a><span class="co">#En fonction d&#39;une liste de colonnes</span></span>
-<span id="cb34-7"><a href="#cb34-7"></a><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</span></code></pre></div>
+<span id="cb34-7"><a href="#cb34-7"></a><span class="kw">aggregate</span>(last_login_date <span class="op">~</span><span class="st"> </span>login <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> users, <span class="dt">FUN =</span> max)</span>
+<span id="cb34-8"><a href="#cb34-8"></a></span>
+<span id="cb34-9"><a href="#cb34-9"></a><span class="co">#Alternative avec dplyr:</span></span>
+<span id="cb34-10"><a href="#cb34-10"></a>users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(login, type) <span class="op">%&gt;%</span></span>
+<span id="cb34-11"><a href="#cb34-11"></a><span class="st">                   </span><span class="kw">summarize</span>(<span class="dt">max_login_date =</span> <span class="kw">max</span>(last_login_date))</span></code></pre></div>
 <p>Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> toString)</span></code></pre></div>
-<p>Pivot des valeurs d'une colonne <code>timevar</code> en nouvelles colonnes avec pour valeurs la colonne <code>Valeur</code> (implicite) pour chaque ligne identifiée par <code>idvar</code></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">reshape</span>(inventaire, <span class="dt">direction =</span> <span class="st">&quot;wide&quot;</span>, <span class="dt">idvar =</span> <span class="kw">c</span>(<span class="st">&quot;ItemID&quot;</span>, <span class="st">&quot;Item&quot;</span>, <span class="st">&quot;Type&quot;</span>, <span class="st">&quot;Categorie&quot;</span>), <span class="dt">timevar =</span> <span class="st">&quot;Champs&quot;</span>)</span></code></pre></div>
 <p>Séparer les dates concaténées précédemment (crée une liste dans cette ligne/colonne)</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>users<span class="op">$</span>dateList &lt;-<span class="st"> </span><span class="kw">strsplit</span>(users<span class="op">$</span>login_date, <span class="st">&#39;,&#39;</span>) <span class="co">#Pour rechercher directement dans dateList: unlist(users$dateList)</span></span>
-<span id="cb37-2"><a href="#cb37-2"></a></span>
-<span id="cb37-3"><a href="#cb37-3"></a><span class="co">#Dupliquer les lignes pour chaque date</span></span>
-<span id="cb37-4"><a href="#cb37-4"></a><span class="kw">library</span>(tidyr)</span>
-<span id="cb37-5"><a href="#cb37-5"></a>users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(<span class="dt">cols =</span> dateList)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>users<span class="op">$</span>dateList &lt;-<span class="st"> </span><span class="kw">strsplit</span>(users<span class="op">$</span>login_date, <span class="st">&quot;, &quot;</span>) <span class="co">#Pour rechercher directement dans dateList: unlist(users$dateList)</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a></span>
+<span id="cb36-3"><a href="#cb36-3"></a><span class="co">#Dupliquer les lignes pour chaque date</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb36-5"><a href="#cb36-5"></a>users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(<span class="dt">cols =</span> dateList)</span></code></pre></div>
 <p>Séparer les dates concaténées précédemment en colonnes distinctes (avec plusieurs séparateurs)</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">library</span>(tidyr)</span>
-<span id="cb38-2"><a href="#cb38-2"></a>users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">separate</span>(Email, <span class="kw">c</span>(<span class="st">&quot;Email&quot;</span>, <span class="st">&quot;Email2&quot;</span>, <span class="st">&quot;Email3&quot;</span>), <span class="st">&quot;[;-,]&quot;</span>)</span>
-<span id="cb38-3"><a href="#cb38-3"></a></span>
-<span id="cb38-4"><a href="#cb38-4"></a><span class="co">#Autre possibilité</span></span>
-<span id="cb38-5"><a href="#cb38-5"></a><span class="kw">library</span>(stringr)</span>
-<span id="cb38-6"><a href="#cb38-6"></a><span class="kw">str_split_fixed</span>(users<span class="op">$</span>Email, <span class="st">&quot;[;-,]&quot;</span>, <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb37-2"><a href="#cb37-2"></a>users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">separate</span>(Email, <span class="kw">c</span>(<span class="st">&quot;Email&quot;</span>, <span class="st">&quot;Email2&quot;</span>, <span class="st">&quot;Email3&quot;</span>), <span class="st">&quot;[;-,]&quot;</span>)</span>
+<span id="cb37-3"><a href="#cb37-3"></a></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="co">#Alternative avec stringr</span></span>
+<span id="cb37-5"><a href="#cb37-5"></a><span class="kw">library</span>(stringr)</span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="kw">str_split_fixed</span>(users<span class="op">$</span>Email, <span class="st">&quot;[;-,]&quot;</span>, <span class="dv">3</span>)</span></code></pre></div>
+<p>Pivot des valeurs d'une colonne <code>timevar</code> en nouvelles colonnes avec pour valeurs la colonne <code>Valeur</code> (implicite) pour chaque ligne identifiée par <code>idvar</code></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">reshape</span>(inventaire, <span class="dt">direction =</span> <span class="st">&quot;wide&quot;</span>, <span class="dt">idvar =</span> <span class="kw">c</span>(<span class="st">&quot;ItemID&quot;</span>, <span class="st">&quot;Item&quot;</span>, <span class="st">&quot;Type&quot;</span>, <span class="st">&quot;Categorie&quot;</span>), <span class="dt">timevar =</span> <span class="st">&quot;Champs&quot;</span>)</span></code></pre></div>
 <p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by =</span> <span class="st">&quot;login&quot;</span>)</span>
 <span id="cb39-2"><a href="#cb39-2"></a></span>

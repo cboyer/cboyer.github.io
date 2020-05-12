@@ -3,7 +3,7 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2020-05-03T19:24:53-04:00</updated>
+    <updated>2020-05-12T17:07:16-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
@@ -56,7 +56,7 @@
         <category term="Développement"/>
         <id>urn:uuid:48d29d28-f09d-5e23-baed-7073729aeb3d</id>
         <published>2019-05-25T10:09:13-04:00</published>
-        <updated>2020-04-27T21:43:29-04:00</updated>
+        <updated>2020-05-12T17:03:29-04:00</updated>
         <summary>Opérations incontournables avec le langage R.</summary>
     </entry>
     <entry>
