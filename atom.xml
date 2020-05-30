@@ -3,12 +3,22 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2020-05-12T17:07:16-04:00</updated>
+    <updated>2020-05-30T17:14:01-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
     <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <entry>
+        <title>Interfacer un programme C avec Elixir grâce aux Ports</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/interface-c-elixir/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:14d178c3-0a64-546d-97a6-0196dd526359</id>
+        <published>2020-05-30T14:27:04-04:00</published>
+        <updated>2020-05-30T14:27:04-04:00</updated>
+        <summary>Interfacer un programme C via STDIN/STDOUT avec les Ports Elixir.</summary>
+    </entry>
     <entry>
         <title>Accélération matérielle 2D avec OpenVG sur Raspberry Pi</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
@@ -56,7 +66,7 @@
         <category term="Développement"/>
         <id>urn:uuid:48d29d28-f09d-5e23-baed-7073729aeb3d</id>
         <published>2019-05-25T10:09:13-04:00</published>
-        <updated>2020-05-12T17:03:29-04:00</updated>
+        <updated>2020-05-28T17:03:29-04:00</updated>
         <summary>Opérations incontournables avec le langage R.</summary>
     </entry>
     <entry>

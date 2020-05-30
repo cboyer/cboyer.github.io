@@ -15,9 +15,9 @@
   <meta property="og:description" content="<p>Opérations incontournables avec le langage R.</p>" />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2020-05-12T17:03:29-04:00" />
+  <meta property="og:updated_time" content="2020-05-28T17:03:29-04:00" />
   <meta property="article:published_time" content="2019-05-25T10:09:13-04:00" />
-  <meta property="article:modified_time" content="2020-05-12T17:03:29-04:00" />
+  <meta property="article:modified_time" content="2020-05-28T17:03:29-04:00" />
   <meta name="generator" content="pandoc" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -146,6 +146,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <li><a href="#files">Opérations sur les fichiers</a></li>
 <li><a href="#stats">Statistiques</a></li>
 <li><a href="#data">Opérations sur les données</a></li>
+<li><a href="#dplyr">Pipelines Dplyr</a></li>
 <li><a href="#graphiques">Graphiques</a></li>
 </ul>
 <h2 id="options-dexécution"><a name="optionsexec"></a>Options d'exécution</h2>
@@ -341,34 +342,43 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb39-7"><a href="#cb39-7"></a>all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by.x =</span> <span class="kw">c</span>(<span class="st">&quot;samAccount&quot;</span>,<span class="st">&quot;email&quot;</span>), <span class="dt">by.y =</span> <span class="kw">c</span>(<span class="st">&quot;login&quot;</span>,<span class="st">&quot;mail&quot;</span>), <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avoir les mêmes colonnes)</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>users_windows &lt;-<span class="st"> </span><span class="kw">rbind</span>(users_windowsNT, users_windowsXP)</span></code></pre></div>
+<h2 id="pipelines-dplyr"><a name="dplyr"></a>Pipelines Dplyr</h2>
+<p>Calcul des taux de saisie de chaque champ</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>saisies &lt;-<span class="st"> </span>formulaires <span class="op">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="st">           </span><span class="kw">select</span>(Valeur, Type, TypeChamps, Champs) <span class="op">%&gt;%</span></span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="st">           </span><span class="kw">mutate</span>(<span class="dt">IsEmpty =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(Valeur), <span class="ot">TRUE</span>, <span class="ot">FALSE</span>) ) <span class="op">%&gt;%</span></span>
+<span id="cb41-4"><a href="#cb41-4"></a><span class="st">           </span><span class="kw">group_by</span>(IsEmpty, Type, TypeChamps, Champs) <span class="op">%&gt;%</span></span>
+<span id="cb41-5"><a href="#cb41-5"></a><span class="st">           </span><span class="kw">summarize</span>(<span class="dt">Vide =</span> <span class="kw">length</span>(Type[IsEmpty <span class="op">==</span><span class="st"> </span><span class="ot">TRUE</span>]), <span class="dt">Saisi =</span> <span class="kw">length</span>(Type[IsEmpty <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>])) <span class="op">%&gt;%</span></span>
+<span id="cb41-6"><a href="#cb41-6"></a><span class="st">           </span><span class="kw">group_by</span>(Type, TypeChamps, Champs) <span class="op">%&gt;%</span></span>
+<span id="cb41-7"><a href="#cb41-7"></a><span class="st">           </span><span class="kw">summarize</span>(<span class="dt">Vide =</span> <span class="kw">sum</span>(Vide), <span class="dt">Saisi =</span> <span class="kw">sum</span>(Saisi), <span class="dt">Saisi_p =</span> <span class="kw">round</span>( (Saisi <span class="op">/</span><span class="st"> </span>(Vide <span class="op">+</span><span class="st"> </span>Saisi))<span class="op">*</span><span class="dv">100</span>, <span class="dt">digits =</span> <span class="dv">2</span>) )</span></code></pre></div>
 <h2 id="graphiques"><a name="graphiques"></a>Graphiques</h2>
 <p>Histogramme horizontal avec palette de couleurs adaptée (données issues de <code>table()</code>)</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="kw">library</span>(ggplot2)</span>
-<span id="cb41-2"><a href="#cb41-2"></a><span class="kw">library</span>(RColorBrewer)</span>
-<span id="cb41-3"><a href="#cb41-3"></a>nbcolors &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(FreqAnomaly<span class="op">$</span>Var1))</span>
-<span id="cb41-4"><a href="#cb41-4"></a>customPalette &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Blues&quot;</span>))(nbcolors)</span>
-<span id="cb41-5"><a href="#cb41-5"></a>customPalette[customPalette <span class="op">==</span><span class="st"> &quot;#F7FBFF&quot;</span>] &lt;-<span class="st"> &quot;#498fd1&quot;</span> <span class="co">#Pour remplacer une couleur</span></span>
-<span id="cb41-6"><a href="#cb41-6"></a></span>
-<span id="cb41-7"><a href="#cb41-7"></a><span class="kw">ggplot</span>(FreqAnomaly,</span>
-<span id="cb41-8"><a href="#cb41-8"></a>       <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(Var1, Freq), <span class="dt">y =</span> Freq, <span class="dt">fill =</span> Var1, <span class="dt">label =</span> Freq)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb41-9"><a href="#cb41-9"></a><span class="st">       </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
-<span id="cb41-10"><a href="#cb41-10"></a><span class="st">       </span><span class="kw">geom_text</span>(<span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.0</span>), <span class="dt">vjust =</span> <span class="fl">+0.25</span>, <span class="dt">hjust =</span> <span class="fl">-0.25</span>) <span class="op">+</span></span>
-<span id="cb41-11"><a href="#cb41-11"></a><span class="st">       </span><span class="kw">theme_minimal</span>() <span class="op">+</span></span>
-<span id="cb41-12"><a href="#cb41-12"></a><span class="st">       </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></span>
-<span id="cb41-13"><a href="#cb41-13"></a><span class="st">       </span><span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></span>
-<span id="cb41-14"><a href="#cb41-14"></a><span class="st">       </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> customPalette) <span class="op">+</span></span>
-<span id="cb41-15"><a href="#cb41-15"></a><span class="st">       </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb41-16"><a href="#cb41-16"></a><span class="st">       </span><span class="kw">coord_flip</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb42-2"><a href="#cb42-2"></a><span class="kw">library</span>(RColorBrewer)</span>
+<span id="cb42-3"><a href="#cb42-3"></a>nbcolors &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(FreqAnomaly<span class="op">$</span>Var1))</span>
+<span id="cb42-4"><a href="#cb42-4"></a>customPalette &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Blues&quot;</span>))(nbcolors)</span>
+<span id="cb42-5"><a href="#cb42-5"></a>customPalette[customPalette <span class="op">==</span><span class="st"> &quot;#F7FBFF&quot;</span>] &lt;-<span class="st"> &quot;#498fd1&quot;</span> <span class="co">#Pour remplacer une couleur</span></span>
+<span id="cb42-6"><a href="#cb42-6"></a></span>
+<span id="cb42-7"><a href="#cb42-7"></a><span class="kw">ggplot</span>(FreqAnomaly,</span>
+<span id="cb42-8"><a href="#cb42-8"></a>       <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(Var1, Freq), <span class="dt">y =</span> Freq, <span class="dt">fill =</span> Var1, <span class="dt">label =</span> Freq)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-9"><a href="#cb42-9"></a><span class="st">       </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
+<span id="cb42-10"><a href="#cb42-10"></a><span class="st">       </span><span class="kw">geom_text</span>(<span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.0</span>), <span class="dt">vjust =</span> <span class="fl">+0.25</span>, <span class="dt">hjust =</span> <span class="fl">-0.25</span>) <span class="op">+</span></span>
+<span id="cb42-11"><a href="#cb42-11"></a><span class="st">       </span><span class="kw">theme_minimal</span>() <span class="op">+</span></span>
+<span id="cb42-12"><a href="#cb42-12"></a><span class="st">       </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></span>
+<span id="cb42-13"><a href="#cb42-13"></a><span class="st">       </span><span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></span>
+<span id="cb42-14"><a href="#cb42-14"></a><span class="st">       </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> customPalette) <span class="op">+</span></span>
+<span id="cb42-15"><a href="#cb42-15"></a><span class="st">       </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-16"><a href="#cb42-16"></a><span class="st">       </span><span class="kw">coord_flip</span>()</span></code></pre></div>
 <p>Histogramme vertical avec palette de couleurs adaptée et labels inclinés (données issues de <code>table()</code>)</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="kw">ggplot</span>(FreqAnomalyComb,</span>
-<span id="cb42-2"><a href="#cb42-2"></a>       <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(Var1, <span class="op">-</span>Freq), <span class="dt">y =</span> Freq, <span class="dt">fill =</span> Var1, <span class="dt">label =</span> Freq)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb42-3"><a href="#cb42-3"></a><span class="st">       </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
-<span id="cb42-4"><a href="#cb42-4"></a><span class="st">       </span><span class="kw">geom_text</span>(<span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.9</span>), <span class="dt">vjust =</span> <span class="fl">-0.25</span>) <span class="op">+</span></span>
-<span id="cb42-5"><a href="#cb42-5"></a><span class="st">       </span><span class="kw">theme_minimal</span>() <span class="op">+</span></span>
-<span id="cb42-6"><a href="#cb42-6"></a><span class="st">       </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></span>
-<span id="cb42-7"><a href="#cb42-7"></a><span class="st">       </span><span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></span>
-<span id="cb42-8"><a href="#cb42-8"></a><span class="st">       </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> customPalette) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb42-9"><a href="#cb42-9"></a><span class="st">       </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>), <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="kw">ggplot</span>(FreqAnomalyComb,</span>
+<span id="cb43-2"><a href="#cb43-2"></a>       <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(Var1, <span class="op">-</span>Freq), <span class="dt">y =</span> Freq, <span class="dt">fill =</span> Var1, <span class="dt">label =</span> Freq)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb43-3"><a href="#cb43-3"></a><span class="st">       </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
+<span id="cb43-4"><a href="#cb43-4"></a><span class="st">       </span><span class="kw">geom_text</span>(<span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.9</span>), <span class="dt">vjust =</span> <span class="fl">-0.25</span>) <span class="op">+</span></span>
+<span id="cb43-5"><a href="#cb43-5"></a><span class="st">       </span><span class="kw">theme_minimal</span>() <span class="op">+</span></span>
+<span id="cb43-6"><a href="#cb43-6"></a><span class="st">       </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></span>
+<span id="cb43-7"><a href="#cb43-7"></a><span class="st">       </span><span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></span>
+<span id="cb43-8"><a href="#cb43-8"></a><span class="st">       </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> customPalette) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb43-9"><a href="#cb43-9"></a><span class="st">       </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>), <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
 <h3 id="liens-complémentaires">Liens complémentaires</h3>
 <ul>
 <li><a href="https://db.rstudio.com/databases/microsoft-sql-server/">DB: SQLServer</a></li>

@@ -68,4 +68,5 @@ Notons qu'il possible de mettre en cache le caractère espace, cependant son uti
 - [OpenVG](https://www.khronos.org/openvg/)
 - [Documentation OpenVG](https://www.khronos.org/registry/OpenVG/specs/openvg-1.1.pdf)
 - [Fiche récapitulative OpenVG](https://www.khronos.org/files/openvg-quick-reference-card.pdf)
+- [Benchmarking OpenVG implementations](https://www.idi.ntnu.no/grupper/su/fordypningsprosjekt-2006/OpenVGReport_final.pdf)
 - [Raspberry Pi GPU Audio Video Programming - Newmarch, Jan](https://www.leslibraires.ca/livres/raspberry-pi-gpu-audio-video-programming-jan-newmarch-9781484224717.html)

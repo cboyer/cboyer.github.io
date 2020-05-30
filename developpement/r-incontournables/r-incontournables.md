@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2020-05-12T17:03:29-04:00"
+updated: "2020-05-28T17:03:29-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -16,6 +16,7 @@ abstract: |
 - [Opérations sur les fichiers](#files)
 - [Statistiques](#stats)
 - [Opérations sur les données](#data)
+- [Pipelines Dplyr](#dplyr)
 - [Graphiques](#graphiques)
 
 
@@ -337,6 +338,19 @@ all_users <- merge(users_windows, user_linux, by.x = c("samAccount","email"), by
 Associer deux dataframes verticalement (l'un à la suite de l'autre, doivent avoir les mêmes colonnes)
 ```R
 users_windows <- rbind(users_windowsNT, users_windowsXP)
+```
+
+## <a name="dplyr"></a>Pipelines Dplyr
+
+Calcul des taux de saisie de chaque champ
+```R
+saisies <- formulaires %>%
+           select(Valeur, Type, TypeChamps, Champs) %>%
+           mutate(IsEmpty = ifelse(is.na(Valeur), TRUE, FALSE) ) %>%
+           group_by(IsEmpty, Type, TypeChamps, Champs) %>%
+           summarize(Vide = length(Type[IsEmpty == TRUE]), Saisi = length(Type[IsEmpty == FALSE])) %>%
+           group_by(Type, TypeChamps, Champs) %>%
+           summarize(Vide = sum(Vide), Saisi = sum(Saisi), Saisi_p = round( (Saisi / (Vide + Saisi))*100, digits = 2) )
 ```
 
 ## <a name="graphiques"></a>Graphiques
