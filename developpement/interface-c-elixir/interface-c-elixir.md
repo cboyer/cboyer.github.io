@@ -164,7 +164,7 @@ int main () {
 
         /* Lis le message sur la longueur spécifiée, buffer overflow si msg_length > MAX_SIZE_DATA */
         do {
-            read(STDIN_FILENO, buf, msg_length);
+            read(STDIN_FILENO, buf, msg_length - strlen(in));
             strncat(in, buf, strlen(buf));
         } while(strlen(in) < msg_length);
 

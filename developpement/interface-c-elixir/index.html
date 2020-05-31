@@ -262,7 +262,7 @@ PortTester.start_link([])</code></pre>
 <span id="cb6-25"><a href="#cb6-25"></a></span>
 <span id="cb6-26"><a href="#cb6-26"></a>        <span class="co">/* Lis le message sur la longueur spécifiée, buffer overflow si msg_length &gt; MAX_SIZE_DATA */</span></span>
 <span id="cb6-27"><a href="#cb6-27"></a>        <span class="cf">do</span> {</span>
-<span id="cb6-28"><a href="#cb6-28"></a>            read(STDIN_FILENO, buf, msg_length);</span>
+<span id="cb6-28"><a href="#cb6-28"></a>            read(STDIN_FILENO, buf, msg_length - strlen(in));</span>
 <span id="cb6-29"><a href="#cb6-29"></a>            strncat(in, buf, strlen(buf));</span>
 <span id="cb6-30"><a href="#cb6-30"></a>        } <span class="cf">while</span>(strlen(in) &lt; msg_length);</span>
 <span id="cb6-31"><a href="#cb6-31"></a></span>
