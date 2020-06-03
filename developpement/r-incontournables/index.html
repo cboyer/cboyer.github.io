@@ -15,9 +15,9 @@
   <meta property="og:description" content="<p>Opérations incontournables avec le langage R.</p>" />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2020-05-28T17:03:29-04:00" />
+  <meta property="og:updated_time" content="2020-06-02T20:30:29-04:00" />
   <meta property="article:published_time" content="2019-05-25T10:09:13-04:00" />
-  <meta property="article:modified_time" content="2020-05-28T17:03:29-04:00" />
+  <meta property="article:modified_time" content="2020-06-02T20:30:29-04:00" />
   <meta name="generator" content="pandoc" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -320,18 +320,20 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Séparer les dates concaténées précédemment (crée une liste dans cette ligne/colonne)</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>users<span class="op">$</span>dateList &lt;-<span class="st"> </span><span class="kw">strsplit</span>(users<span class="op">$</span>login_date, <span class="st">&quot;, &quot;</span>) <span class="co">#Pour rechercher directement dans dateList: unlist(users$dateList)</span></span>
 <span id="cb36-2"><a href="#cb36-2"></a></span>
-<span id="cb36-3"><a href="#cb36-3"></a><span class="co">#Dupliquer les lignes pour chaque date</span></span>
-<span id="cb36-4"><a href="#cb36-4"></a><span class="kw">library</span>(tidyr)</span>
-<span id="cb36-5"><a href="#cb36-5"></a>users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(<span class="dt">cols =</span> dateList)</span></code></pre></div>
+<span id="cb36-3"><a href="#cb36-3"></a><span class="co">#Dupliquer les lignes pour chaque date (TidyR)</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="kw">unnest</span>(users, <span class="dt">cols =</span> dateList)</span></code></pre></div>
 <p>Séparer les dates concaténées précédemment en colonnes distinctes (avec plusieurs séparateurs)</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">library</span>(tidyr)</span>
-<span id="cb37-2"><a href="#cb37-2"></a>users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">separate</span>(Email, <span class="kw">c</span>(<span class="st">&quot;Email&quot;</span>, <span class="st">&quot;Email2&quot;</span>, <span class="st">&quot;Email3&quot;</span>), <span class="st">&quot;[;-,]&quot;</span>)</span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="kw">separate</span>(users, Email, <span class="kw">c</span>(<span class="st">&quot;Email&quot;</span>, <span class="st">&quot;Email2&quot;</span>, <span class="st">&quot;Email3&quot;</span>), <span class="st">&quot;[;-,]&quot;</span>)</span>
 <span id="cb37-3"><a href="#cb37-3"></a></span>
 <span id="cb37-4"><a href="#cb37-4"></a><span class="co">#Alternative avec stringr</span></span>
 <span id="cb37-5"><a href="#cb37-5"></a><span class="kw">library</span>(stringr)</span>
 <span id="cb37-6"><a href="#cb37-6"></a><span class="kw">str_split_fixed</span>(users<span class="op">$</span>Email, <span class="st">&quot;[;-,]&quot;</span>, <span class="dv">3</span>)</span></code></pre></div>
-<p>Pivot des valeurs d'une colonne <code>timevar</code> en nouvelles colonnes avec pour valeurs la colonne <code>Valeur</code> (implicite) pour chaque ligne identifiée par <code>idvar</code></p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">reshape</span>(inventaire, <span class="dt">direction =</span> <span class="st">&quot;wide&quot;</span>, <span class="dt">idvar =</span> <span class="kw">c</span>(<span class="st">&quot;ItemID&quot;</span>, <span class="st">&quot;Item&quot;</span>, <span class="st">&quot;Type&quot;</span>, <span class="st">&quot;Categorie&quot;</span>), <span class="dt">timevar =</span> <span class="st">&quot;Champs&quot;</span>)</span></code></pre></div>
+<p>Pivot des valeurs d'une colonne <code>Champs</code> en nouvelles colonnes avec pour valeurs la colonne <code>Valeur</code> (implicite) pour chaque ligne identifiée par <code>idvar</code></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">reshape</span>(inventaire, <span class="dt">direction =</span> <span class="st">&quot;wide&quot;</span>, <span class="dt">idvar =</span> <span class="kw">c</span>(<span class="st">&quot;ItemID&quot;</span>, <span class="st">&quot;Item&quot;</span>, <span class="st">&quot;Type&quot;</span>, <span class="st">&quot;Categorie&quot;</span>), <span class="dt">timevar =</span> <span class="st">&quot;Champs&quot;</span>)</span>
+<span id="cb38-2"><a href="#cb38-2"></a></span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="co">#Alternative TidyR, beaucoup plus performante:</span></span>
+<span id="cb38-4"><a href="#cb38-4"></a><span class="kw">pivot_wider</span>(inventaire, <span class="dt">id_cols =</span> <span class="kw">c</span>(<span class="st">&quot;ItemID&quot;</span>,<span class="st">&quot;Item&quot;</span>, <span class="st">&quot;Type&quot;</span>), <span class="dt">names_from =</span> Champs, <span class="dt">values_from =</span> Valeur)</span></code></pre></div>
 <p>Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>all_users &lt;-<span class="st"> </span><span class="kw">merge</span>(users_windows, user_linux, <span class="dt">by =</span> <span class="st">&quot;login&quot;</span>)</span>
 <span id="cb39-2"><a href="#cb39-2"></a></span>

@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2020-05-28T17:03:29-04:00"
+updated: "2020-06-02T20:30:29-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -304,24 +304,26 @@ Séparer les dates concaténées précédemment (crée une liste dans cette lign
 ```R
 users$dateList <- strsplit(users$login_date, ", ") #Pour rechercher directement dans dateList: unlist(users$dateList)
 
-#Dupliquer les lignes pour chaque date
-library(tidyr)
-users <- users %>% unnest(cols = dateList)
+#Dupliquer les lignes pour chaque date (TidyR)
+unnest(users, cols = dateList)
 ```
 
 Séparer les dates concaténées précédemment en colonnes distinctes (avec plusieurs séparateurs)
 ```R
 library(tidyr)
-users <- users %>% separate(Email, c("Email", "Email2", "Email3"), "[;-,]")
+separate(users, Email, c("Email", "Email2", "Email3"), "[;-,]")
 
 #Alternative avec stringr
 library(stringr)
 str_split_fixed(users$Email, "[;-,]", 3)
 ```
 
-Pivot des valeurs d'une colonne `timevar` en nouvelles colonnes avec pour valeurs la colonne `Valeur` (implicite) pour chaque ligne identifiée par `idvar`
+Pivot des valeurs d'une colonne `Champs` en nouvelles colonnes avec pour valeurs la colonne `Valeur` (implicite) pour chaque ligne identifiée par `idvar`
 ```R
 reshape(inventaire, direction = "wide", idvar = c("ItemID", "Item", "Type", "Categorie"), timevar = "Champs")
+
+#Alternative TidyR, beaucoup plus performante:
+pivot_wider(inventaire, id_cols = c("ItemID","Item", "Type"), names_from = Champs, values_from = Valeur)
 ```
 
 Fusionner les lignes de deux dataframes par correspondance de colonnes spécifiques
