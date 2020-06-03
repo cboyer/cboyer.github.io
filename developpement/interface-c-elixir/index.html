@@ -246,49 +246,49 @@ PortTester.start_link([])</code></pre>
 <span id="cb6-9"><a href="#cb6-9"></a><span class="dt">int</span> main () {</span>
 <span id="cb6-10"><a href="#cb6-10"></a>    <span class="dt">char</span> add[] = <span class="st">&quot;Hello &quot;</span>;</span>
 <span id="cb6-11"><a href="#cb6-11"></a>    <span class="dt">char</span> in[MAX_SIZE_DATA] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
-<span id="cb6-12"><a href="#cb6-12"></a>    <span class="dt">char</span> buf[MAX_SIZE_DATA] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
-<span id="cb6-13"><a href="#cb6-13"></a>    <span class="dt">char</span> out[MAX_SIZE_DATA + <span class="kw">sizeof</span> add] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
-<span id="cb6-14"><a href="#cb6-14"></a>    <span class="dt">char</span> bytes[<span class="dv">4</span>];</span>
-<span id="cb6-15"><a href="#cb6-15"></a>    <span class="dt">uint32_t</span> msg_length;</span>
+<span id="cb6-12"><a href="#cb6-12"></a>    <span class="dt">char</span> out[MAX_SIZE_DATA] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="dt">char</span> bytes[<span class="dv">4</span>];</span>
+<span id="cb6-14"><a href="#cb6-14"></a>    <span class="dt">uint32_t</span> in_length, out_length;</span>
+<span id="cb6-15"><a href="#cb6-15"></a>    <span class="dt">int</span> iterate, remain;</span>
 <span id="cb6-16"><a href="#cb6-16"></a></span>
-<span id="cb6-17"><a href="#cb6-17"></a>    <span class="co">/* Récupère la longueur du message (4 premiers octets) */</span></span>
-<span id="cb6-18"><a href="#cb6-18"></a>    <span class="cf">while</span> (read(STDIN_FILENO, bytes, <span class="dv">4</span>) != <span class="dv">0</span>) {</span>
-<span id="cb6-19"><a href="#cb6-19"></a></span>
-<span id="cb6-20"><a href="#cb6-20"></a>        <span class="co">/* Conversion des 4 premiers octets en entier (big endian) */</span></span>
-<span id="cb6-21"><a href="#cb6-21"></a>        msg_length = ((<span class="dt">uint32_t</span>)bytes[<span class="dv">0</span>] &lt;&lt; <span class="dv">24</span>) + ((<span class="dt">uint32_t</span>)bytes[<span class="dv">1</span>] &lt;&lt; <span class="dv">16</span>) + ((<span class="dt">uint32_t</span>)bytes[<span class="dv">2</span>] &lt;&lt; <span class="dv">8</span>) + (<span class="dt">uint32_t</span>)bytes[<span class="dv">3</span>];</span>
-<span id="cb6-22"><a href="#cb6-22"></a></span>
-<span id="cb6-23"><a href="#cb6-23"></a>        <span class="co">/* STDERR permet d&#39;afficher dans le terminal (non récupéré par Elixir) */</span></span>
-<span id="cb6-24"><a href="#cb6-24"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Received length from Elixir: %d\n&quot;, msg_length);</span></span>
-<span id="cb6-25"><a href="#cb6-25"></a></span>
-<span id="cb6-26"><a href="#cb6-26"></a>        <span class="co">/* Lis le message sur la longueur spécifiée, buffer overflow si msg_length &gt; MAX_SIZE_DATA */</span></span>
-<span id="cb6-27"><a href="#cb6-27"></a>        <span class="cf">do</span> {</span>
-<span id="cb6-28"><a href="#cb6-28"></a>            read(STDIN_FILENO, buf, msg_length - strlen(in));</span>
-<span id="cb6-29"><a href="#cb6-29"></a>            strncat(in, buf, strlen(buf));</span>
-<span id="cb6-30"><a href="#cb6-30"></a>        } <span class="cf">while</span>(strlen(in) &lt; msg_length);</span>
-<span id="cb6-31"><a href="#cb6-31"></a></span>
-<span id="cb6-32"><a href="#cb6-32"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Received data from Elixir: %s\n&quot;, in);</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a></span>
+<span id="cb6-18"><a href="#cb6-18"></a>    <span class="co">/* Récupère la longueur du message (4 premiers octets) */</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a>    <span class="cf">while</span> (read(STDIN_FILENO, bytes, <span class="dv">4</span>) != <span class="dv">0</span>) {</span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a>        <span class="co">/* Conversion des 4 premiers octets en entier (big endian) */</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a>        in_length = ((<span class="dt">uint32_t</span>)bytes[<span class="dv">0</span>] &lt;&lt; <span class="dv">24</span>) + ((<span class="dt">uint32_t</span>)bytes[<span class="dv">1</span>] &lt;&lt; <span class="dv">16</span>) + ((<span class="dt">uint32_t</span>)bytes[<span class="dv">2</span>] &lt;&lt; <span class="dv">8</span>) + (<span class="dt">uint32_t</span>)bytes[<span class="dv">3</span>];</span>
+<span id="cb6-23"><a href="#cb6-23"></a></span>
+<span id="cb6-24"><a href="#cb6-24"></a>        <span class="co">/* STDERR permet d&#39;afficher dans le terminal (non récupéré par Elixir) */</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Received length from Elixir: %d\n&quot;, in_length);</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a></span>
+<span id="cb6-27"><a href="#cb6-27"></a>        <span class="co">/* Code la longueur du message réponse (int) sur 4 octets big endian */</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a>        out_length = in_length + strlen(add);</span>
+<span id="cb6-29"><a href="#cb6-29"></a>        bytes[<span class="dv">0</span>] = (out_length &gt;&gt; <span class="dv">24</span>) &amp; <span class="bn">0xFF</span>;</span>
+<span id="cb6-30"><a href="#cb6-30"></a>        bytes[<span class="dv">1</span>] = (out_length &gt;&gt; <span class="dv">16</span>) &amp; <span class="bn">0xFF</span>;</span>
+<span id="cb6-31"><a href="#cb6-31"></a>        bytes[<span class="dv">2</span>] = (out_length &gt;&gt; <span class="dv">8</span>) &amp; <span class="bn">0xFF</span>;</span>
+<span id="cb6-32"><a href="#cb6-32"></a>        bytes[<span class="dv">3</span>] = out_length &amp; <span class="bn">0xFF</span>;</span>
 <span id="cb6-33"><a href="#cb6-33"></a></span>
-<span id="cb6-34"><a href="#cb6-34"></a>        <span class="co">/* Prépare le message réponse */</span></span>
-<span id="cb6-35"><a href="#cb6-35"></a>        strncat(out, add, strlen(add));</span>
-<span id="cb6-36"><a href="#cb6-36"></a>        strncat(out, in, strlen(in));</span>
-<span id="cb6-37"><a href="#cb6-37"></a></span>
-<span id="cb6-38"><a href="#cb6-38"></a>        <span class="co">/* Code la longueur du message (int) sur 4 octets big endian */</span></span>
-<span id="cb6-39"><a href="#cb6-39"></a>        msg_length = strlen(out);</span>
-<span id="cb6-40"><a href="#cb6-40"></a>        bytes[<span class="dv">0</span>] = (msg_length &gt;&gt; <span class="dv">24</span>) &amp; <span class="bn">0xFF</span>;</span>
-<span id="cb6-41"><a href="#cb6-41"></a>        bytes[<span class="dv">1</span>] = (msg_length &gt;&gt; <span class="dv">16</span>) &amp; <span class="bn">0xFF</span>;</span>
-<span id="cb6-42"><a href="#cb6-42"></a>        bytes[<span class="dv">2</span>] = (msg_length &gt;&gt; <span class="dv">8</span>) &amp; <span class="bn">0xFF</span>;</span>
-<span id="cb6-43"><a href="#cb6-43"></a>        bytes[<span class="dv">3</span>] = msg_length &amp; <span class="bn">0xFF</span>;</span>
-<span id="cb6-44"><a href="#cb6-44"></a></span>
-<span id="cb6-45"><a href="#cb6-45"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Sending to Elixir length=%d data=%s\n&quot;, msg_length, out);</span></span>
-<span id="cb6-46"><a href="#cb6-46"></a></span>
-<span id="cb6-47"><a href="#cb6-47"></a>        <span class="co">/* Envoi la longueur du message à Elixir */</span></span>
-<span id="cb6-48"><a href="#cb6-48"></a>        write(STDOUT_FILENO, bytes, <span class="dv">4</span>);</span>
+<span id="cb6-34"><a href="#cb6-34"></a>        <span class="co">/* Envoi à Elixir la longueur du message et son début &quot;Hello &quot; */</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a>        write(STDOUT_FILENO, bytes, <span class="dv">4</span>);</span>
+<span id="cb6-36"><a href="#cb6-36"></a>        write(STDOUT_FILENO, add, strlen(add));</span>
+<span id="cb6-37"><a href="#cb6-37"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Send length to Elixir: %d\n&quot;, out_length);</span></span>
+<span id="cb6-38"><a href="#cb6-38"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Send data to Elixir: %s\n&quot;, add);</span></span>
+<span id="cb6-39"><a href="#cb6-39"></a></span>
+<span id="cb6-40"><a href="#cb6-40"></a>        <span class="co">/* Lis le message sur la longueur spécifiée et le renvoi au fur et à mesure (évite les buffers overflow) */</span></span>
+<span id="cb6-41"><a href="#cb6-41"></a>        iterate = in_length / MAX_SIZE_DATA;</span>
+<span id="cb6-42"><a href="#cb6-42"></a>        remain = in_length % MAX_SIZE_DATA;</span>
+<span id="cb6-43"><a href="#cb6-43"></a></span>
+<span id="cb6-44"><a href="#cb6-44"></a>        <span class="cf">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; iterate; i++) {</span>
+<span id="cb6-45"><a href="#cb6-45"></a>            read(STDIN_FILENO, out, MAX_SIZE_DATA);</span>
+<span id="cb6-46"><a href="#cb6-46"></a>            write(STDOUT_FILENO, out, MAX_SIZE_DATA);</span>
+<span id="cb6-47"><a href="#cb6-47"></a>            <span class="co">//fprintf(stderr, &quot;[a.out] Send data to Elixir: %s\n&quot;, out);</span></span>
+<span id="cb6-48"><a href="#cb6-48"></a>        }</span>
 <span id="cb6-49"><a href="#cb6-49"></a></span>
-<span id="cb6-50"><a href="#cb6-50"></a>        <span class="co">/* Envoi le message à Elixir */</span></span>
-<span id="cb6-51"><a href="#cb6-51"></a>        write(STDOUT_FILENO, out, msg_length);</span>
-<span id="cb6-52"><a href="#cb6-52"></a></span>
-<span id="cb6-53"><a href="#cb6-53"></a>        out[<span class="dv">0</span>] = <span class="ch">&#39;\0&#39;</span>;</span>
-<span id="cb6-54"><a href="#cb6-54"></a>        in[<span class="dv">0</span>] = <span class="ch">&#39;\0&#39;</span>;</span>
+<span id="cb6-50"><a href="#cb6-50"></a>        <span class="cf">if</span>(remain &gt; <span class="dv">0</span>) {</span>
+<span id="cb6-51"><a href="#cb6-51"></a>            read(STDIN_FILENO, out, remain);</span>
+<span id="cb6-52"><a href="#cb6-52"></a>            write(STDOUT_FILENO, out, remain);</span>
+<span id="cb6-53"><a href="#cb6-53"></a>            <span class="co">//fprintf(stderr, &quot;[a.out] Send data to Elixir: %s\n&quot;, out);</span></span>
+<span id="cb6-54"><a href="#cb6-54"></a>        }</span>
 <span id="cb6-55"><a href="#cb6-55"></a>    }</span>
 <span id="cb6-56"><a href="#cb6-56"></a></span>
 <span id="cb6-57"><a href="#cb6-57"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>

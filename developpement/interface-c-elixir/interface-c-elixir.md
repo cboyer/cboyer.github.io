@@ -148,49 +148,49 @@ En revanche l'implémentation en C nécessitera un peu plus de travail:
 int main () {
     char add[] = "Hello ";
     char in[MAX_SIZE_DATA] = "\0";
-    char buf[MAX_SIZE_DATA] = "\0";
-    char out[MAX_SIZE_DATA + sizeof add] = "\0";
+    char out[MAX_SIZE_DATA] = "\0";
     char bytes[4];
-    uint32_t msg_length;
+    uint32_t in_length, out_length;
+    int iterate, remain;
+
 
     /* Récupère la longueur du message (4 premiers octets) */
     while (read(STDIN_FILENO, bytes, 4) != 0) {
 
         /* Conversion des 4 premiers octets en entier (big endian) */
-        msg_length = ((uint32_t)bytes[0] << 24) + ((uint32_t)bytes[1] << 16) + ((uint32_t)bytes[2] << 8) + (uint32_t)bytes[3];
+        in_length = ((uint32_t)bytes[0] << 24) + ((uint32_t)bytes[1] << 16) + ((uint32_t)bytes[2] << 8) + (uint32_t)bytes[3];
 
         /* STDERR permet d'afficher dans le terminal (non récupéré par Elixir) */
-        //fprintf(stderr, "[a.out] Received length from Elixir: %d\n", msg_length);
+        //fprintf(stderr, "[a.out] Received length from Elixir: %d\n", in_length);
 
-        /* Lis le message sur la longueur spécifiée, buffer overflow si msg_length > MAX_SIZE_DATA */
-        do {
-            read(STDIN_FILENO, buf, msg_length - strlen(in));
-            strncat(in, buf, strlen(buf));
-        } while(strlen(in) < msg_length);
+        /* Code la longueur du message réponse (int) sur 4 octets big endian */
+        out_length = in_length + strlen(add);
+        bytes[0] = (out_length >> 24) & 0xFF;
+        bytes[1] = (out_length >> 16) & 0xFF;
+        bytes[2] = (out_length >> 8) & 0xFF;
+        bytes[3] = out_length & 0xFF;
 
-        //fprintf(stderr, "[a.out] Received data from Elixir: %s\n", in);
-
-        /* Prépare le message réponse */
-        strncat(out, add, strlen(add));
-        strncat(out, in, strlen(in));
-
-        /* Code la longueur du message (int) sur 4 octets big endian */
-        msg_length = strlen(out);
-        bytes[0] = (msg_length >> 24) & 0xFF;
-        bytes[1] = (msg_length >> 16) & 0xFF;
-        bytes[2] = (msg_length >> 8) & 0xFF;
-        bytes[3] = msg_length & 0xFF;
-
-        //fprintf(stderr, "[a.out] Sending to Elixir length=%d data=%s\n", msg_length, out);
-
-        /* Envoi la longueur du message à Elixir */
+        /* Envoi à Elixir la longueur du message et son début "Hello " */
         write(STDOUT_FILENO, bytes, 4);
+        write(STDOUT_FILENO, add, strlen(add));
+        //fprintf(stderr, "[a.out] Send length to Elixir: %d\n", out_length);
+        //fprintf(stderr, "[a.out] Send data to Elixir: %s\n", add);
 
-        /* Envoi le message à Elixir */
-        write(STDOUT_FILENO, out, msg_length);
+        /* Lis le message sur la longueur spécifiée et le renvoi au fur et à mesure (évite les buffers overflow) */
+        iterate = in_length / MAX_SIZE_DATA;
+        remain = in_length % MAX_SIZE_DATA;
 
-        out[0] = '\0';
-        in[0] = '\0';
+        for(int i = 0; i < iterate; i++) {
+            read(STDIN_FILENO, out, MAX_SIZE_DATA);
+            write(STDOUT_FILENO, out, MAX_SIZE_DATA);
+            //fprintf(stderr, "[a.out] Send data to Elixir: %s\n", out);
+        }
+
+        if(remain > 0) {
+            read(STDIN_FILENO, out, remain);
+            write(STDOUT_FILENO, out, remain);
+            //fprintf(stderr, "[a.out] Send data to Elixir: %s\n", out);
+        }
     }
 
     return 0;
