@@ -19,18 +19,16 @@ Le monitoring avec Zabbix repose sur un serveur chargé de collecter les donnée
 
 ## Le protocole Zabbix
 
-Zabbix utilise un protocole relativement simple: il repose sur des échanges de données au format JSON sur TCP. Étant une technologie libre et open source nous disposons du code source de l'agent Zabbix ainsi qu'une excellente documentation pour en comprendre le fonctionnement (cf. sources en bas de page).
+Zabbix utilise un protocole relativement simple: il repose sur des échanges de données texte sur TCP. Étant une technologie libre et open source nous disposons du code source de l'agent Zabbix ainsi qu'une excellente documentation pour en comprendre le fonctionnement (cf. sources en bas de page).`
 
-Zabbix structure ses messages de la façon suivante:
-
-
-Requête du serveur vers l'agent:
+Requête du serveur vers l'agent (Zabbix version 3):
 ```Javascript
-Zabbix version 3:
 [clé                 , fin de message]
 [chaîne de caractères, 0x0A          ]
+```
 
-Zabbix version 4:
+Requête du serveur vers l'agent (Zabbix version 4):
+```Javascript
 [protocole, flag, longueur des données             , réservé                 , clé (données)       ]
 ["ZBXD"   , 0x01, entier sur 4 octets little endian, [0x00, 0x00, 0x00, 0x00], chaîne de caractères]
 ```
@@ -144,7 +142,7 @@ Notons qu'il est nécessaire d'encoder le message en base 64 pour fonctionner en
 Coté Zabbix toute la configuration s'effectue via un [template](https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml) pour la définition des items/clés à monitorer.
 
 
-## Sources
+## Documentation Zabbix
 
  - [https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive](https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive)
  - [https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen](https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen)
