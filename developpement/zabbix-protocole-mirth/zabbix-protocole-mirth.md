@@ -1,7 +1,7 @@
 ---
 title: "Implémentation du protocole Zabbix dans Mirth Connect"
 date: "2018-12-08T18:23:15-04:00"
-updated: "2019-03-03T17:39:47-04:00"
+updated: "2020-06-13T10:36:47-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -23,26 +23,66 @@ Zabbix utilise un protocole relativement simple: il repose sur des échanges de 
 
 Zabbix structure ses messages de la façon suivante:
 
-```console
-<Entête> <Quantité des données> <Données>
+
+Requête du serveur vers l'agent:
+```Javascript
+Zabbix version 3:
+[clé                 , fin de message]
+[chaîne de caractères, 0x0A          ]
+
+Zabbix version 4:
+[protocole, flag, longueur des données             , réservé                 , clé (données)       ]
+["ZBXD"   , 0x01, entier sur 4 octets little endian, [0x00, 0x00, 0x00, 0x00], chaîne de caractères]
 ```
 
-&nbsp; |Entête|Quantité de données|Données
-:-----:|:-----:|:-----:|:-----:
-**Type** |Chaîne de caractères|Entier (little endian)|Chaîne de caractères
-**Taille** |5 octets|8 octets|Variable, maximum 134217728 octets
-**Contenu** |"ZBXD\\x01"|Taille du champ Données|Données de monitoring (JSON)
+Réponse de l'agent vers le serveur (version 3 et 4):
+```Javascript
+[protocole, flag, longueur des données             , réservé                 , réponse (données)   ]
+["ZBXD"   , 0x01, entier sur 4 octets little endian, [0x00, 0x00, 0x00, 0x00], chaîne de caractères]
+```
 
-
-L'entête est une chaîne de caractères fixe: `"ZBXD\x01"`. Elle est composée de la chaîne `ZBXD` et de l'octet `0x01`.
-La quantité de données est un entier non signé sur 8 octets en little-endian qui représente la longueur de la chaîne contenant les données JSON. Zabbix est limité à une quantité maximale de 134217728 octets.
-Les données envoyées sont en texte clair au format JSON (Zabbix peut crypter ses échanges, cas que nous ne traiterons pas ici).
+L'entête est une chaîne de caractères fixe: `"ZBXD"`. Elle est composée de la chaîne `ZBXD` et de l'octet `0x01`.
+La longueur des données est un entier non signé sur 4 octets en little-endian qui représente la longueur de la chaîne contenant les données. Zabbix est limité à une quantité maximale de 134217728 octets.
+Les données envoyées sont en texte clair (Zabbix peut crypter ses échanges, cas que nous ne traiterons pas ici).
 
 ## Mirth Connect
 
-Pour imiter le fonctionnement de l'agent Zabbix avec un canal Mirth un connecteur source de type TCP Listener est nécessaire afin d'accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu'ils soient altérés par les standards d'encodage (UTF-8, etc.) liés aux chaînes de caractères. Le caractère `0x0A` (LF) sera utilisé comme indicateur de fin de message. Tous ces paramètres sont configurables directement dans Mirth sans la moindre ligne de code.
+Pour imiter le fonctionnement de l'agent Zabbix avec un canal Mirth un connecteur source de type TCP Listener est nécessaire afin d'accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu'ils soient altérés par les standards d'encodage (UTF-8, etc.) liés aux chaînes de caractères. 
+La configuration d'un TCP listener se fait avec l'interface Mirth, sans code:
 
 ![Configuration du connecteur source](mirth_source.png)
+
+Pour être compatible avec les version 3 et 4 de Zabbix, il faut être en mesure de les dicerner:
+
+```javascript
+msg = new java.lang.String(FileUtil.decode(msg));
+
+//Zabbix 4.X
+if (msg.substring(0, 5) == "ZBXD\x01" && msg.length() > 13) {
+
+	//Longueur de la clé: octets 5 à 9
+	var length_bytes = msg.substring(5, 9).getBytes();
+
+	//Décode les 4 octets little endian en entier
+	var bytebuf = Packages.java.nio.ByteBuffer.wrap(length_bytes);
+	bytebuf.order(java.nio.ByteOrder.LITTLE_ENDIAN);
+	var length = bytebuf.getInt(0);
+
+	//Clé demandée par le serveur: octets 13 à (13 + length)
+	msg = msg.substring(13, 13 + length);
+}
+
+//Zabbix 3.X (requête sans entête avec 0x0A final)
+else if (msg.charAt(msg.length() - 1) == 0x0A) {
+
+    //Supprime simplement le 0x0A
+	msg = msg.slice(0, -1);
+}
+
+//Si ce n'est pas un message Zabbix
+else msg = 'UnknownProtocol';
+```
+
 
 Une fois le connecteur source mis en place, nous allons faire appel à un [transformer](https://github.com/cboyer/mirth-zabbix/blob/master/src/destination_transformer.js) afin de récupérer les données demandées par le serveur et les transmettre au connecteur de destination. C'est ici que sont centralisées les fonctionnalités de l'agent Zabbix, plus précisément les clés supportées. Concrètement il s'agit un simple `switch` pour exécuter du code en fonction de la métrique demandée par le serveur:
 
@@ -71,23 +111,30 @@ Pour le [connecteur de destination](https://github.com/cboyer/mirth-zabbix/blob/
 Voici le code du connecteur de destination:
 
 ```javascript
-var header = "ZBXD\x01";
+//Chaque composante du message
+var protocol = "ZBXD";
+var flag = "\x01";
+var reserved = "\x00\x00\x00\x00";
 var data = connectorMessage.getEncodedData();
+var datalen = data.length();
 
-var header_bytes = new java.lang.String(header).getBytes('UTF-8');
+//Transformation en tableau d'octets
+var protocol_bytes = new java.lang.String(protocol).getBytes('UTF-8');
+var flag_bytes = new java.lang.String(flag).getBytes('UTF-8');
+var reserved_bytes = new java.lang.String(reserved).getBytes('UTF-8');
 var data_bytes = new java.lang.String(data).getBytes('UTF-8');
 
-if (data_bytes.length + 1 >= 134217728) { // +1 pour le caractère final 0x0A (LF)
-  throw('Message exceeds the maximum size 134217728 bytes.');
-}
+//Encode la longueur des données sur 4 octets en little endian
+var datalen_bytes = Packages.java.nio.ByteBuffer.allocate(4);
+datalen_bytes.order(java.nio.ByteOrder.LITTLE_ENDIAN);
+datalen_bytes.putInt(data_bytes.length);
 
-var length_bytes = Packages.java.nio.ByteBuffer.allocate(8);
-length_bytes.order(java.nio.ByteOrder.LITTLE_ENDIAN);
-length_bytes.putInt(data_bytes.length + 1); // +1 pour le caractère final 0x0A (LF)
-
-var zabbix_message_bytes = Packages.java.nio.ByteBuffer.allocate(header_bytes.length + length_bytes.array().length + data_bytes.length);
-zabbix_message_bytes.put(header_bytes);
-zabbix_message_bytes.put(length_bytes.array());
+//Construction du message final
+var zabbix_message_bytes = Packages.java.nio.ByteBuffer.allocate(protocol_bytes.length + flag_bytes.length + datalen_bytes.array().length + reserved_bytes.length + data_bytes.length);
+zabbix_message_bytes.put(protocol_bytes);
+zabbix_message_bytes.put(flag_bytes);
+zabbix_message_bytes.put(datalen_bytes.array());
+zabbix_message_bytes.put(reserved_bytes);
 zabbix_message_bytes.put(data_bytes);
 
 return Packages.org.apache.commons.codec.binary.Base64.encodeBase64String(zabbix_message_bytes.array());
