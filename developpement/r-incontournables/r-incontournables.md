@@ -81,7 +81,7 @@ con <- dbConnect(odbc::odbc(),
 Oracle via JDBC
 ```R
 require(RJDBC)
-drv <- JDBC(driverClass="oracle.jdbc.OracleDriver", classPath="C:/JDBC/ojdbc8.jar")
+drv <- JDBC(driverClass = "oracle.jdbc.OracleDriver", classPath = "C:/JDBC/ojdbc8.jar")
 conn <- dbConnect(drv, "jdbc:oracle:thin:@//10.10.10.10:1521/database", "login", "password")
 sql <- "SELECT UserID FROM User"
 userids <- dbGetQuery(conn, sql)
@@ -110,7 +110,7 @@ con <- dbConnect(odbc::odbc(),
 
 tables <- dbListTables(con)
 describe <- lapply(tables, function(x, conn) {
-  data.frame(table=x, column=as.vector(dbListFields(conn, x)))
+  data.frame(table = x, column = as.vector(dbListFields(conn, x)))
 }, conn = con)
 schema <- do.call(rbind, describe)
 ```
@@ -118,7 +118,7 @@ schema <- do.call(rbind, describe)
 Requête avec une liste formée depuis une colonne
 ```R
 client_id <- toString(sprintf("'%s'", liste$client_id))
-sql <- paste('SELECT client_id FROM myTable WHERE client_id IN (', client_id, ')', sep="")
+sql <- paste('SELECT client_id FROM myTable WHERE client_id IN (', client_id, ')', sep = "")
 ```
 
 ## <a name="files"></a>Opérations sur les fichiers
@@ -144,7 +144,7 @@ close(fd)
 Charger un fichier Excel (XSLX/XLS)
 ```R
 require(xlsx)
-liste <- read.xlsx("./mon_fichier.xlsx", sheetName = 1, encoding="UTF-8")
+liste <- read.xlsx("./mon_fichier.xlsx", sheetName = 1, encoding = "UTF-8")
 
 #Cleanup colonnes avec style mais vides
 drops <- as.vector(paste("NA..", seq(1:20000), sep = '' ))
@@ -298,6 +298,10 @@ users <- users %>% group_by(login, type) %>%
 Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)
 ```R
 aggregate(login_date ~ login, data = users, FUN = toString)
+aggregate(login_date ~ login, data = users, FUN = paste, collapse = ",")
+
+#Alternative pour obtenir un vecteur
+aggregate(login_date ~ login, data = users, FUN = c)
 ```
 
 Séparer les dates concaténées précédemment (crée une liste dans cette ligne/colonne)

@@ -185,7 +185,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb7-6"><a href="#cb7-6"></a>                 <span class="dt">PWD =</span> <span class="st">&quot;password&quot;</span>)</span></code></pre></div>
 <p>Oracle via JDBC</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">require</span>(RJDBC)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>drv &lt;-<span class="st"> </span><span class="kw">JDBC</span>(<span class="dt">driverClass=</span><span class="st">&quot;oracle.jdbc.OracleDriver&quot;</span>, <span class="dt">classPath=</span><span class="st">&quot;C:/JDBC/ojdbc8.jar&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>drv &lt;-<span class="st"> </span><span class="kw">JDBC</span>(<span class="dt">driverClass =</span> <span class="st">&quot;oracle.jdbc.OracleDriver&quot;</span>, <span class="dt">classPath =</span> <span class="st">&quot;C:/JDBC/ojdbc8.jar&quot;</span>)</span>
 <span id="cb8-3"><a href="#cb8-3"></a>conn &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(drv, <span class="st">&quot;jdbc:oracle:thin:@//10.10.10.10:1521/database&quot;</span>, <span class="st">&quot;login&quot;</span>, <span class="st">&quot;password&quot;</span>)</span>
 <span id="cb8-4"><a href="#cb8-4"></a>sql &lt;-<span class="st"> &quot;SELECT UserID FROM User&quot;</span></span>
 <span id="cb8-5"><a href="#cb8-5"></a>userids &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(conn, sql)</span>
@@ -208,12 +208,12 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb10-8"><a href="#cb10-8"></a></span>
 <span id="cb10-9"><a href="#cb10-9"></a>tables &lt;-<span class="st"> </span><span class="kw">dbListTables</span>(con)</span>
 <span id="cb10-10"><a href="#cb10-10"></a>describe &lt;-<span class="st"> </span><span class="kw">lapply</span>(tables, <span class="cf">function</span>(x, conn) {</span>
-<span id="cb10-11"><a href="#cb10-11"></a>  <span class="kw">data.frame</span>(<span class="dt">table=</span>x, <span class="dt">column=</span><span class="kw">as.vector</span>(<span class="kw">dbListFields</span>(conn, x)))</span>
+<span id="cb10-11"><a href="#cb10-11"></a>  <span class="kw">data.frame</span>(<span class="dt">table =</span> x, <span class="dt">column =</span> <span class="kw">as.vector</span>(<span class="kw">dbListFields</span>(conn, x)))</span>
 <span id="cb10-12"><a href="#cb10-12"></a>}, <span class="dt">conn =</span> con)</span>
 <span id="cb10-13"><a href="#cb10-13"></a>schema &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, describe)</span></code></pre></div>
 <p>Requête avec une liste formée depuis une colonne</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>client_id &lt;-<span class="st"> </span><span class="kw">toString</span>(<span class="kw">sprintf</span>(<span class="st">&quot;&#39;%s&#39;&quot;</span>, liste<span class="op">$</span>client_id))</span>
-<span id="cb11-2"><a href="#cb11-2"></a>sql &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&#39;SELECT client_id FROM myTable WHERE client_id IN (&#39;</span>, client_id, <span class="st">&#39;)&#39;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<span id="cb11-2"><a href="#cb11-2"></a>sql &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&#39;SELECT client_id FROM myTable WHERE client_id IN (&#39;</span>, client_id, <span class="st">&#39;)&#39;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <h2 id="opérations-sur-les-fichiers"><a name="files"></a>Opérations sur les fichiers</h2>
 <p>Charger un fichier CSV</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>mon_dataframe &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;;&quot;</span>, <span class="dt">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
@@ -226,7 +226,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb14-4"><a href="#cb14-4"></a><span class="kw">close</span>(fd)</span></code></pre></div>
 <p>Charger un fichier Excel (XSLX/XLS)</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">require</span>(xlsx)</span>
-<span id="cb15-2"><a href="#cb15-2"></a>liste &lt;-<span class="st"> </span><span class="kw">read.xlsx</span>(<span class="st">&quot;./mon_fichier.xlsx&quot;</span>, <span class="dt">sheetName =</span> <span class="dv">1</span>, <span class="dt">encoding=</span><span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2"></a>liste &lt;-<span class="st"> </span><span class="kw">read.xlsx</span>(<span class="st">&quot;./mon_fichier.xlsx&quot;</span>, <span class="dt">sheetName =</span> <span class="dv">1</span>, <span class="dt">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
 <span id="cb15-3"><a href="#cb15-3"></a></span>
 <span id="cb15-4"><a href="#cb15-4"></a><span class="co">#Cleanup colonnes avec style mais vides</span></span>
 <span id="cb15-5"><a href="#cb15-5"></a>drops &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">paste</span>(<span class="st">&quot;NA..&quot;</span>, <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">20000</span>), <span class="dt">sep =</span> <span class="st">&#39;&#39;</span> ))</span>
@@ -316,7 +316,11 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb34-10"><a href="#cb34-10"></a>users &lt;-<span class="st"> </span>users <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(login, type) <span class="op">%&gt;%</span></span>
 <span id="cb34-11"><a href="#cb34-11"></a><span class="st">                   </span><span class="kw">summarize</span>(<span class="dt">max_login_date =</span> <span class="kw">max</span>(last_login_date))</span></code></pre></div>
 <p>Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> toString)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> toString)</span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> paste, <span class="dt">collapse =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb35-3"><a href="#cb35-3"></a></span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="co">#Alternative pour obtenir un vecteur</span></span>
+<span id="cb35-5"><a href="#cb35-5"></a><span class="kw">aggregate</span>(login_date <span class="op">~</span><span class="st"> </span>login, <span class="dt">data =</span> users, <span class="dt">FUN =</span> c)</span></code></pre></div>
 <p>Séparer les dates concaténées précédemment (crée une liste dans cette ligne/colonne)</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>users<span class="op">$</span>dateList &lt;-<span class="st"> </span><span class="kw">strsplit</span>(users<span class="op">$</span>login_date, <span class="st">&quot;, &quot;</span>) <span class="co">#Pour rechercher directement dans dateList: unlist(users$dateList)</span></span>
 <span id="cb36-2"><a href="#cb36-2"></a></span>
