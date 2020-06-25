@@ -215,4 +215,4 @@ Notons également qu'il existe l'équivalent de Buildroot pour FreeBSD: [Crochet
 
 ### Articles connexes
 
--[https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc](https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc)
+- [https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc](https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc)

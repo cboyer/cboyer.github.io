@@ -22,27 +22,28 @@ Ce programme peut facilement être intégré dans des systèmes comme [LibreELEC
 
 Dreamscreen utilise le port 8888 en UDP sur son interface WiFi pour envoyer et recevoir des messages binaires.
 
-&nbsp;|Début du paquet|Longueur du paquet|Adresse de groupe|Drapeau|Commande|Paramètre|Payload|CRC
-:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:
-Longueur (en octets)|1|1|1|1|1|1|variable (1 à 3)|1
+Structure du message:
+```Javascript
+[début, longueur du paquet, adresse de groupe, flag, commande principale, commande secondaire, payload (1 à 3 octets), CRC8]
+[0xFC , 0x??              , 0x??             , 0x11, 0x03               , 0x??               , [0x??, 0x??, 0x??]    , 0x??]
+```
 
-
-**Début du paquet:** Permet la synchronisation lors de la réception d’un paquet. Contient toujours `0xFC`
+**Début:** Permet la synchronisation lors de la réception d’un paquet. Contient toujours `0xFC`
 
 **Longueur du paquet:** Nombre d’octet contenu entre l’Adresse de groupe et le CRC inclus. Normalement `0x06` (payload d’un seul octet) sauf pour la définition d’une couleur ambiante `0x08` (payload de 3 octets).
 
 **Adresse de groupe:** Adresse identifiant le groupe auquel l’équipement est associé. `0x00` pour aucun groupe, `0x01` pour le groupe 1, `0x02` pour le groupe 2 etc.
 Dans le cas où l’adresse de groupe est incorrect, le message sera ignoré.
 
-**Drapeau:** Défini le contexte pour d’interprétation du message. Utiliser `0x11` pour commander le dreamscreen.
+**Flag:** Défini le contexte pour d’interprétation du message. Utiliser `0x11` pour commander le dreamscreen.
 
-**Commande:** Défini la commande, utiliser `0x03` pour commander le Dreamscreen.
+**Commande principale:** Défini la commande, utiliser `0x03` pour commander le Dreamscreen.
 
-**Paramètre:** Identifie l’élément à paramétrer (cf. tableau plus bas).
+**Commande secondaire:** Identifie l’élément à paramétrer (cf. tableau plus bas).
 
 **Payload:** Valeur à affecter au paramètre (cf. tableau plus bas).
 
-**CRC:** CRC sur 8 bits pour valider l’intégrité du message. S’il est incorrect, le message sera ignoré.
+**CRC8:** CRC sur 8 bits pour valider l’intégrité du message. S’il est incorrect, le message sera ignoré.
 
 
 ## Commandes et paramètres
@@ -57,7 +58,7 @@ Préréglage d’ambiance lumineuse |0x03|0x0D|0x00: Couleur aléatoire; 0x01: F
 Entrée HDMI|0x03|0x20|0x00: Entrée 1; 0x01: Entrée 2; 0x02: Entrée 3|1
 
 
-## Source
+## Documentation
 
  - [Documentation du protocole dreamscreen](https://planet.neeo.com/media/80x1kj/download/dreamscreen-v2-wifi-udp-protocol.pdf)
  - [https://github.com/cboyer/dreamscreen-daemon](https://github.com/cboyer/dreamscreen-daemon)
