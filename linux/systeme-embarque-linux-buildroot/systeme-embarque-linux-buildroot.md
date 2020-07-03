@@ -213,6 +213,6 @@ Citons le très intéressant [Nerves](https://nerves-project.org/) qui utilise B
 Notons également qu'il existe l'équivalent de Buildroot pour FreeBSD: [Crochet](https://github.com/freebsd/crochet).
 
 
-### Articles connexes
+### Articles complémentaires
 
-- [https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc](https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc)
+- [Buildroot-part 1. General information, minimum system build, setup via menu](https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc)

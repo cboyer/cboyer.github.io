@@ -14,6 +14,8 @@ div.sourceCode { background: rgba(230,235,237,0.25) !important; margin: 1em 0 3.
 ul.nobullet{ list-style: none; padding: 0; }
 ul.nobullet a { text-decoration: none; }
 ul.nobullet a:hover { text-decoration: underline; }
+ul:not(.nobullet):not(.menu) { list-style: none; padding-left: 0px; }
+ul:not(.nobullet):not(.menu) li:before{ content: "- "; font-size: 12pt; }
 hr { height: 1px; padding: 0; margin: 24px 0; background-color: #eaecef; border: 0; }
 figure { margin: 2em 0 3em 0; }
 figure img { display: block; margin-left: auto; margin-right: auto; }
@@ -31,18 +33,15 @@ th, td { border: 1px solid #dfe2e5; padding: 5px; padding: 3px 15px !important; 
 #links{ float: right; width: 30%; padding-top: 15px; text-align: right; height: 25px; }
 #menu { width: 100%; padding-top: 15px; margin: 20px 0 60px 0; clear: both; }
 #footer { width: 100%; font-size: 80%; margin: 100px 0 50px 0; text-align: center; border-top: 1px solid #eaecef; padding-top: 10px; }
-
 @media print {
   body { font-size: 12px; }
   #links, #menu, .menu_item { display: none; }
   #site_title { float: none; }
   h1, h2.title { margin: 0; }
 }
-
 @media screen {
   #container { margin-left: auto; margin-right: auto; max-width: 1150px; padding: 0 20px 0 20px; }
 }
-
 @media screen and (max-width:470px) {
   #site_title, #links {
     float: none;
@@ -58,15 +57,12 @@ th, td { border: 1px solid #dfe2e5; padding: 5px; padding: 3px 15px !important; 
     width: 100%;
   }
 }
-
 @media screen and (max-width:1150px) {
   #header {
     margin: 10px 5px 0 5px;
   }
 }
-
 svg:hover,path:hover { fill: #65928c; pointer-events: all; }
-
 ul.menu {
     list-style-type: none;
     margin: 0;
@@ -86,5 +82,3 @@ li.menu_item a {
 li.menu_item { float: left; }
 li.menu_item a:hover { background-color: #65928c; color: white; }
 li.active a { background-color: #65928c; color: white !important; }
-/*li.menu_item a:active { outline-style: none; }*/
-/*li.active, li.active a:hover { background-color: #fcfcfc !important; text-decoration: underline; color: #3273dc; }*/
