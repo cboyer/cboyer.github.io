@@ -64,8 +64,8 @@ con <- dbConnect(odbc::odbc(),
                  Driver = "SQL Server",
                  Server = "1.2.3.4",
                  Database = "mydb",
-                 User = "login",
-                 Password = "password")
+                 UID = "login",
+                 PWD = "password")
 ```
 
 Oracle via ODBC sans sources configurées (DSN)
@@ -105,8 +105,8 @@ con <- dbConnect(odbc::odbc(),
                  Driver = "SQL Server",
                  Server = "1.2.3.4",
                  Database = "mydb",
-                 User = "domaine\\login",
-                 Password = "password")
+                 UID = "domaine\\login",
+                 PWD = "password")
 
 tables <- dbListTables(con)
 describe <- lapply(tables, function(x, conn) {
