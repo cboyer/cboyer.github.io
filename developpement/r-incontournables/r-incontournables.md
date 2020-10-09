@@ -359,6 +359,25 @@ saisies <- formulaires %>%
            summarize(Vide = sum(Vide), Saisi = sum(Saisi), Saisi_p = round( (Saisi / (Vide + Saisi))*100, digits = 2) )
 ```
 
+```R
+stats <- all_data %>%
+           mutate(Groupment = case_when(
+                Source == 'A' & Status == 'failed' & (Details != 'Aucune adresse courriel' | is.na(Details)) ~ "Incorrecte",
+                Source == 'A' & Details == 'Aucune adresse courriel' ~ "Vide",
+                Source == 'B' & Status == 'sent' ~ "Envoyé",
+                Source == 'C' ~ "Replay",
+                TRUE ~ "Unknown"
+           )) %>%
+           filter(Groupment %in% c("Adresse incorrecte", "Sans adresse", "Envoyé")) %>%
+           group_by(ID_Extraction, Groupment) %>%
+           summarize(NBResult = length(ID_msg)) %>%
+           pivot_wider(id_cols = c("ID_Extraction"), names_from = Groupment, values_from = NBResult) %>%
+           mutate(ID_Extraction = strptime(ID_Extraction, format="%Y%m%d%H%M%S"), 
+                    Total = Vide + Incorrecte + Envoyé) %>%
+           rename("Date" = ID_Extraction)
+```
+
+
 ## <a name="graphiques"></a>Graphiques
 
 Histogramme horizontal avec palette de couleurs adaptée (données issues de `table()`)
