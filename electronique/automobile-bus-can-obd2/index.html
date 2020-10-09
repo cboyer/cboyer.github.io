@@ -138,7 +138,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h2 class="title">Automobile, bus CAN et norme OBD2</h2>
- <span class="author">C. Boyer</span>,   <span class="date">2018-11-01 18:08:32 (UTC-04:00)</span>
+ <span class="date">2018-11-01 18:08:32 (UTC-04:00)</span>
 </header>
 <p>Pour établir la communication avec l'ordinateur embarqué d'une automobile (appelé ECU pour Electronic Control Unit), rien de bien compliqué car la technologie mis en oeuvre ici (CAN pour Controller Area Network) date en partie des années 1980 et n'intègre pas les concepts issus des enjeux d'aujourd'hui (authentification, cryptage etc.). N'oublions pas que ces systèmes embarqués sont très limités en terme de capacité de traitement tout en étant soumis à des contraintes de temps dans lesquelles ils doivent être en mesure d'opérer.</p>
 <p>La couche physique (niveau 1 OSI), fonctionne selon une topologie de type bus: tous les noeuds connectés au bus reçoivent chaque message émis (broadcast) ce qui nécessite d'introduire la notion d'identification afin d'être en mesure d'identifier un noeud comme destinataire ou émetteur d'un message. L'identification des noeuds s'effectue par la couche liaison de donnée (niveau 2 OSI) qui est normalisée ISO avec deux variantes: l'une fonctionnant avec 11 bits et l'autre (dite "extended") sur 29 bits. On ne peut pas parler d'adressage formel car un noeud peut écouter sur un identifiant et répondre avec un autre (c'est le cas de l'ECU).</p>

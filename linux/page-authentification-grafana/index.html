@@ -138,7 +138,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h2 class="title">Page d'authentification personnalisée pour Grafana avec NGINX</h2>
- <span class="author">C. Boyer</span>,   <span class="date">2018-05-06 21:23:46 (UTC-04:00)</span>
+ <span class="date">2018-05-06 21:23:46 (UTC-04:00)</span>
 </header>
 <p>Voici un moyen relativement simple d'avoir une page d'authentification personnalisée pour Grafana sans altérer l'application ce qui va nous permettre de pouvoir la mettre à jour sans problème. L'idée est d'utiliser NGINX comme reverse proxy pour intercepter les requêtes en direction de la page d'authentification de Grafana. NGINX renverra alors une page d'authentification HTML écrite par nos soins. Cette page contiendra un formulaire login/mot de passe dont l'envoie cible la page légitime de Grafana. Ainsi c'est le mécanisme d'authentification de Grafana qui est utilisé (LDAP ou interne). Selon le retours de la page légitime, notre page personnalisée redirigera ou non vers Grafana. En résumé nous utilisons le concept de "man in the middle".</p>
 <p>Commençons par installer NGINX avec le gestionnaire adapté à la distribution en question (apt, yum, dnf).</p>

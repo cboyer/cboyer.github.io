@@ -138,7 +138,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h2 class="title">Implémentation du protocole Dreamscreen en C</h2>
- <span class="author">C. Boyer</span>,   <span class="date">2018-05-29 19:36:04 (UTC-04:00)</span>
+ <span class="date">2018-05-29 19:36:04 (UTC-04:00)</span>
 </header>
 <p>Le <a href="https://www.dreamscreentv.com">Dreamscreen</a> est un équipement multimédia du type "ambilight". Cet équipement utilise une application Android/IPhone pour être configuré et contrôlé par Wifi mais pas de télécommande. L'application en question est uniquement disponible sur Google Play (pour Android), ce qui est ennuyant lorsqu'on utilise un téléphone "dé-google-isé" avec <a href="https://www.lineageos.org">LineageOS</a>.</p>
 <p>Pour palier à ce manque, j'ai donc écrit un simple programme en C pour Linux (disponible sur <a href="https://github.com/cboyer/dreamscreen-daemon">Github</a>) afin contrôler un dreamscreen depuis un <a href="../../electronique/recepteur-infrarouge-usb-atmega32u4/index.html">système de télécommande</a> maison, que j'utilise avec Kodi. Ce programme est compatible avec n'importe quel autre périphérique de type clavier. Techniquement il s'agit d'une implémentation en C du protocole dreamscreen qui envoie des message via UDP en fonction d'évènements clavier. Ce programme peut facilement être intégré dans des systèmes comme <a href="https://libreelec.tv">LibreELEC</a> ou encore <a href="https://openelec.tv">OpenELEC</a>.</p>

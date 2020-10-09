@@ -3,12 +3,22 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2020-07-28T16:47:09-04:00</updated>
+    <updated>2020-10-09T19:05:08-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
     <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <entry>
+        <title>Afficher des données avec DataTables</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/datatables/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:60b5c907-fc9e-5dc4-9554-6e1fd7fd8535</id>
+        <published>2020-10-09T18:13:11-04:00</published>
+        <updated>2020-10-09T18:13:11-04:00</updated>
+        <summary>Afficher des données avec DataTables</summary>
+    </entry>
     <entry>
         <title>Interfacer un programme C avec Elixir grâce aux Ports</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
