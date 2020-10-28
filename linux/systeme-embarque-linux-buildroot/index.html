@@ -137,8 +137,8 @@ code span.wa { color: #bf0303; } /* Warning */
   <div id="container">
 <article>
 <header id="title-block-header">
-<h2 class="title">Système embarqué Linux avec Buildroot</h2>
- <span class="date">2018-08-09 11:29:00 (UTC-04:00)</span>
+<h1 class="title">Système embarqué Linux avec Buildroot</h1>
+ <small class="date">2018-08-09T11:29:00-04:00</small>
 </header>
 <p>Dans le cadre d'un projet de monitoring, j'ai été amené à concevoir une vingtaine de sondes thermiques pouvant être interrogées via Ethernet. Mes choix techniques se sont naturellement tournés vers une solution Raspberry Pi/Linux/capteur DS18B20. Pour le coté applicatif j'ai opté pour la simplicité et la rapidité avec le couple Python/Flask pour acheminer les données via HTTPS. L'applicatif aurait pu être développé en C avec des librairies comme <a href="https://www.gnu.org/software/libmicrohttpd/">Libmicrohttpd</a> ou encore <a href="https://kore.io/">Kore</a>.</p>
 <p>Le ciment permettant de lier l'ensemble est <a href="https://buildroot.org/">Buildroot</a> qui va nous permettre d'obtenir un système Linux sur mesure. Buildroot est un outil permettant de générer des systèmes Linux sur mesure en prenant en charge la compilation de la toolchain pour l'architecture cible (ARMv7), du noyau, du bootloader (que nous n'utiliserons pas) et de BusyBox pour l'environnement utilisateur. Tout cela avec nos paramètres définis pour chaque élément: modules dans le noyau, librairies standards (<a href="http://www.etalabs.net/compare_libcs.html">musl</a>, glibc, etc.), gestionnaire de services/périphériques (initd, systemd, udev), binaires à inclure dans BusyBoxy, etc. L'utilité de Buildroot se situe principalement dans sa capacité à gérer les dépendances pour la compilation, exactement comme Portage le fait dans Gentoo.</p>

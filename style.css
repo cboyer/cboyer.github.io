@@ -1,5 +1,5 @@
 body{ font-size: 1rem; letter-spacing: .01em; line-height: 1.5; font-family: "Open Sans", arial, sans-serif; text-rendering: optimizeLegibility; color: #2c2c2c; margin: 0; }
-h2, h3, h4, p.author { font-weight: normal; margin: 40px 0 0 0; border-bottom: 1px solid #eaecef; color: #2e6c65; }
+h1.title, h2, h3, h4, p.author { font-weight: normal; margin: 40px 0 0 0; border-bottom: 1px solid #eaecef; color: #2e6c65; }
 a { color: #03585f; cursor: pointer; text-decoration: underline; }
 a:hover { text-decoration: underline; }
 a:focus { outline: 0; }
@@ -37,7 +37,7 @@ th, td { border: 1px solid #dfe2e5; padding: 5px; padding: 3px 15px !important; 
   body { font-size: 12px; }
   #links, #menu, .menu_item { display: none; }
   #site_title { float: none; }
-  h1, h2.title { margin: 0; }
+  h1, h1.title { margin: 0; }
 }
 @media screen {
   #container { margin-left: auto; margin-right: auto; max-width: 1150px; padding: 0 20px 0 20px; }
