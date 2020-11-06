@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [OpenVG, Raspberry, Raspberry Pi, OpenGLES, C, 2D, accélération matérielle]
-abstract: |
-  Générer des images en 2D avec l'accélération matérielle sur Raspberry Pi via OpenVG.
+abstract: "Générer des images en 2D avec l'accélération matérielle sur Raspberry Pi via OpenVG."
 ---
 
 ## Introduction
@@ -63,7 +62,7 @@ Pour palier à cette problématique, il est possible d'implémenter une fonction
 Notons qu'il possible de mettre en cache le caractère espace, cependant son utilisation fonctionne uniquement off-screen avec `eglCreatePbufferSurface()` et `eglCreatePbufferFromClientBuffer()` et non on-screen où la chaîne de caractère n'est pas dessinée et déclenche `assert(vgGetError() == VG_NO_ERROR)`. Pour contourner le problème il suffit de ne pas utiliser le cache et simplement décaler la position du prochain caractère.
 
 
-### Liens complémentaires
+## Liens complémentaires
 
 - [OpenVG](https://www.khronos.org/openvg/)
 - [Documentation OpenVG](https://www.khronos.org/registry/OpenVG/specs/openvg-1.1.pdf)

@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [Mirth, SOAP, web service, XML, java, JAXB, JAR, WSDL, XSD]
-abstract: |
-  Création d’un web service SOAP avec Mirth.
+abstract: "Création d’un web service SOAP avec Mirth."
 ---
 
 Cet article a été écrit en utilisant la version 3.2 de Mirth.
@@ -638,7 +637,7 @@ En renvoyant la même requête que précédemment (les paramètres d'entrée n'a
 ```
 
 
-## Sources
+## Liens complémentaires
 
 - [http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1](http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1)
 - [https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java](https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java)

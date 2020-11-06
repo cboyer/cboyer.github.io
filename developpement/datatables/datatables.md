@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [DataTables, javascript, php]
-abstract: |
-  Afficher des données avec DataTables
+abstract: "Afficher des données avec DataTables."
 ---
 
 ## Arborescence des fichiers

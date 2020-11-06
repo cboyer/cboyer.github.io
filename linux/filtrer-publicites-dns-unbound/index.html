@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>Filtrer les publicités avec un serveur DNS Unbound - C. Boyer</title>
-  <meta name="description" content="<p>Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires.</p>" />
+  <meta name="description" content="Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="dns, publicité, unbound, linux" />
   <link rel="canonical" href="https://cboyer.github.io/linux/filtrer-publicites-dns-unbound" />
   <meta property="og:title" content="Filtrer les publicités avec un serveur DNS Unbound - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="<p>Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires.</p>" />
+  <meta property="og:description" content="Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2018-11-01T18:08:32-04:00" />
@@ -64,7 +64,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span. { color: #1f1c1b; } /* Normal */
+code span { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
 code span.an { color: #ca60ca; } /* Annotation */
 code span.at { color: #0057ae; } /* Attribute */
@@ -99,16 +99,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </head>
 <body>
   <div id="header">
-    <div id="site_title">
-      <h1>cboyer.github.io</h1>
-    </div>
     <div id="links">
-      <a href="../../rechercher.html" class="search" title="Rechercher">
-          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
-            <title id="search-icon">Rechercher</title>
-            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
-          </svg>
-      </a>
       <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
           <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title id="github-icon">GitHub</title>
@@ -122,15 +113,9 @@ code span.wa { color: #bf0303; } /* Warning */
           </svg>
       </a>
     </div>
-
+    <h1>cboyer.github.io</h1>
     <div id="menu">
-      <ul class="menu">
-        <li class="menu_item"><a href="../../index.html">Index</a></li>
-        <li class="menu_item"><a href="../../developpement.html">Développement</a></li>
-        <li class="menu_item active"><a href="../../linux.html">Linux</a></li>
-        <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
-        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
-      </ul>
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
     </div>
   </div>
 
@@ -147,39 +132,39 @@ code span.wa { color: #bf0303; } /* Warning */
 apt-get install unbound
 yum install unbound</code></pre>
 <p>La configuration d'Unbound <code>/etc/unbound/unbound.conf</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">server</span><span class="kw">:</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="at">    </span><span class="fu">interface</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.0.0.0</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="at">    </span><span class="fu">verbosity</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="at">    </span><span class="fu">use-syslog</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="at">    </span><span class="fu">username</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;unbound&quot;</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="at">    </span><span class="fu">directory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;/etc/unbound&quot;</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="at">    </span><span class="fu">pidfile</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;/var/run/unbound/unbound.pid&quot;</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="at">    </span><span class="fu">logfile</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;/var/log/unbound/unbound.log&quot;</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="at">    </span><span class="fu">include</span><span class="kw">:</span><span class="at"> /etc/unbound/local.conf</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="at">    </span><span class="fu">include</span><span class="kw">:</span><span class="at"> /etc/unbound/blacklist.conf</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="at">    </span><span class="fu">log-time-ascii</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="at">    </span><span class="fu">do-ip4</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="at">        </span><span class="fu">do-ip6</span><span class="kw">:</span><span class="at"> </span><span class="ch">no</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="at">        </span><span class="fu">do-udp</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="at">        </span><span class="fu">do-tcp</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="at">        </span><span class="fu">do-daemonize</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="at">    </span><span class="fu">so-sndbuf</span><span class="kw">:</span><span class="at"> 8m</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a><span class="at">    </span><span class="fu">msg-cache-size</span><span class="kw">:</span><span class="at"> 8m</span></span>
-<span id="cb2-19"><a href="#cb2-19"></a><span class="at">    </span><span class="fu">rrset-cache-size</span><span class="kw">:</span><span class="at"> 8m</span></span>
-<span id="cb2-20"><a href="#cb2-20"></a><span class="at">    </span><span class="fu">cache-min-ttl</span><span class="kw">:</span><span class="at"> 3600s</span></span>
-<span id="cb2-21"><a href="#cb2-21"></a><span class="at">    </span><span class="fu">cache-max-ttl</span><span class="kw">:</span><span class="at"> </span><span class="dv">86400</span></span>
-<span id="cb2-22"><a href="#cb2-22"></a><span class="at">    </span><span class="fu">cache-max-negative-ttl</span><span class="kw">:</span><span class="at"> </span><span class="dv">86400</span></span>
-<span id="cb2-23"><a href="#cb2-23"></a></span>
-<span id="cb2-24"><a href="#cb2-24"></a><span class="fu">remote-control</span><span class="kw">:</span></span>
-<span id="cb2-25"><a href="#cb2-25"></a><span class="at">        </span><span class="fu">control-enable</span><span class="kw">:</span><span class="at"> </span><span class="ch">no</span></span>
-<span id="cb2-26"><a href="#cb2-26"></a></span>
-<span id="cb2-27"><a href="#cb2-27"></a><span class="fu">forward-zone</span><span class="kw">:</span></span>
-<span id="cb2-28"><a href="#cb2-28"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;.&quot;</span></span>
-<span id="cb2-29"><a href="#cb2-29"></a><span class="at">    </span><span class="fu">forward-addr</span><span class="kw">:</span><span class="at"> 1.1.1.1@853</span></span>
-<span id="cb2-30"><a href="#cb2-30"></a><span class="at">    </span><span class="fu">forward-addr</span><span class="kw">:</span><span class="at"> 1.0.0.1@853</span></span>
-<span id="cb2-31"><a href="#cb2-31"></a><span class="at">    </span><span class="fu">forward-ssl-upstream</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
-<span id="cb2-32"><a href="#cb2-32"></a><span class="co">    #forward-addr: 80.67.169.12</span></span>
-<span id="cb2-33"><a href="#cb2-33"></a><span class="co">    #forward-addr: 80.67.169.40</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">server</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="at">    </span><span class="fu">interface</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.0.0.0</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">verbosity</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">    </span><span class="fu">use-syslog</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="at">    </span><span class="fu">username</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;unbound&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="at">    </span><span class="fu">directory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;/etc/unbound&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="at">    </span><span class="fu">pidfile</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;/var/run/unbound/unbound.pid&quot;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="at">    </span><span class="fu">logfile</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;/var/log/unbound/unbound.log&quot;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="at">    </span><span class="fu">include</span><span class="kw">:</span><span class="at"> /etc/unbound/local.conf</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="at">    </span><span class="fu">include</span><span class="kw">:</span><span class="at"> /etc/unbound/blacklist.conf</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="at">    </span><span class="fu">log-time-ascii</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="at">    </span><span class="fu">do-ip4</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="at">        </span><span class="fu">do-ip6</span><span class="kw">:</span><span class="at"> </span><span class="ch">no</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="at">        </span><span class="fu">do-udp</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a><span class="at">        </span><span class="fu">do-tcp</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="at">        </span><span class="fu">do-daemonize</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a><span class="at">    </span><span class="fu">so-sndbuf</span><span class="kw">:</span><span class="at"> 8m</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="at">    </span><span class="fu">msg-cache-size</span><span class="kw">:</span><span class="at"> 8m</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a><span class="at">    </span><span class="fu">rrset-cache-size</span><span class="kw">:</span><span class="at"> 8m</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a><span class="at">    </span><span class="fu">cache-min-ttl</span><span class="kw">:</span><span class="at"> 3600s</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a><span class="at">    </span><span class="fu">cache-max-ttl</span><span class="kw">:</span><span class="at"> </span><span class="dv">86400</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a><span class="at">    </span><span class="fu">cache-max-negative-ttl</span><span class="kw">:</span><span class="at"> </span><span class="dv">86400</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a><span class="fu">remote-control</span><span class="kw">:</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a><span class="at">        </span><span class="fu">control-enable</span><span class="kw">:</span><span class="at"> </span><span class="ch">no</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a><span class="fu">forward-zone</span><span class="kw">:</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;.&quot;</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a><span class="at">    </span><span class="fu">forward-addr</span><span class="kw">:</span><span class="at"> 1.1.1.1@853</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a><span class="at">    </span><span class="fu">forward-addr</span><span class="kw">:</span><span class="at"> 1.0.0.1@853</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a><span class="at">    </span><span class="fu">forward-ssl-upstream</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a><span class="co">    #forward-addr: 80.67.169.12</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a><span class="co">    #forward-addr: 80.67.169.40</span></span></code></pre></div>
 <p>Vous trouverez la description de tous ces paramètres dans la documentation officielle d'Unbound: <a href="https://www.unbound.net/documentation/unbound.conf.html">https://www.unbound.net/documentation/unbound.conf.html</a></p>
 <p>Pour résumer, Unbound fait office de cache DNS en résolvant les requêtes avec les DNS Cloudflare (connexion sécurisée par TLS). Les deux autres adresses commentées correspondent aux serveurs DNS de la <a href="https://www.fdn.fr/actions/dns">FDN</a> dans le cas où vous ne feriez pas confiance à Cloudflare. Les DNS de Google sont vraiment à éviter pour des raisons évidentes.</p>
 <p>Le fichier <code>/etc/unbound/local.conf</code> contiendra nos entrées locales, par exemple:</p>
@@ -189,16 +174,16 @@ local-data: &quot;serveur A 192.168.10.100&quot;
 local-zone: &quot;patate&quot; redirect
 local-data: &quot;patate A 192.168.10.12&quot;</code></pre>
 <p>Le fichier <code>/etc/unbound/blacklist.conf</code> contiendra les domaines à bloquer. Pour cela, je vous propose les listes de Steven Black qui sont tenues à jour fréquemment et disponibles sur son dépôt Github: <a href="https://github.com/StevenBlack/hosts">https://github.com/StevenBlack/hosts</a>. Le problème est que le formatage de cette liste est adapté pour un fichier hosts et non pour Unbound. Remédions à la situation avec un simple script Bash:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">wget</span> https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts</span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="fu">egrep</span> <span class="st">&#39;^0.0.0.0&#39;</span> hosts <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $2}&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;1d&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> -e <span class="st">&#39;s/^/local-zone: &quot;/&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> -e <span class="st">&#39;s/$/&quot; refuse/&#39;</span> <span class="op">&gt;</span> /etc/unbound/blacklist.conf</span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="fu">rm</span> -f hosts</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="fu">wget</span> https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="fu">egrep</span> <span class="st">&#39;^0.0.0.0&#39;</span> hosts <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $2}&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;1d&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> -e <span class="st">&#39;s/^/local-zone: &quot;/&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> -e <span class="st">&#39;s/$/&quot; refuse/&#39;</span> <span class="op">&gt;</span> /etc/unbound/blacklist.conf</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="fu">rm</span> -f hosts</span></code></pre></div>
 <p>Adaptez l'URL selon votre choix parmi les différentes listes disponibles. Ce script peut parfaitement être ajouté dans la crontab pour une synchronisation régulière: pour cela ajoutez un redémarrage du service en dernière ligne.</p>
 <p>Pour redémarrer Unbound:</p>
 <pre class="console"><code>systemctl restart unbound</code></pre>
 <p>Il ne reste plus qu'à faire pointer vos clients vers le serveur DNS en ajoutant l'adresse IP dans la configuration de vos machines et/ou dans votre DHCP (routeur).</p>
-<h2 id="sources">Sources:</h2>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://etherarp.net/build-an-adblocking-dns-server/index.html">https://etherarp.net/build-an-adblocking-dns-server/index.html</a></li>
 <li><a href="https://wiki.archlinux.org/index.php/unbound">https://wiki.archlinux.org/index.php/unbound</a></li>

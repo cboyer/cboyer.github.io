@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [buildroot, embarqué, raspberry pi, linux]
-abstract: |
-  Création d'un système embarqué Linux avec Buildroot pour Raspberry Pi 2.
+abstract: "Création d'un système embarqué Linux avec Buildroot pour Raspberry Pi 2."
 ---
 
 Dans le cadre d'un projet de monitoring, j'ai été amené à concevoir une vingtaine de sondes thermiques pouvant être interrogées via Ethernet. Mes choix techniques se sont naturellement tournés vers une solution Raspberry Pi/Linux/capteur DS18B20. Pour le coté applicatif j'ai opté pour la simplicité et la rapidité avec le couple Python/Flask pour acheminer les données via HTTPS. L'applicatif aurait pu être développé en C avec des librairies comme [Libmicrohttpd](https://www.gnu.org/software/libmicrohttpd/) ou encore [Kore](https://kore.io/).
@@ -213,6 +212,6 @@ Citons le très intéressant [Nerves](https://nerves-project.org/) qui utilise B
 Notons également qu'il existe l'équivalent de Buildroot pour FreeBSD: [Crochet](https://github.com/freebsd/crochet).
 
 
-### Articles complémentaires
+## Liens complémentaires
 
 - [Buildroot-part 1. General information, minimum system build, setup via menu](https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc)

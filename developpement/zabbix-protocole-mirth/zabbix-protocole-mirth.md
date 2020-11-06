@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [zabbix, mirth, mirth connect, monitoring]
-abstract: |
-  Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener.
+abstract: "Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener."
 ---
 
 L'objectif est d'implémenter un agent [Zabbix](https://www.zabbix.com/) dans [Mirth Connect](https://www.nextgen.com/products-and-services/NextGen-Connect-Integration-Engine-Downloads) comme n'importe quel autre échange de données afin de monitorer l'activité de ce dernier (erreurs, statuts, volumes de transactions, etc.).
@@ -142,7 +141,7 @@ Notons qu'il est nécessaire d'encoder le message en base 64 pour fonctionner en
 Coté Zabbix toute la configuration s'effectue via un [template](https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml) pour la définition des items/clés à monitorer.
 
 
-## Documentation Zabbix
+## Liens complémentaires
 
  - [https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive](https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive)
  - [https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen](https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen)

@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>Confidentialité et paramètres avancés dans Firefox - C. Boyer</title>
-  <meta name="description" content="<p>Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance.</p>" />
+  <meta name="description" content="Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="firefox, confidentialité, paramètres, avancé, about config" />
   <link rel="canonical" href="https://cboyer.github.io/linux/firefox-parametres-confidentialite" />
   <meta property="og:title" content="Confidentialité et paramètres avancés dans Firefox - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="<p>Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance.</p>" />
+  <meta property="og:description" content="Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2018-11-17T11:58:22-04:00" />
@@ -64,7 +64,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span. { color: #1f1c1b; } /* Normal */
+code span { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
 code span.an { color: #ca60ca; } /* Annotation */
 code span.at { color: #0057ae; } /* Attribute */
@@ -99,16 +99,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </head>
 <body>
   <div id="header">
-    <div id="site_title">
-      <h1>cboyer.github.io</h1>
-    </div>
     <div id="links">
-      <a href="../../rechercher.html" class="search" title="Rechercher">
-          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
-            <title id="search-icon">Rechercher</title>
-            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
-          </svg>
-      </a>
       <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
           <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title id="github-icon">GitHub</title>
@@ -122,15 +113,9 @@ code span.wa { color: #bf0303; } /* Warning */
           </svg>
       </a>
     </div>
-
+    <h1>cboyer.github.io</h1>
     <div id="menu">
-      <ul class="menu">
-        <li class="menu_item"><a href="../../index.html">Index</a></li>
-        <li class="menu_item"><a href="../../developpement.html">Développement</a></li>
-        <li class="menu_item active"><a href="../../linux.html">Linux</a></li>
-        <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
-        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
-      </ul>
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
     </div>
   </div>
 
@@ -143,33 +128,33 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Firefox possède de nombreux paramètres qui ne sont pas accessibles par les menus de l'interface graphique (Édition &gt; Préférences). Pour y accéder, tapez <code>about:config</code> dans la barre d'adresse (une confirmation va vous être demandée car certaines modifications peuvent entrainer des disfonctionnements). Voici quelques paramètres intéressants que j'utilise pour la confidentialité. Une liste plus complète est disponible dans les sources.</p>
 <p>Il est important de noter que certains risquent de vous refuser l'accès à leurs services (ou de mal fonctionner) s'ils ne peuvent plus abuser de vos données personnelles. Cela a été le cas pour moi avec un site d'hébergement de photo qui me refusait clairement l'accès car je ne transmettais plus d'entête Referer (page consultée précédemment). Modifier les paramètres relatifs aux cookies pose énormément de problèmes car c'est là que se situent principalement les abus d'accès aux données personnelles.</p>
 <p>Empêcher la désactivation du click droit (peut entrainer quelques problèmes si le site utilise son propre menu contextuel):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1"></a><span class="va">dom</span>.<span class="va">event</span>.<span class="va">contextmenu</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>dom<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">contextmenu</span><span class="op">.</span><span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></span></code></pre></div>
 <p>Éviter le blocage du copier/coller:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1"></a><span class="va">dom</span>.<span class="va">event</span>.<span class="va">clipboardevents</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>dom<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">clipboardevents</span><span class="op">.</span><span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></span></code></pre></div>
 <p>Empêcher la consultation de la liste des modules installés (Adblock, etc.).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1"></a><span class="va">plugins</span>.<span class="at">enumerable_names</span> <span class="op">=</span> blank</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>plugins<span class="op">.</span><span class="at">enumerable_names</span> <span class="op">=</span> blank</span></code></pre></div>
 <p>Ne plus transmettre l'URL consultée précédemment (entêtes Referer):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1"></a><span class="va">network</span>.<span class="va">http</span>.<span class="at">sendRefererHeader</span> <span class="op">=</span> <span class="dv">0</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>network<span class="op">.</span><span class="at">http</span><span class="op">.</span><span class="at">sendRefererHeader</span> <span class="op">=</span> <span class="dv">0</span></span></code></pre></div>
 <p>Falsifer l'URL consultée précédemment:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1"></a><span class="va">network</span>.<span class="va">http</span>.<span class="va">referer</span>.<span class="at">spoofSource</span> <span class="op">=</span> <span class="kw">true</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>network<span class="op">.</span><span class="at">http</span><span class="op">.</span><span class="at">referer</span><span class="op">.</span><span class="at">spoofSource</span> <span class="op">=</span> <span class="kw">true</span></span></code></pre></div>
 <p>Active la protection contre les trackers:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1"></a><span class="va">privacy</span>.<span class="va">trackingprotection</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">true</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>privacy<span class="op">.</span><span class="at">trackingprotection</span><span class="op">.</span><span class="at">enabled</span> <span class="op">=</span> <span class="kw">true</span></span></code></pre></div>
 <p>Désactiver tous les types de géolocalisation:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1"></a><span class="va">geo</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="va">geo</span>.<span class="va">wifi</span>.<span class="at">uri</span> <span class="op">=</span> blank</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="va">browser</span>.<span class="va">search</span>.<span class="va">geoip</span>.<span class="at">url</span> <span class="op">=</span> blank</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>geo<span class="op">.</span><span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>geo<span class="op">.</span><span class="at">wifi</span><span class="op">.</span><span class="at">uri</span> <span class="op">=</span> blank</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>browser<span class="op">.</span><span class="at">search</span><span class="op">.</span><span class="at">geoip</span><span class="op">.</span><span class="at">url</span> <span class="op">=</span> blank</span></code></pre></div>
 <p>Désactiver l'extension Pocket imposée dans Firefox (non open source):</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1"></a><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">site</span> <span class="op">=</span> blank</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">oAuthConsumerKey</span> <span class="op">=</span> blank</span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="va">extensions</span>.<span class="va">pocket</span>.<span class="at">api</span> <span class="op">=</span> blank</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>extensions<span class="op">.</span><span class="at">pocket</span><span class="op">.</span><span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>extensions<span class="op">.</span><span class="at">pocket</span><span class="op">.</span><span class="at">site</span> <span class="op">=</span> blank</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>extensions<span class="op">.</span><span class="at">pocket</span><span class="op">.</span><span class="at">oAuthConsumerKey</span> <span class="op">=</span> blank</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>extensions<span class="op">.</span><span class="at">pocket</span><span class="op">.</span><span class="at">api</span> <span class="op">=</span> blank</span></code></pre></div>
 <p>Désactiver l'accès au statut de la batterie (utilisé par les trackers pour l'identification):</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1"></a><span class="va">dom</span>.<span class="va">battery</span>.<span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>dom<span class="op">.</span><span class="at">battery</span><span class="op">.</span><span class="at">enabled</span> <span class="op">=</span> <span class="kw">false</span></span></code></pre></div>
 <p>Supprime un identifiant télémétrique inconnu (ne peut qu'être utilisé pour vous identifier):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1"></a><span class="va">toolkit</span>.<span class="va">telemetry</span>.<span class="at">cachedClientID</span> <span class="op">=</span> blank</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>toolkit<span class="op">.</span><span class="at">telemetry</span><span class="op">.</span><span class="at">cachedClientID</span> <span class="op">=</span> blank</span></code></pre></div>
 <p>Désactiver le suivi de vos clicks:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1"></a><span class="va">browser</span>.<span class="at">send_pings</span> <span class="op">=</span> <span class="kw">false</span></span></code></pre></div>
-<h2 id="sources">Sources</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>browser<span class="op">.</span><span class="at">send_pings</span> <span class="op">=</span> <span class="kw">false</span></span></code></pre></div>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://gist.github.com/0XDE57/fbd302cef7693e62c769">https://gist.github.com/0XDE57/fbd302cef7693e62c769</a></li>
 </ul>

@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [Elixir, C, Ports, interface, stdin, stdout]
-abstract: |
-  Interfacer un programme C via STDIN/STDOUT avec les Ports Elixir.
+abstract: "Interfacer un programme C via STDIN/STDOUT avec les Ports Elixir."
 ---
 
 Il existe plusieurs méthodes d'interfacer un programme C avec Elixir. Les Ports consistent à utiliser STDIN/STDOUT pour communiquer avec un autre programme (C ou autres). 
@@ -198,7 +197,7 @@ int main () {
 ```
 
 
-### Liens complémentaires
+## Liens complémentaires
 
  - [Ports Elixir](https://hexdocs.pm/elixir/Port.html)
  - [Outside Elixir: running external programs with ports](https://www.theerlangelist.com/article/outside_elixir)

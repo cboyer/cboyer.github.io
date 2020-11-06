@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [authentification, grafana, nginx, linux]
-abstract: |
-  Utilisation de NGINX en reverse proxy comme "man in the middle" pour rediriger vers une page d'authentification personnalisée.
+abstract: "Utilisation de NGINX en reverse proxy pour rediriger vers une page d'authentification personnalisée."
 ---
 
 Voici un moyen relativement simple d'avoir une page d'authentification personnalisée pour Grafana sans altérer l'application ce qui va nous permettre de pouvoir la mettre à jour sans problème. L'idée est d'utiliser NGINX comme reverse proxy pour intercepter les requêtes en direction de la page d'authentification de Grafana. NGINX renverra alors une page d'authentification HTML écrite par nos soins. Cette page contiendra un formulaire login/mot de passe dont l'envoie cible la page légitime de Grafana. Ainsi c'est le mécanisme d'authentification de Grafana qui est utilisé (LDAP ou interne). Selon le retours de la page légitime, notre page personnalisée redirigera ou non vers Grafana.
@@ -188,7 +187,7 @@ NGINX se fie à l'URI pour fournir les pages demandée: la chaîne de caractère
 
 J'ai également pu observer l'affichage d'une erreur 404 de Grafana pendant une fraction de seconde après l'authentification sans en trouver l'origine.
 
-## Sources:
+## Liens complémentaires
 
  - [Grafana derrière un proxy](http://docs.grafana.org/installation/behind_proxy)
  - [NGINX en reverse proxy](http://nginx.org/en/docs/http/ngx_http_core_module.html#location)

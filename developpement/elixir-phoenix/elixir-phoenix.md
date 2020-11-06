@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [Elixir,Phoenix,Liveview,mix,iex]
-abstract: |
-  Le web avec Elixir et son framework Phoenix
+abstract: "Le web avec Elixir et son framework Phoenix."
 ---
 
 - [Installation de Phoenix](#installation)
@@ -44,7 +43,9 @@ Dépendances systèmes à installer:
 sudo dnf install erlang-parsetools inotify-tools
 ```
 
-## <a name="projetsimple"></a>Création d'un projet Phoenix élémentaire sans base de donnée ni dépendances NodeJS
+## <a name="projetsimple"></a>Création d'un projet Phoenix élémentaire
+
+Pour créer un nouveau projet Phoenix minimaliste sans base de données (Ecto) ni NodeJS (Webpack):
 ```Console
 mix phx.new test_phoenix --no-webpack --no-ecto
 
@@ -93,15 +94,12 @@ Fetch and install dependencies? [Yn] y
 * running mix deps.get
 
 We are almost there! The following steps are missing:
-
     $ cd test_phoenix
 
 Start your Phoenix app with:
-
     $ mix phx.server
 
 You can also run your app inside IEx (Interactive Elixir) as:
-
     $ iex -S mix phx.server
 ```
 

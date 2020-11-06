@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [dreamscreen, linux, kodi]
-abstract: |
-  Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen.
+abstract: "Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen."
 ---
 
 Le [Dreamscreen](https://www.dreamscreentv.com) est un équipement multimédia du type "ambilight". Cet équipement utilise une application Android/IPhone pour être configuré et contrôlé par Wifi mais pas de télécommande. L'application en question est uniquement disponible sur Google Play (pour Android), ce qui est ennuyant lorsqu'on utilise un téléphone "dé-google-isé" avec [LineageOS](https://www.lineageos.org).
@@ -58,7 +57,7 @@ Préréglage d’ambiance lumineuse |0x03|0x0D|0x00: Couleur aléatoire; 0x01: F
 Entrée HDMI|0x03|0x20|0x00: Entrée 1; 0x01: Entrée 2; 0x02: Entrée 3|1
 
 
-## Documentation
+## Liens complémentaires
 
  - [Documentation du protocole dreamscreen](https://planet.neeo.com/media/80x1kj/download/dreamscreen-v2-wifi-udp-protocol.pdf)
  - [https://github.com/cboyer/dreamscreen-daemon](https://github.com/cboyer/dreamscreen-daemon)

@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [Elixir, mix, iex, Supervisor, GenServer, développement]
-abstract: |
-  Exemple d'application Elixir.
+abstract: "Exemple d'application Elixir."
 ---
 
 
@@ -170,7 +169,7 @@ Pour visualiser les toutes les caractéristiques de notre application (dans `iex
 ```
 
 
-### Sources
+## Liens complémentaires
 
 - [elixir-lang.org: Supervisor and application](https://elixir-lang.org/getting-started/mix-otp/supervisor-and-application.html)
 - [elixir-lang.org: GenServer](https://elixir-lang.org/getting-started/mix-otp/genserver.html)

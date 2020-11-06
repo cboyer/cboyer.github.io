@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>Création manuelle d'un LPAR AIX depuis le VIOS - C. Boyer</title>
-  <meta name="description" content="<p>Monter manuellement un LPAR AIX 7.1 depuis le VIOS.</p>" />
+  <meta name="description" content="Monter manuellement un LPAR AIX 7.1 depuis le VIOS." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="IBM, AIX, LPAR, HMC, VIOS, création, manuelle" />
   <link rel="canonical" href="https://cboyer.github.io/linux/creation-lpar-aix" />
   <meta property="og:title" content="Création manuelle d'un LPAR AIX depuis le VIOS - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="<p>Monter manuellement un LPAR AIX 7.1 depuis le VIOS.</p>" />
+  <meta property="og:description" content="Monter manuellement un LPAR AIX 7.1 depuis le VIOS." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2018-11-17T13:09:10-04:00" />
@@ -64,7 +64,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span. { color: #1f1c1b; } /* Normal */
+code span { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
 code span.an { color: #ca60ca; } /* Annotation */
 code span.at { color: #0057ae; } /* Attribute */
@@ -99,16 +99,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </head>
 <body>
   <div id="header">
-    <div id="site_title">
-      <h1>cboyer.github.io</h1>
-    </div>
     <div id="links">
-      <a href="../../rechercher.html" class="search" title="Rechercher">
-          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
-            <title id="search-icon">Rechercher</title>
-            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
-          </svg>
-      </a>
       <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
           <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title id="github-icon">GitHub</title>
@@ -122,15 +113,9 @@ code span.wa { color: #bf0303; } /* Warning */
           </svg>
       </a>
     </div>
-
+    <h1>cboyer.github.io</h1>
     <div id="menu">
-      <ul class="menu">
-        <li class="menu_item"><a href="../../index.html">Index</a></li>
-        <li class="menu_item"><a href="../../developpement.html">Développement</a></li>
-        <li class="menu_item active"><a href="../../linux.html">Linux</a></li>
-        <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
-        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
-      </ul>
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
     </div>
   </div>
 
@@ -149,15 +134,15 @@ id</code></pre>
 <p>Installer la mise à jour du VIOS:</p>
 <pre class="console"><code>updateios -accept -dev /home/padmin/Extact/ -install</code></pre>
 <p>Changer le prompt:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="bu">echo</span> <span class="st">&quot;export ENV=/home/padmin/.kshrc&quot;</span> <span class="op">&gt;&gt;</span> /home/padmin/.profile</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;export ENV=/home/padmin/.kshrc&quot;</span> <span class="op">&gt;&gt;</span> /home/padmin/.profile</span></code></pre></div>
 <p>Créer le /home/padmin/.kshrc avec:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="bu">export</span> <span class="va">HOST=</span><span class="st">&quot;</span><span class="va">$(</span><span class="ex">/usr/bin/uname</span> -n<span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">if</span><span class="bu"> [</span> <span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;root&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> # &quot;</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">else</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> $ &quot;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="kw">fi</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="kw">set</span> <span class="ex">-o</span> vi</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="bu">export</span> <span class="va">HOST=</span><span class="st">&quot;</span><span class="va">$(</span><span class="ex">/usr/bin/uname</span> -n<span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">if</span><span class="bu"> [</span> <span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;root&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  <span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> # &quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="kw">else</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>  <span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> $ &quot;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="kw">fi</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="kw">set</span> <span class="ex">-o</span> vi</span></code></pre></div>
 <p>Changer la date (mmJJHHMMAAAA):</p>
 <pre class="console"><code>chdate 070913232015</code></pre>
 <p>Détails des interfaces:</p>

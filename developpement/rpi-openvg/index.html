@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>Accélération matérielle 2D avec OpenVG sur Raspberry Pi - C. Boyer</title>
-  <meta name="description" content="<p>Générer des images en 2D avec l'accélération matérielle sur Raspberry Pi via OpenVG.</p>" />
+  <meta name="description" content="Générer des images en 2D avec l'accélération matérielle sur Raspberry Pi via OpenVG." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="OpenVG, Raspberry, Raspberry Pi, OpenGLES, C, 2D, accélération matérielle" />
   <link rel="canonical" href="https://cboyer.github.io/developpement/rpi-openvg" />
   <meta property="og:title" content="Accélération matérielle 2D avec OpenVG sur Raspberry Pi - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="<p>Générer des images en 2D avec l'accélération matérielle sur Raspberry Pi via OpenVG.</p>" />
+  <meta property="og:description" content="Générer des images en 2D avec l'accélération matérielle sur Raspberry Pi via OpenVG." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2020-05-03T19:14:27-04:00" />
@@ -32,16 +32,7 @@
 </head>
 <body>
   <div id="header">
-    <div id="site_title">
-      <h1>cboyer.github.io</h1>
-    </div>
     <div id="links">
-      <a href="../../rechercher.html" class="search" title="Rechercher">
-          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
-            <title id="search-icon">Rechercher</title>
-            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
-          </svg>
-      </a>
       <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
           <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title id="github-icon">GitHub</title>
@@ -55,15 +46,9 @@
           </svg>
       </a>
     </div>
-
+    <h1>cboyer.github.io</h1>
     <div id="menu">
-      <ul class="menu">
-        <li class="menu_item"><a href="../../index.html">Index</a></li>
-        <li class="menu_item active"><a href="../../developpement.html">Développement</a></li>
-        <li class="menu_item"><a href="../../linux.html">Linux</a></li>
-        <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
-        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
-      </ul>
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
     </div>
   </div>
 
@@ -93,7 +78,7 @@
 <p>Pour le chargement de polices de caractères True Type (TTF), nous utiliserons Freetype2 afin d'obtenir les glyphes.</p>
 <p>OpenVG propose la fonction <code>vgDrawGlyph()</code> qui permet de dessiner ces glyphes. En revanche <code>vgDrawGlyph()</code> semble fonctionnelle uniquement pour le dessin on-screen, son utilisation sur une surface créée avec <code>eglCreatePbufferSurface()</code> ou <code>eglCreatePbufferFromClientBuffer()</code> ne produit rien. Deplus, <code>vgDrawGlyph()</code> possède un autre désavantage: elle est affectée uniquement par les matrices de transformation de type <code>G_MATRIX_GLYPH_USER_TO_SURFACE</code> et non <code>VG_MATRIX_PATH_USER_TO_SURFACE</code> qui s'apliquent uniquement aux <code>VGPath</code> et il est possible d'utiliser un seul type avec <code>vgSeti(VG_MATRIX_MODE, )</code>.</p>
 <p>Pour palier à cette problématique, il est possible d'implémenter une fonction <code>vgDrawString()</code> qui dessine des chemins <code>VGPath</code> générés depuis les glyphes TTF. Pour ne pas avoir a générer un <code>VGPath</code> pour chaque caractère lors de l'appel à <code>vgDrawString()</code>, nous utiliserons un cache qui contiendra tous les <code>VGPath</code> de chaque caractère utilisable. Chacun de ces <code>VGPath</code> sera associé à son caractère avec une indexation gérée avec une <code>GHashTable</code> (glib). Notons qu'il possible de mettre en cache le caractère espace, cependant son utilisation fonctionne uniquement off-screen avec <code>eglCreatePbufferSurface()</code> et <code>eglCreatePbufferFromClientBuffer()</code> et non on-screen où la chaîne de caractère n'est pas dessinée et déclenche <code>assert(vgGetError() == VG_NO_ERROR)</code>. Pour contourner le problème il suffit de ne pas utiliser le cache et simplement décaler la position du prochain caractère.</p>
-<h3 id="liens-complémentaires">Liens complémentaires</h3>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://www.khronos.org/openvg/">OpenVG</a></li>
 <li><a href="https://www.khronos.org/registry/OpenVG/specs/openvg-1.1.pdf">Documentation OpenVG</a></li>

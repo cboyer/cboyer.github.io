@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [nginx, ldap, authentification, linux]
-abstract: |
-  Ajout du support LDAP en compilant le module d'authentification LDAP avec la version open source d'NGINX.
+abstract: "Ajout du support LDAP en compilant le module d'authentification LDAP avec la version open source d'NGINX."
 ---
 
 La version gratuite de NGINX n'intègre pas le module d'authentification via LDAP par défaut. Pour y remédier, il faut passer par une compilation des sources avec le module `nginx-auth-ldap`.
@@ -67,7 +66,7 @@ sudo systemctl daemon-reload
 
 Pour la suite, il suffit de suivre la documentation du module et modifier le fichier `/usr/local/nginx/conf/nginx.conf`.
 
-## Sources
+## Liens complémentaires
 
  - [https://github.com/kvspb/nginx-auth-ldap/issues/180](https://github.com/kvspb/nginx-auth-ldap/issues/180)
  - [https://github.com/kvspb/nginx-auth-ldap](https://github.com/kvspb/nginx-auth-ldap)

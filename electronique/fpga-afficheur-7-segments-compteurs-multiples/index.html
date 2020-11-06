@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>FPGA et afficheur 7 segments: compteur à afficheurs multiples - C. Boyer</title>
-  <meta name="description" content="<p>Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments.</p>" />
+  <meta name="description" content="Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="fpga, afficheur, led, verilog" />
   <link rel="canonical" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteurs-multiples" />
   <meta property="og:title" content="FPGA et afficheur 7 segments: compteur à afficheurs multiples - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="<p>Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments.</p>" />
+  <meta property="og:description" content="Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2018-11-01T18:08:32-04:00" />
@@ -64,7 +64,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span. { color: #1f1c1b; } /* Normal */
+code span { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
 code span.an { color: #ca60ca; } /* Annotation */
 code span.at { color: #0057ae; } /* Attribute */
@@ -99,16 +99,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </head>
 <body>
   <div id="header">
-    <div id="site_title">
-      <h1>cboyer.github.io</h1>
-    </div>
     <div id="links">
-      <a href="../../rechercher.html" class="search" title="Rechercher">
-          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
-            <title id="search-icon">Rechercher</title>
-            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
-          </svg>
-      </a>
       <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
           <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title id="github-icon">GitHub</title>
@@ -122,15 +113,9 @@ code span.wa { color: #bf0303; } /* Warning */
           </svg>
       </a>
     </div>
-
+    <h1>cboyer.github.io</h1>
     <div id="menu">
-      <ul class="menu">
-        <li class="menu_item"><a href="../../index.html">Index</a></li>
-        <li class="menu_item"><a href="../../developpement.html">Développement</a></li>
-        <li class="menu_item"><a href="../../linux.html">Linux</a></li>
-        <li class="menu_item active"><a href="../../electronique.html">Électronique</a></li>
-        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
-      </ul>
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
     </div>
   </div>
 
@@ -150,191 +135,189 @@ code span.wa { color: #bf0303; } /* Warning */
 </figure>
 <p>Prenons l’exemple du nombre 21 qui s’affiche avec les segments <code>{B6, B7, B3, B1, BD}</code> et <code>{E7, EC}</code>.</p>
 <p>Ce qui donne en Verilog :</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1"></a>display_<span class="dv">2</span>_leds &lt;= <span class="bn">9&#39;b111001011</span>;</span>
-<span id="cb1-2"><a href="#cb1-2"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b010000101</span>;</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>display_<span class="dv">2</span>_leds &lt;= <span class="bn">9&#39;b111001011</span>;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>display_<span class="dv">1</span>_leds &lt;= <span class="bn">9&#39;b010000101</span>;</span></code></pre></div>
 <p>Nous obtiendrons sur chacun de nos deux afficheurs les segments des chiffres 1 et 2 en même temps comme s’ils étaient superposés. Ceci correspond à un OU logique entre <code>display_1_leds</code> et <code>display_2_leds</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1"></a>    <span class="bn">9&#39;b111001011</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>OU  <span class="bn">9&#39;b010000101</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a>----------------</span>
-<span id="cb2-4"><a href="#cb2-4"></a>    9’b111001111</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>    <span class="bn">9&#39;b111001011</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>OU  <span class="bn">9&#39;b010000101</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>----------------</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    9’b111001111</span></code></pre></div>
 <p>Ce qui nous donne les segments suivants sur chaque afficheur:</p>
 <pre class="console"><code>{B6, B7, B3, B1, BD, BC}
 {E6, E7, E3, E1, ED, EC}</code></pre>
 <p>Comment éviter ce comportement? Le seul paramètre indépendant entre nos deux afficheurs est l’anode (respectivement B et E). Cependant l’anode seule ne permet pas de contrôler un segment. L’astuce ici est d’afficher le chiffre 2 sur le second afficheur et alternativement le chiffre 1 sur le premier afficheur. Ces affichages consécutifs à une fréquence suffisamment élevée vont créer l’illusion d’avoir les deux afficheurs fonctionnant simultanément (phénomène de persistance rétinienne, que nous utilisons déjà pour les segments). Pour cela nous réutiliserons notre compteur <code>counter</code>.</p>
 <p>Nous allons commencer par remanier notre code pour isoler les anodes des cathodes afin de contrôler chaque afficheur séparément (par leur anode respective) et les segments à afficher (par les cathodes). Pour cela nous aurons besoin de deux sorties avec <code>output [1:0] DISPLAYS</code> pour l'anode de chacun des deux afficheurs et 8 autres sorties avec <code>output [7:0] SEGMENTS</code> pour la cathodes de chaque segment (en comptant le point).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">/* module */</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">module</span> SevenSegment (</span>
-<span id="cb4-3"><a href="#cb4-3"></a>    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</span>
-<span id="cb4-4"><a href="#cb4-4"></a>    <span class="dt">output</span> [<span class="dv">1</span>:<span class="dv">0</span>] DISPLAYS,</span>
-<span id="cb4-5"><a href="#cb4-5"></a>    <span class="dt">output</span> [<span class="dv">7</span>:<span class="dv">0</span>] SEGMENTS</span>
-<span id="cb4-6"><a href="#cb4-6"></a>);</span>
-<span id="cb4-7"><a href="#cb4-7"></a></span>
-<span id="cb4-8"><a href="#cb4-8"></a>    <span class="co">/* reg */</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>    <span class="dt">reg</span> [<span class="dv">7</span>:<span class="dv">0</span>] segments = <span class="bn">8&#39;b0</span>;</span>
-<span id="cb4-10"><a href="#cb4-10"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_value = <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb4-11"><a href="#cb4-11"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">2</span>_value = <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb4-12"><a href="#cb4-12"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] displayed_value = <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb4-13"><a href="#cb4-13"></a>    <span class="dt">reg</span> [<span class="dv">1</span>:<span class="dv">0</span>] displays = <span class="bn">2&#39;b0</span>;</span>
-<span id="cb4-14"><a href="#cb4-14"></a>    <span class="dt">reg</span> [<span class="dv">25</span>:<span class="dv">0</span>] counter = {<span class="dv">26</span>{<span class="bn">1&#39;b0</span>}};</span>
-<span id="cb4-15"><a href="#cb4-15"></a></span>
-<span id="cb4-16"><a href="#cb4-16"></a>    <span class="co">/* assign */</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a>    <span class="kw">assign</span> DISPLAYS = displays;</span>
-<span id="cb4-18"><a href="#cb4-18"></a>    <span class="kw">assign</span> SEGMENTS = segments;</span>
-<span id="cb4-19"><a href="#cb4-19"></a></span>
-<span id="cb4-20"><a href="#cb4-20"></a>    <span class="co">/* always */</span></span>
-<span id="cb4-21"><a href="#cb4-21"></a>    <span class="kw">always</span> @ (<span class="kw">posedge</span> CLOCK_<span class="dv">50</span>) <span class="kw">begin</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a></span>
-<span id="cb4-23"><a href="#cb4-23"></a>        <span class="co">//Incrémente le compteur</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a>        counter &lt;= counter + <span class="bn">1&#39;b1</span>;</span>
-<span id="cb4-25"><a href="#cb4-25"></a></span>
-<span id="cb4-26"><a href="#cb4-26"></a>        <span class="co">//Incrémente la valeur du premier afficheur</span></span>
-<span id="cb4-27"><a href="#cb4-27"></a>        <span class="kw">if</span>(counter[<span class="dv">24</span>:<span class="dv">0</span>] == <span class="bn">25&#39;b1</span>) <span class="kw">begin</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a>            display_<span class="dv">1</span>_value &lt;= display_<span class="dv">1</span>_value + <span class="bn">1&#39;b1</span>;</span>
-<span id="cb4-29"><a href="#cb4-29"></a>        <span class="kw">end</span></span>
-<span id="cb4-30"><a href="#cb4-30"></a></span>
-<span id="cb4-31"><a href="#cb4-31"></a>        <span class="co">//Si on atteint 9</span></span>
-<span id="cb4-32"><a href="#cb4-32"></a>        <span class="kw">if</span>(display_<span class="dv">1</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></span>
-<span id="cb4-33"><a href="#cb4-33"></a></span>
-<span id="cb4-34"><a href="#cb4-34"></a>            <span class="co">//On réinitialise la valeur du premier afficheur</span></span>
-<span id="cb4-35"><a href="#cb4-35"></a>            display_<span class="dv">1</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb4-36"><a href="#cb4-36"></a></span>
-<span id="cb4-37"><a href="#cb4-37"></a>            <span class="co">//Incrémente la valeur du le deuxième afficheur</span></span>
-<span id="cb4-38"><a href="#cb4-38"></a>            display_<span class="dv">2</span>_value &lt;= display_<span class="dv">2</span>_value + <span class="bn">1&#39;b1</span>;</span>
-<span id="cb4-39"><a href="#cb4-39"></a>        <span class="kw">end</span></span>
-<span id="cb4-40"><a href="#cb4-40"></a></span>
-<span id="cb4-41"><a href="#cb4-41"></a>        <span class="co">//Si on atteint 9, on réinitialise la valeur du deuxième afficheur</span></span>
-<span id="cb4-42"><a href="#cb4-42"></a>        <span class="kw">if</span>(display_<span class="dv">2</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span>    </span>
-<span id="cb4-43"><a href="#cb4-43"></a>            display_<span class="dv">2</span>_value &lt;= <span class="bn">4&#39;b0000</span>;          </span>
-<span id="cb4-44"><a href="#cb4-44"></a>        <span class="kw">end</span></span>
-<span id="cb4-45"><a href="#cb4-45"></a></span>
-<span id="cb4-46"><a href="#cb4-46"></a>        <span class="kw">if</span>(counter[<span class="dv">18</span>] == <span class="bn">1&#39;b1</span>) <span class="kw">begin</span></span>
-<span id="cb4-47"><a href="#cb4-47"></a></span>
-<span id="cb4-48"><a href="#cb4-48"></a>            <span class="co">//Active l&#39;anode du premier afficheur seulement</span></span>
-<span id="cb4-49"><a href="#cb4-49"></a>            displays &lt;= <span class="bn">2&#39;b01</span>;</span>
-<span id="cb4-50"><a href="#cb4-50"></a></span>
-<span id="cb4-51"><a href="#cb4-51"></a>            <span class="co">//Copie la valeur du premier afficheur dans displayed_value</span></span>
-<span id="cb4-52"><a href="#cb4-52"></a>            displayed_value &lt;= display_<span class="dv">1</span>_value;  </span>
-<span id="cb4-53"><a href="#cb4-53"></a>        <span class="kw">end</span></span>
-<span id="cb4-54"><a href="#cb4-54"></a></span>
-<span id="cb4-55"><a href="#cb4-55"></a>        <span class="kw">if</span>(counter[<span class="dv">18</span>] == <span class="bn">1&#39;b0</span>) <span class="kw">begin</span></span>
-<span id="cb4-56"><a href="#cb4-56"></a></span>
-<span id="cb4-57"><a href="#cb4-57"></a>            <span class="co">//Active l&#39;anode du deuxième afficheur seulement</span></span>
-<span id="cb4-58"><a href="#cb4-58"></a>            displays &lt;= <span class="bn">2&#39;b10</span>;</span>
-<span id="cb4-59"><a href="#cb4-59"></a></span>
-<span id="cb4-60"><a href="#cb4-60"></a>            <span class="co">//Copie la valeur du deuxième afficheur dans displayed_value  </span></span>
-<span id="cb4-61"><a href="#cb4-61"></a>            displayed_value &lt;= display_<span class="dv">2</span>_value;</span>
-<span id="cb4-62"><a href="#cb4-62"></a>        <span class="kw">end</span></span>
-<span id="cb4-63"><a href="#cb4-63"></a></span>
-<span id="cb4-64"><a href="#cb4-64"></a>        <span class="co">//Active les segments selon la valeur affichée</span></span>
-<span id="cb4-65"><a href="#cb4-65"></a>        <span class="kw">case</span>(displayed_value[<span class="dv">3</span>:<span class="dv">0</span>])</span>
-<span id="cb4-66"><a href="#cb4-66"></a>            <span class="bn">4&#39;b0000</span> : segments &lt;= <span class="bn">8&#39;b11101011</span>; <span class="co">//0</span></span>
-<span id="cb4-67"><a href="#cb4-67"></a>            <span class="bn">4&#39;b0001</span> : segments &lt;= <span class="bn">8&#39;b01000010</span>; <span class="co">//1</span></span>
-<span id="cb4-68"><a href="#cb4-68"></a>            <span class="bn">4&#39;b0010</span> : segments &lt;= <span class="bn">8&#39;b11100101</span>; <span class="co">//2</span></span>
-<span id="cb4-69"><a href="#cb4-69"></a>            <span class="bn">4&#39;b0011</span> : segments &lt;= <span class="bn">8&#39;b11100110</span>; <span class="co">//3</span></span>
-<span id="cb4-70"><a href="#cb4-70"></a>            <span class="bn">4&#39;b0100</span> : segments &lt;= <span class="bn">8&#39;b01001110</span>; <span class="co">//4</span></span>
-<span id="cb4-71"><a href="#cb4-71"></a>            <span class="bn">4&#39;b0101</span> : segments &lt;= <span class="bn">8&#39;b10101110</span>; <span class="co">//5</span></span>
-<span id="cb4-72"><a href="#cb4-72"></a>            <span class="bn">4&#39;b0110</span> : segments &lt;= <span class="bn">8&#39;b10101111</span>; <span class="co">//6</span></span>
-<span id="cb4-73"><a href="#cb4-73"></a>            <span class="bn">4&#39;b0111</span> : segments &lt;= <span class="bn">8&#39;b01100010</span>; <span class="co">//7</span></span>
-<span id="cb4-74"><a href="#cb4-74"></a>            <span class="bn">4&#39;b1000</span> : segments &lt;= <span class="bn">8&#39;b11101111</span>; <span class="co">//8</span></span>
-<span id="cb4-75"><a href="#cb4-75"></a>            <span class="bn">4&#39;b1001</span> : segments &lt;= <span class="bn">8&#39;b11101110</span>; <span class="co">//9</span></span>
-<span id="cb4-76"><a href="#cb4-76"></a>            <span class="kw">default</span> : segments &lt;= <span class="bn">8&#39;b00000000</span>; <span class="co">//Rien</span></span>
-<span id="cb4-77"><a href="#cb4-77"></a>        <span class="kw">endcase</span></span>
-<span id="cb4-78"><a href="#cb4-78"></a></span>
-<span id="cb4-79"><a href="#cb4-79"></a>    <span class="kw">end</span></span>
-<span id="cb4-80"><a href="#cb4-80"></a></span>
-<span id="cb4-81"><a href="#cb4-81"></a><span class="kw">endmodule</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="co">/* module */</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">module</span> SevenSegment (</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="dt">output</span> [<span class="dv">1</span>:<span class="dv">0</span>] DISPLAYS,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="dt">output</span> [<span class="dv">7</span>:<span class="dv">0</span>] SEGMENTS</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>);</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    <span class="co">/* reg */</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">7</span>:<span class="dv">0</span>] segments = <span class="bn">8&#39;b0</span>;</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_value = <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">2</span>_value = <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] displayed_value = <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">1</span>:<span class="dv">0</span>] displays = <span class="bn">2&#39;b0</span>;</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">25</span>:<span class="dv">0</span>] counter = {<span class="dv">26</span>{<span class="bn">1&#39;b0</span>}};</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a>    <span class="co">/* assign */</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a>    <span class="kw">assign</span> DISPLAYS = displays;</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a>    <span class="kw">assign</span> SEGMENTS = segments;</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true"></a>    <span class="co">/* always */</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true"></a>    <span class="kw">always</span> @ (<span class="kw">posedge</span> CLOCK_<span class="dv">50</span>) <span class="kw">begin</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true"></a>        <span class="co">//Incrémente le compteur</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true"></a>        counter &lt;= counter + <span class="bn">1&#39;b1</span>;</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true"></a>        <span class="co">//Incrémente la valeur du premier afficheur</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true"></a>        <span class="kw">if</span>(counter[<span class="dv">24</span>:<span class="dv">0</span>] == <span class="bn">25&#39;b1</span>) <span class="kw">begin</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true"></a>            display_<span class="dv">1</span>_value &lt;= display_<span class="dv">1</span>_value + <span class="bn">1&#39;b1</span>;</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true"></a>        <span class="co">//Si on atteint 9</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true"></a>        <span class="kw">if</span>(display_<span class="dv">1</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true"></a>            <span class="co">//On réinitialise la valeur du premier afficheur</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true"></a>            display_<span class="dv">1</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true"></a>            <span class="co">//Incrémente la valeur du le deuxième afficheur</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true"></a>            display_<span class="dv">2</span>_value &lt;= display_<span class="dv">2</span>_value + <span class="bn">1&#39;b1</span>;</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true"></a></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true"></a>        <span class="co">//Si on atteint 9, on réinitialise la valeur du deuxième afficheur</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true"></a>        <span class="kw">if</span>(display_<span class="dv">2</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span>    </span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true"></a>            display_<span class="dv">2</span>_value &lt;= <span class="bn">4&#39;b0000</span>;          </span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true"></a>        <span class="kw">if</span>(counter[<span class="dv">18</span>] == <span class="bn">1&#39;b1</span>) <span class="kw">begin</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true"></a></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true"></a>            <span class="co">//Active l&#39;anode du premier afficheur seulement</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true"></a>            displays &lt;= <span class="bn">2&#39;b01</span>;</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true"></a>            <span class="co">//Copie la valeur du premier afficheur dans displayed_value</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true"></a>            displayed_value &lt;= display_<span class="dv">1</span>_value;  </span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true"></a></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true"></a>        <span class="kw">if</span>(counter[<span class="dv">18</span>] == <span class="bn">1&#39;b0</span>) <span class="kw">begin</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true"></a></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true"></a>            <span class="co">//Active l&#39;anode du deuxième afficheur seulement</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true"></a>            displays &lt;= <span class="bn">2&#39;b10</span>;</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true"></a></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true"></a>            <span class="co">//Copie la valeur du deuxième afficheur dans displayed_value  </span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true"></a>            displayed_value &lt;= display_<span class="dv">2</span>_value;</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true"></a></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true"></a>        <span class="co">//Active les segments selon la valeur affichée</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true"></a>        <span class="kw">case</span>(displayed_value[<span class="dv">3</span>:<span class="dv">0</span>])</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true"></a>            <span class="bn">4&#39;b0000</span> : segments &lt;= <span class="bn">8&#39;b11101011</span>; <span class="co">//0</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true"></a>            <span class="bn">4&#39;b0001</span> : segments &lt;= <span class="bn">8&#39;b01000010</span>; <span class="co">//1</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true"></a>            <span class="bn">4&#39;b0010</span> : segments &lt;= <span class="bn">8&#39;b11100101</span>; <span class="co">//2</span></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true"></a>            <span class="bn">4&#39;b0011</span> : segments &lt;= <span class="bn">8&#39;b11100110</span>; <span class="co">//3</span></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true"></a>            <span class="bn">4&#39;b0100</span> : segments &lt;= <span class="bn">8&#39;b01001110</span>; <span class="co">//4</span></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true"></a>            <span class="bn">4&#39;b0101</span> : segments &lt;= <span class="bn">8&#39;b10101110</span>; <span class="co">//5</span></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true"></a>            <span class="bn">4&#39;b0110</span> : segments &lt;= <span class="bn">8&#39;b10101111</span>; <span class="co">//6</span></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true"></a>            <span class="bn">4&#39;b0111</span> : segments &lt;= <span class="bn">8&#39;b01100010</span>; <span class="co">//7</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true"></a>            <span class="bn">4&#39;b1000</span> : segments &lt;= <span class="bn">8&#39;b11101111</span>; <span class="co">//8</span></span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true"></a>            <span class="bn">4&#39;b1001</span> : segments &lt;= <span class="bn">8&#39;b11101110</span>; <span class="co">//9</span></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true"></a>            <span class="kw">default</span> : segments &lt;= <span class="bn">8&#39;b00000000</span>; <span class="co">//Rien</span></span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true"></a>        <span class="kw">endcase</span></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true"></a></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true"></a></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true"></a><span class="kw">endmodule</span></span></code></pre></div>
 <p>Nous avons fait le choix ici d’utiliser un vecteur de 4 bits <code>displayed_value</code> dédié pour l’affichage dans lequel nous copions alternativement la valeur de chacun des afficheurs <code>display_1_value</code> et <code>display_2_value</code>. Nous aurions pu ajouter directement un bloc <code>case</code> sur <code>display_1_value</code> et <code>display_2_value</code> dans chacun des <code>if</code> pour économiser l’espace occupé par <code>displayed_value</code>. En revanche cette solution aurait mobilisé davantage d'éléments logiques dans le FPGA (deux blocs <code>case</code> au lieu d’un seul).</p>
 <h2 id="compteur-à-quatre-afficheurs">Compteur à quatre afficheurs</h2>
 <p>Maintenant que nous sommes capable de piloter deux afficheurs, il ne reste qu’un pas à franchir pour contrôler les quatre. En utilisant toujours la même technique, nous pouvons étendre facilement le contrôle aux deux afficheurs restant.</p>
 <p>Pour alterner l'affichage sur 4 afficheurs nous avons besoin de 2 bits de <code>counter</code> pour les identifier individuellement. La position de ces 2 bits dans <code>counter</code> permet de définir la fréquence à laquelle l'alternance est effectuée.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">/* module */</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">module</span> SevenSegment (</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</span>
-<span id="cb5-4"><a href="#cb5-4"></a>    <span class="dt">output</span> [<span class="dv">3</span>:<span class="dv">0</span>] DISPLAYS,</span>
-<span id="cb5-5"><a href="#cb5-5"></a>    <span class="dt">output</span> [<span class="dv">7</span>:<span class="dv">0</span>] SEGMENTS</span>
-<span id="cb5-6"><a href="#cb5-6"></a>);</span>
-<span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a>    <span class="co">/* reg */</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a>    <span class="dt">reg</span> [<span class="dv">7</span>:<span class="dv">0</span>] segments = <span class="bn">8&#39;b0</span>;</span>
-<span id="cb5-10"><a href="#cb5-10"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_value = <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb5-11"><a href="#cb5-11"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">2</span>_value = <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb5-12"><a href="#cb5-12"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">3</span>_value = <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb5-13"><a href="#cb5-13"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">4</span>_value = <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb5-14"><a href="#cb5-14"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] displayed_value = <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb5-15"><a href="#cb5-15"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] displays = <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb5-16"><a href="#cb5-16"></a>    <span class="dt">reg</span> [<span class="dv">25</span>:<span class="dv">0</span>] counter = {<span class="dv">26</span>{<span class="bn">1&#39;b0</span>}};</span>
-<span id="cb5-17"><a href="#cb5-17"></a></span>
-<span id="cb5-18"><a href="#cb5-18"></a>    <span class="co">/* assign */</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a>    <span class="kw">assign</span> DISPLAYS = displays;</span>
-<span id="cb5-20"><a href="#cb5-20"></a>    <span class="kw">assign</span> SEGMENTS = segments;</span>
-<span id="cb5-21"><a href="#cb5-21"></a></span>
-<span id="cb5-22"><a href="#cb5-22"></a>    <span class="co">/* always */</span></span>
-<span id="cb5-23"><a href="#cb5-23"></a>    <span class="kw">always</span> @ (<span class="kw">posedge</span> CLOCK_<span class="dv">50</span>) <span class="kw">begin</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a>        counter &lt;= counter + <span class="bn">1&#39;b1</span>;</span>
-<span id="cb5-25"><a href="#cb5-25"></a></span>
-<span id="cb5-26"><a href="#cb5-26"></a>        <span class="kw">if</span>(counter[<span class="dv">20</span>:<span class="dv">0</span>] == <span class="bn">21&#39;b1</span>) <span class="kw">begin</span></span>
-<span id="cb5-27"><a href="#cb5-27"></a>            display_<span class="dv">1</span>_value &lt;= display_<span class="dv">1</span>_value + <span class="bn">1&#39;b1</span>;</span>
-<span id="cb5-28"><a href="#cb5-28"></a>        <span class="kw">end</span></span>
-<span id="cb5-29"><a href="#cb5-29"></a></span>
-<span id="cb5-30"><a href="#cb5-30"></a>        <span class="kw">if</span>(display_<span class="dv">1</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></span>
-<span id="cb5-31"><a href="#cb5-31"></a>            display_<span class="dv">1</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb5-32"><a href="#cb5-32"></a>            display_<span class="dv">2</span>_value &lt;= display_<span class="dv">2</span>_value + <span class="bn">1&#39;b1</span>;</span>
-<span id="cb5-33"><a href="#cb5-33"></a>        <span class="kw">end</span></span>
-<span id="cb5-34"><a href="#cb5-34"></a></span>
-<span id="cb5-35"><a href="#cb5-35"></a>        <span class="kw">if</span>(display_<span class="dv">2</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></span>
-<span id="cb5-36"><a href="#cb5-36"></a>            display_<span class="dv">2</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb5-37"><a href="#cb5-37"></a>            display_<span class="dv">3</span>_value &lt;= display_<span class="dv">3</span>_value + <span class="bn">1&#39;b1</span>;</span>
-<span id="cb5-38"><a href="#cb5-38"></a>        <span class="kw">end</span></span>
-<span id="cb5-39"><a href="#cb5-39"></a></span>
-<span id="cb5-40"><a href="#cb5-40"></a>        <span class="kw">if</span>(display_<span class="dv">3</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></span>
-<span id="cb5-41"><a href="#cb5-41"></a>            display_<span class="dv">3</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb5-42"><a href="#cb5-42"></a>            display_<span class="dv">4</span>_value &lt;= display_<span class="dv">4</span>_value + <span class="bn">1&#39;b1</span>;</span>
-<span id="cb5-43"><a href="#cb5-43"></a>        <span class="kw">end</span></span>
-<span id="cb5-44"><a href="#cb5-44"></a></span>
-<span id="cb5-45"><a href="#cb5-45"></a>        <span class="kw">if</span>(display_<span class="dv">4</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></span>
-<span id="cb5-46"><a href="#cb5-46"></a>            display_<span class="dv">4</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</span>
-<span id="cb5-47"><a href="#cb5-47"></a>        <span class="kw">end</span></span>
-<span id="cb5-48"><a href="#cb5-48"></a></span>
-<span id="cb5-49"><a href="#cb5-49"></a>        <span class="kw">case</span>(counter[<span class="dv">18</span>:<span class="dv">17</span>])</span>
-<span id="cb5-50"><a href="#cb5-50"></a>            <span class="bn">2&#39;b11</span> : <span class="kw">begin</span></span>
-<span id="cb5-51"><a href="#cb5-51"></a>                displays &lt;= <span class="bn">4&#39;b0001</span>;</span>
-<span id="cb5-52"><a href="#cb5-52"></a>                displayed_value &lt;= display_<span class="dv">1</span>_value;</span>
-<span id="cb5-53"><a href="#cb5-53"></a>            <span class="kw">end</span></span>
-<span id="cb5-54"><a href="#cb5-54"></a>            <span class="bn">2&#39;b10</span> : <span class="kw">begin</span></span>
-<span id="cb5-55"><a href="#cb5-55"></a>                displays &lt;= <span class="bn">4&#39;b0010</span>;</span>
-<span id="cb5-56"><a href="#cb5-56"></a>                displayed_value &lt;= display_<span class="dv">2</span>_value;</span>
-<span id="cb5-57"><a href="#cb5-57"></a>            <span class="kw">end</span></span>
-<span id="cb5-58"><a href="#cb5-58"></a>            <span class="bn">2&#39;b01</span> : <span class="kw">begin</span></span>
-<span id="cb5-59"><a href="#cb5-59"></a>                displays &lt;= <span class="bn">4&#39;b0100</span>;</span>
-<span id="cb5-60"><a href="#cb5-60"></a>                displayed_value &lt;= display_<span class="dv">3</span>_value;</span>
-<span id="cb5-61"><a href="#cb5-61"></a>            <span class="kw">end</span></span>
-<span id="cb5-62"><a href="#cb5-62"></a>            <span class="bn">2&#39;b00</span> : <span class="kw">begin</span></span>
-<span id="cb5-63"><a href="#cb5-63"></a>                displays &lt;= <span class="bn">4&#39;b1000</span>;</span>
-<span id="cb5-64"><a href="#cb5-64"></a>                displayed_value &lt;= display_<span class="dv">4</span>_value;</span>
-<span id="cb5-65"><a href="#cb5-65"></a>            <span class="kw">end</span></span>
-<span id="cb5-66"><a href="#cb5-66"></a>        <span class="kw">endcase</span></span>
-<span id="cb5-67"><a href="#cb5-67"></a></span>
-<span id="cb5-68"><a href="#cb5-68"></a>        <span class="kw">case</span>(displayed_value[<span class="dv">3</span>:<span class="dv">0</span>])</span>
-<span id="cb5-69"><a href="#cb5-69"></a>            <span class="bn">4&#39;b0000</span> : segments &lt;= <span class="bn">8&#39;b11101011</span>; <span class="co">//0</span></span>
-<span id="cb5-70"><a href="#cb5-70"></a>            <span class="bn">4&#39;b0001</span> : segments &lt;= <span class="bn">8&#39;b01000010</span>; <span class="co">//1</span></span>
-<span id="cb5-71"><a href="#cb5-71"></a>            <span class="bn">4&#39;b0010</span> : segments &lt;= <span class="bn">8&#39;b11100101</span>; <span class="co">//2</span></span>
-<span id="cb5-72"><a href="#cb5-72"></a>            <span class="bn">4&#39;b0011</span> : segments &lt;= <span class="bn">8&#39;b11100110</span>; <span class="co">//3</span></span>
-<span id="cb5-73"><a href="#cb5-73"></a>            <span class="bn">4&#39;b0100</span> : segments &lt;= <span class="bn">8&#39;b01001110</span>; <span class="co">//4</span></span>
-<span id="cb5-74"><a href="#cb5-74"></a>            <span class="bn">4&#39;b0101</span> : segments &lt;= <span class="bn">8&#39;b10101110</span>; <span class="co">//5</span></span>
-<span id="cb5-75"><a href="#cb5-75"></a>            <span class="bn">4&#39;b0110</span> : segments &lt;= <span class="bn">8&#39;b10101111</span>; <span class="co">//6</span></span>
-<span id="cb5-76"><a href="#cb5-76"></a>            <span class="bn">4&#39;b0111</span> : segments &lt;= <span class="bn">8&#39;b01100010</span>; <span class="co">//7</span></span>
-<span id="cb5-77"><a href="#cb5-77"></a>            <span class="bn">4&#39;b1000</span> : segments &lt;= <span class="bn">8&#39;b11101111</span>; <span class="co">//8</span></span>
-<span id="cb5-78"><a href="#cb5-78"></a>            <span class="bn">4&#39;b1001</span> : segments &lt;= <span class="bn">8&#39;b11101110</span>; <span class="co">//9</span></span>
-<span id="cb5-79"><a href="#cb5-79"></a>            <span class="kw">default</span> : segments &lt;= <span class="bn">8&#39;b00000000</span>; <span class="co">//Rien</span></span>
-<span id="cb5-80"><a href="#cb5-80"></a>        <span class="kw">endcase</span></span>
-<span id="cb5-81"><a href="#cb5-81"></a></span>
-<span id="cb5-82"><a href="#cb5-82"></a>    <span class="kw">end</span></span>
-<span id="cb5-83"><a href="#cb5-83"></a></span>
-<span id="cb5-84"><a href="#cb5-84"></a><span class="kw">endmodule</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co">/* module */</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">module</span> SevenSegment (</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    <span class="dt">input</span> CLOCK_<span class="dv">50</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>    <span class="dt">output</span> [<span class="dv">3</span>:<span class="dv">0</span>] DISPLAYS,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    <span class="dt">output</span> [<span class="dv">7</span>:<span class="dv">0</span>] SEGMENTS</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>);</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>    <span class="co">/* reg */</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">7</span>:<span class="dv">0</span>] segments = <span class="bn">8&#39;b0</span>;</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">1</span>_value = <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">2</span>_value = <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">3</span>_value = <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] display_<span class="dv">4</span>_value = <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] displayed_value = <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">3</span>:<span class="dv">0</span>] displays = <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a>    <span class="dt">reg</span> [<span class="dv">25</span>:<span class="dv">0</span>] counter = {<span class="dv">26</span>{<span class="bn">1&#39;b0</span>}};</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a>    <span class="co">/* assign */</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true"></a>    <span class="kw">assign</span> DISPLAYS = displays;</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true"></a>    <span class="kw">assign</span> SEGMENTS = segments;</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true"></a>    <span class="co">/* always */</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true"></a>    <span class="kw">always</span> @ (<span class="kw">posedge</span> CLOCK_<span class="dv">50</span>) <span class="kw">begin</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true"></a>        counter &lt;= counter + <span class="bn">1&#39;b1</span>;</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true"></a>        <span class="kw">if</span>(counter[<span class="dv">20</span>:<span class="dv">0</span>] == <span class="bn">21&#39;b1</span>) <span class="kw">begin</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true"></a>            display_<span class="dv">1</span>_value &lt;= display_<span class="dv">1</span>_value + <span class="bn">1&#39;b1</span>;</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true"></a>        <span class="kw">if</span>(display_<span class="dv">1</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true"></a>            display_<span class="dv">1</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true"></a>            display_<span class="dv">2</span>_value &lt;= display_<span class="dv">2</span>_value + <span class="bn">1&#39;b1</span>;</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true"></a>        <span class="kw">if</span>(display_<span class="dv">2</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true"></a>            display_<span class="dv">2</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true"></a>            display_<span class="dv">3</span>_value &lt;= display_<span class="dv">3</span>_value + <span class="bn">1&#39;b1</span>;</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true"></a>        <span class="kw">if</span>(display_<span class="dv">3</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true"></a>            display_<span class="dv">3</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true"></a>            display_<span class="dv">4</span>_value &lt;= display_<span class="dv">4</span>_value + <span class="bn">1&#39;b1</span>;</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true"></a>        <span class="kw">if</span>(display_<span class="dv">4</span>_value[<span class="dv">3</span>:<span class="dv">0</span>] == <span class="bn">4&#39;b1010</span>) <span class="kw">begin</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true"></a>            display_<span class="dv">4</span>_value &lt;= <span class="bn">4&#39;b0000</span>;</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true"></a></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true"></a>        <span class="kw">case</span>(counter[<span class="dv">18</span>:<span class="dv">17</span>])</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true"></a>            <span class="bn">2&#39;b11</span> : <span class="kw">begin</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true"></a>                displays &lt;= <span class="bn">4&#39;b0001</span>;</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true"></a>                displayed_value &lt;= display_<span class="dv">1</span>_value;</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true"></a>            <span class="kw">end</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true"></a>            <span class="bn">2&#39;b10</span> : <span class="kw">begin</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true"></a>                displays &lt;= <span class="bn">4&#39;b0010</span>;</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true"></a>                displayed_value &lt;= display_<span class="dv">2</span>_value;</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true"></a>            <span class="kw">end</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true"></a>            <span class="bn">2&#39;b01</span> : <span class="kw">begin</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true"></a>                displays &lt;= <span class="bn">4&#39;b0100</span>;</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true"></a>                displayed_value &lt;= display_<span class="dv">3</span>_value;</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true"></a>            <span class="kw">end</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true"></a>            <span class="bn">2&#39;b00</span> : <span class="kw">begin</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true"></a>                displays &lt;= <span class="bn">4&#39;b1000</span>;</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true"></a>                displayed_value &lt;= display_<span class="dv">4</span>_value;</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true"></a>            <span class="kw">end</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true"></a>        <span class="kw">endcase</span></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true"></a></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true"></a>        <span class="kw">case</span>(displayed_value[<span class="dv">3</span>:<span class="dv">0</span>])</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true"></a>            <span class="bn">4&#39;b0000</span> : segments &lt;= <span class="bn">8&#39;b11101011</span>; <span class="co">//0</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true"></a>            <span class="bn">4&#39;b0001</span> : segments &lt;= <span class="bn">8&#39;b01000010</span>; <span class="co">//1</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true"></a>            <span class="bn">4&#39;b0010</span> : segments &lt;= <span class="bn">8&#39;b11100101</span>; <span class="co">//2</span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true"></a>            <span class="bn">4&#39;b0011</span> : segments &lt;= <span class="bn">8&#39;b11100110</span>; <span class="co">//3</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true"></a>            <span class="bn">4&#39;b0100</span> : segments &lt;= <span class="bn">8&#39;b01001110</span>; <span class="co">//4</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true"></a>            <span class="bn">4&#39;b0101</span> : segments &lt;= <span class="bn">8&#39;b10101110</span>; <span class="co">//5</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true"></a>            <span class="bn">4&#39;b0110</span> : segments &lt;= <span class="bn">8&#39;b10101111</span>; <span class="co">//6</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true"></a>            <span class="bn">4&#39;b0111</span> : segments &lt;= <span class="bn">8&#39;b01100010</span>; <span class="co">//7</span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true"></a>            <span class="bn">4&#39;b1000</span> : segments &lt;= <span class="bn">8&#39;b11101111</span>; <span class="co">//8</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true"></a>            <span class="bn">4&#39;b1001</span> : segments &lt;= <span class="bn">8&#39;b11101110</span>; <span class="co">//9</span></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true"></a>            <span class="kw">default</span> : segments &lt;= <span class="bn">8&#39;b00000000</span>; <span class="co">//Rien</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true"></a>        <span class="kw">endcase</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true"></a></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true"></a></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true"></a><span class="kw">endmodule</span></span></code></pre></div>
 <p>Le bloc <code>case</code> nous permet de comparer <code>counter[18:17]</code> de manière élégante bien qu'une série de 4 <code>if</code> aurait parfaitement fonctionné.</p>
 <p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>, <a href="../fpga-afficheur-7-segments-compteur-unique/">partie 2</a>, partie 3</p>
-<h3 id="sources">Sources</h3>
-<p><a href="https://zipcpu.com/tutorial/">https://zipcpu.com/tutorial/</a></p>
 </article>
 
 <div id="footer">

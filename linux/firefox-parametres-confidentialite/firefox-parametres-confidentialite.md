@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [firefox, confidentialité, paramètres, avancé, about config]
-abstract: |
-  Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance.
+abstract: "Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance."
 ---
 
 
@@ -89,6 +88,6 @@ Désactiver le suivi de vos clicks:
 browser.send_pings = false
 ```
 
-## Sources
+## Liens complémentaires
 
  - [https://gist.github.com/0XDE57/fbd302cef7693e62c769](https://gist.github.com/0XDE57/fbd302cef7693e62c769)

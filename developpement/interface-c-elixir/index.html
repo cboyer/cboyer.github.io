@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>Interfacer un programme C avec Elixir grâce aux Ports - C. Boyer</title>
-  <meta name="description" content="<p>Interfacer un programme C via STDIN/STDOUT avec les Ports Elixir.</p>" />
+  <meta name="description" content="Interfacer un programme C via STDIN/STDOUT avec les Ports Elixir." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Elixir, C, Ports, interface, stdin, stdout" />
   <link rel="canonical" href="https://cboyer.github.io/developpement/interface-c-elixir" />
   <meta property="og:title" content="Interfacer un programme C avec Elixir grâce aux Ports - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="<p>Interfacer un programme C via STDIN/STDOUT avec les Ports Elixir.</p>" />
+  <meta property="og:description" content="Interfacer un programme C via STDIN/STDOUT avec les Ports Elixir." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2020-05-30T14:27:04-04:00" />
@@ -64,7 +64,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span. { color: #1f1c1b; } /* Normal */
+code span { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
 code span.an { color: #ca60ca; } /* Annotation */
 code span.at { color: #0057ae; } /* Attribute */
@@ -99,16 +99,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </head>
 <body>
   <div id="header">
-    <div id="site_title">
-      <h1>cboyer.github.io</h1>
-    </div>
     <div id="links">
-      <a href="../../rechercher.html" class="search" title="Rechercher">
-          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
-            <title id="search-icon">Rechercher</title>
-            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
-          </svg>
-      </a>
       <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
           <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title id="github-icon">GitHub</title>
@@ -122,15 +113,9 @@ code span.wa { color: #bf0303; } /* Warning */
           </svg>
       </a>
     </div>
-
+    <h1>cboyer.github.io</h1>
     <div id="menu">
-      <ul class="menu">
-        <li class="menu_item"><a href="../../index.html">Index</a></li>
-        <li class="menu_item active"><a href="../../developpement.html">Développement</a></li>
-        <li class="menu_item"><a href="../../linux.html">Linux</a></li>
-        <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
-        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
-      </ul>
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
     </div>
   </div>
 
@@ -143,30 +128,30 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Il existe plusieurs méthodes d'interfacer un programme C avec Elixir. Les Ports consistent à utiliser STDIN/STDOUT pour communiquer avec un autre programme (C ou autres). Deux façons de les utiliser: simplement en envoyant/recevant les données, et l'autre en y ajoutant la longueur de ces données sur les premiers octets (comme certains protocoles applicatifs qui utilisent TCP/IP).</p>
 <h2 id="utilisation-simple-des-ports">Utilisation simple des Ports</h2>
 <p>Exemple de programme C lisant sur STDIN, ajoute "Hello " devant puis écrit le résultat sur STDOUT_FILENO. À compiler avec <code>gcc test.c</code> pour obtenir l'exécutable <code>a.out</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="pp">#define MAX_SIZE_DATA 50</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="dt">int</span> main () {</span>
-<span id="cb1-9"><a href="#cb1-9"></a>    <span class="dt">char</span> add[] = <span class="st">&quot;Hello &quot;</span>;</span>
-<span id="cb1-10"><a href="#cb1-10"></a>    <span class="dt">char</span> in[MAX_SIZE_DATA] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
-<span id="cb1-11"><a href="#cb1-11"></a>    <span class="dt">char</span> out[MAX_SIZE_DATA + <span class="kw">sizeof</span> add] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
-<span id="cb1-12"><a href="#cb1-12"></a></span>
-<span id="cb1-13"><a href="#cb1-13"></a>    <span class="co">/* Utilisation de read() avec STDIN_FILENO fonctionne également, fgets suppose l&#39;utilisation de &#39;\n&#39; comme fin de chaîne */</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a>    <span class="cf">while</span> (fgets(in, <span class="kw">sizeof</span> in - <span class="dv">1</span>, stdin) != <span class="dv">0</span>) {</span>
-<span id="cb1-15"><a href="#cb1-15"></a>        strncat(out, add, strlen(add));</span>
-<span id="cb1-16"><a href="#cb1-16"></a>        strncat(out, in, strlen(in));</span>
-<span id="cb1-17"><a href="#cb1-17"></a>  </span>
-<span id="cb1-18"><a href="#cb1-18"></a>        <span class="co">/* fprintf(stdout, out) et printf(&quot;%s&quot;, out) ne sont pas récupérés par Elixir */</span></span>
-<span id="cb1-19"><a href="#cb1-19"></a>        write(STDOUT_FILENO, out, strlen(out));</span>
-<span id="cb1-20"><a href="#cb1-20"></a>        out[<span class="dv">0</span>] = <span class="ch">&#39;\0&#39;</span>;</span>
-<span id="cb1-21"><a href="#cb1-21"></a>    }</span>
-<span id="cb1-22"><a href="#cb1-22"></a></span>
-<span id="cb1-23"><a href="#cb1-23"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb1-24"><a href="#cb1-24"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="pp">#define MAX_SIZE_DATA 50</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="dt">int</span> main () {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    <span class="dt">char</span> add[] = <span class="st">&quot;Hello &quot;</span>;</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="dt">char</span> in[MAX_SIZE_DATA] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>    <span class="dt">char</span> out[MAX_SIZE_DATA + <span class="kw">sizeof</span> add] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    <span class="co">/* Utilisation de read() avec STDIN_FILENO fonctionne également, fgets suppose l&#39;utilisation de &#39;\n&#39; comme fin de chaîne */</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>    <span class="cf">while</span> (fgets(in, <span class="kw">sizeof</span> in - <span class="dv">1</span>, stdin) != <span class="dv">0</span>) {</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>        strncat(out, add, strlen(add));</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>        strncat(out, in, strlen(in));</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>  </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>        <span class="co">/* fprintf(stdout, out) et printf(&quot;%s&quot;, out) ne sont pas récupérés par Elixir */</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>        write(STDOUT_FILENO, out, strlen(out));</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a>        out[<span class="dv">0</span>] = <span class="ch">&#39;\0&#39;</span>;</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>    }</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>}</span></code></pre></div>
 <p>Tests avec <code>iex</code>:</p>
 <pre class="console"><code>Interactive Elixir (1.10.3) - press Ctrl+C to exit (type h() ENTER for help)
 iex(1)&gt; port = Port.open({:spawn_executable, &quot;./a.out&quot;}, [:binary])
@@ -179,121 +164,121 @@ iex(4)&gt; flush()
 {#Port&lt;0.5&gt;, {:data, &quot;Hello Polo\n&quot;}}
 :ok</code></pre>
 <p>Les ports peuvent également être utilisés avec GenServer:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">defmodule</span> <span class="cn">PortTester</span> <span class="kw">do</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>    <span class="im">use</span> <span class="cn">GenServer</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>    <span class="im">require</span> <span class="cn">Logger</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a></span>
-<span id="cb3-5"><a href="#cb3-5"></a>    <span class="kw">def</span> start_link(args) <span class="kw">do</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>        <span class="cn">GenServer</span><span class="op">.</span>start_link(__MODULE__, args, [<span class="va">name:</span> <span class="va">:echo_port</span>])</span>
-<span id="cb3-7"><a href="#cb3-7"></a>    <span class="kw">end</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a></span>
-<span id="cb3-9"><a href="#cb3-9"></a>    <span class="kw">def</span> init(_args) <span class="kw">do</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a>        state <span class="op">=</span> %{</span>
-<span id="cb3-11"><a href="#cb3-11"></a>            <span class="va">port:</span> <span class="cn">nil</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>        }</span>
-<span id="cb3-13"><a href="#cb3-13"></a></span>
-<span id="cb3-14"><a href="#cb3-14"></a>        port <span class="op">=</span> <span class="cn">Port</span><span class="op">.</span>open({<span class="va">:spawn_executable</span>, <span class="st">&quot;./a.out&quot;</span>}, [<span class="va">:binary</span>, <span class="va">:exit_status</span>])</span>
-<span id="cb3-15"><a href="#cb3-15"></a>        state <span class="op">=</span> <span class="cn">Map</span><span class="op">.</span>put(state, <span class="va">:port</span>, port)</span>
-<span id="cb3-16"><a href="#cb3-16"></a>        <span class="cn">Port</span><span class="op">.</span>command(port, <span class="st">&quot;Init\n&quot;</span>)</span>
-<span id="cb3-17"><a href="#cb3-17"></a></span>
-<span id="cb3-18"><a href="#cb3-18"></a>        <span class="co">#Stream continu pour générer des messages (entier incrémenté chaque seconde)</span></span>
-<span id="cb3-19"><a href="#cb3-19"></a>        _pid <span class="op">=</span> spawn <span class="kw">fn</span> <span class="op">-&gt;</span> <span class="dv">1000</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a>                        <span class="op">|&gt;</span> <span class="cn">Stream</span><span class="op">.</span>interval()</span>
-<span id="cb3-21"><a href="#cb3-21"></a>                        <span class="op">|&gt;</span> <span class="cn">Stream</span><span class="op">.</span>each(<span class="op">&amp;</span>(send(<span class="va">:echo_port</span>, <span class="st">&quot;test &quot;</span> <span class="op">&lt;&gt;</span> <span class="cn">Integer</span><span class="op">.</span>to_string(<span class="op">&amp;</span><span class="dv">1</span>))) ) </span>
-<span id="cb3-22"><a href="#cb3-22"></a>                        <span class="op">|&gt;</span> <span class="cn">Stream</span><span class="op">.</span>run()</span>
-<span id="cb3-23"><a href="#cb3-23"></a>        <span class="kw">end</span></span>
-<span id="cb3-24"><a href="#cb3-24"></a></span>
-<span id="cb3-25"><a href="#cb3-25"></a>        {<span class="va">:ok</span>, state}</span>
-<span id="cb3-26"><a href="#cb3-26"></a>    <span class="kw">end</span></span>
-<span id="cb3-27"><a href="#cb3-27"></a></span>
-<span id="cb3-28"><a href="#cb3-28"></a>    <span class="co">#Réception des messages en provenance du port</span></span>
-<span id="cb3-29"><a href="#cb3-29"></a>    <span class="kw">def</span> handle_info({port, {<span class="va">:data</span>, msg}}, state) <span class="kw">do</span></span>
-<span id="cb3-30"><a href="#cb3-30"></a>        <span class="cn">Logger</span><span class="op">.</span>info <span class="st">&quot;Received from port </span><span class="ot">#{</span>inspect port<span class="ot">}</span><span class="st">: </span><span class="ot">#{</span>inspect msg<span class="ot">}</span><span class="st">&quot;</span></span>
-<span id="cb3-31"><a href="#cb3-31"></a>        {<span class="va">:noreply</span>, state}</span>
-<span id="cb3-32"><a href="#cb3-32"></a>    <span class="kw">end</span></span>
-<span id="cb3-33"><a href="#cb3-33"></a></span>
-<span id="cb3-34"><a href="#cb3-34"></a>    <span class="co">#Redémarre le port au besoin</span></span>
-<span id="cb3-35"><a href="#cb3-35"></a>    <span class="kw">def</span> handle_info({port, {<span class="va">:exit_status</span>, status}}, state) <span class="kw">do</span></span>
-<span id="cb3-36"><a href="#cb3-36"></a>        <span class="cn">Logger</span><span class="op">.</span>info <span class="st">&quot;Port </span><span class="ot">#{</span>inspect port<span class="ot">}</span><span class="st"> exited with status </span><span class="ot">#{</span>inspect status<span class="ot">}</span><span class="st">, restarting...&quot;</span></span>
-<span id="cb3-37"><a href="#cb3-37"></a>        port <span class="op">=</span> <span class="cn">Port</span><span class="op">.</span>open({<span class="va">:spawn_executable</span>, <span class="st">&quot;./a.out&quot;</span>}, [<span class="va">:binary</span>, <span class="va">:exit_status</span>])</span>
-<span id="cb3-38"><a href="#cb3-38"></a>        state <span class="op">=</span> <span class="cn">Map</span><span class="op">.</span>put(state, <span class="va">:port</span>, port)</span>
-<span id="cb3-39"><a href="#cb3-39"></a>        {<span class="va">:noreply</span>, state}</span>
-<span id="cb3-40"><a href="#cb3-40"></a>    <span class="kw">end</span></span>
-<span id="cb3-41"><a href="#cb3-41"></a>    </span>
-<span id="cb3-42"><a href="#cb3-42"></a>    <span class="co">#Récupère les messages en provenance du Stream pour les envoyer au port</span></span>
-<span id="cb3-43"><a href="#cb3-43"></a>    <span class="kw">def</span> handle_info(msg, state) <span class="kw">do</span></span>
-<span id="cb3-44"><a href="#cb3-44"></a>        <span class="cn">Logger</span><span class="op">.</span>info <span class="st">&quot;Send to port </span><span class="ot">#{</span>inspect state<span class="op">.</span>port<span class="ot">}</span><span class="st">: </span><span class="ot">#{</span>inspect msg<span class="ot">}</span><span class="st">&quot;</span></span>
-<span id="cb3-45"><a href="#cb3-45"></a>        <span class="cn">Port</span><span class="op">.</span>command(state<span class="op">.</span>port, msg <span class="op">&lt;&gt;</span> <span class="st">&quot;\n&quot;</span>)</span>
-<span id="cb3-46"><a href="#cb3-46"></a>        {<span class="va">:noreply</span>, state}</span>
-<span id="cb3-47"><a href="#cb3-47"></a>    <span class="kw">end</span></span>
-<span id="cb3-48"><a href="#cb3-48"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">PortTester</span> <span class="kw">do</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="im">use</span> <span class="cn">GenServer</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="im">require</span> <span class="cn">Logger</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    <span class="kw">def</span> start_link(args) <span class="kw">do</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>        <span class="cn">GenServer</span><span class="op">.</span>start_link(__MODULE__, args, [<span class="va">name:</span> <span class="va">:echo_port</span>])</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>    <span class="kw">def</span> init(_args) <span class="kw">do</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>        state <span class="op">=</span> %{</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>            <span class="va">port:</span> <span class="cn">nil</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>        }</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>        port <span class="op">=</span> <span class="cn">Port</span><span class="op">.</span>open({<span class="va">:spawn_executable</span>, <span class="st">&quot;./a.out&quot;</span>}, [<span class="va">:binary</span>, <span class="va">:exit_status</span>])</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>        state <span class="op">=</span> <span class="cn">Map</span><span class="op">.</span>put(state, <span class="va">:port</span>, port)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>        <span class="cn">Port</span><span class="op">.</span>command(port, <span class="st">&quot;Init\n&quot;</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>        <span class="co">#Stream continu pour générer des messages (entier incrémenté chaque seconde)</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a>        _pid <span class="op">=</span> spawn <span class="kw">fn</span> <span class="op">-&gt;</span> <span class="dv">1000</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>                        <span class="op">|&gt;</span> <span class="cn">Stream</span><span class="op">.</span>interval()</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a>                        <span class="op">|&gt;</span> <span class="cn">Stream</span><span class="op">.</span>each(<span class="op">&amp;</span>(send(<span class="va">:echo_port</span>, <span class="st">&quot;test &quot;</span> <span class="op">&lt;&gt;</span> <span class="cn">Integer</span><span class="op">.</span>to_string(<span class="op">&amp;</span><span class="dv">1</span>))) ) </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a>                        <span class="op">|&gt;</span> <span class="cn">Stream</span><span class="op">.</span>run()</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a>        {<span class="va">:ok</span>, state}</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true"></a>    <span class="co">#Réception des messages en provenance du port</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true"></a>    <span class="kw">def</span> handle_info({port, {<span class="va">:data</span>, msg}}, state) <span class="kw">do</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true"></a>        <span class="cn">Logger</span><span class="op">.</span>info <span class="st">&quot;Received from port </span><span class="ot">#{</span>inspect port<span class="ot">}</span><span class="st">: </span><span class="ot">#{</span>inspect msg<span class="ot">}</span><span class="st">&quot;</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true"></a>        {<span class="va">:noreply</span>, state}</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true"></a>    <span class="co">#Redémarre le port au besoin</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true"></a>    <span class="kw">def</span> handle_info({port, {<span class="va">:exit_status</span>, status}}, state) <span class="kw">do</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true"></a>        <span class="cn">Logger</span><span class="op">.</span>info <span class="st">&quot;Port </span><span class="ot">#{</span>inspect port<span class="ot">}</span><span class="st"> exited with status </span><span class="ot">#{</span>inspect status<span class="ot">}</span><span class="st">, restarting...&quot;</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true"></a>        port <span class="op">=</span> <span class="cn">Port</span><span class="op">.</span>open({<span class="va">:spawn_executable</span>, <span class="st">&quot;./a.out&quot;</span>}, [<span class="va">:binary</span>, <span class="va">:exit_status</span>])</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true"></a>        state <span class="op">=</span> <span class="cn">Map</span><span class="op">.</span>put(state, <span class="va">:port</span>, port)</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true"></a>        {<span class="va">:noreply</span>, state}</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true"></a>    </span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true"></a>    <span class="co">#Récupère les messages en provenance du Stream pour les envoyer au port</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true"></a>    <span class="kw">def</span> handle_info(msg, state) <span class="kw">do</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true"></a>        <span class="cn">Logger</span><span class="op">.</span>info <span class="st">&quot;Send to port </span><span class="ot">#{</span>inspect state<span class="op">.</span>port<span class="ot">}</span><span class="st">: </span><span class="ot">#{</span>inspect msg<span class="ot">}</span><span class="st">&quot;</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true"></a>        <span class="cn">Port</span><span class="op">.</span>command(state<span class="op">.</span>port, msg <span class="op">&lt;&gt;</span> <span class="st">&quot;\n&quot;</span>)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true"></a>        {<span class="va">:noreply</span>, state}</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
 <p>Compilation/exécution:</p>
 <pre class="console"><code>elixirc porttester.ex
 iex
 PortTester.start_link([])</code></pre>
 <h2 id="inclure-la-longueur-des-messages">Inclure la longueur des messages</h2>
 <p>Pour s'assurer de récupérer l'intégralité d'un message (éventuellement envoyé en plusieurs parties), Elixir propose d'envoyer en premier la longueur du message attendu. En utilisant ce mode de fonctionnement, la longueur d'un message doit être spécifiée en entrée comme en sortie du Port. L'ensemble est géré de manière transparente avec Elixir qui nécessite uniquement l'ajout d'un paramètre à l'ouverture du Port (dans notre module <code>PortTester</code>) :</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb5-1"><a href="#cb5-1"></a>port <span class="op">=</span> <span class="cn">Port</span><span class="op">.</span>open({<span class="va">:spawn_executable</span>, <span class="st">&quot;./a.out&quot;</span>}, [<span class="va">:binary</span>, {<span class="va">:packet</span>, <span class="dv">4</span>}, <span class="va">:exit_status</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>port <span class="op">=</span> <span class="cn">Port</span><span class="op">.</span>open({<span class="va">:spawn_executable</span>, <span class="st">&quot;./a.out&quot;</span>}, [<span class="va">:binary</span>, {<span class="va">:packet</span>, <span class="dv">4</span>}, <span class="va">:exit_status</span>])</span></code></pre></div>
 <p>En revanche l'implémentation en C nécessitera un peu plus de travail:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="pp">#define MAX_SIZE_DATA 50</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="dt">int</span> main () {</span>
-<span id="cb6-10"><a href="#cb6-10"></a>    <span class="dt">char</span> add[] = <span class="st">&quot;Hello &quot;</span>;</span>
-<span id="cb6-11"><a href="#cb6-11"></a>    <span class="dt">char</span> in[MAX_SIZE_DATA] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
-<span id="cb6-12"><a href="#cb6-12"></a>    <span class="dt">char</span> out[MAX_SIZE_DATA] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
-<span id="cb6-13"><a href="#cb6-13"></a>    <span class="dt">char</span> bytes[<span class="dv">4</span>];</span>
-<span id="cb6-14"><a href="#cb6-14"></a>    <span class="dt">uint32_t</span> in_length, out_length;</span>
-<span id="cb6-15"><a href="#cb6-15"></a>    <span class="dt">int</span> iterate, remain;</span>
-<span id="cb6-16"><a href="#cb6-16"></a></span>
-<span id="cb6-17"><a href="#cb6-17"></a></span>
-<span id="cb6-18"><a href="#cb6-18"></a>    <span class="co">/* Récupère la longueur du message (4 premiers octets) */</span></span>
-<span id="cb6-19"><a href="#cb6-19"></a>    <span class="cf">while</span> (read(STDIN_FILENO, bytes, <span class="dv">4</span>) != <span class="dv">0</span>) {</span>
-<span id="cb6-20"><a href="#cb6-20"></a></span>
-<span id="cb6-21"><a href="#cb6-21"></a>        <span class="co">/* Conversion des 4 premiers octets en entier (big endian) */</span></span>
-<span id="cb6-22"><a href="#cb6-22"></a>        in_length = ((<span class="dt">uint32_t</span>)bytes[<span class="dv">0</span>] &lt;&lt; <span class="dv">24</span>) + ((<span class="dt">uint32_t</span>)bytes[<span class="dv">1</span>] &lt;&lt; <span class="dv">16</span>) + ((<span class="dt">uint32_t</span>)bytes[<span class="dv">2</span>] &lt;&lt; <span class="dv">8</span>) + (<span class="dt">uint32_t</span>)bytes[<span class="dv">3</span>];</span>
-<span id="cb6-23"><a href="#cb6-23"></a></span>
-<span id="cb6-24"><a href="#cb6-24"></a>        <span class="co">/* STDERR permet d&#39;afficher dans le terminal (non récupéré par Elixir) */</span></span>
-<span id="cb6-25"><a href="#cb6-25"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Received length from Elixir: %d\n&quot;, in_length);</span></span>
-<span id="cb6-26"><a href="#cb6-26"></a></span>
-<span id="cb6-27"><a href="#cb6-27"></a>        <span class="co">/* Code la longueur du message réponse (int) sur 4 octets big endian */</span></span>
-<span id="cb6-28"><a href="#cb6-28"></a>        out_length = in_length + strlen(add);</span>
-<span id="cb6-29"><a href="#cb6-29"></a>        bytes[<span class="dv">0</span>] = (out_length &gt;&gt; <span class="dv">24</span>) &amp; <span class="bn">0xFF</span>;</span>
-<span id="cb6-30"><a href="#cb6-30"></a>        bytes[<span class="dv">1</span>] = (out_length &gt;&gt; <span class="dv">16</span>) &amp; <span class="bn">0xFF</span>;</span>
-<span id="cb6-31"><a href="#cb6-31"></a>        bytes[<span class="dv">2</span>] = (out_length &gt;&gt; <span class="dv">8</span>) &amp; <span class="bn">0xFF</span>;</span>
-<span id="cb6-32"><a href="#cb6-32"></a>        bytes[<span class="dv">3</span>] = out_length &amp; <span class="bn">0xFF</span>;</span>
-<span id="cb6-33"><a href="#cb6-33"></a></span>
-<span id="cb6-34"><a href="#cb6-34"></a>        <span class="co">/* Envoi à Elixir la longueur du message et son début &quot;Hello &quot; */</span></span>
-<span id="cb6-35"><a href="#cb6-35"></a>        write(STDOUT_FILENO, bytes, <span class="dv">4</span>);</span>
-<span id="cb6-36"><a href="#cb6-36"></a>        write(STDOUT_FILENO, add, strlen(add));</span>
-<span id="cb6-37"><a href="#cb6-37"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Send length to Elixir: %d\n&quot;, out_length);</span></span>
-<span id="cb6-38"><a href="#cb6-38"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Send data to Elixir: %s\n&quot;, add);</span></span>
-<span id="cb6-39"><a href="#cb6-39"></a></span>
-<span id="cb6-40"><a href="#cb6-40"></a>        <span class="co">/* Lis le message sur la longueur spécifiée et le renvoi au fur et à mesure (évite les buffers overflow) */</span></span>
-<span id="cb6-41"><a href="#cb6-41"></a>        iterate = in_length / MAX_SIZE_DATA;</span>
-<span id="cb6-42"><a href="#cb6-42"></a>        remain = in_length % MAX_SIZE_DATA;</span>
-<span id="cb6-43"><a href="#cb6-43"></a></span>
-<span id="cb6-44"><a href="#cb6-44"></a>        <span class="cf">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; iterate; i++) {</span>
-<span id="cb6-45"><a href="#cb6-45"></a>            read(STDIN_FILENO, out, MAX_SIZE_DATA);</span>
-<span id="cb6-46"><a href="#cb6-46"></a>            write(STDOUT_FILENO, out, MAX_SIZE_DATA);</span>
-<span id="cb6-47"><a href="#cb6-47"></a>            <span class="co">//fprintf(stderr, &quot;[a.out] Send data to Elixir: %s\n&quot;, out);</span></span>
-<span id="cb6-48"><a href="#cb6-48"></a>        }</span>
-<span id="cb6-49"><a href="#cb6-49"></a></span>
-<span id="cb6-50"><a href="#cb6-50"></a>        <span class="cf">if</span>(remain &gt; <span class="dv">0</span>) {</span>
-<span id="cb6-51"><a href="#cb6-51"></a>            read(STDIN_FILENO, out, remain);</span>
-<span id="cb6-52"><a href="#cb6-52"></a>            write(STDOUT_FILENO, out, remain);</span>
-<span id="cb6-53"><a href="#cb6-53"></a>            <span class="co">//fprintf(stderr, &quot;[a.out] Send data to Elixir: %s\n&quot;, out);</span></span>
-<span id="cb6-54"><a href="#cb6-54"></a>        }</span>
-<span id="cb6-55"><a href="#cb6-55"></a>    }</span>
-<span id="cb6-56"><a href="#cb6-56"></a></span>
-<span id="cb6-57"><a href="#cb6-57"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb6-58"><a href="#cb6-58"></a>}</span></code></pre></div>
-<h3 id="liens-complémentaires">Liens complémentaires</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="pp">#define MAX_SIZE_DATA 50</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a><span class="dt">int</span> main () {</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a>    <span class="dt">char</span> add[] = <span class="st">&quot;Hello &quot;</span>;</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a>    <span class="dt">char</span> in[MAX_SIZE_DATA] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true"></a>    <span class="dt">char</span> out[MAX_SIZE_DATA] = <span class="st">&quot;</span><span class="sc">\0</span><span class="st">&quot;</span>;</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true"></a>    <span class="dt">char</span> bytes[<span class="dv">4</span>];</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true"></a>    <span class="dt">uint32_t</span> in_length, out_length;</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true"></a>    <span class="dt">int</span> iterate, remain;</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true"></a>    <span class="co">/* Récupère la longueur du message (4 premiers octets) */</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true"></a>    <span class="cf">while</span> (read(STDIN_FILENO, bytes, <span class="dv">4</span>) != <span class="dv">0</span>) {</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true"></a>        <span class="co">/* Conversion des 4 premiers octets en entier (big endian) */</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true"></a>        in_length = ((<span class="dt">uint32_t</span>)bytes[<span class="dv">0</span>] &lt;&lt; <span class="dv">24</span>) + ((<span class="dt">uint32_t</span>)bytes[<span class="dv">1</span>] &lt;&lt; <span class="dv">16</span>) + ((<span class="dt">uint32_t</span>)bytes[<span class="dv">2</span>] &lt;&lt; <span class="dv">8</span>) + (<span class="dt">uint32_t</span>)bytes[<span class="dv">3</span>];</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true"></a>        <span class="co">/* STDERR permet d&#39;afficher dans le terminal (non récupéré par Elixir) */</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Received length from Elixir: %d\n&quot;, in_length);</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true"></a>        <span class="co">/* Code la longueur du message réponse (int) sur 4 octets big endian */</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true"></a>        out_length = in_length + strlen(add);</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true"></a>        bytes[<span class="dv">0</span>] = (out_length &gt;&gt; <span class="dv">24</span>) &amp; <span class="bn">0xFF</span>;</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true"></a>        bytes[<span class="dv">1</span>] = (out_length &gt;&gt; <span class="dv">16</span>) &amp; <span class="bn">0xFF</span>;</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true"></a>        bytes[<span class="dv">2</span>] = (out_length &gt;&gt; <span class="dv">8</span>) &amp; <span class="bn">0xFF</span>;</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true"></a>        bytes[<span class="dv">3</span>] = out_length &amp; <span class="bn">0xFF</span>;</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true"></a></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true"></a>        <span class="co">/* Envoi à Elixir la longueur du message et son début &quot;Hello &quot; */</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true"></a>        write(STDOUT_FILENO, bytes, <span class="dv">4</span>);</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true"></a>        write(STDOUT_FILENO, add, strlen(add));</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Send length to Elixir: %d\n&quot;, out_length);</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true"></a>        <span class="co">//fprintf(stderr, &quot;[a.out] Send data to Elixir: %s\n&quot;, add);</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true"></a></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true"></a>        <span class="co">/* Lis le message sur la longueur spécifiée et le renvoi au fur et à mesure (évite les buffers overflow) */</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true"></a>        iterate = in_length / MAX_SIZE_DATA;</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true"></a>        remain = in_length % MAX_SIZE_DATA;</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true"></a></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true"></a>        <span class="cf">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; iterate; i++) {</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true"></a>            read(STDIN_FILENO, out, MAX_SIZE_DATA);</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true"></a>            write(STDOUT_FILENO, out, MAX_SIZE_DATA);</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true"></a>            <span class="co">//fprintf(stderr, &quot;[a.out] Send data to Elixir: %s\n&quot;, out);</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true"></a>        }</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true"></a></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true"></a>        <span class="cf">if</span>(remain &gt; <span class="dv">0</span>) {</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true"></a>            read(STDIN_FILENO, out, remain);</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true"></a>            write(STDOUT_FILENO, out, remain);</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true"></a>            <span class="co">//fprintf(stderr, &quot;[a.out] Send data to Elixir: %s\n&quot;, out);</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true"></a>        }</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true"></a>    }</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true"></a></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true"></a>}</span></code></pre></div>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://hexdocs.pm/elixir/Port.html">Ports Elixir</a></li>
 <li><a href="https://www.theerlangelist.com/article/outside_elixir">Outside Elixir: running external programs with ports</a></li>

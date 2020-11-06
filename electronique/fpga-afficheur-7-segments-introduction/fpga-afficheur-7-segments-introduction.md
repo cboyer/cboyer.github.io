@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Électronique"
 keywords: [fpga, afficheur, led, verilog]
-abstract: |
-  Pilotage d'un afficheur 7 segments avec un FPGA et Verilog.
+abstract: "Pilotage d'un afficheur 7 segments avec un FPGA et Verilog."
 ---
 
 Partie 1, [partie 2](../fpga-afficheur-7-segments-compteur-unique/), [partie 3](../fpga-afficheur-7-segments-compteurs-multiples/)
@@ -229,7 +228,3 @@ Dans [la partie 2](../fpga-afficheur-7-segments-compteur-unique/), nous irons un
 
 Partie 1, [partie 2](../fpga-afficheur-7-segments-compteur-unique/), [partie 3](../fpga-afficheur-7-segments-compteurs-multiples/)
 
-
-### Sources
-
-[https://zipcpu.com/tutorial/](https://zipcpu.com/tutorial/)

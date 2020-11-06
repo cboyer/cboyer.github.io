@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Électronique"
 keywords: [fpga, afficheur, led, verilog]
-abstract: |
-  Implémentation en Verilog d'un compteur sur un afficheur 7 segments.
+abstract: "Implémentation en Verilog d'un compteur sur un afficheur 7 segments."
 ---
 
 [Partie 1](../fpga-afficheur-7-segments-introduction/), partie 2, [partie 3](../fpga-afficheur-7-segments-compteurs-multiples/)
@@ -119,6 +118,3 @@ Dans [la partie 3](../fpga-afficheur-7-segments-compteurs-multiples/), nous verr
 
 [Partie 1](../fpga-afficheur-7-segments-introduction/), partie 2, [partie 3](../fpga-afficheur-7-segments-compteurs-multiples/)
 
-### Sources
-
-[https://zipcpu.com/tutorial/](https://zipcpu.com/tutorial/)

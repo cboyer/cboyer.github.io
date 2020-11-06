@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [dns, publicité, unbound, linux]
-abstract: |
-  Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires.
+abstract: "Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires."
 ---
 
 Les publicités sont devenues depuis quelques années une véritable plaie sur Internet. Rares sont les sites et autres blogues qui en sont exempts, l'appât du gain ouvrant grand les portes à la monétisation. Ce qui est d'autant plus dérangeant c'est qu'elles ne se limitent plus à afficher (de manière intempestive ou non) un produit quelconque: les régies publicitaires ciblent des annonces en fonctions des données accessibles depuis votre navigateur (cookies, user-agent, recoupement avec d'autres données, etc.).
@@ -104,7 +103,7 @@ systemctl restart unbound
 Il ne reste plus qu'à faire pointer vos clients vers le serveur DNS en ajoutant l'adresse IP dans la configuration de vos machines et/ou dans votre DHCP (routeur).
 
 
-## Sources:
+## Liens complémentaires
 
  - [https://etherarp.net/build-an-adblocking-dns-server/index.html](https://etherarp.net/build-an-adblocking-dns-server/index.html)
  - [https://wiki.archlinux.org/index.php/unbound](https://wiki.archlinux.org/index.php/unbound)

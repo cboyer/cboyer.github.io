@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>Les outils Elixir - C. Boyer</title>
-  <meta name="description" content="<p>Aide mémoire Elixir: les outils.</p>" />
+  <meta name="description" content="Aide mémoire Elixir: les outils." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Elixir, mix, iex, développement" />
   <link rel="canonical" href="https://cboyer.github.io/developpement/outils-elixir" />
   <meta property="og:title" content="Les outils Elixir - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="<p>Aide mémoire Elixir: les outils.</p>" />
+  <meta property="og:description" content="Aide mémoire Elixir: les outils." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2019-11-16T13:24:27-05:00" />
@@ -64,7 +64,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span. { color: #1f1c1b; } /* Normal */
+code span { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
 code span.an { color: #ca60ca; } /* Annotation */
 code span.at { color: #0057ae; } /* Attribute */
@@ -99,16 +99,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </head>
 <body>
   <div id="header">
-    <div id="site_title">
-      <h1>cboyer.github.io</h1>
-    </div>
     <div id="links">
-      <a href="../../rechercher.html" class="search" title="Rechercher">
-          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
-            <title id="search-icon">Rechercher</title>
-            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
-          </svg>
-      </a>
       <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
           <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title id="github-icon">GitHub</title>
@@ -122,15 +113,9 @@ code span.wa { color: #bf0303; } /* Warning */
           </svg>
       </a>
     </div>
-
+    <h1>cboyer.github.io</h1>
     <div id="menu">
-      <ul class="menu">
-        <li class="menu_item"><a href="../../index.html">Index</a></li>
-        <li class="menu_item active"><a href="../../developpement.html">Développement</a></li>
-        <li class="menu_item"><a href="../../linux.html">Linux</a></li>
-        <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
-        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
-      </ul>
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
     </div>
   </div>
 
@@ -254,44 +239,44 @@ code span.wa { color: #bf0303; } /* Warning */
 </table>
 <h2 id="le-fichier-mix.exs">Le fichier mix.exs</h2>
 <p>Le fichier <code>mix.exs</code> contient la configuration de l'application, des dépendances et des releases.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">defmodule</span> <span class="cn">Serial</span><span class="op">.</span><span class="cn">MixProject</span> <span class="kw">do</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>  <span class="im">use</span> <span class="cn">Mix</span><span class="op">.</span><span class="cn">Project</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a>  <span class="kw">def</span> project <span class="kw">do</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>    [</span>
-<span id="cb1-6"><a href="#cb1-6"></a>      <span class="va">app:</span> <span class="va">:serial</span>,</span>
-<span id="cb1-7"><a href="#cb1-7"></a>      <span class="va">version:</span> <span class="st">&quot;1.0.0&quot;</span>,</span>
-<span id="cb1-8"><a href="#cb1-8"></a>      <span class="va">elixir:</span> <span class="st">&quot;~&gt; 1.9&quot;</span>,</span>
-<span id="cb1-9"><a href="#cb1-9"></a>      <span class="va">start_permanent:</span> <span class="cn">Mix</span><span class="op">.</span>env() <span class="op">==</span> <span class="va">:prod</span>,</span>
-<span id="cb1-10"><a href="#cb1-10"></a>      <span class="va">deps:</span> deps(),</span>
-<span id="cb1-11"><a href="#cb1-11"></a>      <span class="va">releases:</span> [</span>
-<span id="cb1-12"><a href="#cb1-12"></a>        <span class="co"># Configuration de la release &quot;serial_prod&quot;</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a>        <span class="va">serial_prod:</span> [</span>
-<span id="cb1-14"><a href="#cb1-14"></a>          <span class="va">include_executables_for:</span> [<span class="va">:unix</span>],</span>
-<span id="cb1-15"><a href="#cb1-15"></a>          <span class="va">applications:</span> [<span class="va">runtime_tools:</span> <span class="va">:permanent</span>]</span>
-<span id="cb1-16"><a href="#cb1-16"></a>        ]</span>
-<span id="cb1-17"><a href="#cb1-17"></a>      ]</span>
-<span id="cb1-18"><a href="#cb1-18"></a>    ]</span>
-<span id="cb1-19"><a href="#cb1-19"></a>  <span class="kw">end</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a></span>
-<span id="cb1-21"><a href="#cb1-21"></a>  <span class="co"># Configuration de l&#39;application (plus d&#39;options avec &quot;mix help compile.app&quot;).</span></span>
-<span id="cb1-22"><a href="#cb1-22"></a>  <span class="kw">def</span> application <span class="kw">do</span></span>
-<span id="cb1-23"><a href="#cb1-23"></a>    [</span>
-<span id="cb1-24"><a href="#cb1-24"></a>      <span class="va">extra_applications:</span> [<span class="va">:logger</span>],</span>
-<span id="cb1-25"><a href="#cb1-25"></a>      <span class="va">mod:</span> {<span class="cn">Serial</span><span class="op">.</span><span class="cn">Application</span>, []}</span>
-<span id="cb1-26"><a href="#cb1-26"></a>    ]</span>
-<span id="cb1-27"><a href="#cb1-27"></a>  <span class="kw">end</span></span>
-<span id="cb1-28"><a href="#cb1-28"></a></span>
-<span id="cb1-29"><a href="#cb1-29"></a>  <span class="co"># Dépendances (plus d&#39;option avec &quot;mix help deps&quot;).</span></span>
-<span id="cb1-30"><a href="#cb1-30"></a>  <span class="kw">defp</span> deps <span class="kw">do</span></span>
-<span id="cb1-31"><a href="#cb1-31"></a>    [</span>
-<span id="cb1-32"><a href="#cb1-32"></a>      {<span class="va">:circuits_uart</span>, <span class="st">&quot;~&gt; 1.3&quot;</span>}</span>
-<span id="cb1-33"><a href="#cb1-33"></a>    ]</span>
-<span id="cb1-34"><a href="#cb1-34"></a>  <span class="kw">end</span></span>
-<span id="cb1-35"><a href="#cb1-35"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">Serial</span><span class="op">.</span><span class="cn">MixProject</span> <span class="kw">do</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="im">use</span> <span class="cn">Mix</span><span class="op">.</span><span class="cn">Project</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>  <span class="kw">def</span> project <span class="kw">do</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    [</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>      <span class="va">app:</span> <span class="va">:serial</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>      <span class="va">version:</span> <span class="st">&quot;1.0.0&quot;</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>      <span class="va">elixir:</span> <span class="st">&quot;~&gt; 1.9&quot;</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>      <span class="va">start_permanent:</span> <span class="cn">Mix</span><span class="op">.</span>env() <span class="op">==</span> <span class="va">:prod</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>      <span class="va">deps:</span> deps(),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>      <span class="va">releases:</span> [</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>        <span class="co"># Configuration de la release &quot;serial_prod&quot;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>        <span class="va">serial_prod:</span> [</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>          <span class="va">include_executables_for:</span> [<span class="va">:unix</span>],</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>          <span class="va">applications:</span> [<span class="va">runtime_tools:</span> <span class="va">:permanent</span>]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>        ]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>      ]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>    ]</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>  <span class="kw">end</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>  <span class="co"># Configuration de l&#39;application (plus d&#39;options avec &quot;mix help compile.app&quot;).</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a>  <span class="kw">def</span> application <span class="kw">do</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a>    [</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>      <span class="va">extra_applications:</span> [<span class="va">:logger</span>],</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>      <span class="va">mod:</span> {<span class="cn">Serial</span><span class="op">.</span><span class="cn">Application</span>, []}</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a>    ]</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a>  <span class="kw">end</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a>  <span class="co"># Dépendances (plus d&#39;option avec &quot;mix help deps&quot;).</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a>  <span class="kw">defp</span> deps <span class="kw">do</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true"></a>    [</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true"></a>      {<span class="va">:circuits_uart</span>, <span class="st">&quot;~&gt; 1.3&quot;</span>}</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true"></a>    ]</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true"></a>  <span class="kw">end</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
 <h2 id="observer">Observer</h2>
 <p>Pour visualiser les toutes les caractéristiques de notre application (dans <code>iex</code>, en ayant au préalable installé le package <code>erlang-observer</code>):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb2-1"><a href="#cb2-1"></a><span class="va">:observer</span><span class="op">.</span>start</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="va">:observer</span><span class="op">.</span>start</span></code></pre></div>
 <h2 id="compilation-manuelle-de-fichiers-source-sans-mix">Compilation manuelle de fichiers source sans Mix</h2>
 <p>Pour le compiler manuellement et obtenir un binaire (bytecode pour la machine virtuelle BEAM):</p>
 <pre class="console"><code>elixirc elixir_app/lib/elixir_app/application.ex
@@ -299,7 +284,7 @@ elixirc elixir_app/lib/elixir_app/worker.ex</code></pre>
 <p>On obtient alors les fichiers <code>Elixir.ElixirApp.Application.beam</code> et <code>Elixir.ElixirApp.Worker.beam</code></p>
 <p>Pour l'exécuter depuis le shell (en se plaçant dans le même dossier que <code>Elixir.ElixirApp.Application.beam</code>):</p>
 <pre class="console"><code>elixir -e &quot;ElixirApp.Application.start(:ok, [])&quot;</code></pre>
-<h3 id="sources">Sources</h3>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://hexdocs.pm/mix/Mix.Tasks.Release.html">Gestion des Releases</a></li>
 <li><a href="https://hexdocs.pm/iex/IEx.Helpers.html">Les helpers IEx</a></li>

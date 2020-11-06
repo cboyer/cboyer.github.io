@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [IBM, AIX, LPAR, HMC, VIOS, création, manuelle]
-abstract: |
-  Monter manuellement un LPAR AIX 7.1 depuis le VIOS.
+abstract: "Monter manuellement un LPAR AIX 7.1 depuis le VIOS."
 ---
 
 

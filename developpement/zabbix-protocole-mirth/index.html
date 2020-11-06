@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>Implémentation du protocole Zabbix dans Mirth Connect - C. Boyer</title>
-  <meta name="description" content="<p>Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener.</p>" />
+  <meta name="description" content="Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="zabbix, mirth, mirth connect, monitoring" />
   <link rel="canonical" href="https://cboyer.github.io/developpement/zabbix-protocole-mirth" />
   <meta property="og:title" content="Implémentation du protocole Zabbix dans Mirth Connect - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="<p>Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener.</p>" />
+  <meta property="og:description" content="Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2020-06-13T10:36:47-04:00" />
@@ -64,7 +64,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span. { color: #1f1c1b; } /* Normal */
+code span { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
 code span.an { color: #ca60ca; } /* Annotation */
 code span.at { color: #0057ae; } /* Attribute */
@@ -99,16 +99,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </head>
 <body>
   <div id="header">
-    <div id="site_title">
-      <h1>cboyer.github.io</h1>
-    </div>
     <div id="links">
-      <a href="../../rechercher.html" class="search" title="Rechercher">
-          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
-            <title id="search-icon">Rechercher</title>
-            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
-          </svg>
-      </a>
       <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
           <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title id="github-icon">GitHub</title>
@@ -122,15 +113,9 @@ code span.wa { color: #bf0303; } /* Warning */
           </svg>
       </a>
     </div>
-
+    <h1>cboyer.github.io</h1>
     <div id="menu">
-      <ul class="menu">
-        <li class="menu_item"><a href="../../index.html">Index</a></li>
-        <li class="menu_item active"><a href="../../developpement.html">Développement</a></li>
-        <li class="menu_item"><a href="../../linux.html">Linux</a></li>
-        <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
-        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
-      </ul>
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
     </div>
   </div>
 
@@ -145,14 +130,14 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 id="le-protocole-zabbix">Le protocole Zabbix</h2>
 <p>Zabbix utilise un protocole relativement simple: il repose sur des échanges de données texte sur TCP. Étant une technologie libre et open source nous disposons du code source de l'agent Zabbix ainsi qu'une excellente documentation pour en comprendre le fonctionnement (cf. sources en bas de page).`</p>
 <p>Requête du serveur vers l'agent (Zabbix version 3):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1"></a>[clé                 <span class="op">,</span> fin de message]</span>
-<span id="cb1-2"><a href="#cb1-2"></a>[chaîne de caractères<span class="op">,</span> <span class="bn">0x0A</span>          ]</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>[clé                 <span class="op">,</span> fin de message]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>[chaîne de caractères<span class="op">,</span> <span class="bn">0x0A</span>          ]</span></code></pre></div>
 <p>Requête du serveur vers l'agent (Zabbix version 4):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1"></a>[protocole<span class="op">,</span> flag<span class="op">,</span> longueur des données             <span class="op">,</span> réservé                 <span class="op">,</span> <span class="at">clé</span> (données)       ]</span>
-<span id="cb2-2"><a href="#cb2-2"></a>[<span class="st">&quot;ZBXD&quot;</span>   <span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> entier sur <span class="dv">4</span> octets little endian<span class="op">,</span> [<span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>]<span class="op">,</span> chaîne de caractères]</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>[protocole<span class="op">,</span> flag<span class="op">,</span> longueur des données             <span class="op">,</span> réservé                 <span class="op">,</span> <span class="fu">clé</span> (données)       ]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>[<span class="st">&quot;ZBXD&quot;</span>   <span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> entier sur <span class="dv">4</span> octets little endian<span class="op">,</span> [<span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>]<span class="op">,</span> chaîne de caractères]</span></code></pre></div>
 <p>Réponse de l'agent vers le serveur (version 3 et 4):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1"></a>[protocole<span class="op">,</span> flag<span class="op">,</span> longueur des données             <span class="op">,</span> réservé                 <span class="op">,</span> <span class="at">réponse</span> (données)   ]</span>
-<span id="cb3-2"><a href="#cb3-2"></a>[<span class="st">&quot;ZBXD&quot;</span>   <span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> entier sur <span class="dv">4</span> octets little endian<span class="op">,</span> [<span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>]<span class="op">,</span> chaîne de caractères]</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>[protocole<span class="op">,</span> flag<span class="op">,</span> longueur des données             <span class="op">,</span> réservé                 <span class="op">,</span> <span class="fu">réponse</span> (données)   ]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>[<span class="st">&quot;ZBXD&quot;</span>   <span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> entier sur <span class="dv">4</span> octets little endian<span class="op">,</span> [<span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>]<span class="op">,</span> chaîne de caractères]</span></code></pre></div>
 <p>L'entête est une chaîne de caractères fixe: <code>"ZBXD"</code>. Elle est composée de la chaîne <code>ZBXD</code> et de l'octet <code>0x01</code>. La longueur des données est un entier non signé sur 4 octets en little-endian qui représente la longueur de la chaîne contenant les données. Zabbix est limité à une quantité maximale de 134217728 octets. Les données envoyées sont en texte clair (Zabbix peut crypter ses échanges, cas que nous ne traiterons pas ici).</p>
 <h2 id="mirth-connect">Mirth Connect</h2>
 <p>Pour imiter le fonctionnement de l'agent Zabbix avec un canal Mirth un connecteur source de type TCP Listener est nécessaire afin d'accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu'ils soient altérés par les standards d'encodage (UTF-8, etc.) liés aux chaînes de caractères. La configuration d'un TCP listener se fait avec l'interface Mirth, sans code:</p>
@@ -160,81 +145,81 @@ code span.wa { color: #bf0303; } /* Warning */
 <img src="mirth_source.png" alt="" /><figcaption>Configuration du connecteur source</figcaption>
 </figure>
 <p>Pour être compatible avec les version 3 et 4 de Zabbix, il faut être en mesure de les dicerner:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1"></a>msg <span class="op">=</span> <span class="kw">new</span> <span class="va">java</span>.<span class="va">lang</span>.<span class="at">String</span>(<span class="va">FileUtil</span>.<span class="at">decode</span>(msg))<span class="op">;</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="co">//Zabbix 4.X</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="cf">if</span> (<span class="va">msg</span>.<span class="at">substring</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">5</span>) <span class="op">==</span> <span class="st">&quot;ZBXD</span><span class="sc">\x01</span><span class="st">&quot;</span> <span class="op">&amp;&amp;</span> <span class="va">msg</span>.<span class="at">length</span>() <span class="op">&gt;</span> <span class="dv">13</span>) <span class="op">{</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a></span>
-<span id="cb4-6"><a href="#cb4-6"></a>    <span class="co">//Longueur de la clé: octets 5 à 9</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>    <span class="kw">var</span> length_bytes <span class="op">=</span> <span class="va">msg</span>.<span class="at">substring</span>(<span class="dv">5</span><span class="op">,</span> <span class="dv">9</span>).<span class="at">getBytes</span>()<span class="op">;</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a></span>
-<span id="cb4-9"><a href="#cb4-9"></a>    <span class="co">//Décode les 4 octets little endian en entier</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>    <span class="kw">var</span> bytebuf <span class="op">=</span> <span class="va">Packages</span>.<span class="va">java</span>.<span class="va">nio</span>.<span class="va">ByteBuffer</span>.<span class="at">wrap</span>(length_bytes)<span class="op">;</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a>    <span class="va">bytebuf</span>.<span class="at">order</span>(<span class="va">java</span>.<span class="va">nio</span>.<span class="va">ByteOrder</span>.<span class="at">LITTLE_ENDIAN</span>)<span class="op">;</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a>    <span class="kw">var</span> length <span class="op">=</span> <span class="va">bytebuf</span>.<span class="at">getInt</span>(<span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a></span>
-<span id="cb4-14"><a href="#cb4-14"></a>    <span class="co">//Clé demandée par le serveur: octets 13 à (13 + length)</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a>    msg <span class="op">=</span> <span class="va">msg</span>.<span class="at">substring</span>(<span class="dv">13</span><span class="op">,</span> <span class="dv">13</span> <span class="op">+</span> length)<span class="op">;</span></span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="op">}</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a></span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="co">//Zabbix 3.X (requête sans entête avec 0x0A final)</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="cf">else</span> <span class="cf">if</span> (<span class="va">msg</span>.<span class="at">charAt</span>(<span class="va">msg</span>.<span class="at">length</span>() <span class="op">-</span> <span class="dv">1</span>) <span class="op">==</span> <span class="bn">0x0A</span>) <span class="op">{</span></span>
-<span id="cb4-20"><a href="#cb4-20"></a></span>
-<span id="cb4-21"><a href="#cb4-21"></a>    <span class="co">//Supprime simplement le 0x0A</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a>    msg <span class="op">=</span> <span class="va">msg</span>.<span class="at">slice</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">-1</span>)<span class="op">;</span></span>
-<span id="cb4-23"><a href="#cb4-23"></a><span class="op">}</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a></span>
-<span id="cb4-25"><a href="#cb4-25"></a><span class="co">//Si ce n&#39;est pas un message Zabbix</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a><span class="cf">else</span> msg <span class="op">=</span> <span class="st">&#39;UnknownProtocol&#39;</span><span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>msg <span class="op">=</span> <span class="kw">new</span> java<span class="op">.</span><span class="at">lang</span><span class="op">.</span><span class="fu">String</span>(FileUtil<span class="op">.</span><span class="fu">decode</span>(msg))<span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="co">//Zabbix 4.X</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="cf">if</span> (msg<span class="op">.</span><span class="fu">substring</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">5</span>) <span class="op">==</span> <span class="st">&quot;ZBXD</span><span class="sc">\x01</span><span class="st">&quot;</span> <span class="op">&amp;&amp;</span> msg<span class="op">.</span><span class="fu">length</span>() <span class="op">&gt;</span> <span class="dv">13</span>) {</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    <span class="co">//Longueur de la clé: octets 5 à 9</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    <span class="kw">var</span> length_bytes <span class="op">=</span> msg<span class="op">.</span><span class="fu">substring</span>(<span class="dv">5</span><span class="op">,</span> <span class="dv">9</span>)<span class="op">.</span><span class="fu">getBytes</span>()<span class="op">;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>    <span class="co">//Décode les 4 octets little endian en entier</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>    <span class="kw">var</span> bytebuf <span class="op">=</span> Packages<span class="op">.</span><span class="at">java</span><span class="op">.</span><span class="at">nio</span><span class="op">.</span><span class="at">ByteBuffer</span><span class="op">.</span><span class="fu">wrap</span>(length_bytes)<span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>    bytebuf<span class="op">.</span><span class="fu">order</span>(java<span class="op">.</span><span class="at">nio</span><span class="op">.</span><span class="at">ByteOrder</span><span class="op">.</span><span class="at">LITTLE_ENDIAN</span>)<span class="op">;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    <span class="kw">var</span> length <span class="op">=</span> bytebuf<span class="op">.</span><span class="fu">getInt</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>    <span class="co">//Clé demandée par le serveur: octets 13 à (13 + length)</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>    msg <span class="op">=</span> msg<span class="op">.</span><span class="fu">substring</span>(<span class="dv">13</span><span class="op">,</span> <span class="dv">13</span> <span class="op">+</span> length)<span class="op">;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a>}</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a><span class="co">//Zabbix 3.X (requête sans entête avec 0x0A final)</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true"></a><span class="cf">else</span> <span class="cf">if</span> (msg<span class="op">.</span><span class="fu">charAt</span>(msg<span class="op">.</span><span class="fu">length</span>() <span class="op">-</span> <span class="dv">1</span>) <span class="op">==</span> <span class="bn">0x0A</span>) {</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true"></a>    <span class="co">//Supprime simplement le 0x0A</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true"></a>    msg <span class="op">=</span> msg<span class="op">.</span><span class="fu">slice</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">-1</span>)<span class="op">;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true"></a>}</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true"></a><span class="co">//Si ce n&#39;est pas un message Zabbix</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true"></a><span class="cf">else</span> msg <span class="op">=</span> <span class="st">&#39;UnknownProtocol&#39;</span><span class="op">;</span></span></code></pre></div>
 <p>Une fois le connecteur source mis en place, nous allons faire appel à un <a href="https://github.com/cboyer/mirth-zabbix/blob/master/src/destination_transformer.js">transformer</a> afin de récupérer les données demandées par le serveur et les transmettre au connecteur de destination. C'est ici que sont centralisées les fonctionnalités de l'agent Zabbix, plus précisément les clés supportées. Concrètement il s'agit un simple <code>switch</code> pour exécuter du code en fonction de la métrique demandée par le serveur:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">switch</span> (item_requested) <span class="op">{</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a></span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="cf">case</span> <span class="st">&#39;agent.ping&#39;</span><span class="op">:</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>        msg <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>        <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a></span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="cf">case</span> <span class="st">&#39;agent.version&#39;</span><span class="op">:</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a>        msg <span class="op">=</span> <span class="st">&#39;Mirthix 1.1.0&#39;</span><span class="op">;</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a>        <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a></span>
-<span id="cb5-11"><a href="#cb5-11"></a>    <span class="cf">case</span> <span class="st">&#39;agent.hostname&#39;</span><span class="op">:</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>    <span class="cf">case</span> <span class="st">&#39;system.uname&#39;</span><span class="op">:</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>        msg <span class="op">=</span> <span class="va">com</span>.<span class="va">mirth</span>.<span class="va">connect</span>.<span class="va">server</span>.<span class="va">controllers</span>.<span class="va">ConfigurationController</span>.<span class="at">getInstance</span>().<span class="at">getServerName</span>()<span class="op">;</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a>        <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a></span>
-<span id="cb5-16"><a href="#cb5-16"></a>    <span class="cf">default</span><span class="op">:</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a>        msg <span class="op">=</span> <span class="st">&quot;ZBX_NOTSUPPORTED</span><span class="sc">\x00</span><span class="st">Key not implemented in Mirthix: &quot;</span> <span class="op">+</span> item_requested<span class="op">;</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="cf">switch</span> (item_requested) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    <span class="cf">case</span> <span class="st">&#39;agent.ping&#39;</span><span class="op">:</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>        msg <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>    <span class="cf">case</span> <span class="st">&#39;agent.version&#39;</span><span class="op">:</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>        msg <span class="op">=</span> <span class="st">&#39;Mirthix 1.1.0&#39;</span><span class="op">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>    <span class="cf">case</span> <span class="st">&#39;agent.hostname&#39;</span><span class="op">:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>    <span class="cf">case</span> <span class="st">&#39;system.uname&#39;</span><span class="op">:</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a>        msg <span class="op">=</span> com<span class="op">.</span><span class="at">mirth</span><span class="op">.</span><span class="at">connect</span><span class="op">.</span><span class="at">server</span><span class="op">.</span><span class="at">controllers</span><span class="op">.</span><span class="at">ConfigurationController</span><span class="op">.</span><span class="fu">getInstance</span>()<span class="op">.</span><span class="fu">getServerName</span>()<span class="op">;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a>    <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a>        msg <span class="op">=</span> <span class="st">&quot;ZBX_NOTSUPPORTED</span><span class="sc">\x00</span><span class="st">Key not implemented in Mirthix: &quot;</span> <span class="op">+</span> item_requested<span class="op">;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a>}</span></code></pre></div>
 <p>Pour le <a href="https://github.com/cboyer/mirth-zabbix/blob/master/src/destination.js">connecteur de destination</a> (chargé d'envoyer les données au serveur Zabbix), nous devrons implémenter le protocole Zabbix avec le header, la longueur des données sur 8 octets en little-endian et les données. Voici le code du connecteur de destination:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">//Chaque composante du message</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">var</span> protocol <span class="op">=</span> <span class="st">&quot;ZBXD&quot;</span><span class="op">;</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="kw">var</span> flag <span class="op">=</span> <span class="st">&quot;</span><span class="sc">\x01</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="kw">var</span> reserved <span class="op">=</span> <span class="st">&quot;</span><span class="sc">\x00\x00\x00\x00</span><span class="st">&quot;</span><span class="op">;</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">var</span> data <span class="op">=</span> <span class="va">connectorMessage</span>.<span class="at">getEncodedData</span>()<span class="op">;</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">var</span> datalen <span class="op">=</span> <span class="va">data</span>.<span class="at">length</span>()<span class="op">;</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="co">//Transformation en tableau d&#39;octets</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="kw">var</span> protocol_bytes <span class="op">=</span> <span class="kw">new</span> <span class="va">java</span>.<span class="va">lang</span>.<span class="at">String</span>(protocol).<span class="at">getBytes</span>(<span class="st">&#39;UTF-8&#39;</span>)<span class="op">;</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a><span class="kw">var</span> flag_bytes <span class="op">=</span> <span class="kw">new</span> <span class="va">java</span>.<span class="va">lang</span>.<span class="at">String</span>(flag).<span class="at">getBytes</span>(<span class="st">&#39;UTF-8&#39;</span>)<span class="op">;</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="kw">var</span> reserved_bytes <span class="op">=</span> <span class="kw">new</span> <span class="va">java</span>.<span class="va">lang</span>.<span class="at">String</span>(reserved).<span class="at">getBytes</span>(<span class="st">&#39;UTF-8&#39;</span>)<span class="op">;</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a><span class="kw">var</span> data_bytes <span class="op">=</span> <span class="kw">new</span> <span class="va">java</span>.<span class="va">lang</span>.<span class="at">String</span>(data).<span class="at">getBytes</span>(<span class="st">&#39;UTF-8&#39;</span>)<span class="op">;</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a></span>
-<span id="cb6-14"><a href="#cb6-14"></a><span class="co">//Encode la longueur des données sur 4 octets en little endian</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a><span class="kw">var</span> datalen_bytes <span class="op">=</span> <span class="va">Packages</span>.<span class="va">java</span>.<span class="va">nio</span>.<span class="va">ByteBuffer</span>.<span class="at">allocate</span>(<span class="dv">4</span>)<span class="op">;</span></span>
-<span id="cb6-16"><a href="#cb6-16"></a><span class="va">datalen_bytes</span>.<span class="at">order</span>(<span class="va">java</span>.<span class="va">nio</span>.<span class="va">ByteOrder</span>.<span class="at">LITTLE_ENDIAN</span>)<span class="op">;</span></span>
-<span id="cb6-17"><a href="#cb6-17"></a><span class="va">datalen_bytes</span>.<span class="at">putInt</span>(<span class="va">data_bytes</span>.<span class="at">length</span>)<span class="op">;</span></span>
-<span id="cb6-18"><a href="#cb6-18"></a></span>
-<span id="cb6-19"><a href="#cb6-19"></a><span class="co">//Construction du message final</span></span>
-<span id="cb6-20"><a href="#cb6-20"></a><span class="kw">var</span> zabbix_message_bytes <span class="op">=</span> <span class="va">Packages</span>.<span class="va">java</span>.<span class="va">nio</span>.<span class="va">ByteBuffer</span>.<span class="at">allocate</span>(<span class="va">protocol_bytes</span>.<span class="at">length</span> <span class="op">+</span> <span class="va">flag_bytes</span>.<span class="at">length</span> <span class="op">+</span> <span class="va">datalen_bytes</span>.<span class="at">array</span>().<span class="at">length</span> <span class="op">+</span> <span class="va">reserved_bytes</span>.<span class="at">length</span> <span class="op">+</span> <span class="va">data_bytes</span>.<span class="at">length</span>)<span class="op">;</span></span>
-<span id="cb6-21"><a href="#cb6-21"></a><span class="va">zabbix_message_bytes</span>.<span class="at">put</span>(protocol_bytes)<span class="op">;</span></span>
-<span id="cb6-22"><a href="#cb6-22"></a><span class="va">zabbix_message_bytes</span>.<span class="at">put</span>(flag_bytes)<span class="op">;</span></span>
-<span id="cb6-23"><a href="#cb6-23"></a><span class="va">zabbix_message_bytes</span>.<span class="at">put</span>(<span class="va">datalen_bytes</span>.<span class="at">array</span>())<span class="op">;</span></span>
-<span id="cb6-24"><a href="#cb6-24"></a><span class="va">zabbix_message_bytes</span>.<span class="at">put</span>(reserved_bytes)<span class="op">;</span></span>
-<span id="cb6-25"><a href="#cb6-25"></a><span class="va">zabbix_message_bytes</span>.<span class="at">put</span>(data_bytes)<span class="op">;</span></span>
-<span id="cb6-26"><a href="#cb6-26"></a></span>
-<span id="cb6-27"><a href="#cb6-27"></a><span class="cf">return</span> <span class="va">Packages</span>.<span class="va">org</span>.<span class="va">apache</span>.<span class="va">commons</span>.<span class="va">codec</span>.<span class="va">binary</span>.<span class="va">Base64</span>.<span class="at">encodeBase64String</span>(<span class="va">zabbix_message_bytes</span>.<span class="at">array</span>())<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="co">//Chaque composante du message</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="kw">var</span> protocol <span class="op">=</span> <span class="st">&quot;ZBXD&quot;</span><span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="kw">var</span> flag <span class="op">=</span> <span class="st">&quot;</span><span class="sc">\x01</span><span class="st">&quot;</span><span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="kw">var</span> reserved <span class="op">=</span> <span class="st">&quot;</span><span class="sc">\x00\x00\x00\x00</span><span class="st">&quot;</span><span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="kw">var</span> data <span class="op">=</span> connectorMessage<span class="op">.</span><span class="fu">getEncodedData</span>()<span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="kw">var</span> datalen <span class="op">=</span> data<span class="op">.</span><span class="fu">length</span>()<span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a><span class="co">//Transformation en tableau d&#39;octets</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a><span class="kw">var</span> protocol_bytes <span class="op">=</span> <span class="kw">new</span> java<span class="op">.</span><span class="at">lang</span><span class="op">.</span><span class="fu">String</span>(protocol)<span class="op">.</span><span class="fu">getBytes</span>(<span class="st">&#39;UTF-8&#39;</span>)<span class="op">;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a><span class="kw">var</span> flag_bytes <span class="op">=</span> <span class="kw">new</span> java<span class="op">.</span><span class="at">lang</span><span class="op">.</span><span class="fu">String</span>(flag)<span class="op">.</span><span class="fu">getBytes</span>(<span class="st">&#39;UTF-8&#39;</span>)<span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a><span class="kw">var</span> reserved_bytes <span class="op">=</span> <span class="kw">new</span> java<span class="op">.</span><span class="at">lang</span><span class="op">.</span><span class="fu">String</span>(reserved)<span class="op">.</span><span class="fu">getBytes</span>(<span class="st">&#39;UTF-8&#39;</span>)<span class="op">;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true"></a><span class="kw">var</span> data_bytes <span class="op">=</span> <span class="kw">new</span> java<span class="op">.</span><span class="at">lang</span><span class="op">.</span><span class="fu">String</span>(data)<span class="op">.</span><span class="fu">getBytes</span>(<span class="st">&#39;UTF-8&#39;</span>)<span class="op">;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true"></a><span class="co">//Encode la longueur des données sur 4 octets en little endian</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true"></a><span class="kw">var</span> datalen_bytes <span class="op">=</span> Packages<span class="op">.</span><span class="at">java</span><span class="op">.</span><span class="at">nio</span><span class="op">.</span><span class="at">ByteBuffer</span><span class="op">.</span><span class="fu">allocate</span>(<span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true"></a>datalen_bytes<span class="op">.</span><span class="fu">order</span>(java<span class="op">.</span><span class="at">nio</span><span class="op">.</span><span class="at">ByteOrder</span><span class="op">.</span><span class="at">LITTLE_ENDIAN</span>)<span class="op">;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true"></a>datalen_bytes<span class="op">.</span><span class="fu">putInt</span>(data_bytes<span class="op">.</span><span class="at">length</span>)<span class="op">;</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true"></a><span class="co">//Construction du message final</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true"></a><span class="kw">var</span> zabbix_message_bytes <span class="op">=</span> Packages<span class="op">.</span><span class="at">java</span><span class="op">.</span><span class="at">nio</span><span class="op">.</span><span class="at">ByteBuffer</span><span class="op">.</span><span class="fu">allocate</span>(protocol_bytes<span class="op">.</span><span class="at">length</span> <span class="op">+</span> flag_bytes<span class="op">.</span><span class="at">length</span> <span class="op">+</span> datalen_bytes<span class="op">.</span><span class="fu">array</span>()<span class="op">.</span><span class="at">length</span> <span class="op">+</span> reserved_bytes<span class="op">.</span><span class="at">length</span> <span class="op">+</span> data_bytes<span class="op">.</span><span class="at">length</span>)<span class="op">;</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true"></a>zabbix_message_bytes<span class="op">.</span><span class="fu">put</span>(protocol_bytes)<span class="op">;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true"></a>zabbix_message_bytes<span class="op">.</span><span class="fu">put</span>(flag_bytes)<span class="op">;</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true"></a>zabbix_message_bytes<span class="op">.</span><span class="fu">put</span>(datalen_bytes<span class="op">.</span><span class="fu">array</span>())<span class="op">;</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true"></a>zabbix_message_bytes<span class="op">.</span><span class="fu">put</span>(reserved_bytes)<span class="op">;</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true"></a>zabbix_message_bytes<span class="op">.</span><span class="fu">put</span>(data_bytes)<span class="op">;</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true"></a><span class="cf">return</span> Packages<span class="op">.</span><span class="at">org</span><span class="op">.</span><span class="at">apache</span><span class="op">.</span><span class="at">commons</span><span class="op">.</span><span class="at">codec</span><span class="op">.</span><span class="at">binary</span><span class="op">.</span><span class="at">Base64</span><span class="op">.</span><span class="fu">encodeBase64String</span>(zabbix_message_bytes<span class="op">.</span><span class="fu">array</span>())<span class="op">;</span></span></code></pre></div>
 <p>Notons qu'il est nécessaire d'encoder le message en base 64 pour fonctionner en mode binaire dans Mirth. Coté Zabbix toute la configuration s'effectue via un <a href="https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml">template</a> pour la définition des items/clés à monitorer.</p>
-<h2 id="documentation-zabbix">Documentation Zabbix</h2>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive">https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive</a></li>
 <li><a href="https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen">https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen</a></li>

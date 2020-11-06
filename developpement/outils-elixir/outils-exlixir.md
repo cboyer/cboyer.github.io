@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [Elixir, mix, iex, développement]
-abstract: |
-  Aide mémoire Elixir: les outils.
+abstract: "Aide mémoire Elixir: les outils."
 ---
 
 ## Mix
@@ -115,7 +114,7 @@ Pour l'exécuter depuis le shell (en se plaçant dans le même dossier que `Elix
 elixir -e "ElixirApp.Application.start(:ok, [])"
 ```
 
-### Sources
+## Liens complémentaires
 
 - [Gestion des Releases](https://hexdocs.pm/mix/Mix.Tasks.Release.html)
 - [Les helpers IEx](https://hexdocs.pm/iex/IEx.Helpers.html)

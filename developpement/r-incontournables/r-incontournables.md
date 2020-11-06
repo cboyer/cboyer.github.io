@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [R, RStudio, ODBC, SQL, MSSQL, Oracle, code snippets, développement]
-abstract: |
-  Opérations incontournables avec le langage R.
+abstract: "Opérations incontournables avec le langage R."
 ---
 
 - [Options d'exécution](#optionsexec)
@@ -415,7 +414,7 @@ ggplot(FreqAnomalyComb,
 
 
 
-### Liens complémentaires
+## Liens complémentaires
 
 - [DB: SQLServer](https://db.rstudio.com/databases/microsoft-sql-server/)
 - [DB: Oracle](https://db.rstudio.com/databases/oracle/)

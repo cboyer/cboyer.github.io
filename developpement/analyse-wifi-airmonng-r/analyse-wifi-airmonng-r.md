@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [R, analyse, réseau, airmon-ng]
-abstract: |
-  Analyse du trafic WiFi avec Airodump-ng et R.
+abstract: "Analyse du trafic WiFi avec Airodump-ng et R."
 ---
 
 
@@ -164,7 +163,7 @@ Le diagramme qui en résulte est interactif avec RStudio (le survol indique la q
 D'autre types de diagrammes (graphe/réseau) sont utilisables afin de mieux présenter la topologie d'un réseau. Ce type d'analyse peut rapidement produire des diagrammes très complexes en fonction de la quantités de noeuds présents dans le réseau.
 
 
-## Sources
+## Liens complémentaires
 
  - [Script R complet](./wifi.R)
  - [https://bost.ocks.org/mike/sankey/](https://bost.ocks.org/mike/sankey/)

@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Électronique"
 keywords: [automobile, can, bus, obd2, macchina, savvycan]
-abstract: |
-  Dialoguer avec l'ordinateur de bord d'un véhicule automobile via OBD2.
+abstract: "Dialoguer avec l'ordinateur de bord d'un véhicule automobile via OBD2."
 ---
 
 Pour établir la communication avec l'ordinateur embarqué d'une automobile (appelé ECU pour Electronic Control Unit), rien de bien compliqué car la technologie mis en oeuvre ici (CAN pour Controller Area Network) date en partie des années 1980 et n'intègre pas les concepts issus des enjeux d'aujourd'hui (authentification, cryptage etc.). N'oublions pas que ces systèmes embarqués sont très limités en terme de capacité de traitement tout en étant soumis à des contraintes de temps dans lesquelles ils doivent être en mesure d'opérer.
@@ -179,7 +178,7 @@ Les compagnies d'assurance ou de location pourrait vérifier le comportement d'u
 
 OBD2 n'étant pas complètement standardisé, l'absence de stockage de ces données et d'interfaces pour y accéder nous protègent de telles dérives, mais pour combien de temps.
 
-## Sources
+## Liens complémentaires
 
  - [Documentation Macchina M2](https://docs.macchina.cc/)
  - [Identifiants OBD2 et formules de calcul](https://en.wikipedia.org/wiki/OBD-II_PIDs#Service_01)

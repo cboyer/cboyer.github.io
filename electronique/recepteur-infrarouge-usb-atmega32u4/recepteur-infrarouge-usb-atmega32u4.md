@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Électronique"
 keywords: [arduino, atmega32u4, infrarouge, usb, kodi]
-abstract: |
-  Utilisation des fonctions HID du microcontrôleur ATmega32u4 et un capteur infrarouge pour contrôler des systèmes/applications avec une télécommande.
+abstract: "Utilisation des fonctions HID du microcontrôleur ATmega32u4 et un capteur infrarouge pour contrôler des systèmes/applications avec une télécommande."
 ---
 
 Beaucoup utilisent Kodi comme système multimédia avec leur TV. Que ce soit sur un Raspberry Pi, un mini PC ou bien un laptop, le besoin d'interagir à distance depuis son divan nous amène à considérer l'achat d'une télécommande USB. Bien que la norme HDMI intègre la fonction CEC pour commander des équipements avec la même télécommande, cette fonction n'est pas toujours présente sur les TV et équipement multimédia.
@@ -163,7 +162,7 @@ Dans le cas où votre télécommande n'utiliserai pas les mêmes codes infraroug
 
 Les touches `MEDIA_*` fonctionnent uniquement sur un système Linux, Windows ne les reconnait pas. Ceci n'est donc pas un problème pour les utilisateurs de [LibreELEC](https://libreelec.tv/)/[OpenELEC](https://www.openelec.tv/).
 
-## Sources
+## Liens complémentaires
 
  - [https://github.com/z3t0/Arduino-IRremote](https://github.com/z3t0/Arduino-IRremote)
  - [https://github.com/NicoHood/HID](https://github.com/NicoHood/HID)

@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [gluster, glusterfs, dfs, système de fichiers distribué, linux]
-abstract: |
-  Configuration d'un volume GlusterFS sous CentOS.
+abstract: "Configuration d'un volume GlusterFS sous CentOS."
 ---
 
 GlusterFS est un système de fichiers distribué simple à mettre en place et possédant des fonctionnalitées avancées (snapshot, recovery, etc.) ainsi qu'une flexibilité (ajout/retrait de noeuds, nombre de noeuds, etc.) qui dépasse de loin ce que proposaient les anciennetés comme DRBD. GlusterFS est en fait une surcouche aux systèmes de fichiers (EXT4, XFS, etc.) car il ne travaille pas avec des périphériques de type block (block devices) pour stocker ses données mais des fichiers. C'est ce qui fait sa force pour sa flexibilité mais aussi sa faiblesse concernant les performances.

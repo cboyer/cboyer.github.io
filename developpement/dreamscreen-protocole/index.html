@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="HandheldFriendly" content="True">
   <title>Implémentation du protocole Dreamscreen en C - C. Boyer</title>
-  <meta name="description" content="<p>Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen.</p>" />
+  <meta name="description" content="Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="dreamscreen, linux, kodi" />
   <link rel="canonical" href="https://cboyer.github.io/developpement/dreamscreen-protocole" />
   <meta property="og:title" content="Implémentation du protocole Dreamscreen en C - C. Boyer" />
   <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="<p>Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen.</p>" />
+  <meta property="og:description" content="Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
   <meta property="og:updated_time" content="2019-01-10T18:25:32-04:00" />
@@ -64,7 +64,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span. { color: #1f1c1b; } /* Normal */
+code span { color: #1f1c1b; } /* Normal */
 code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
 code span.an { color: #ca60ca; } /* Annotation */
 code span.at { color: #0057ae; } /* Attribute */
@@ -99,16 +99,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </head>
 <body>
   <div id="header">
-    <div id="site_title">
-      <h1>cboyer.github.io</h1>
-    </div>
     <div id="links">
-      <a href="../../rechercher.html" class="search" title="Rechercher">
-          <svg class="button" aria-labelledby="search-icon" role="img" viewBox="5 5 21 21" xmlns="http://www.w3.org/2000/svg">
-            <title id="search-icon">Rechercher</title>
-            <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"/>
-          </svg>
-      </a>
       <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
           <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title id="github-icon">GitHub</title>
@@ -122,15 +113,9 @@ code span.wa { color: #bf0303; } /* Warning */
           </svg>
       </a>
     </div>
-
+    <h1>cboyer.github.io</h1>
     <div id="menu">
-      <ul class="menu">
-        <li class="menu_item"><a href="../../index.html">Index</a></li>
-        <li class="menu_item active"><a href="../../developpement.html">Développement</a></li>
-        <li class="menu_item"><a href="../../linux.html">Linux</a></li>
-        <li class="menu_item"><a href="../../electronique.html">Électronique</a></li>
-        <li class="menu_item"><a href="../../apropos.html">À propos</a></li>
-      </ul>
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
     </div>
   </div>
 
@@ -145,8 +130,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 id="structure-du-message">Structure du message</h2>
 <p>Dreamscreen utilise le port 8888 en UDP sur son interface WiFi pour envoyer et recevoir des messages binaires.</p>
 <p>Structure du message:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1"></a>[début<span class="op">,</span> longueur du paquet<span class="op">,</span> adresse de groupe<span class="op">,</span> flag<span class="op">,</span> commande principale<span class="op">,</span> commande secondaire<span class="op">,</span> <span class="at">payload</span> (<span class="dv">1</span> à <span class="dv">3</span> octets)<span class="op">,</span> CRC8]</span>
-<span id="cb1-2"><a href="#cb1-2"></a>[<span class="bn">0xFC</span> <span class="op">,</span> 0x<span class="op">??</span>              <span class="op">,</span> 0x<span class="op">??</span>             <span class="op">,</span> <span class="bn">0x11</span><span class="op">,</span> <span class="bn">0x03</span>               <span class="op">,</span> 0x<span class="op">??</span>               <span class="op">,</span> [0x<span class="op">??,</span> 0x<span class="op">??,</span> 0x<span class="op">??</span>]    <span class="op">,</span> 0x<span class="op">??</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>[début<span class="op">,</span> longueur du paquet<span class="op">,</span> adresse de groupe<span class="op">,</span> flag<span class="op">,</span> commande principale<span class="op">,</span> commande secondaire<span class="op">,</span> <span class="fu">payload</span> (<span class="dv">1</span> à <span class="dv">3</span> octets)<span class="op">,</span> CRC8]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>[<span class="bn">0xFC</span> <span class="op">,</span> 0x<span class="op">??</span>              <span class="op">,</span> 0x<span class="op">??</span>             <span class="op">,</span> <span class="bn">0x11</span><span class="op">,</span> <span class="bn">0x03</span>               <span class="op">,</span> 0x<span class="op">??</span>               <span class="op">,</span> [0x<span class="op">??,</span> 0x<span class="op">??,</span> 0x<span class="op">??</span>]    <span class="op">,</span> 0x<span class="op">??</span>]</span></code></pre></div>
 <p><strong>Début:</strong> Permet la synchronisation lors de la réception d’un paquet. Contient toujours <code>0xFC</code></p>
 <p><strong>Longueur du paquet:</strong> Nombre d’octet contenu entre l’Adresse de groupe et le CRC inclus. Normalement <code>0x06</code> (payload d’un seul octet) sauf pour la définition d’une couleur ambiante <code>0x08</code> (payload de 3 octets).</p>
 <p><strong>Adresse de groupe:</strong> Adresse identifiant le groupe auquel l’équipement est associé. <code>0x00</code> pour aucun groupe, <code>0x01</code> pour le groupe 1, <code>0x02</code> pour le groupe 2 etc. Dans le cas où l’adresse de groupe est incorrect, le message sera ignoré.</p>
@@ -218,7 +203,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </tr>
 </tbody>
 </table>
-<h2 id="documentation">Documentation</h2>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://planet.neeo.com/media/80x1kj/download/dreamscreen-v2-wifi-udp-protocol.pdf">Documentation du protocole dreamscreen</a></li>
 <li><a href="https://github.com/cboyer/dreamscreen-daemon">https://github.com/cboyer/dreamscreen-daemon</a></li>

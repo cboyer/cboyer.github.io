@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Électronique"
 keywords: [fpga, afficheur, led, verilog]
-abstract: |
-  Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments.
+abstract: "Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments."
 ---
 
 [Partie 1](../fpga-afficheur-7-segments-introduction/), [partie 2](../fpga-afficheur-7-segments-compteur-unique/), partie 3
@@ -246,6 +245,3 @@ Le bloc `case` nous permet de comparer `counter[18:17]` de manière élégante b
 
 [Partie 1](../fpga-afficheur-7-segments-introduction/), [partie 2](../fpga-afficheur-7-segments-compteur-unique/), partie 3
 
-### Sources
-
-[https://zipcpu.com/tutorial/](https://zipcpu.com/tutorial/)
