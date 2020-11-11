@@ -501,3 +501,4 @@ query = from u in User,
 - [https://michael.minton.io/2018/12/creating-a-form-for-a-non-persisted-ecto-schema-in-phoenix.html](https://michael.minton.io/2018/12/creating-a-form-for-a-non-persisted-ecto-schema-in-phoenix.html)
 - [https://www.alanvardy.com/post/associations-phoenix](https://www.alanvardy.com/post/associations-phoenix)
 - [https://www.sitepoint.com/understanding-elixirs-ecto-querying-dsl-the-basics/](https://www.sitepoint.com/understanding-elixirs-ecto-querying-dsl-the-basics/)
+- [https://blog.appsignal.com/2020/11/10/understanding-associations-in-elixir-ecto.html](https://blog.appsignal.com/2020/11/10/understanding-associations-in-elixir-ecto.html)
