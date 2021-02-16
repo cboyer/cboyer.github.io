@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="HandheldFriendly" content="True">
+  <title>Tests avec Hadoop - C. Boyer</title>
+  <meta name="description" content="Tests avec Hadoop" />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="Hadoop, Linux, Java" />
+  <link rel="canonical" href="https://cboyer.github.io/linux/hadoop" />
+  <meta property="og:title" content="Tests avec Hadoop - C. Boyer" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Tests avec Hadoop" />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="website" />
+  <meta property="og:updated_time" content="2017-06-21T13:23:14-04:00" />
+  <meta property="article:published_time" content="2017-06-21T13:23:14-04:00" />
+  <meta property="article:modified_time" content="2017-06-21T13:23:14-04:00" />
+  <meta name="generator" content="pandoc" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style>
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+</head>
+<body>
+  <div id="header">
+    <div id="links">
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+    <h1>cboyer.github.io</h1>
+    <div id="menu">
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
+    </div>
+  </div>
+
+  <div id="container">
+<article>
+<header id="title-block-header">
+<h1 class="title">Tests avec Hadoop</h1>
+ <small class="date">2017-06-21T13:23:14-04:00</small>
+</header>
+<p>Lancer le DFS</p>
+<pre class="console"><code>start-dfs.sh</code></pre>
+<p>Lancer YARN</p>
+<pre class="console"><code>start-yarn.sh</code></pre>
+<p>Formatter le DFS</p>
+<pre class="console"><code>hadoop namenode -format</code></pre>
+<p>Statut du cluster</p>
+<pre class="console"><code>hadoop dfsadmin -report</code></pre>
+<p>Statut des services</p>
+<pre class="console"><code>jps</code></pre>
+<p>URL de statut du cluster (NameNode)</p>
+<pre class="console"><code>http://192.168.56.200:8088</code></pre>
+<p>Lister le contenu du DFS</p>
+<pre class="console"><code>hadoop fs -ls /</code></pre>
+<p>Créer le dossier /input et /output</p>
+<pre class="console"><code>hadoop fs -mkdir /input
+hadoop fs -mkdir /output</code></pre>
+<p>Envoyer les données sur le DFS</p>
+<pre class="console"><code>hadoop fs -put file01 /input</code></pre>
+<p>Example de WordCount.java</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">import</span><span class="im"> java.io.IOException;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="kw">import</span><span class="im"> java.util.StringTokenizer;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.conf.Configuration;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.fs.Path;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.io.IntWritable;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.io.Text;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.mapreduce.Job;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.mapreduce.Mapper;</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.mapreduce.Reducer;</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> WordCount {</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="kw">class</span> TokenizerMapper</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true"></a>       <span class="kw">extends</span> Mapper&lt;<span class="bu">Object</span>, <span class="bu">Text</span>, <span class="bu">Text</span>, IntWritable&gt;{</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">final</span> <span class="dt">static</span> IntWritable one = <span class="kw">new</span> <span class="fu">IntWritable</span>(<span class="dv">1</span>);</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Text</span> word = <span class="kw">new</span> <span class="bu">Text</span>();</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">map</span>(<span class="bu">Object</span> key, <span class="bu">Text</span> value, <span class="bu">Context</span> context</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true"></a>                    ) <span class="kw">throws</span> <span class="bu">IOException</span>, <span class="bu">InterruptedException</span> {</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true"></a>      <span class="bu">StringTokenizer</span> itr = <span class="kw">new</span> <span class="bu">StringTokenizer</span>(value.<span class="fu">toString</span>());</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true"></a>      <span class="kw">while</span> (itr.<span class="fu">hasMoreTokens</span>()) {</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true"></a>        word.<span class="fu">set</span>(itr.<span class="fu">nextToken</span>());</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true"></a>        context.<span class="fu">write</span>(word, one);</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true"></a>      }</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true"></a>    }</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true"></a>  }</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="kw">class</span> IntSumReducer</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true"></a>       <span class="kw">extends</span> Reducer&lt;<span class="bu">Text</span>,IntWritable,<span class="bu">Text</span>,IntWritable&gt; {</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true"></a>    <span class="kw">private</span> IntWritable result = <span class="kw">new</span> <span class="fu">IntWritable</span>();</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true"></a></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">reduce</span>(<span class="bu">Text</span> key, <span class="bu">Iterable</span>&lt;IntWritable&gt; values,</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true"></a>                       <span class="bu">Context</span> context</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true"></a>                       ) <span class="kw">throws</span> <span class="bu">IOException</span>, <span class="bu">InterruptedException</span> {</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true"></a>      <span class="dt">int</span> sum = <span class="dv">0</span>;</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true"></a>      <span class="kw">for</span> (IntWritable val : values) {</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true"></a>        sum += val.<span class="fu">get</span>();</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true"></a>      }</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true"></a>      result.<span class="fu">set</span>(sum);</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true"></a>      context.<span class="fu">write</span>(key, result);</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true"></a>    }</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true"></a>  }</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true"></a></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span>(<span class="bu">String</span>[] args) <span class="kw">throws</span> <span class="bu">Exception</span> {</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true"></a>    <span class="bu">Configuration</span> conf = <span class="kw">new</span> <span class="bu">Configuration</span>();</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true"></a>    Job job = Job.<span class="fu">getInstance</span>(conf, <span class="st">&quot;word count&quot;</span>);</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true"></a>    job.<span class="fu">setJarByClass</span>(WordCount.<span class="fu">class</span>);</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true"></a>    job.<span class="fu">setMapperClass</span>(TokenizerMapper.<span class="fu">class</span>);</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true"></a>    job.<span class="fu">setCombinerClass</span>(IntSumReducer.<span class="fu">class</span>);</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true"></a>    job.<span class="fu">setReducerClass</span>(IntSumReducer.<span class="fu">class</span>);</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true"></a>    job.<span class="fu">setOutputKeyClass</span>(<span class="bu">Text</span>.<span class="fu">class</span>);</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true"></a>    job.<span class="fu">setOutputValueClass</span>(IntWritable.<span class="fu">class</span>);</span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true"></a>    FileInputFormat.<span class="fu">addInputPath</span>(job, <span class="kw">new</span> <span class="fu">Path</span>(args[<span class="dv">0</span>]));</span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true"></a>    FileOutputFormat.<span class="fu">setOutputPath</span>(job, <span class="kw">new</span> <span class="fu">Path</span>(args[<span class="dv">1</span>]));</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true"></a>    <span class="bu">System</span>.<span class="fu">exit</span>(job.<span class="fu">waitForCompletion</span>(<span class="kw">true</span>) ? <span class="dv">0</span> : <span class="dv">1</span>);</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true"></a>  }</span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Compiler le code java</p>
+<pre class="console"><code>hadoop com.sun.tools.javac.Main WordCount.java
+jar cf wc.jar WordCount*.class</code></pre>
+<p>Lancer la job</p>
+<pre class="console"><code>hadoop jar wc.jar WordCount /input /output</code></pre>
+<p>Lister les jobs</p>
+<pre class="console"><code>hadoop job -list</code></pre>
+<p>Récupérer le résultat</p>
+<pre class="console"><code>hadoop fs -get /output output</code></pre>
+<h1 id="liens-complémentaires">Liens complémentaires</h1>
+<ul>
+<li><a href="https://anchalkataria.wordpress.com/2016/05/01/installing-hadoop-in-fully-distributed-mode/">https://anchalkataria.wordpress.com/2016/05/01/installing-hadoop-in-fully-distributed-mode/</a></li>
+<li><a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html</a></li>
+<li><a href="https://www.tutorialspoint.com/hadoop/hadoop_multi_node_cluster.htm">https://www.tutorialspoint.com/hadoop/hadoop_multi_node_cluster.htm</a></li>
+</ul>
+</article>
+
+<div id="footer">
+  <span class="copyrights">© 2018-2020 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+</div>
+
+</div>
+</body>
+</html>

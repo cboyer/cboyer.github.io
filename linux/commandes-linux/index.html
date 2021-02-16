@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="HandheldFriendly" content="True">
+  <title>Quelques commandes utiles sous Linux - C. Boyer</title>
+  <meta name="description" content="Quelques commandes utiles sous Linux" />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="Linux, commandes, Bash" />
+  <link rel="canonical" href="https://cboyer.github.io/linux/commandes-linux" />
+  <meta property="og:title" content="Quelques commandes utiles sous Linux - C. Boyer" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Quelques commandes utiles sous Linux" />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="website" />
+  <meta property="og:updated_time" content="2021-02-16T13:23:14-04:00" />
+  <meta property="article:published_time" content="2017-04-12T13:23:14-04:00" />
+  <meta property="article:modified_time" content="2021-02-16T13:23:14-04:00" />
+  <meta name="generator" content="pandoc" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+  <div id="header">
+    <div id="links">
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+    <h1>cboyer.github.io</h1>
+    <div id="menu">
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
+    </div>
+  </div>
+
+  <div id="container">
+<article>
+<header id="title-block-header">
+<h1 class="title">Quelques commandes utiles sous Linux</h1>
+ <small class="date">2017-04-12T13:23:14-04:00</small>
+</header>
+<p>Tester son débit</p>
+<pre class="console"><code>iperf3 -R -c ping.online.net -p 5206 -P5
+wget http://test-debit.free.fr/10485760.rnd -O /dev/null</code></pre>
+<p>Détacher un programme dans un terminal virtuel</p>
+<pre class="console"><code>screen -d -m -S Telechargement wget -i liste.txt
+CTRL+A+D</code></pre>
+<p>Lister les terminaux virtuels</p>
+<pre class="console"><code>screen -ls</code></pre>
+<p>Se connecter à un terminal virtuel</p>
+<pre class="console"><code>screen -r Telechargement</code></pre>
+<p>Afficher les chaînes de caractère d'un fichier binaire</p>
+<pre class="console"><code>strings file.bin</code></pre>
+<p>Récupérer des fichiers depuis une image disque</p>
+<pre class="console"><code>foremost -dv -i file.img</code></pre>
+<p>Trouver fichiers en double</p>
+<pre class="console"><code>find Pictures/  -type f -exec md5sum &#39;{}&#39; &#39;;&#39; | sort | uniq --all-repeated=separate -w 15 &gt; dupes.txt
+fdupes -rSm Pictures/</code></pre>
+<p>Top amélioré</p>
+<pre class="console"><code>htop</code></pre>
+<p>Programme le plus consommateur de RAM puis CPU</p>
+<pre class="console"><code>dstat -g -l -m -s --top-mem
+dstat -c -y -l --proc-count --top-cpu</code></pre>
+<p>Sortie CSV pour dstat</p>
+<pre class="console"><code>dstat éoutput /tmp/sampleoutput.csv -cdn</code></pre>
+<p>Coloration de texte en console</p>
+<pre class="console"><code>echo &quot;Mon texte&quot; | lolcat</code></pre>
+<p>Restauration TSM</p>
+<pre class="console"><code>dsmc restore -pick -inactive &quot;/data/mon_fichier.gz&quot; /home/dossier_restauration/</code></pre>
+<p>Lister les différences entre deux arborescences (local ou distant)</p>
+<pre class="console"><code>rsync -av --dry-run /source serveur:/dest</code></pre>
+<p>Ajouter des librairies .so</p>
+<pre class="console"><code>ldconfig -p | grep &quot;libicuuc.so.32&quot;
+echo &quot;/usr/local/BerkeleyDB/lib&quot; &gt;&gt; /etc/ld.so.conf
+ldconfig</code></pre>
+<p>Afficher les caractéristiques wifi en temps réel</p>
+<pre class="console"><code>wavemon</code></pre>
+<p>Surveiller la qualité de liaison wifi:</p>
+<pre class="console"><code>watch -n 1 cat /proc/net/wireless</code></pre>
+<p>Afficher la date du dernier accés/modification</p>
+<pre class="console"><code>stat -c &quot;last access: %x last modification:%y&quot; mon_fichier</code></pre>
+<p>Ajouter un utilisateur existant à un groupe supplémentaire existant</p>
+<pre class="console"><code>usermod -a -G groupe utilisateur</code></pre>
+<p>Serveur web d'urgence avec Netcat</p>
+<pre class="console"><code>while true; do nc -l -p 8080 &lt; index.html; done
+while true; do echo &quot;&lt; pre&gt;$(ps aux)&lt; /pre&gt;&quot; | nc -l -p 8080; done</code></pre>
+<p>Arborescence des processus</p>
+<pre class="console"><code>pstree -p | grep httpd</code></pre>
+<p>Lancer une trace</p>
+<pre class="console"><code>strace -f -o trace.txt /etc/rc.d/init.d/httpd start</code></pre>
+<p>Benchmark HTTP</p>
+<pre class="console"><code>httperf --hog --server=10.1.1.1 --wsess=2000,10,2 --rate 300 --timeout 5
+ab -kc 500 -n 10000 http://10.1.1.1/
+siege -b -t60S  http://example.com</code></pre>
+<p>Calcule le quantiéme d'une date donnée (Mois/Jour/Année)</p>
+<pre class="console"><code>date --date &#39;03/23/2012&#39; +%j</code></pre>
+<p>Calculer le quantiéme du jour dans l'année (aujourd'hui)</p>
+<pre class="console"><code>date &quot;+%j&quot;</code></pre>
+<p>Affecter un dossier /home/toto é l'utilisateur toto (doit exister dans /etc/passwd)</p>
+<pre class="console"><code>usermod -d /home/toto toto</code></pre>
+<p>Afficher l'id du groupe toto</p>
+<pre class="console"><code>id -g toto</code></pre>
+<p>Afficher l'id de l'utilisateur toto</p>
+<pre class="console"><code>id -u toto</code></pre>
+<p>Monitoring nmon (resultat dans fichier <hostname>_date_time.nmon)</p>
+<pre class="console"><code>#capture toutes les 30 secondes 120 fois; excel généré avec nmon_analyzer
+nmon -fT -s 30 -c 120
+dstat -nN eth0</code></pre>
+<p>Gestion des fichier RPM, installation</p>
+<pre class="console"><code>rpm -ivh paquet.rpm</code></pre>
+<p>Désinstallation</p>
+<pre class="console"><code>rpm -e nom_paquet</code></pre>
+<p>Vérifier si installé</p>
+<pre class="console"><code>rpm -ql nom_paquet</code></pre>
+<p>Trouver les liens symboliques</p>
+<pre class="console"><code>find /home/ -type l</code></pre>
+<p>Opération sur un critére de fichiers</p>
+<pre class="console"><code>find /home/exploit/ * -type f -exec du -h {} \;
+find /data/entrepot/USER/ -name *.sas7bdat -not -user admpap -type f -mtime +100 -exec gzip -f {} \;</code></pre>
+<p>TreeSize Linux</p>
+<pre class="console"><code>du -h --max-depth=2</code></pre>
+<p>Affiche l'arborescence (dossiers seulements)</p>
+<pre class="console"><code>tree -d /data</code></pre>
+<p>Lister les connexions réseau avec résolution des PID/Programme</p>
+<pre class="console"><code>netstat -pantu</code></pre>
+<p>Lister les connexions réseau avec lsof</p>
+<pre class="console"><code>lsof -ni
+lsof -ni tcp:22
+lsof -ni &#39;udp@192.168.66.66:123&#39;</code></pre>
+<p>Recherche les occurences de "meta" dans tous les fichiers php de /var/www/drupal</p>
+<pre class="console"><code>find /var/www/drupal/ -name &quot;*.php&quot; -exec grep -H meta {} \;
+find /var/www/drupal/ -name &quot;*.php&quot; -print | xargs grep &quot;meta&quot;</code></pre>
+<p>Recherche récursive d'un motif et retourne le fichier</p>
+<pre class="console"><code>grep -rl &#39;chose&#39; ./</code></pre>
+<p>Recherche récursive d'un motif et le remplacer</p>
+<pre class="console"><code>grep -rl &#39;chose&#39; ./ | xargs sed -i &#39;s/chose/truc/g&#39;</code></pre>
+<p>Cherche les fichiers plus lourd que 500Mo et moins d'1 Go</p>
+<pre class="console"><code>find / -type f -size +500M -size -1G</code></pre>
+<p>Rechercher les fichiers plus gros q'une certaine limite</p>
+<pre class="console"><code>find / -type f -size +100000k -printf &quot;%p %s\n&quot;</code></pre>
+<p>Perl shell interactif (débug)</p>
+<pre class="console"><code>perl -d -e 1</code></pre>
+<p>Créer plusieurs dossiers simultanément</p>
+<pre class="console"><code>mkdir -p MyRepo/{i386,noarch,i686,SRPMS}</code></pre>
+<p>Compresser un fichier en fichier .gz</p>
+<pre class="console"><code>gzip fichier</code></pre>
+<p>Compresser fichier en fichier .gz avec écrasement et conserve la copie originale</p>
+<pre class="console"><code>gzip  -cf  fichier</code></pre>
+<p>Décompresser fichier.gz</p>
+<pre class="console"><code>gzip -d fichier.gz</code></pre>
+<p>Lien symbolique</p>
+<pre class="console"><code>ln -s fichier_a_lier lien_symbolique</code></pre>
+<p>Rassembler plusieurs fichiers en une seule archive sans compression</p>
+<pre class="console"><code>tar cvf  fichier.tar fichiers</code></pre>
+<p>Liste le contenu d'un fichier tar</p>
+<pre class="console"><code>tar tvf  fichier.tar</code></pre>
+<p>Extraire le contenu d'un fichier tar</p>
+<pre class="console"><code>tar oxvf  fichier.tar</code></pre>
+<p>Extraire le contenu d'un fichier tgz</p>
+<pre class="console"><code>tar zxvf fichier.tgz</code></pre>
+<p>Augmenter la priortié d'un processus</p>
+<pre class="console"><code>renice 10 6969</code></pre>
+<p>Sauvegarder en PDF le man d'une commande</p>
+<pre class="console"><code>man -t apt | ps2pdf - apt.pdf</code></pre>
+<p>Dupliquer l'installation de package RPM d'une machine à une autre</p>
+<pre class="console"><code>ssh root@remote.host &quot;rpm -qa&quot; | xargs yum -y install</code></pre>
+<p>Ajout une entête sur un fichier PDF</p>
+<pre class="console"><code>echo &quot;This text gets stamped on the top of the pdf pages.&quot; | enscript -B -f Courier-Bold16 -o- | ps2pdf - | pdftk input.pdf stamp - output output.pdf</code></pre>
+<p>Affiche le nombre de connexion à une base MySQL</p>
+<pre class="console"><code>mysql -u root -p -BNe &quot;select host,count(host) from processlist group by host;&quot; information_schema</code></pre>
+<p>Créer une archive locale d'un dossier sur une machine distante</p>
+<pre class="console"><code>ssh user@host &quot;tar -zcf - /path/to/dir&quot; &gt; dir.tar.gz</code></pre>
+<p>Affiche un résumé des logs SSH</p>
+<pre class="console"><code>ssh -t remotebox &quot;tail -f /var/log/remote.log&quot;</code></pre>
+<p>Affiche un diagramme des utilisateur/groupes</p>
+<pre class="console"><code>awk &#39;BEGIN{FS=&quot;:&quot;; print &quot;digraph{&quot;}{split($4, a, &quot;,&quot;); for (i in a) printf &quot;\&quot;%s\&quot; [shape=box]\n\&quot;%s\&quot; -&gt; \&quot;%s\&quot;\n&quot;, $1, a[i], $1}END{print &quot;}&quot;}&#39; /etc/group|display</code></pre>
+<p>Affiche un graphique des dépendances des modules du noyau</p>
+<pre class="console"><code>lsmod | perl -e &#39;print &quot;digraph \&quot;lsmod\&quot; {&quot;;&lt;&gt;;while(&lt;&gt;){@_=split/\s+/; print &quot;\&quot;$_[0]\&quot; -&gt; \&quot;$_\&quot;\n&quot; for split/,/,$_[3]}print &quot;}&quot;&#39; | dot -Tpng | display -</code></pre>
+<p>Génére un mot de passe fort</p>
+<pre class="console"><code>read -s pass; echo $pass | md5sum | base64 | cut -c -16</code></pre>
+<p>Limite l'utilisation du CPU pour un processus</p>
+<pre class="console"><code>cpulimit -p pid -l 50</code></pre>
+</article>
+
+<div id="footer">
+  <span class="copyrights">© 2018-2020 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+</div>
+
+</div>
+</body>
+</html>

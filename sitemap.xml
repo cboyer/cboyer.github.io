@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://cboyer.github.io</loc>
-        <lastmod>2020-11-10T20:00:42-05:00</lastmod>
+        <lastmod>2021-02-16T18:09:08-05:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/linux.html</loc>
-        <lastmod>2020-11-10T20:00:42-05:00</lastmod>
+        <lastmod>2021-02-16T18:09:08-05:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/electronique.html</loc>
-        <lastmod>2020-11-10T20:00:42-05:00</lastmod>
+        <lastmod>2021-02-16T18:09:08-05:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/apropos.html</loc>
-        <lastmod>2020-11-10T20:00:42-05:00</lastmod>
+        <lastmod>2021-02-16T18:09:08-05:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.2</priority>
     </url>
@@ -158,8 +158,26 @@
         <priority>0.9</priority>
     </url>
     <url>
+        <loc>https://cboyer.github.io/linux/hadoop/</loc>
+        <lastmod>2017-06-21T13:23:14-04:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://cboyer.github.io/linux/commandes-linux/</loc>
+        <lastmod>2021-02-16T13:23:14-04:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
         <loc>https://cboyer.github.io/linux/systeme-fichiers-distribue-glusterfs/</loc>
         <lastmod>2018-11-04T11:04:32-05:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://cboyer.github.io/linux/cluster-linux/</loc>
+        <lastmod>2016-10-30T13:23:14-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
