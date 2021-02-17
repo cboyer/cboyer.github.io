@@ -59,8 +59,10 @@ function auth(){
 
   http.onreadystatechange = function() {
       if(http.readyState == 4 && http.status == 200) {
+          //console.log(http.responseText);
           var json = JSON.parse(http.responseText);
-          document.cookie = "token="+json.token+"; path=/"; 
+          document.cookie = "token="+json.token+"; path=/";
+          window.location.replace("/");
       }
       if(http.readyState == 4 && http.status != 200) {
           //console.log(http.responseText);
@@ -83,6 +85,7 @@ server {
 
 	root /var/www/html;
 
+	#Pour héberger login.html
 	location /login {
 		root /var/www/html;
 	}
