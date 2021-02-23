@@ -421,3 +421,6 @@ ggplot(FreqAnomalyComb,
 - [Subset](https://www.statmethods.net/management/subset.html)
 - [Statistiques en sciences humaines et sociales avec R, Jean-Herman Guay](http://dimension.usherbrooke.ca/dimension/v2ssrcadre.html)
 - [Harvard R Graphics](https://tutorials.iq.harvard.edu/R/Rgraphics/Rgraphics.html)
+- [Big data avec R et Sparklyr](https://rstudio.github.io/bigdataclass/data-transformation.html#group-and-sort-records)
+- [R et Spark](https://therinspark.com/intro.html)
+- [Sparklyr](https://spark.rstudio.com/)
