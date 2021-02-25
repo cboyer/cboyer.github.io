@@ -426,12 +426,10 @@ Passer la listes des profils au template `lib/test_bd_web/templates/user/index.h
 ```Elixir
 def index(conn, params) do
     users = case Map.fetch(params, "profile") do
+        {:ok, ""} ->
+            ContextUser.list_users_with_profile
         {:ok, user_type_filter} ->
-            if user_type_filter != "" do
-                ContextUser.list_users_with_profile(user_type_filter)
-            else
-                ContextUser.list_users_with_profile
-            end
+            ContextUser.list_users_with_profile(user_type_filter)
         :error ->
             ContextUser.list_users_with_profile
     end
