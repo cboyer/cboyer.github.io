@@ -54,6 +54,11 @@ Top amélioré
 htop
 ```
 
+Tentatives de connexions SSH
+```console
+grep "Invalid user" /var/log/auth.log | awk 'BEGIN { FS=" " } { print $8}' | sort | uniq --count | sort --reverse --numeric-sort
+```
+
 Programme le plus consommateur de RAM puis CPU
 ```console
 dstat -g -l -m -s --top-mem

@@ -46,7 +46,7 @@ Leur utilisation réduit grandement les performances et amène une consommation 
 
 ## Enregistrer les images
 
-Les images récupérées avec `vgReadPixels()` ou `vgGetImageSubData()` sont enregistrées au format PNG avec la librairie STB et sa fonction `stbi_write_png()`. En revanche l'ordre dans lequel OpenVG stock ses pixels diffère de celui de STB ce qui produit des images inversées. Pour éviter ce problème il suffit d'inverser l'image elle-même avec OpenVG en appliquant une matrice de transformation `VG_MATRIX_PATH_USER_TO_SURFACE` sur nos `VGPath.
+Les images récupérées avec `vgReadPixels()` ou `vgGetImageSubData()` sont enregistrées au format PNG avec la librairie STB et sa fonction `stbi_write_png()`. En revanche l'ordre dans lequel OpenVG stock ses pixels diffère de celui de STB ce qui produit des images inversées. Pour éviter ce problème il suffit d'inverser l'image elle-même avec OpenVG en appliquant une matrice de transformation `VG_MATRIX_PATH_USER_TO_SURFACE` sur nos `VGPath`.
 STB est une librairie utilisant uniquement le CPU, donc très couteuse en consommation de temps CPU.
 
 
@@ -69,3 +69,4 @@ Notons qu'il possible de mettre en cache le caractère espace, cependant son uti
 - [Fiche récapitulative OpenVG](https://www.khronos.org/files/openvg-quick-reference-card.pdf)
 - [Benchmarking OpenVG implementations](https://www.idi.ntnu.no/grupper/su/fordypningsprosjekt-2006/OpenVGReport_final.pdf)
 - [Raspberry Pi GPU Audio Video Programming - Newmarch, Jan](https://www.leslibraires.ca/livres/raspberry-pi-gpu-audio-video-programming-jan-newmarch-9781484224717.html)
+- [Exemples avec LibShapes](https://github.com/ajstarks/openvg/blob/master/libshapes.c)

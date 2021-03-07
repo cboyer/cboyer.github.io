@@ -10,6 +10,8 @@ keywords: [buildroot, embarqué, raspberry pi, linux]
 abstract: "Création d'un système embarqué Linux avec Buildroot pour Raspberry Pi 2."
 ---
 
+Une version plus récente de cet article est disponible [ici](../buildroot-raspberry/).
+
 Dans le cadre d'un projet de monitoring, j'ai été amené à concevoir une vingtaine de sondes thermiques pouvant être interrogées via Ethernet. Mes choix techniques se sont naturellement tournés vers une solution Raspberry Pi/Linux/capteur DS18B20. Pour le coté applicatif j'ai opté pour la simplicité et la rapidité avec le couple Python/Flask pour acheminer les données via HTTPS. L'applicatif aurait pu être développé en C avec des librairies comme [Libmicrohttpd](https://www.gnu.org/software/libmicrohttpd/) ou encore [Kore](https://kore.io/).
 
 Le ciment permettant de lier l'ensemble est [Buildroot](https://buildroot.org/) qui va nous permettre d'obtenir un système Linux sur mesure. Buildroot est un outil permettant de générer des systèmes Linux sur mesure en prenant en charge la compilation de la toolchain pour l'architecture cible (ARMv7), du noyau, du bootloader (que nous n'utiliserons pas) et de BusyBox pour l'environnement utilisateur. Tout cela avec nos paramètres définis pour chaque élément: modules dans le noyau, librairies standards ([musl](http://www.etalabs.net/compare_libcs.html), glibc, etc.), gestionnaire de services/périphériques (initd, systemd, udev), binaires à inclure dans BusyBoxy, etc. L'utilité de Buildroot se situe principalement dans sa capacité à gérer les dépendances pour la compilation, exactement comme Portage le fait dans Gentoo.

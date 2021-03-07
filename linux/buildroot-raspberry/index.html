@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="HandheldFriendly" content="True">
+  <title>Système embarqué Linux avec Buildroot, Qemu et Raspberry Pi 3 - C. Boyer</title>
+  <meta name="description" content="Création d'un système embarqué Linux avec Buildroot et Qemu pour Raspberry Pi 3." />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="buildroot, qemu, raspberry, raspberry pi, linux" />
+  <link rel="canonical" href="https://cboyer.github.io/linux/buildroot-raspberry" />
+  <meta property="og:title" content="Système embarqué Linux avec Buildroot, Qemu et Raspberry Pi 3 - C. Boyer" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Création d'un système embarqué Linux avec Buildroot et Qemu pour Raspberry Pi 3." />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="website" />
+  <meta property="og:updated_time" content="2021-03-07T18:23:00-05:00" />
+  <meta property="article:published_time" content="2021-03-07T18:23:00-05:00" />
+  <meta property="article:modified_time" content="2021-03-07T18:23:00-05:00" />
+  <meta name="generator" content="pandoc" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style>
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+</head>
+<body>
+  <div id="header">
+    <div id="links">
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+    <h1>cboyer.github.io</h1>
+    <div id="menu">
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
+    </div>
+  </div>
+
+  <div id="container">
+<article>
+<header id="title-block-header">
+<h1 class="title">Système embarqué Linux avec Buildroot, Qemu et Raspberry Pi 3</h1>
+ <small class="date">2021-03-07T18:23:00-05:00</small>
+</header>
+<p>Un autre article sur l'utilisation de Buildroot avec un Raspberry Pi, quelque peu similaire au <a href="../systeme-embarque-linux-buildroot/">précédent</a> à ceci près qu'il comporte davantage de détails. Il présente notamment l'intégration d'éléments externes à Buildroot (comme une application) et la prise en charge du réseau sous Qemu. Nous utilisons ici Buildroot 2021.02-rc3 pour obtenir une image 64 bits compatible avec le Raspberry Pi 3.</p>
+<h2 id="paramétrage-de-limage-du-noyau-et-busybox">Paramétrage de l'image, du noyau et Busybox</h2>
+<p>Commençons par télécharger Buildroot depuit son dépôt Github</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">git</span> clone https://github.com/buildroot/buildroot</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="bu">cd</span> buildroot</span></code></pre></div>
+<h3 id="paramétrage-de-limage">Paramétrage de l'image</h3>
+<p>Charger la configuration par défaut pour Raspberry Pi 3 qui nous servira de base pour être ajustée selon nos besoins</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">make</span> raspberrypi3_64_defconfig</span></code></pre></div>
+<p>Paramétrage de l'image buildroot</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="fu">make</span> menuconfig</span></code></pre></div>
+<p>Quelques modifications depuis la configuration de base <code>raspberrypi3_64_defconfig</code>:</p>
+<table>
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 20%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Emplacement</th>
+<th>Symbole Kconfig</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Enable root login with password</td>
+<td>System configuration</td>
+<td>BR2_TARGET_ENABLE_ROOT_LOGIN</td>
+</tr>
+<tr class="even">
+<td>Root password</td>
+<td>System configuration</td>
+<td>BR2_TARGET_GENERIC_ROOT_PASSWD</td>
+</tr>
+<tr class="odd">
+<td>System hostname</td>
+<td>System configuration</td>
+<td>BR2_TARGET_GENERIC_HOSTNAME</td>
+</tr>
+<tr class="even">
+<td>System banner</td>
+<td>System configuration</td>
+<td>BR2_TARGET_GENERIC_ISSUE</td>
+</tr>
+<tr class="odd">
+<td>remount root filesystem read-write during boot</td>
+<td>System configuration</td>
+<td>BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW</td>
+</tr>
+<tr class="even">
+<td>exact size *</td>
+<td>Filesystem images</td>
+<td>BR2_TARGET_ROOTFS_EXT2_SIZE</td>
+</tr>
+</tbody>
+</table>
+<p>* Attention à ne pas mettre une valeur trop petite car Buildroot sera incapable de faire tenir le système sur une image sous-dimensonnée.</p>
+<p>La configuration Buildroot peut être sauvegardée à un endroit autre que celui par défaut (<code>buildroot/.config</code>). Cela va nous permettre plus tard d'exporter la configuration dans un arbre externe.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildroot_config</span></code></pre></div>
+<p>Pour la charger dans Buildroot:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="fu">make</span> defconfig BR2_DEFCONFIG=./buildroot_config</span></code></pre></div>
+<h3 id="paramétrage-du-noyau-linux">Paramétrage du noyau Linux</h3>
+<p>Paramétrer le noyau:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="fu">make</span> linux-menuconfig</span></code></pre></div>
+<p>Une option importante à définir est la liste des paramètres passés au noyau:</p>
+<pre class="text"><code>Boot options
+└── Default kernel command string (CMDLINE)
+
+console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait</code></pre>
+<p>Pour fournir un accès réseau à la machine virtuelle Qemu, il faut le module <code>cdc_ether</code> pour utiliser l'ethernet sur USB car le Raspberry ne possède pas de contrôleur permettant d'utiliser VirtIO:</p>
+<pre class="text"><code>Device Drivers
+└── Network device support (NETDEVICES)
+    └── USB Network Adapters (USB_NET_DRIVERS)
+        └── Multi-purpose USB Networking Framework (USB_USBNET)
+            └── CDC Ethernet support (smart devices such as cable modems) (USB_NET_CDCETHER)</code></pre>
+<h3 id="paramétrage-de-busybox">Paramétrage de BusyBox</h3>
+<p>Paramétrer BusyBox permet de sélectionner les binaires à intégrer comme <code>ls</code>, <code>find</code>, <code>xargs</code>, etc. Il ne peuvent pas tous être exclus car certains sont utilisés dans des scripts systèmes (par exemple <code>xargs</code> et <code>touch</code>).</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="fu">make</span> busybox-menuconfig</span></code></pre></div>
+<h2 id="création-dun-arbre-externe-contenant-une-application">Création d'un arbre externe contenant une application</h2>
+<h3 id="arborescence">Arborescence</h3>
+<p>Nous allons créer un arbre externe qui va nous permettre de stocker toutes les particularités pour notre image (applications, overlays, patches pour le noyau, configurations).</p>
+<p>La structure du dossier <code>br-external</code> (arbre externe), dans la racine Buildroot:</p>
+<pre class="text"><code>br-external/
+├── config                      Stocke nos configurations Buildroot et Linux
+├── Config.in                   Regroupe dynamiquement tous les descriptifs Kconfig des packages
+├── external.desc               Nom de l&#39;arbre, conditionne la variable $BR2_EXTERNAL_***_PATH
+├── external.mk                 Regroupe dynamiquement les Makefiles des packages
+├── linux-patches               Pour les patchs du noyau (non utilisé ici)
+├── package                     Les packages (applications)
+│   └── hello                   Notre application de test
+│       ├── Config.in           Descriptif Kconfig
+│       ├── S99hello            Script de démarrage init.d
+│       ├── external.mk         Script Buildroot pour la compilation/installation
+│       └── src             
+│           ├── hello.c         Fichier source
+│           └── Makefile        Makefile
+└── rootfs_overlay              Fichiers à ajouter dans l&#39;image (non utilisé ici)</code></pre>
+<h4 id="fichier-br-externalexternal.desc">Fichier br-external/external.desc</h4>
+<pre class="text"><code>name: MONDEPOT
+desc: Exemple arbre externe</code></pre>
+<h4 id="fichier-br-externalexternal.mk">Fichier br-external/external.mk</h4>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="ex">include</span> <span class="va">$(</span><span class="fu">sort</span> <span class="va">$(</span><span class="ex">wildcard</span> <span class="va">$(</span><span class="ex">BR2_EXTERNAL_MONDEPOT_PATH</span><span class="va">)</span>/package/*/*.mk<span class="va">))</span></span></code></pre></div>
+<h3 id="intégration-dune-application-package">Intégration d'une application (package)</h3>
+<p>L'intégration d'une application <code>hello</code> dans Buildroot consiste à créer un package qui contient le code source et les directives (Makefile) pour la compilation et l'installation.</p>
+<h4 id="fichier-br-externalconfig.in">Fichier br-external/Config.in</h4>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="bu">source</span> <span class="st">&quot;</span><span class="va">$BR2_EXTERNAL_MONDEPOT_PATH</span><span class="st">/package/hello/Config.in&quot;</span></span></code></pre></div>
+<h4 id="fichier-br-externalpackagehelloconfig.in">Fichier br-external/package/hello/Config.in</h4>
+<pre class="text"><code>config BR2_PACKAGE_HELLO
+    bool &quot;hello&quot;
+    help
+      Application externe de test hello.
+
+      https://cboyer.github.io/</code></pre>
+<h4 id="fichier-br-externalpackagehelloexternal.mk">Fichier br-external/package/hello/external.mk</h4>
+<div class="sourceCode" id="cb15"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="co">################################################################################</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a><span class="co">#</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a><span class="co"># hello</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a><span class="co">#</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a><span class="co">################################################################################</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a><span class="dt">HELLO_VERSION </span><span class="ch">=</span><span class="st"> 1.0</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a><span class="dt">HELLO_SITE </span><span class="ch">=</span><span class="st"> </span><span class="ch">$(</span><span class="dt">BR2_EXTERNAL_MONDEPOT_PATH</span><span class="ch">)</span><span class="st">/package/hello/src</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a><span class="dt">HELLO_SITE_METHOD </span><span class="ch">=</span><span class="st"> local</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true"></a><span class="kw">define</span> HELLO_BUILD_CMDS</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true"></a>    <span class="ch">$(</span><span class="dt">MAKE</span><span class="ch">)</span> <span class="dt">CC</span><span class="ch">=</span><span class="st">&quot;</span><span class="ch">$(</span><span class="dt">TARGET_CC</span><span class="ch">)</span><span class="st">&quot; LD=&quot;</span><span class="ch">$(</span><span class="dt">TARGET_LD</span><span class="ch">)</span><span class="st">&quot; -C </span><span class="ch">$(</span><span class="dt">@D</span><span class="ch">)</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true"></a><span class="kw">endef</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true"></a><span class="kw">define</span> HELLO_INSTALL_TARGET_CMDS</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true"></a>    <span class="ch">$(</span><span class="dt">INSTALL</span><span class="ch">)</span> -D -m 0755 <span class="ch">$(</span><span class="dt">@D</span><span class="ch">)</span>/hello <span class="ch">$(</span><span class="dt">TARGET_DIR</span><span class="ch">)</span>/usr/bin</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true"></a><span class="kw">endef</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true"></a><span class="kw">define</span> HELLO_INSTALL_INIT_SYSV</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true"></a>    <span class="ch">$(</span><span class="dt">INSTALL</span><span class="ch">)</span> -D -m 0755 <span class="ch">$(</span><span class="dt">HELLO_PKGDIR</span><span class="ch">)</span>/S99hello \</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true"></a>    <span class="ch">$(</span><span class="dt">TARGET_DIR</span><span class="ch">)</span>/etc/init.d/S99hello</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true"></a><span class="kw">endef</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true"></a><span class="ch">$(</span><span class="kw">eval</span><span class="st"> </span><span class="ch">$(</span><span class="dt">generic-package</span><span class="ch">))</span></span></code></pre></div>
+<h4 id="fichier-br-externalpackagehellosrchello.c">Fichier br-external/package/hello/src/hello.c</h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a><span class="dt">int</span> main(<span class="dt">void</span>) {</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a>    puts(<span class="st">&quot;hello&quot;</span>);</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a>}</span></code></pre></div>
+<h4 id="fichier-br-externalpackagehellosrcmakefile">Fichier br-external/package/hello/src/Makefile</h4>
+<div class="sourceCode" id="cb17"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="dt">CC </span><span class="ch">=</span><span class="st"> gcc</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a><span class="ot">.PHONY:</span><span class="dt"> clean</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a><span class="dv">hello:</span><span class="dt"> hello.c</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a>    <span class="ch">$(</span><span class="dt">CC</span><span class="ch">)</span> -o <span class="st">&#39;</span><span class="ch">$@</span><span class="st">&#39;</span> <span class="st">&#39;</span><span class="ch">$&lt;</span><span class="st">&#39;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true"></a><span class="dv">clean:</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true"></a>    rm hello</span></code></pre></div>
+<h4 id="fichier-br-externalpackagehellos99hello">Fichier br-external/package/hello/S99hello</h4>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a><span class="kw">case</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span><span class="kw"> in</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>    start<span class="kw">)</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a>        <span class="bu">printf</span> <span class="st">&quot;Starting hello: &quot;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a>        <span class="ex">/usr/bin/hello</span> --start</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a>        [ <span class="va">$?</span> = <span class="ex">0</span> ] <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;OK&quot;</span> <span class="kw">||</span> <span class="bu">echo</span> <span class="st">&quot;FAIL&quot;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a>        <span class="kw">;;</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a>    stop<span class="kw">)</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a>        <span class="bu">printf</span> <span class="st">&quot;Stopping hello: &quot;</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a>        <span class="ex">/usr/bin/hello</span> --stop</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true"></a>        [ <span class="va">$?</span> = <span class="ex">0</span> ] <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;OK&quot;</span> <span class="kw">||</span> <span class="bu">echo</span> <span class="st">&quot;FAIL&quot;</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true"></a>        <span class="kw">;;</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true"></a>    restart<span class="kw">|</span>reload<span class="kw">)</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true"></a>        <span class="st">&quot;</span><span class="va">$0</span><span class="st">&quot;</span> <span class="ex">stop</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true"></a>        <span class="st">&quot;</span><span class="va">$0</span><span class="st">&quot;</span> <span class="ex">start</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true"></a>        <span class="kw">;;</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true"></a>    *<span class="kw">)</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true"></a>        <span class="bu">echo</span> <span class="st">&quot;Usage: </span><span class="va">$0</span><span class="st"> {start|stop|restart}&quot;</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true"></a>        <span class="bu">exit</span> 1</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true"></a><span class="kw">esac</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true"></a></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true"></a><span class="bu">exit</span> <span class="va">$?</span></span></code></pre></div>
+<p>Les nouveaux packages de l'arbre externe (<code>hello</code>) sont accessibles depuis les paramètres Buildroot dans un nouveau menu <code>External options</code> qui est disponible avec:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="fu">make</span> BR2_EXTERNAL=./br-external menuconfig</span></code></pre></div>
+<h3 id="intégration-des-configurations-buildroot-et-du-noyau-linux">Intégration des configurations Buildroot et du noyau Linux</h3>
+<p>Nous pouvons copier notre fichier de configuration Buildroot et celui du noyau dans notre arbre externe. Ceci permet de regrouper tous les composants spécifiques à la création de l'image en les séparant des fichiers Buildroot d'origine.</p>
+<p>Copier la configuration du noyau</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="fu">cp</span> output/build/linux-custom/.config br-external/config/linux.config</span></code></pre></div>
+<p>Pour charger automatiquement le fichier de configuration noyau par Buildroot, il faut activer l'utilisation d'une configuration spécifique puis saisir le chemin vers le fichier en question: <code>$(BR2_EXTERNAL_MONDEPOT_PATH)/config/linux.config</code>. L'opération est identique pour les patches, overlays et scripts en ajustant le dossier cible (non utilisés ici).</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="fu">make</span> BR2_EXTERNAL=./br-external menuconfig</span></code></pre></div>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 33%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Emplacement</th>
+<th>Symbole Kconfig</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Using a custom (def)config file</td>
+<td>Kernel &gt; Linux Kernel &gt; Kernel configuration</td>
+<td>BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG</td>
+</tr>
+<tr class="even">
+<td>Configuration file path</td>
+<td>Kernel &gt; Linux Kernel</td>
+<td>BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE</td>
+</tr>
+<tr class="odd">
+<td>global patch directories</td>
+<td>Build options</td>
+<td>BR2_GLOBAL_PATCH_DIR</td>
+</tr>
+<tr class="even">
+<td>Root filesystem overlay directories</td>
+<td>System configuration</td>
+<td>BR2_ROOTFS_OVERLAY</td>
+</tr>
+<tr class="odd">
+<td>Custom scripts to run after creating filesystem images</td>
+<td>System configuration</td>
+<td>BR2_ROOTFS_POST_IMAGE_SCRIPT</td>
+</tr>
+</tbody>
+</table>
+<p>Copie du fichier de configuration Buildroot</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./br-external/config/raspberrypi3_64_custom_defconfig</span></code></pre></div>
+<p>Pour recharger le fichier de configuration Buildroot depuis l'arbre externe</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="fu">make</span> defconfig BR2_DEFCONFIG=./br-external/config/raspberrypi3_64_custom_defconfig</span></code></pre></div>
+<h2 id="compilation-et-création-de-limage">Compilation et création de l'image</h2>
+<p>Pour compiler/recompiler séparément un élément (noyau, Busybox ou un package)</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="fu">make</span> linux-build</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a><span class="fu">make</span> busybox-build</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a><span class="fu">make</span> hello-build</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a><span class="co">#Nettoyage et recompilation</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true"></a><span class="fu">make</span> linux-dirclean</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true"></a><span class="fu">make</span> linux-rebuild</span></code></pre></div>
+<p>Pour générer l'image buildroot (comprend la compilation de tous les éléments qui compose l'image)</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="fu">make</span></span></code></pre></div>
+<p>Pour retirer le package <code>hello</code> sans tout recompiler:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="co">#Désélectionner le package hello dans External options</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a><span class="fu">make</span> BR2_EXTERNAL=./br-external menuconfig</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a><span class="co">#Retrait du binaire de l&#39;image</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a><span class="fu">rm</span> output/target/usr/bin/hello </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a><span class="co">#Supprime le dossier de compilation, équivaut à rm -rf output/build/hello-1.0/</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true"></a><span class="fu">make</span> hello-dirclean</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true"></a><span class="fu">make</span></span></code></pre></div>
+<h2 id="exécuter-limage-avec-qemu">Exécuter l'image avec Qemu</h2>
+<p>Il s'agit de charger l'image avec Qemu en spécifiant les paramètres comme les fichiers (noyau, image et device tree). Ici le port 80 de la machine virtuelle Qemu est accessible via le port 5555 sur localhost. La vm possède également accès au réseau externe et à internet. Cette configuration peut également être modifiée pour permettre l'accès via SSH en utilisant le port 22 au lieu de 80.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="ex">qemu-system-aarch64</span> -M raspi3 -m 1024 <span class="kw">\</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>    <span class="ex">-kernel</span> output/images/Image <span class="kw">\</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>    <span class="ex">-dtb</span> output/images/bcm2710-rpi-3-b.dtb <span class="kw">\</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>    <span class="ex">-drive</span> if=sd,driver=raw,file=output/images/sdcard.img <span class="kw">\</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a>    <span class="ex">-append</span> <span class="st">&quot;console=ttyAMA0 root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4&quot;</span> <span class="kw">\</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true"></a>    <span class="ex">-device</span> usb-net,netdev=net0 -netdev user,id=net0,hostfwd=tcp::5555-:80 <span class="kw">\</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true"></a>    <span class="ex">-serial</span> stdio</span></code></pre></div>
+<p>Si Qemu retourne l'erreur suivante, il suffit d'utiliser <code>qemu-img</code></p>
+<pre class="console"><code>qemu-system-aarch64: Invalid SD card size: 57 MiB
+
+SD card size has to be a power of 2, e.g. 64 MiB.
+You can resize disk images with &#39;qemu-img resize &lt;imagefile&gt; &lt;new-size&gt;&#39;
+(note that this will lose data if you make the image smaller than it currently is).</code></pre>
+<p>Pour vérifier les dimensions de l'image</p>
+<pre class="console"><code>qemu-img info output/images/sdcard.img</code></pre>
+<p>Redimmensionner l'image</p>
+<pre class="console"><code>qemu-img resize -f raw output/images/sdcard.img 64M </code></pre>
+<p>Au boot de la vm on peut voir la configuration réseau (ici <code>cdc_ether</code> est directement inclus dans le noyau)</p>
+<pre class="console"><code>[    2.604357] usb 1-1.1: new full-speed USB device number 3 using dwc_otg
+[    2.704194] usb 1-1.1: New USB device found, idVendor=0525, idProduct=a4a2, bcdDevice= 0.00
+[    2.704879] usb 1-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=10
+[    2.705936] usb 1-1.1: Product: RNDIS/QEMU USB Network Device
+[    2.706784] usb 1-1.1: Manufacturer: QEMU
+[    2.707319] usb 1-1.1: SerialNumber: 1-1.1
+[    2.731964] cdc_ether 1-1.1:1.0 eth0: register &#39;cdc_ether&#39; at usb-3f980000.usb-1.1, CDC Ethernet Device, 40:54:00:12:34:57
+(...)
+Starting network: [    3.859276] random: crng init done
+udhcpc: started, v1.33.0
+udhcpc: sending discover
+udhcpc: sending select for 10.0.2.15
+udhcpc: lease of 10.0.2.15 obtained, lease time 86400
+deleting routers
+adding dns 10.0.2.3
+OK</code></pre>
+<p>Pour effectuer un test réseau nous pouvons utiliser <code>nc</code> comme serveur HTTP improvisé sur la vm Qemu:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="kw">while</span> <span class="fu">true</span> <span class="kw">;</span> <span class="kw">do</span>  <span class="bu">echo</span> -e <span class="st">&quot;HTTP/1.1 200 OK\n\n Bonjour réseau!&quot;</span> <span class="kw">|</span> <span class="ex">nc</span> -l -p 80  <span class="kw">;</span> <span class="kw">done</span></span></code></pre></div>
+<p>La page peut être consulté depuis le host avec un navigateur (ou curl/wget) via l'adresse <code>http://localhost:5555</code>.</p>
+<p>Notre application est compilée et présente dans l'image: <code>/usr/bin/hello</code>, celle-ci est également exécutée au démarrage (en dernier) grâce au script init.d <code>/etc/init.d/S99hello</code>.</p>
+<p>Pour copier l'image sur une carte SD à destination d'un Raspberry Pi 3:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="fu">dd</span> bs=4M if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a><span class="fu">sync</span></span></code></pre></div>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
+<ul>
+<li><a href="https://github.com/maximeh/buildroot/blob/master/docs/manual/customize-outside-br.txt">Arbre externe</a></li>
+<li><a href="https://github.com/m-ka/br-external">Exemple d'arbre externe sur Github</a></li>
+</ul>
+</article>
+
+<div id="footer">
+  <span class="copyrights">© 2015-2021 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+</div>
+
+</div>
+</body>
+</html>

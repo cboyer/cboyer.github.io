@@ -77,6 +77,8 @@ CTRL+A+D</code></pre>
 fdupes -rSm Pictures/</code></pre>
 <p>Top amélioré</p>
 <pre class="console"><code>htop</code></pre>
+<p>Tentatives de connexions SSH</p>
+<pre class="console"><code>grep &quot;Invalid user&quot; /var/log/auth.log | awk &#39;BEGIN { FS=&quot; &quot; } { print $8}&#39; | sort | uniq --count | sort --reverse --numeric-sort</code></pre>
 <p>Programme le plus consommateur de RAM puis CPU</p>
 <pre class="console"><code>dstat -g -l -m -s --top-mem
 dstat -c -y -l --proc-count --top-cpu</code></pre>
@@ -202,7 +204,7 @@ find /var/www/drupal/ -name &quot;*.php&quot; -print | xargs grep &quot;meta&quo
 </article>
 
 <div id="footer">
-  <span class="copyrights">© 2018-2020 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+  <span class="copyrights">© 2015-2021 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
 </div>
 
 </div>

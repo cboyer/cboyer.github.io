@@ -73,7 +73,7 @@
 </ul>
 <p>Leur utilisation réduit grandement les performances et amène une consommation du temps CPU accrue.</p>
 <h2 id="enregistrer-les-images">Enregistrer les images</h2>
-<p>Les images récupérées avec <code>vgReadPixels()</code> ou <code>vgGetImageSubData()</code> sont enregistrées au format PNG avec la librairie STB et sa fonction <code>stbi_write_png()</code>. En revanche l'ordre dans lequel OpenVG stock ses pixels diffère de celui de STB ce qui produit des images inversées. Pour éviter ce problème il suffit d'inverser l'image elle-même avec OpenVG en appliquant une matrice de transformation <code>VG_MATRIX_PATH_USER_TO_SURFACE</code> sur nos `VGPath. STB est une librairie utilisant uniquement le CPU, donc très couteuse en consommation de temps CPU.</p>
+<p>Les images récupérées avec <code>vgReadPixels()</code> ou <code>vgGetImageSubData()</code> sont enregistrées au format PNG avec la librairie STB et sa fonction <code>stbi_write_png()</code>. En revanche l'ordre dans lequel OpenVG stock ses pixels diffère de celui de STB ce qui produit des images inversées. Pour éviter ce problème il suffit d'inverser l'image elle-même avec OpenVG en appliquant une matrice de transformation <code>VG_MATRIX_PATH_USER_TO_SURFACE</code> sur nos <code>VGPath</code>. STB est une librairie utilisant uniquement le CPU, donc très couteuse en consommation de temps CPU.</p>
 <h2 id="dessiner-des-caractères-depuis-des-polices-ttf">Dessiner des caractères depuis des polices TTF</h2>
 <p>Pour le chargement de polices de caractères True Type (TTF), nous utiliserons Freetype2 afin d'obtenir les glyphes.</p>
 <p>OpenVG propose la fonction <code>vgDrawGlyph()</code> qui permet de dessiner ces glyphes. En revanche <code>vgDrawGlyph()</code> semble fonctionnelle uniquement pour le dessin on-screen, son utilisation sur une surface créée avec <code>eglCreatePbufferSurface()</code> ou <code>eglCreatePbufferFromClientBuffer()</code> ne produit rien. Deplus, <code>vgDrawGlyph()</code> possède un autre désavantage: elle est affectée uniquement par les matrices de transformation de type <code>G_MATRIX_GLYPH_USER_TO_SURFACE</code> et non <code>VG_MATRIX_PATH_USER_TO_SURFACE</code> qui s'apliquent uniquement aux <code>VGPath</code> et il est possible d'utiliser un seul type avec <code>vgSeti(VG_MATRIX_MODE, )</code>.</p>
@@ -85,11 +85,12 @@
 <li><a href="https://www.khronos.org/files/openvg-quick-reference-card.pdf">Fiche récapitulative OpenVG</a></li>
 <li><a href="https://www.idi.ntnu.no/grupper/su/fordypningsprosjekt-2006/OpenVGReport_final.pdf">Benchmarking OpenVG implementations</a></li>
 <li><a href="https://www.leslibraires.ca/livres/raspberry-pi-gpu-audio-video-programming-jan-newmarch-9781484224717.html">Raspberry Pi GPU Audio Video Programming - Newmarch, Jan</a></li>
+<li><a href="https://github.com/ajstarks/openvg/blob/master/libshapes.c">Exemples avec LibShapes</a></li>
 </ul>
 </article>
 
 <div id="footer">
-  <span class="copyrights">© 2018-2020 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+  <span class="copyrights">© 2015-2021 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
 </div>
 
 </div>
