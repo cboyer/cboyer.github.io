@@ -123,7 +123,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h1 class="title">NGINX: sous-requête d'authentification</h1>
- <small class="date">2021-02-17T11:18:41-04:00</small>
+ <small class="date">Publié le 2021-02-17</small>
 </header>
 <p>NGINX permet de restreindre l'accès à certaines ressources en effectuant une sous-requête d'authentification. Cette sous-requête doit retourner un code 200 pour autoriser l'accès, un code 403 pour l'interdire.</p>
 <p>Il est important de savoir que cette sous-requête ne peut contenir de données autres que des headers et sera uniquement de type GET. Les champs d'un formulaire dans le corp d'une requête POST seront ignorés. Seules les entêtes peuvent être transmises au backend par le biais d'une sous-requête. NGINX s'attend à recevoir un code HTTP (200 pour un succès, 403 pour un échec) et ne retournera aucune donnée issue de la sous-requêtes (ni corp, ni entêtes). Ce mécanisme permet d'implémenter des méthodes d'authentification personnalisées.</p>
