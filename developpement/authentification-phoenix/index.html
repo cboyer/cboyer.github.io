@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="HandheldFriendly" content="True">
+  <title>Authentification avec Phoenix - C. Boyer</title>
+  <meta name="description" content="Authentification avec Phoenix" />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="Elixir, Phoenix, Plug, authentification, session" />
+  <link rel="canonical" href="https://cboyer.github.io/developpement/authentification-phoenix" />
+  <meta property="og:title" content="Authentification avec Phoenix - C. Boyer" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Authentification avec Phoenix" />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="website" />
+  <meta property="og:updated_time" content="2021-03-13T19:04:11-05:00" />
+  <meta property="article:published_time" content="2021-03-13T19:04:11-05:00" />
+  <meta property="article:modified_time" content="2021-03-13T19:04:11-05:00" />
+  <meta name="generator" content="pandoc" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style>
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+</head>
+<body>
+  <div id="header">
+    <div id="links">
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+    <h1>cboyer.github.io</h1>
+    <div id="menu">
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
+    </div>
+  </div>
+
+  <div id="container">
+<article>
+<header id="title-block-header">
+<h1 class="title">Authentification avec Phoenix</h1>
+ <small class="date">2021-03-13T19:04:11-05:00</small>
+</header>
+<h2 id="initialisation-du-projet">Initialisation du projet</h2>
+<p>Le soin est laissé au lecteur d'avoir un environnement Elixir/PostgreSQL fonctionnel. Il est toujours préférable d'utiliser la dernière version de Phoenix, pour une mise à jour:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">mix</span> local.phx</span></code></pre></div>
+<p>Créer le projet</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">mix</span> phx.new app_test</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="bu">cd</span> app_test</span></code></pre></div>
+<p>Paramétrer les informations de connexion à la base de données dans <code>config/dev.exs</code></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>config <span class="va">:test_bd</span>, <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Repo</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  <span class="va">username:</span> <span class="st">&quot;postgres&quot;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>  <span class="va">password:</span> <span class="st">&quot;postgres&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>  <span class="va">database:</span> <span class="st">&quot;app_test&quot;</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>  <span class="va">hostname:</span> <span class="st">&quot;localhost&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>  <span class="va">show_sensitive_data_on_connection_error:</span> <span class="cn">true</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>  <span class="va">pool_size:</span> <span class="dv">10</span></span></code></pre></div>
+<p>Initialiser Ecto qui va créer la base de données si nécessaire</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ex">mix</span> ecto.create</span></code></pre></div>
+<p>Création du contexte <code>Accounts</code>, du module <code>User</code> et de la table <code>users</code> avec ses colonnes:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ex">mix</span> phx.gen.context Accounts User users username:string:unique password:string</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="ex">mix</span> ecto.migrate</span></code></pre></div>
+<p>Ajustement de la table <code>users</code> avec une migration Ecto pour insérer automatiquement <code>inserted_at</code> et <code>updated_at</code>: Ceci va nous permettre plus tard de faire des insertions sans nous préoccuper de ces deux colonnes qui ont une contrainte "non nulle".</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="ex">mix</span> ecto.gen.migration alter_users_table</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>    <span class="ex">*</span> creating priv/repo/migrations/20210312192247_alter_users_table.exs</span></code></pre></div>
+<p>Contenu de la migration:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Repo</span><span class="op">.</span><span class="cn">Migrations</span><span class="op">.</span><span class="cn">AlterUsersTable</span> <span class="kw">do</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>  <span class="im">use</span> <span class="cn">Ecto</span><span class="op">.</span><span class="cn">Migration</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>  <span class="kw">def</span> change <span class="kw">do</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    alter table(<span class="va">:users</span>) <span class="kw">do</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>        modify <span class="va">:inserted_at</span>, <span class="va">:utc_datetime</span>, <span class="va">default:</span> fragment(<span class="st">&quot;NOW()&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>        modify <span class="va">:updated_at</span>, <span class="va">:utc_datetime</span>, <span class="va">default:</span> fragment(<span class="st">&quot;NOW()&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>  <span class="kw">end</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Appliquer les changements (création du schéma et migrations):</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="ex">mix</span> ecto.migrate</span></code></pre></div>
+<p>Pour ne pas stocker les mot de passe en clair nous allons utiliser une fonction de hashage. Ajouter une fonction de hashage <code>hash_password/1</code> dans le contrôleur <code>Accounts</code>, <code>lib/app_test/accounts.ex</code>. Le choix de SHA256 permet de ne pas utiliser de librairie externe à l'instar de Bcrypt. Également nous allons ajouter une fonction <code>logged?/1</code> pour vérifier si l'utilisateur est connecté en vérifiant la présence de son ID en session:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="kw">def</span> hash_password(password) <span class="kw">do</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>    <span class="va">:crypto</span><span class="op">.</span>hash(<span class="va">:sha256</span>, password)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>    <span class="op">|&gt;</span> <span class="cn">Base</span><span class="op">.</span>encode16()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>    <span class="op">|&gt;</span> <span class="cn">String</span><span class="op">.</span>downcase()</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a><span class="kw">end</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a><span class="kw">defp</span> logged?(conn) <span class="kw">do</span>      </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>    <span class="kw">case</span> <span class="cn">Plug</span><span class="op">.</span><span class="cn">Conn</span><span class="op">.</span>get_session(conn, <span class="va">:user_id</span>) <span class="kw">do</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>        <span class="cn">nil</span> <span class="op">-&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>            <span class="cn">false</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a>        <span class="st">&quot;&quot;</span> <span class="op">-&gt;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true"></a>            <span class="cn">false</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true"></a>        _user_id <span class="op">-&gt;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true"></a>            <span class="cn">true</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Démarrer l'application en mode interactif avec iEX</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="ex">iex</span> -S mix phx.server</span></code></pre></div>
+<p>Ajouter un utlisateur dans la base de données avec Ecto depuis iEX:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="im">alias</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span><span class="cn">User</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="cn">AppTest</span><span class="op">.</span><span class="cn">Repo</span><span class="op">.</span>insert_all(<span class="cn">User</span>, [[<span class="va">id:</span> <span class="dv">0</span>, <span class="va">username:</span> <span class="st">&quot;adm&quot;</span>, <span class="va">password:</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span>hash_password(<span class="st">&quot;admin&quot;</span>)]])</span></code></pre></div>
+<p>On vérifie que l'utilisateur est bien présent avec <code>Repo.get_by</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="cn">AppTest</span><span class="op">.</span><span class="cn">Repo</span><span class="op">.</span>get_by(<span class="cn">User</span>, <span class="va">username:</span> <span class="st">&quot;adm&quot;</span>, <span class="va">password:</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span>hash_password(<span class="st">&quot;admin&quot;</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>%<span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span><span class="cn">User</span>{</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a>  <span class="va">__meta__:</span> <span class="co">#Ecto.Schema.Metadata&lt;:loaded, &quot;users&quot;&gt;,</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a>  <span class="va">id:</span> <span class="dv">0</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>  <span class="va">inserted_at:</span> <span class="op">~</span>N[<span class="dv">2021-03-13</span> <span class="dv">14</span>:<span class="dv">29</span>:<span class="dv">48</span>],</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>  <span class="va">password:</span> <span class="st">&quot;8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918&quot;</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a>  <span class="va">updated_at:</span> <span class="op">~</span>N[<span class="dv">2021-03-13</span> <span class="dv">14</span>:<span class="dv">29</span>:<span class="dv">48</span>],</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a>  <span class="va">username:</span> <span class="st">&quot;adm&quot;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true"></a>}</span></code></pre></div>
+<h2 id="page-protégée">Page protégée</h2>
+<p>Créer une page se fait en quatre étapes:</p>
+<ol type="1">
+<li>définir les routes dans lib/app_test_web/router.ex</li>
+<li>un contrôleur dans lib/app_test_web/controllers/</li>
+<li>une vue dans lib/app_test_web/views/</li>
+<li>un template dans lib/app_test_web/templates/NOM_VUE/</li>
+</ol>
+<p>Ajouter une route <code>/hello</code> dans le routeur <code>lib/app_test_web/router.ex</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>scope <span class="st">&quot;/&quot;</span>, <span class="cn">AppTestWeb</span> <span class="kw">do</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>    pipe_through <span class="va">:browser</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a>    <span class="co">#Méthode    URL         Contrôleur         Fonction appelée</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>    get         <span class="st">&quot;/hello&quot;</span>,   <span class="cn">HelloController</span>,   <span class="va">:index</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Créer un contrôleur <code>HelloController</code> dans <code>lib/app_test_web/controllers/hello_controller.ex</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">HelloController</span> <span class="kw">do</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>    <span class="im">use</span> <span class="cn">AppTestWeb</span>, <span class="va">:controller</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>    <span class="kw">def</span> index(conn, _params) <span class="kw">do</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>        <span class="co">#Si l&#39;utilisateur est authentifié, on affiche la page</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a>        <span class="cf">if</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span>logged?(conn) <span class="kw">do</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true"></a>            render(conn, <span class="st">&quot;hello.html&quot;</span>, _params)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true"></a>        <span class="co">#Sinon on redirige vers le formulaire</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true"></a>        <span class="cf">else</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true"></a>            conn</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true"></a>            <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>authentication_path(conn, <span class="va">:index</span>))</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true"></a>            <span class="op">|&gt;</span> halt()</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Créer une vue <code>HelloView</code> dans <code>lib/app_test_web/views/hello_view.ex</code></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">HelloView</span> <span class="kw">do</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>    <span class="im">use</span> <span class="cn">AppTestWeb</span>, <span class="va">:view</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Créer un template <code>hello</code> dans <code>lib/app_test_web/templates/hello/hello.html.eex</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="kw">&lt;div</span><span class="ot"> style=</span><span class="st">&quot;text-align: center;&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>    Hello! <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a>    <span class="er">&lt;</span>%= button(&quot;Se déconnecter&quot;, to: &quot;/logout&quot;, method: :get, class: &quot;btn&quot;) %&gt;</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<h2 id="page-dauthentification">Page d'authentification</h2>
+<p>Ajouter les trois routes vers le contrôleur <code>AuthenticationController</code> dans le routeur <code>lib/app_test_web/router.ex</code>:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a>scope <span class="st">&quot;/&quot;</span>, <span class="cn">AppTestWeb</span> <span class="kw">do</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>    pipe_through <span class="va">:browser</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>    <span class="co">#Méthode    URL         Contrôleur                  Fonction appelée</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>    get         <span class="st">&quot;/hello&quot;</span>,   <span class="cn">HelloController</span>,            <span class="va">:index</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a>    get         <span class="st">&quot;/login&quot;</span>,   <span class="cn">AuthenticationController</span>,   <span class="va">:index</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a>    get         <span class="st">&quot;/logout&quot;</span>,  <span class="cn">AuthenticationController</span>,   <span class="va">:logout</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true"></a>    post        <span class="st">&quot;/login&quot;</span>,   <span class="cn">AuthenticationController</span>,   <span class="va">:login</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Créer un contrôleur <code>AuthenticationController</code> dans <code>lib/app_test_web/controllers/authentication_controller.ex</code>.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">AuthenticationController</span> <span class="kw">do</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>    <span class="im">use</span> <span class="cn">AppTestWeb</span>, <span class="va">:controller</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>    <span class="co">#Fonction index appelée depuis le routeur (GET sur /login)</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a>    <span class="kw">def</span> index(conn, _params) <span class="kw">do</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a>        <span class="co">#Si l&#39;utilisateur est authentifié, on redirige vers la page protégée</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a>        <span class="cf">if</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span>logged?(conn) <span class="kw">do</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a>            conn</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a>            <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>hello_path(conn, <span class="va">:index</span>))</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a>            <span class="op">|&gt;</span> halt()</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true"></a>        <span class="co">#Sinon on affiche le formulaire d&#39;authentification</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true"></a>        <span class="cf">else</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true"></a>            render(conn, <span class="st">&quot;login.html&quot;</span>, <span class="va">unauthorized:</span> <span class="cn">false</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true"></a></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true"></a>    <span class="co">#Fonction login appelée lors de la soumission du formulaire (POST sur /login)</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true"></a>    <span class="kw">def</span> login(conn, params) <span class="kw">do</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true"></a></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true"></a>        <span class="co">#Vérifie le login/mot de passe dans la base de données</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true"></a>        %{<span class="st">&quot;username&quot;</span> <span class="op">=&gt;</span> username, <span class="st">&quot;password&quot;</span> <span class="op">=&gt;</span> password} <span class="op">=</span> params</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true"></a>        current_user <span class="op">=</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Repo</span><span class="op">.</span>get_by(<span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span><span class="cn">User</span>, <span class="va">username:</span> username, <span class="va">password:</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span>hash_password(password))</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true"></a></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true"></a>        <span class="co">#Si aucun utilisateur n&#39;a été trouvé, on affiche le message d&#39;erreur</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true"></a>        <span class="cf">if</span> current_user <span class="op">==</span> <span class="cn">nil</span> <span class="kw">do</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true"></a>            render(conn, <span class="st">&quot;login.html&quot;</span>, <span class="va">unauthorized:</span> <span class="cn">true</span>)</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true"></a>        </span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true"></a>        <span class="co">#Sinon on stock son ID en session et on redirige vers la page protégée</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true"></a>        <span class="cf">else</span></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true"></a>            conn</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true"></a>            <span class="op">|&gt;</span> put_session(<span class="va">:user_id</span>, current_user<span class="op">.</span>id)</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true"></a>            <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>hello_path(conn, <span class="va">:index</span>))</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true"></a>            <span class="op">|&gt;</span> halt()</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true"></a></span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true"></a></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true"></a>    <span class="co">#Fonction authentication appelée lors de la déconnexion (GET sur /logout)</span></span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true"></a>    <span class="kw">def</span> logout(conn, _params) <span class="kw">do</span></span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true"></a>        conn</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true"></a>        <span class="op">|&gt;</span> clear_session()</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true"></a>        <span class="op">|&gt;</span> put_flash(<span class="va">:info</span>, <span class="st">&quot;Vous êtes déconnecté.&quot;</span>)</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true"></a>        <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>authentication_path(conn, <span class="va">:index</span>))</span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true"></a>        <span class="op">|&gt;</span> halt()</span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Créer une vue <code>AuthenticationView</code> dans <code>lib/app_test_web/views/authentication_view.ex</code></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">AuthenticationView</span> <span class="kw">do</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>    <span class="im">use</span> <span class="cn">AppTestWeb</span>, <span class="va">:view</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Créer un template <code>login</code> dans <code>lib/app_test_web/templates/authentication/login.html.eex</code>. Utiliser un message conditionnel plutôt que la fonction <code>put_flash/2</code> depuis un contrôleur permet d'avoir plus de contrôle sur le style et le contenu. Une autre stratégie aurait pu être d'utiliser la variable transmettre directement le message au template.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="er">&lt;</span>%= if @unauthorized do %&gt;</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;alert alert-danger&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>      <span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;text-align: center;&quot;</span><span class="kw">&gt;</span>Nom d&#39;utilisateur ou mot de passe incorrect.<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>    <span class="kw">&lt;/div&gt;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a><span class="er">&lt;</span>% end %&gt;</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a><span class="kw">&lt;div</span><span class="ot"> style=</span><span class="st">&quot;text-align: center;&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a><span class="er">&lt;</span>%= form_for @conn, Routes.authentication_path(@conn, :index), [method: :post, name: :auth], fn f -&gt; %&gt;</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true"></a>    <span class="er">&lt;</span>%= text_input f, :username, class: &quot;form-control&quot;, placeholder: &quot;Login&quot;, required: true, style: &quot;width: 300px; text-align:center;&quot; %&gt; <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true"></a>    <span class="er">&lt;</span>%= password_input f, :password, class: &quot;form-control&quot;, placeholder: &quot;Mot de passe&quot;, required: true, style: &quot;width: 300px; text-align:center;&quot; %&gt; <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true"></a>    <span class="er">&lt;</span>%= submit &quot;Se connecter&quot; %&gt;</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true"></a><span class="er">&lt;</span>% end %&gt;</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<h2 id="standardiser-lauthentification-avec-une-plug">Standardiser l'authentification avec une Plug</h2>
+<p>La solution précédente implique de vérifier la présence de <code>user_id</code> en session dans chaque contrôleur et de rediriger le cas échéant. Cette solution devient fastidieuse si l'application contient de nombreuse pages. Phoenix permet de standardiser le processus avec une Plug:</p>
+<p>Créer une plug <code>Authentication</code> dans <code>lib/app_test_web/plugs/authentication.ex</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">Plugs</span><span class="op">.</span><span class="cn">Authentication</span> <span class="kw">do</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>    <span class="im">import</span> <span class="cn">Plug</span><span class="op">.</span><span class="cn">Conn</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>    <span class="im">import</span> <span class="cn">Phoenix</span><span class="op">.</span><span class="cn">Controller</span>, <span class="va">only:</span> [<span class="va">redirect:</span> <span class="dv">2</span>, <span class="va">put_flash:</span> <span class="dv">3</span>]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>    <span class="im">alias</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">Router</span><span class="op">.</span><span class="cn">Helpers</span>, <span class="va">as:</span> <span class="cn">Routes</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a>    <span class="kw">def</span> init(_params) <span class="kw">do</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a>    <span class="kw">def</span> call(conn, _params) <span class="kw">do</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true"></a>        <span class="co">#Redirige vers le formulaire si non authentifié</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true"></a>        <span class="cf">if</span><span class="op"> !</span> logged?(conn) <span class="kw">do</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true"></a>            conn</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true"></a>            <span class="op">|&gt;</span> put_flash(<span class="va">:error</span>, <span class="st">&quot;Vous devez être authentifié pour accéder à cette page.&quot;</span>)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true"></a>            <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>authentication_path(conn, <span class="va">:index</span>)) <span class="co">#Alternative: redirect(to: &quot;/login&quot;)</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true"></a>            <span class="op">|&gt;</span> halt()</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true"></a>        <span class="cf">else</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true"></a>            conn</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true"></a></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true"></a>    <span class="kw">defp</span> logged?(conn) <span class="kw">do</span>      </span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true"></a>        <span class="kw">case</span> <span class="cn">Plug</span><span class="op">.</span><span class="cn">Conn</span><span class="op">.</span>get_session(conn, <span class="va">:user_id</span>) <span class="kw">do</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true"></a>            <span class="cn">nil</span> <span class="op">-&gt;</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true"></a>                <span class="cn">false</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true"></a>            <span class="st">&quot;&quot;</span> <span class="op">-&gt;</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true"></a>                <span class="cn">false</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true"></a>            _user_id <span class="op">-&gt;</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true"></a>                <span class="cn">true</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Créer un pipeline <code>:authenticated</code> qui contient la plug <code>Authentication</code> et un nouveau scope dans le routeur <code>lib/app_test_web/router.ex</code>. Également déplacer la route <code>/hello</code> dans ce nouveau scope pour appliquer la plug. Les routes <code>/login</code> et <code>logout</code> ne doivent pas figurer dans ce scope car elles doivent rester accessibles sans authentification.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>pipeline <span class="va">:authenticated</span> <span class="kw">do</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>    plug <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">Plugs</span><span class="op">.</span><span class="cn">Authentication</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a><span class="kw">end</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a>scope <span class="st">&quot;/&quot;</span>, <span class="cn">AppTestWeb</span> <span class="kw">do</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>    pipe_through [<span class="va">:browser</span>, <span class="va">:authenticated</span>]</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true"></a>    get     <span class="st">&quot;/hello&quot;</span>,   <span class="cn">HelloController</span>,            <span class="va">:index</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true"></a><span class="kw">end</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true"></a>scope <span class="st">&quot;/&quot;</span>, <span class="cn">AppTestWeb</span> <span class="kw">do</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true"></a>    pipe_through <span class="va">:browser</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true"></a>    get     <span class="st">&quot;/login&quot;</span>,   <span class="cn">AuthenticationController</span>,   <span class="va">:index</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true"></a>    post    <span class="st">&quot;/login&quot;</span>,   <span class="cn">AuthenticationController</span>,   <span class="va">:login</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true"></a>    get     <span class="st">&quot;/logout&quot;</span>,  <span class="cn">AuthenticationController</span>,   <span class="va">:logout</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Dès lors il n'est plus nécessaire de vérifier la session dans les contrôleurs des pages comme <code>HelloController</code> dans <code>lib/app_test_web/controllers/hello_controller.ex</code>:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">HelloController</span> <span class="kw">do</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>    <span class="im">use</span> <span class="cn">AppTestWeb</span>, <span class="va">:controller</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a>    <span class="kw">def</span> index(conn, _params) <span class="kw">do</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true"></a>        render(conn, <span class="st">&quot;hello.html&quot;</span>, _params)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
+<ul>
+<li><a href="https://whatdidilearn.info/2018/02/25/phoenix-authentication-and-authorization-using-plugs.html">Gestion d'autorisations avec Plug</a></li>
+</ul>
+</article>
+
+<div id="footer">
+  <span class="copyrights">© 2015-2021 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>.</span>
+</div>
+
+</div>
+</body>
+</html>

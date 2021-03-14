@@ -8,8 +8,9 @@ small.date { margin-bottom: 20px; }
 p { /* font-size: 1em; line-height: 1.3; */ text-rendering: optimizeLegibility; text-align: justify; }
 p code { padding: 2px 5px; font-size: 1.1em; background: #eee; }
 ul { list-style-type: none; padding-left: 0; line-height: 1.2; }
+ol { padding: 0; list-style: inside decimal; line-height: 0px; font-size: 0.9em; }
 figure { margin: 10px 0 50px 0; text-align: center; }
-figcaption { font-style: italic; }
+figcaption { font-style: italic; font-size: 0.8em; }
 .sourceCode, .console, .text { font-size: 14px; line-height: 1.0; margin: 0 0 50px 0 !important; }
 pre.sourceCode { margin-bottom: 0 !important;}
 .button { width: 22px; }
