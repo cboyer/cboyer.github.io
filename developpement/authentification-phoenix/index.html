@@ -262,7 +262,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true"></a></span>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true"></a>        <span class="co">#Sinon on affiche le formulaire d&#39;authentification</span></span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true"></a>        <span class="cf">else</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true"></a>            render(conn, <span class="st">&quot;login.html&quot;</span>, <span class="va">unauthorized:</span> <span class="cn">false</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true"></a>            render(conn, <span class="st">&quot;login.html&quot;</span>)</span>
 <span id="cb18-16"><a href="#cb18-16" aria-hidden="true"></a>        <span class="kw">end</span></span>
 <span id="cb18-17"><a href="#cb18-17" aria-hidden="true"></a>    <span class="kw">end</span></span>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true"></a></span>
@@ -276,81 +276,78 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb18-26"><a href="#cb18-26" aria-hidden="true"></a></span>
 <span id="cb18-27"><a href="#cb18-27" aria-hidden="true"></a>        <span class="co">#Si aucun utilisateur n&#39;a été trouvé, on affiche le message d&#39;erreur</span></span>
 <span id="cb18-28"><a href="#cb18-28" aria-hidden="true"></a>        <span class="cf">if</span> current_user <span class="op">==</span> <span class="cn">nil</span> <span class="kw">do</span></span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true"></a>            render(conn, <span class="st">&quot;login.html&quot;</span>, <span class="va">unauthorized:</span> <span class="cn">true</span>)</span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true"></a>        </span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true"></a>        <span class="co">#Sinon on stock son ID en session et on redirige vers la page protégée</span></span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true"></a>        <span class="cf">else</span></span>
-<span id="cb18-33"><a href="#cb18-33" aria-hidden="true"></a>            conn</span>
-<span id="cb18-34"><a href="#cb18-34" aria-hidden="true"></a>            <span class="op">|&gt;</span> put_session(<span class="va">:user_id</span>, current_user<span class="op">.</span>id)</span>
-<span id="cb18-35"><a href="#cb18-35" aria-hidden="true"></a>            <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>hello_path(conn, <span class="va">:index</span>))</span>
-<span id="cb18-36"><a href="#cb18-36" aria-hidden="true"></a>            <span class="op">|&gt;</span> halt()</span>
-<span id="cb18-37"><a href="#cb18-37" aria-hidden="true"></a>        <span class="kw">end</span></span>
-<span id="cb18-38"><a href="#cb18-38" aria-hidden="true"></a>    <span class="kw">end</span></span>
-<span id="cb18-39"><a href="#cb18-39" aria-hidden="true"></a></span>
-<span id="cb18-40"><a href="#cb18-40" aria-hidden="true"></a></span>
-<span id="cb18-41"><a href="#cb18-41" aria-hidden="true"></a>    <span class="co">#Fonction authentication appelée lors de la déconnexion (GET sur /logout)</span></span>
-<span id="cb18-42"><a href="#cb18-42" aria-hidden="true"></a>    <span class="kw">def</span> logout(conn, _params) <span class="kw">do</span></span>
-<span id="cb18-43"><a href="#cb18-43" aria-hidden="true"></a>        conn</span>
-<span id="cb18-44"><a href="#cb18-44" aria-hidden="true"></a>        <span class="op">|&gt;</span> clear_session()</span>
-<span id="cb18-45"><a href="#cb18-45" aria-hidden="true"></a>        <span class="op">|&gt;</span> put_flash(<span class="va">:info</span>, <span class="st">&quot;Vous êtes déconnecté.&quot;</span>)</span>
-<span id="cb18-46"><a href="#cb18-46" aria-hidden="true"></a>        <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>authentication_path(conn, <span class="va">:index</span>))</span>
-<span id="cb18-47"><a href="#cb18-47" aria-hidden="true"></a>        <span class="op">|&gt;</span> halt()</span>
-<span id="cb18-48"><a href="#cb18-48" aria-hidden="true"></a>    <span class="kw">end</span></span>
-<span id="cb18-49"><a href="#cb18-49" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true"></a>            conn</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true"></a>            <span class="op">|&gt;</span> put_flash(<span class="va">:error</span>, <span class="st">&quot;Nom d&#39;utilisateur ou mot de passe incorrect.&quot;</span>)</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true"></a>            <span class="op">|&gt;</span> render(<span class="st">&quot;login.html&quot;</span>)</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true"></a>        </span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true"></a>        <span class="co">#Sinon on stock son ID en session et on redirige vers la page protégée</span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true"></a>        <span class="cf">else</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true"></a>            conn</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true"></a>            <span class="op">|&gt;</span> put_session(<span class="va">:user_id</span>, current_user<span class="op">.</span>id)</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true"></a>            <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>hello_path(conn, <span class="va">:index</span>))</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true"></a>            <span class="op">|&gt;</span> halt()</span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true"></a></span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true"></a></span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true"></a>    <span class="co">#Fonction authentication appelée lors de la déconnexion (GET sur /logout)</span></span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true"></a>    <span class="kw">def</span> logout(conn, _params) <span class="kw">do</span></span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true"></a>        conn</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true"></a>        <span class="op">|&gt;</span> clear_session()</span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true"></a>        <span class="op">|&gt;</span> put_flash(<span class="va">:info</span>, <span class="st">&quot;Vous êtes déconnecté.&quot;</span>)</span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true"></a>        <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>authentication_path(conn, <span class="va">:index</span>))</span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true"></a>        <span class="op">|&gt;</span> halt()</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
 <p>Créer une vue <code>AuthenticationView</code> dans <code>lib/app_test_web/views/authentication_view.ex</code></p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">AuthenticationView</span> <span class="kw">do</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>    <span class="im">use</span> <span class="cn">AppTestWeb</span>, <span class="va">:view</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
-<p>Créer un template <code>login</code> dans <code>lib/app_test_web/templates/authentication/login.html.eex</code>. Utiliser un message conditionnel plutôt que la fonction <code>put_flash/2</code> depuis un contrôleur permet d'avoir plus de contrôle sur le style et le contenu. Une autre stratégie aurait pu être d'utiliser la variable transmettre directement le message au template.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="er">&lt;</span>%= if @unauthorized do %&gt;</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;alert alert-danger&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>      <span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;text-align: center;&quot;</span><span class="kw">&gt;</span>Nom d&#39;utilisateur ou mot de passe incorrect.<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>    <span class="kw">&lt;/div&gt;</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a><span class="er">&lt;</span>% end %&gt;</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a><span class="kw">&lt;div</span><span class="ot"> style=</span><span class="st">&quot;text-align: center;&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a><span class="er">&lt;</span>%= form_for @conn, Routes.authentication_path(@conn, :index), [method: :post, name: :auth], fn f -&gt; %&gt;</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true"></a>    <span class="er">&lt;</span>%= text_input f, :username, class: &quot;form-control&quot;, placeholder: &quot;Login&quot;, required: true, style: &quot;width: 300px; text-align:center;&quot; %&gt; <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true"></a>    <span class="er">&lt;</span>%= password_input f, :password, class: &quot;form-control&quot;, placeholder: &quot;Mot de passe&quot;, required: true, style: &quot;width: 300px; text-align:center;&quot; %&gt; <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true"></a>    <span class="er">&lt;</span>%= submit &quot;Se connecter&quot; %&gt;</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true"></a><span class="er">&lt;</span>% end %&gt;</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<p>Créer un template <code>login</code> dans <code>lib/app_test_web/templates/authentication/login.html.eex</code>:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="kw">&lt;div</span><span class="ot"> style=</span><span class="st">&quot;text-align: center;&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a><span class="er">&lt;</span>%= form_for @conn, Routes.authentication_path(@conn, :index), [method: :post, name: :auth], fn f -&gt; %&gt;</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>    <span class="er">&lt;</span>%= text_input f, :username, class: &quot;form-control&quot;, placeholder: &quot;Login&quot;, required: true, style: &quot;width: 300px; text-align:center;&quot; %&gt; <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>    <span class="er">&lt;</span>%= password_input f, :password, class: &quot;form-control&quot;, placeholder: &quot;Mot de passe&quot;, required: true, style: &quot;width: 300px; text-align:center;&quot; %&gt; <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a>    <span class="er">&lt;</span>%= submit &quot;Se connecter&quot; %&gt;</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a><span class="er">&lt;</span>% end %&gt;</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
 <h2 id="standardiser-lauthentification-avec-une-plug">Standardiser l'authentification avec une Plug</h2>
 <p>La solution précédente implique de vérifier la présence de <code>user_id</code> en session dans chaque contrôleur et de rediriger le cas échéant. Cette solution devient fastidieuse si l'application contient de nombreuse pages. Phoenix permet de standardiser le processus avec une Plug:</p>
 <p>Créer une plug <code>Authentication</code> dans <code>lib/app_test_web/plugs/authentication.ex</code>:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">Plugs</span><span class="op">.</span><span class="cn">Authentication</span> <span class="kw">do</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>    <span class="im">import</span> <span class="cn">Plug</span><span class="op">.</span><span class="cn">Conn</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>    <span class="im">import</span> <span class="cn">Phoenix</span><span class="op">.</span><span class="cn">Controller</span>, <span class="va">only:</span> [<span class="va">redirect:</span> <span class="dv">2</span>, <span class="va">put_flash:</span> <span class="dv">3</span>]</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>    <span class="im">alias</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">Router</span><span class="op">.</span><span class="cn">Helpers</span>, <span class="va">as:</span> <span class="cn">Routes</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a>    <span class="kw">def</span> init(_params) <span class="kw">do</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>    <span class="kw">end</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a>    <span class="kw">def</span> call(conn, _params) <span class="kw">do</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true"></a></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true"></a>        <span class="co">#Redirige vers le formulaire si non authentifié</span></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true"></a>        <span class="cf">if</span><span class="op"> !</span> logged?(conn) <span class="kw">do</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true"></a>            conn</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true"></a>            <span class="op">|&gt;</span> put_flash(<span class="va">:error</span>, <span class="st">&quot;Vous devez être authentifié pour accéder à cette page.&quot;</span>)</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true"></a>            <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>authentication_path(conn, <span class="va">:index</span>)) <span class="co">#Alternative: redirect(to: &quot;/login&quot;)</span></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true"></a>            <span class="op">|&gt;</span> halt()</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true"></a>        <span class="cf">else</span></span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true"></a>            conn</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true"></a>        <span class="kw">end</span></span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true"></a>    <span class="kw">end</span></span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true"></a></span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true"></a>    <span class="kw">defp</span> logged?(conn) <span class="kw">do</span>      </span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true"></a>        <span class="kw">case</span> <span class="cn">Plug</span><span class="op">.</span><span class="cn">Conn</span><span class="op">.</span>get_session(conn, <span class="va">:user_id</span>) <span class="kw">do</span></span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true"></a>            <span class="cn">nil</span> <span class="op">-&gt;</span></span>
-<span id="cb21-26"><a href="#cb21-26" aria-hidden="true"></a>                <span class="cn">false</span></span>
-<span id="cb21-27"><a href="#cb21-27" aria-hidden="true"></a>            <span class="st">&quot;&quot;</span> <span class="op">-&gt;</span></span>
-<span id="cb21-28"><a href="#cb21-28" aria-hidden="true"></a>                <span class="cn">false</span></span>
-<span id="cb21-29"><a href="#cb21-29" aria-hidden="true"></a>            _user_id <span class="op">-&gt;</span></span>
-<span id="cb21-30"><a href="#cb21-30" aria-hidden="true"></a>                <span class="cn">true</span></span>
-<span id="cb21-31"><a href="#cb21-31" aria-hidden="true"></a>        <span class="kw">end</span></span>
-<span id="cb21-32"><a href="#cb21-32" aria-hidden="true"></a>    <span class="kw">end</span></span>
-<span id="cb21-33"><a href="#cb21-33" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a>    <span class="im">import</span> <span class="cn">Phoenix</span><span class="op">.</span><span class="cn">HTML</span><span class="op">.</span><span class="cn">Link</span>, <span class="va">only:</span> [<span class="va">link:</span> <span class="dv">2</span>]</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a>    <span class="im">alias</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">Router</span><span class="op">.</span><span class="cn">Helpers</span>, <span class="va">as:</span> <span class="cn">Routes</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>    <span class="kw">def</span> init(_params) <span class="kw">do</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true"></a>    <span class="kw">def</span> call(conn, _params) <span class="kw">do</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true"></a>        <span class="co">#Redirige vers le formulaire si non authentifié</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true"></a>        <span class="cf">if</span><span class="op"> !</span> logged?(conn) <span class="kw">do</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true"></a>            conn</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true"></a>            <span class="op">|&gt;</span> put_flash(<span class="va">:error</span>, [<span class="st">&quot;Vous devez être authentifié pour accéder à cette page. &quot;</span>, link(<span class="st">&quot;S&#39;inscrire.&quot;</span>, <span class="va">to:</span> <span class="st">&quot;/subscribe&quot;</span>)])</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true"></a>            <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>authentication_path(conn, <span class="va">:index</span>)) <span class="co">#Alternative: redirect(to: &quot;/login&quot;)</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true"></a>            <span class="op">|&gt;</span> halt()</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true"></a>        <span class="cf">else</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true"></a>            conn</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true"></a></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true"></a>    <span class="kw">defp</span> logged?(conn) <span class="kw">do</span>      </span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true"></a>        <span class="kw">case</span> <span class="cn">Plug</span><span class="op">.</span><span class="cn">Conn</span><span class="op">.</span>get_session(conn, <span class="va">:user_id</span>) <span class="kw">do</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true"></a>            <span class="cn">nil</span> <span class="op">-&gt;</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true"></a>                <span class="cn">false</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true"></a>            <span class="st">&quot;&quot;</span> <span class="op">-&gt;</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true"></a>                <span class="cn">false</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true"></a>            _user_id <span class="op">-&gt;</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true"></a>                <span class="cn">true</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
 <p>Créer un pipeline <code>:authenticated</code> qui contient la plug <code>Authentication</code> et un nouveau scope dans le routeur <code>lib/app_test_web/router.ex</code>. Également déplacer la route <code>/hello</code> dans ce nouveau scope pour appliquer la plug. Les routes <code>/login</code> et <code>logout</code> ne doivent pas figurer dans ce scope car elles doivent rester accessibles sans authentification.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>pipeline <span class="va">:authenticated</span> <span class="kw">do</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>    plug <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">Plugs</span><span class="op">.</span><span class="cn">Authentication</span></span>

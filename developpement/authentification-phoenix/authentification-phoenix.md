@@ -211,7 +211,7 @@ defmodule AppTestWeb.AuthenticationController do
 
         #Sinon on affiche le formulaire d'authentification
         else
-            render(conn, "login.html", unauthorized: false)
+            render(conn, "login.html")
         end
     end
 
@@ -225,7 +225,9 @@ defmodule AppTestWeb.AuthenticationController do
 
         #Si aucun utilisateur n'a été trouvé, on affiche le message d'erreur
         if current_user == nil do
-            render(conn, "login.html", unauthorized: true)
+            conn
+            |> put_flash(:error, "Nom d'utilisateur ou mot de passe incorrect.")
+            |> render("login.html")
         
         #Sinon on stock son ID en session et on redirige vers la page protégée
         else
@@ -255,16 +257,8 @@ defmodule AppTestWeb.AuthenticationView do
 end
 ```
 
-Créer un template `login` dans `lib/app_test_web/templates/authentication/login.html.eex`.
-Utiliser un message conditionnel plutôt que la fonction `put_flash/2` depuis un contrôleur permet d'avoir plus de contrôle sur le style et le contenu.
-Une autre stratégie aurait pu être d'utiliser la variable transmettre directement le message au template.
+Créer un template `login` dans `lib/app_test_web/templates/authentication/login.html.eex`:
 ```HTML
-<%= if @unauthorized do %>
-    <div class="alert alert-danger">
-      <p style="text-align: center;">Nom d'utilisateur ou mot de passe incorrect.</p>
-    </div>
-<% end %>
-
 <div style="text-align: center;">
 <%= form_for @conn, Routes.authentication_path(@conn, :index), [method: :post, name: :auth], fn f -> %>
     <%= text_input f, :username, class: "form-control", placeholder: "Login", required: true, style: "width: 300px; text-align:center;" %> <br />
@@ -286,6 +280,7 @@ Créer une plug `Authentication` dans `lib/app_test_web/plugs/authentication.ex`
 defmodule AppTestWeb.Plugs.Authentication do
     import Plug.Conn
     import Phoenix.Controller, only: [redirect: 2, put_flash: 3]
+    import Phoenix.HTML.Link, only: [link: 2]
 
     alias AppTestWeb.Router.Helpers, as: Routes
 
@@ -297,7 +292,7 @@ defmodule AppTestWeb.Plugs.Authentication do
         #Redirige vers le formulaire si non authentifié
         if ! logged?(conn) do
             conn
-            |> put_flash(:error, "Vous devez être authentifié pour accéder à cette page.")
+            |> put_flash(:error, ["Vous devez être authentifié pour accéder à cette page. ", link("S'inscrire.", to: "/subscribe")])
             |> redirect(to: Routes.authentication_path(conn, :index)) #Alternative: redirect(to: "/login")
             |> halt()
         else
