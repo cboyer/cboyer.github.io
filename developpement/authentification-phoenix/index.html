@@ -15,9 +15,9 @@
   <meta property="og:description" content="Authentification avec Phoenix" />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2021-03-13T19:04:11-05:00" />
+  <meta property="og:updated_time" content="2021-03-14T13:12:01-04:00" />
   <meta property="article:published_time" content="2021-03-13T19:04:11-05:00" />
-  <meta property="article:modified_time" content="2021-03-13T19:04:11-05:00" />
+  <meta property="article:modified_time" content="2021-03-14T13:12:01-04:00" />
   <meta name="generator" content="pandoc" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -123,7 +123,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h1 class="title">Authentification avec Phoenix</h1>
- <small class="date">Publié le 2021-03-13</small>
+ <small class="date">Publié le 2021-03-13, dernière mise à jour: 2021-03-14</small>
 </header>
 <h2 id="initialisation-du-projet">Initialisation du projet</h2>
 <p>Le soin est laissé au lecteur d'avoir un environnement Elixir/PostgreSQL fonctionnel. Il est toujours préférable d'utiliser la dernière version de Phoenix, pour une mise à jour:</p>
@@ -348,7 +348,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb21-32"><a href="#cb21-32" aria-hidden="true"></a>        <span class="kw">end</span></span>
 <span id="cb21-33"><a href="#cb21-33" aria-hidden="true"></a>    <span class="kw">end</span></span>
 <span id="cb21-34"><a href="#cb21-34" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
-<p>Créer un pipeline <code>:authenticated</code> qui contient la plug <code>Authentication</code> et un nouveau scope dans le routeur <code>lib/app_test_web/router.ex</code>. Également déplacer la route <code>/hello</code> dans ce nouveau scope pour appliquer la plug. Les routes <code>/login</code> et <code>logout</code> ne doivent pas figurer dans ce scope car elles doivent rester accessibles sans authentification.</p>
+<p>Créer un pipeline <code>:authenticated</code> qui contient la plug <code>Authentication</code> et un nouveau scope dans le routeur <code>lib/app_test_web/router.ex</code>. Également déplacer la route <code>/hello</code> dans ce nouveau scope pour appliquer la plug. Les routes <code>/login</code> et <code>/logout</code> ne doivent pas figurer dans ce scope car elles doivent rester accessibles sans authentification.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>pipeline <span class="va">:authenticated</span> <span class="kw">do</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>    plug <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">Plugs</span><span class="op">.</span><span class="cn">Authentication</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a><span class="kw">end</span></span>

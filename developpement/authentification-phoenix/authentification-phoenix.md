@@ -1,7 +1,7 @@
 ---
 title: "Authentification avec Phoenix"
 date: "2021-03-13T19:04:11-05:00"
-updated: "2021-03-13T19:04:11-05:00"
+updated: "2021-03-14T13:12:01-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -314,7 +314,7 @@ end
 ```
 
 Créer un pipeline `:authenticated` qui contient la plug `Authentication` et un nouveau scope dans le routeur `lib/app_test_web/router.ex`.
-Également déplacer la route `/hello` dans ce nouveau scope pour appliquer la plug. Les routes `/login` et `logout` ne doivent pas figurer dans ce scope car elles doivent rester accessibles sans authentification.
+Également déplacer la route `/hello` dans ce nouveau scope pour appliquer la plug. Les routes `/login` et `/logout` ne doivent pas figurer dans ce scope car elles doivent rester accessibles sans authentification.
 ```Elixir
 pipeline :authenticated do
     plug AppTestWeb.Plugs.Authentication
