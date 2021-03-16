@@ -477,7 +477,7 @@ live_dashboard_path  GET     /dashboard/:node/:page                 Phoenix.Live
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a>        <span class="va">where:</span> p<span class="op">.</span>profile <span class="op">==</span> <span class="op">^</span>profile,</span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true"></a>        <span class="va">preload:</span> [<span class="va">profile:</span> p],</span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a>        <span class="va">order_by:</span> [<span class="va">asc:</span> <span class="va">:name</span>]</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a>        </span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true"></a><span class="co">#Avec Preload</span></span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true"></a>query <span class="op">=</span> from u <span class="kw">in</span> <span class="cn">User</span>,</span>
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true"></a>        <span class="va">join:</span> p <span class="kw">in</span> assoc(u, <span class="va">:profile</span>),</span>
@@ -490,7 +490,7 @@ live_dashboard_path  GET     /dashboard/:node/:page                 Phoenix.Live
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true"></a>        <span class="va">join:</span> p <span class="kw">in</span> <span class="cn">TestBd</span><span class="op">.</span><span class="cn">ContextProfile</span><span class="op">.</span><span class="cn">Profile</span>, <span class="va">on:</span> u<span class="op">.</span>profile_id <span class="op">==</span> p<span class="op">.</span>id,</span>
 <span id="cb25-18"><a href="#cb25-18" aria-hidden="true"></a>        <span class="va">where:</span> p<span class="op">.</span>profile <span class="op">==</span> <span class="op">^</span>profile,</span>
 <span id="cb25-19"><a href="#cb25-19" aria-hidden="true"></a>        <span class="va">order_by:</span> [<span class="va">asc:</span> <span class="va">:name</span>],</span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true"></a>        select([u, p], %<span class="cn">User</span>{<span class="va">id:</span> u<span class="op">.</span>id, <span class="va">name:</span> u<span class="op">.</span>name, <span class="va">profile:</span> %{<span class="va">profile:</span> p<span class="op">.</span>profile, <span class="va">profile_id:</span> p<span class="op">.</span>id}})</span></code></pre></div>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true"></a>        <span class="va">select:</span> %<span class="cn">User</span>{<span class="va">id:</span> u<span class="op">.</span>id, <span class="va">name:</span> u<span class="op">.</span>name, <span class="va">profile:</span> %{<span class="va">profile:</span> p<span class="op">.</span>profile, <span class="va">profile_id:</span> p<span class="op">.</span>id}}</span></code></pre></div>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Schema.html">https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Schema.html</a></li>

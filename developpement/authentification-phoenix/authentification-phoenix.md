@@ -1,7 +1,7 @@
 ---
 title: "Authentification avec Phoenix"
 date: "2021-03-13T19:04:11-05:00"
-updated: "2021-03-14T13:12:01-04:00"
+updated: "2021-03-16T11:54:51-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -78,6 +78,8 @@ Ajouter une fonction de hashage `hash_password/1` dans le contrôleur `Accounts`
 Le choix de SHA256 permet de ne pas utiliser de librairie externe à l'instar de Bcrypt.
 Également nous allons ajouter une fonction `logged?/1` pour vérifier si l'utilisateur est connecté en vérifiant la présence de son ID en session:
 ```Elixir
+def hash_password(password) when is_nil(password), do: ""
+def hash_password(password) when password == "",   do: ""
 def hash_password(password) do
     :crypto.hash(:sha256, password)
     |> Base.encode16()
@@ -221,10 +223,11 @@ defmodule AppTestWeb.AuthenticationController do
 
         #Vérifie le login/mot de passe dans la base de données
         %{"username" => username, "password" => password} = params
-        current_user = AppTest.Repo.get_by(AppTest.Accounts.User, username: username, password: AppTest.Accounts.hash_password(password))
+        current_user = AppTest.Accounts.User
+                       |> AppTest.Repo.get_by(username: username, password: AppTest.Accounts.hash_password(password))
 
         #Si aucun utilisateur n'a été trouvé, on affiche le message d'erreur
-        if current_user == nil do
+        if is_nil(current_user) do
             conn
             |> put_flash(:error, "Nom d'utilisateur ou mot de passe incorrect.")
             |> render("login.html")
@@ -290,24 +293,13 @@ defmodule AppTestWeb.Plugs.Authentication do
     def call(conn, _params) do
 
         #Redirige vers le formulaire si non authentifié
-        if ! logged?(conn) do
+        if ! AppTest.Accounts.logged?(conn) do
             conn
             |> put_flash(:error, ["Vous devez être authentifié pour accéder à cette page. ", link("S'inscrire.", to: "/subscribe")])
             |> redirect(to: Routes.authentication_path(conn, :index)) #Alternative: redirect(to: "/login")
             |> halt()
         else
             conn
-        end
-    end
-
-    defp logged?(conn) do      
-        case Plug.Conn.get_session(conn, :user_id) do
-            nil ->
-                false
-            "" ->
-                false
-            _user_id ->
-                true
         end
     end
 end

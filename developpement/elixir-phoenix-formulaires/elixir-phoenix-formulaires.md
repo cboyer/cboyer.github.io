@@ -468,7 +468,7 @@ query = from u in User,
         where: p.profile == ^profile,
         preload: [profile: p],
         order_by: [asc: :name]
-
+        
 #Avec Preload
 query = from u in User,
         join: p in assoc(u, :profile),
@@ -481,7 +481,7 @@ query = from u in User,
         join: p in TestBd.ContextProfile.Profile, on: u.profile_id == p.id,
         where: p.profile == ^profile,
         order_by: [asc: :name],
-        select([u, p], %User{id: u.id, name: u.name, profile: %{profile: p.profile, profile_id: p.id}})
+        select: %User{id: u.id, name: u.name, profile: %{profile: p.profile, profile_id: p.id}}
 ```
 
 
