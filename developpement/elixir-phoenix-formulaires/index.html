@@ -491,6 +491,9 @@ live_dashboard_path  GET     /dashboard/:node/:page                 Phoenix.Live
 <span id="cb25-18"><a href="#cb25-18" aria-hidden="true"></a>        <span class="va">where:</span> p<span class="op">.</span>profile <span class="op">==</span> <span class="op">^</span>profile,</span>
 <span id="cb25-19"><a href="#cb25-19" aria-hidden="true"></a>        <span class="va">order_by:</span> [<span class="va">asc:</span> <span class="va">:name</span>],</span>
 <span id="cb25-20"><a href="#cb25-20" aria-hidden="true"></a>        <span class="va">select:</span> %<span class="cn">User</span>{<span class="va">id:</span> u<span class="op">.</span>id, <span class="va">name:</span> u<span class="op">.</span>name, <span class="va">profile:</span> %{<span class="va">profile:</span> p<span class="op">.</span>profile, <span class="va">profile_id:</span> p<span class="op">.</span>id}}</span></code></pre></div>
+<blockquote>
+<p>Note: il est possible de structurer les données au besoin avec <code>select</code>. En utilisant <code>%User{}</code> nous aurons toutes les clés qui lui sont propres: celles non utilisées auront <code>nil</code> comme valeur.</p>
+</blockquote>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Schema.html">https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Schema.html</a></li>

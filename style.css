@@ -9,6 +9,7 @@ p { /* font-size: 1em; line-height: 1.3; */ text-rendering: optimizeLegibility; 
 p code { padding: 2px 5px; font-size: 1.1em; background: #eee; }
 ul { list-style-type: none; padding-left: 0; line-height: 1.2; }
 ol { padding: 0; list-style: inside decimal; line-height: 1.1; font-size: 0.9em; }
+blockquote {margin: 0; border: 0 solid currentColor; border-left-width: 4px;padding-left: 1.5rem; margin-top: 1.5rem; margin-bottom: 5rem; }
 figure { margin: 10px 0 50px 0; text-align: center; }
 figcaption { font-style: italic; font-size: 0.8em; }
 .sourceCode, .console, .text { font-size: 14px; line-height: 1.0; margin: 0 0 50px 0 !important; }

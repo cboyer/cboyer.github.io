@@ -484,6 +484,9 @@ query = from u in User,
         select: %User{id: u.id, name: u.name, profile: %{profile: p.profile, profile_id: p.id}}
 ```
 
+> Note: il est possible de structurer les données au besoin avec `select`. En utilisant `%User{}` nous aurons toutes les clés qui lui sont propres: celles non utilisées auront `nil` comme valeur.
+
+
 
 ## Liens complémentaires
 
