@@ -181,7 +181,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true"></a>    <span class="kw">end</span></span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
 <blockquote>
-<p>Note: le choix de SHA256 pour <code>hash_password/1</code> permet de se passer de librairies externes (cas de Bcrypt). Il est également possible de combiner plus méthodes de hashage (plusieurs passe) pour renforcer la sécurité.</p>
+<p>Note: le choix de SHA256 pour <code>hash_password/1</code> permet de se passer de librairies externes (cas de Bcrypt). Il est également possible de combiner plusieurs méthodes de hashage (plusieurs passe) pour renforcer la sécurité.</p>
 </blockquote>
 <p>Démarrer l'application en mode interactif avec iEX</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="ex">iex</span> -S mix phx.server</span></code></pre></div>
@@ -208,13 +208,16 @@ code span.wa { color: #bf0303; } /* Warning */
 <li>vérifier la présence de <code>user_id</code> en session lors de l'accès à une page protégée</li>
 <li>détruire la session lors de la déconnexion</li>
 </ol>
-<p>Phoenix conserve par défaut les données de session en clair dans un cookie <code>_app_test_key</code> avec <code>put_session/3</code>. La configuration des cookies s'effectue dans le fichier <code>lib/process_doc_web/endpoint.ex</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="ot">@session_options</span> [</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>  <span class="va">store:</span> <span class="va">:cookie</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>  <span class="va">key:</span> <span class="st">&quot;_app_test_key&quot;</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a>  <span class="va">signing_salt:</span> <span class="st">&quot;Eswl2Dv0&quot;</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>]</span></code></pre></div>
-<p>En n'activant pas le chiffrement du cookie, on s'expose au risque d'un faux cookie contenant un <code>user_id</code> qui va nous permettre d'accéder aux pages protégées sans avoir été authentifié au préalable. Si on regarde un cookie généré avec <code>put_session/3</code>, celui-ci semble chiffré mais il n'en est rien:</p>
+<p>Phoenix conserve par défaut les données de session en clair dans un cookie <code>_app_test_key</code> avec <code>put_session/3</code>. Définir/vérifier <code>secret_key_base</code> dans <code>config/config.exs</code> (générée aléatoirement à la création du projet). Activer le chiffrement des cookies avec <code>:encryption_salt</code> dans <code>@session_options</code> du fichier <code>lib/process_doc_web/endpoint.ex</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="co"># Set :encryption_salt if you would also like to encrypt it.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="ot">@session_options</span> [</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>  <span class="va">store:</span> <span class="va">:cookie</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a>  <span class="va">key:</span> <span class="st">&quot;_app_test_key&quot;</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>  <span class="va">signing_salt:</span> <span class="st">&quot;Eswl2Dv0&quot;</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>  <span class="va">encryption_salt:</span> <span class="st">&quot;AjouterLeSaltIci&quot;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a>]</span></code></pre></div>
+<h3 id="exemple-de-cookie-non-chiffré">Exemple de cookie non chiffré</h3>
+<p>Si le chiffrement n'est pas activé, on s'expose au risque d'un faux cookie contenant un <code>user_id</code> qui va nous permettre d'accéder aux pages protégées sans avoir été authentifié au préalable. Exemple de cookie généré avec <code>put_session/3</code> sans chiffrement:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>cookie <span class="op">=</span> <span class="st">&quot;SFMyNTY.g3QAAAACbQAAAAtfY3NyZl90b2tlbm0AAAAYcGRUNzdBQzZJa05BOXo1QlB6V2JWMVJubQAAAAd1c2VyX2lkYQA.OOA1nbXcTc7Hj8ijSuYS4WikxRPeKQZ2y3KvywWdDKE&quot;</span></span></code></pre></div>
 <p>Ce cookie peut être décodé avec la fonction suivante:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">def</span> decode_cookie(cookie) <span class="kw">do</span></span>
@@ -224,7 +227,9 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
 <p>Ce qui donne:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>%{<span class="st">&quot;_csrf_token&quot;</span> <span class="op">=&gt;</span> <span class="st">&quot;pdT77AC6IkNA9z5BPzWbV1Rn&quot;</span>, <span class="st">&quot;user_id&quot;</span> <span class="op">=&gt;</span> <span class="dv">0</span>}</span></code></pre></div>
-<p>Pour éviter cette problématique il faut activer le chiffrement des cookies avec une clé <code>secret_key_base</code> configurée dans <code>config/config.exs</code>. Autrement il est possible de faire appel à <code>Phoenix.Token.sign</code> avant d'utiliser <code>put_session/3</code>.</p>
+<blockquote>
+<p>Note: une autre solution pour éviter cette problématique est d'utiliser <code>Phoenix.Token.sign</code> avant d'utiliser <code>put_session/3</code>, ou le stockage des sessions en mémoire (ETS).</p>
+</blockquote>
 <h2 id="page-protégée">Page protégée</h2>
 <p>Créer une page se fait en quatre étapes:</p>
 <ol type="1">
@@ -301,36 +306,49 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb22-20"><a href="#cb22-20" aria-hidden="true"></a>    <span class="co">#Fonction login appelée lors de la soumission du formulaire (POST sur /login)</span></span>
 <span id="cb22-21"><a href="#cb22-21" aria-hidden="true"></a>    <span class="kw">def</span> login(conn, params) <span class="kw">do</span></span>
 <span id="cb22-22"><a href="#cb22-22" aria-hidden="true"></a></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true"></a>        <span class="co">#Vérifie le login/mot de passe dans la base de données</span></span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true"></a>        %{<span class="st">&quot;username&quot;</span> <span class="op">=&gt;</span> username, <span class="st">&quot;password&quot;</span> <span class="op">=&gt;</span> password} <span class="op">=</span> params</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true"></a>        current_user <span class="op">=</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span><span class="cn">User</span></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true"></a>                       <span class="op">|&gt;</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Repo</span><span class="op">.</span>get_by(<span class="va">username:</span> username, <span class="va">password:</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span>hash_password(password))</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true"></a></span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true"></a>        <span class="co">#Si aucun utilisateur n&#39;a été trouvé, on affiche le message d&#39;erreur</span></span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true"></a>        <span class="cf">if</span> is_nil(current_user) <span class="kw">do</span></span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true"></a>            conn</span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true"></a>            <span class="op">|&gt;</span> put_flash(<span class="va">:error</span>, <span class="st">&quot;Nom d&#39;utilisateur ou mot de passe incorrect.&quot;</span>)</span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true"></a>            <span class="op">|&gt;</span> render(<span class="st">&quot;login.html&quot;</span>)</span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true"></a>        </span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true"></a>        <span class="co">#Sinon on stock son ID en session et on redirige vers la page protégée</span></span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true"></a>        <span class="cf">else</span></span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true"></a>            conn</span>
-<span id="cb22-37"><a href="#cb22-37" aria-hidden="true"></a>            <span class="op">|&gt;</span> put_session(<span class="va">:user_id</span>, current_user<span class="op">.</span>id)</span>
-<span id="cb22-38"><a href="#cb22-38" aria-hidden="true"></a>            <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>hello_path(conn, <span class="va">:index</span>))</span>
-<span id="cb22-39"><a href="#cb22-39" aria-hidden="true"></a>            <span class="op">|&gt;</span> halt()</span>
-<span id="cb22-40"><a href="#cb22-40" aria-hidden="true"></a>        <span class="kw">end</span></span>
-<span id="cb22-41"><a href="#cb22-41" aria-hidden="true"></a>    <span class="kw">end</span></span>
-<span id="cb22-42"><a href="#cb22-42" aria-hidden="true"></a></span>
-<span id="cb22-43"><a href="#cb22-43" aria-hidden="true"></a></span>
-<span id="cb22-44"><a href="#cb22-44" aria-hidden="true"></a>    <span class="co">#Fonction authentication appelée lors de la déconnexion (GET sur /logout)</span></span>
-<span id="cb22-45"><a href="#cb22-45" aria-hidden="true"></a>    <span class="kw">def</span> logout(conn, _params) <span class="kw">do</span></span>
-<span id="cb22-46"><a href="#cb22-46" aria-hidden="true"></a>        conn</span>
-<span id="cb22-47"><a href="#cb22-47" aria-hidden="true"></a>        <span class="op">|&gt;</span> clear_session()</span>
-<span id="cb22-48"><a href="#cb22-48" aria-hidden="true"></a>        <span class="op">|&gt;</span> put_flash(<span class="va">:info</span>, <span class="st">&quot;Vous êtes déconnecté.&quot;</span>)</span>
-<span id="cb22-49"><a href="#cb22-49" aria-hidden="true"></a>        <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>authentication_path(conn, <span class="va">:index</span>))</span>
-<span id="cb22-50"><a href="#cb22-50" aria-hidden="true"></a>        <span class="op">|&gt;</span> halt()</span>
-<span id="cb22-51"><a href="#cb22-51" aria-hidden="true"></a>    <span class="kw">end</span></span>
-<span id="cb22-52"><a href="#cb22-52" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true"></a></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true"></a>        <span class="co">#Vérifie que chaque paramètre du formulaire est bien transmis</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true"></a>        with {<span class="va">:ok</span>, username} <span class="op">&lt;-</span> <span class="cn">Map</span><span class="op">.</span>fetch(params, <span class="st">&quot;username&quot;</span>),</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true"></a>             {<span class="va">:ok</span>, password} <span class="op">&lt;-</span> <span class="cn">Map</span><span class="op">.</span>fetch(params, <span class="st">&quot;password&quot;</span>)</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true"></a>        <span class="kw">do</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true"></a></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true"></a>            <span class="co">#Vérifie le login/mot de passe dans la base de données</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true"></a>            current_user <span class="op">=</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span><span class="cn">User</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true"></a>                        <span class="op">|&gt;</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Repo</span><span class="op">.</span>get_by(<span class="va">username:</span> username, <span class="va">password:</span> <span class="cn">AppTest</span><span class="op">.</span><span class="cn">Accounts</span><span class="op">.</span>hash_password(password))</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true"></a></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true"></a>            <span class="co">#Si aucun utilisateur n&#39;a été trouvé, on affiche le message d&#39;erreur</span></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true"></a>            <span class="cf">if</span> is_nil(current_user) <span class="kw">do</span></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true"></a>                conn</span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true"></a>                <span class="op">|&gt;</span> put_flash(<span class="va">:error</span>, <span class="st">&quot;Nom d&#39;utilisateur ou mot de passe incorrect.&quot;</span>)</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true"></a>                <span class="op">|&gt;</span> render(<span class="st">&quot;login.html&quot;</span>)</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true"></a></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true"></a>            <span class="co">#Sinon on stock son ID en session et on redirige vers la page protégée</span></span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true"></a>            <span class="cf">else</span></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true"></a>                conn</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true"></a>                <span class="op">|&gt;</span> put_session(<span class="va">:user_id</span>, current_user<span class="op">.</span>id)</span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true"></a>                <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>hello_path(conn, <span class="va">:index</span>))</span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true"></a>                <span class="op">|&gt;</span> halt()</span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true"></a>            <span class="kw">end</span></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true"></a></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true"></a>        <span class="co">#Si un champ du formulaire est manquant</span></span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true"></a>        <span class="cf">else</span></span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true"></a>            <span class="va">:error</span> <span class="op">-&gt;</span></span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true"></a>                conn</span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true"></a>                <span class="op">|&gt;</span> put_flash(<span class="va">:error</span>, <span class="st">&quot;Nom d&#39;utilisateur ou mot de passe incorrect.&quot;</span>)</span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true"></a>                <span class="op">|&gt;</span> render(<span class="st">&quot;login.html&quot;</span>)</span>
+<span id="cb22-53"><a href="#cb22-53" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb22-54"><a href="#cb22-54" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb22-55"><a href="#cb22-55" aria-hidden="true"></a></span>
+<span id="cb22-56"><a href="#cb22-56" aria-hidden="true"></a></span>
+<span id="cb22-57"><a href="#cb22-57" aria-hidden="true"></a>    <span class="co">#Fonction authentication appelée lors de la déconnexion (GET sur /logout)</span></span>
+<span id="cb22-58"><a href="#cb22-58" aria-hidden="true"></a>    <span class="kw">def</span> logout(conn, _params) <span class="kw">do</span></span>
+<span id="cb22-59"><a href="#cb22-59" aria-hidden="true"></a>        conn</span>
+<span id="cb22-60"><a href="#cb22-60" aria-hidden="true"></a>        <span class="op">|&gt;</span> clear_session()</span>
+<span id="cb22-61"><a href="#cb22-61" aria-hidden="true"></a>        <span class="op">|&gt;</span> put_flash(<span class="va">:info</span>, <span class="st">&quot;Vous êtes déconnecté.&quot;</span>)</span>
+<span id="cb22-62"><a href="#cb22-62" aria-hidden="true"></a>        <span class="op">|&gt;</span> redirect(<span class="va">to:</span> <span class="cn">Routes</span><span class="op">.</span>authentication_path(conn, <span class="va">:index</span>))</span>
+<span id="cb22-63"><a href="#cb22-63" aria-hidden="true"></a>        <span class="op">|&gt;</span> halt()</span>
+<span id="cb22-64"><a href="#cb22-64" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb22-65"><a href="#cb22-65" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
 <p>Créer une vue <code>AuthenticationView</code> dans <code>lib/app_test_web/views/authentication_view.ex</code></p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">AppTestWeb</span><span class="op">.</span><span class="cn">AuthenticationView</span> <span class="kw">do</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>    <span class="im">use</span> <span class="cn">AppTestWeb</span>, <span class="va">:view</span></span>

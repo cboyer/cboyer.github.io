@@ -98,7 +98,7 @@ defp logged?(conn) do
 end
 ```
 
-> Note: le choix de SHA256 pour `hash_password/1` permet de se passer de librairies externes (cas de Bcrypt). Il est également possible de combiner plus méthodes de hashage (plusieurs passe) pour renforcer la sécurité.
+> Note: le choix de SHA256 pour `hash_password/1` permet de se passer de librairies externes (cas de Bcrypt). Il est également possible de combiner plusieurs méthodes de hashage (plusieurs passe) pour renforcer la sécurité.
 
 Démarrer l'application en mode interactif avec iEX
 ```Bash
@@ -138,18 +138,22 @@ Habituellement le mécanisme d'authentification consiste à:
 
 
 Phoenix conserve par défaut les données de session en clair dans un cookie `_app_test_key` avec `put_session/3`. 
-La configuration des cookies s'effectue dans le fichier `lib/process_doc_web/endpoint.ex`:
+Définir/vérifier `secret_key_base` dans `config/config.exs` (générée aléatoirement à la création du projet).
+Activer le chiffrement des cookies avec `:encryption_salt` dans `@session_options` du fichier `lib/process_doc_web/endpoint.ex`:
 ```Elixir
+# Set :encryption_salt if you would also like to encrypt it.
 @session_options [
   store: :cookie,
   key: "_app_test_key",
-  signing_salt: "Eswl2Dv0"
+  signing_salt: "Eswl2Dv0",
+  encryption_salt: "AjouterLeSaltIci"
 ]
 ```
 
+### Exemple de cookie non chiffré
 
-En n'activant pas le chiffrement du cookie, on s'expose au risque d'un faux cookie contenant un `user_id` qui va nous permettre d'accéder aux pages protégées sans avoir été authentifié au préalable.
-Si on regarde un cookie généré avec `put_session/3`, celui-ci semble chiffré mais il n'en est rien:
+Si le chiffrement n'est pas activé, on s'expose au risque d'un faux cookie contenant un `user_id` qui va nous permettre d'accéder aux pages protégées sans avoir été authentifié au préalable.
+Exemple de cookie généré avec `put_session/3` sans chiffrement:
 ```Elixir
 cookie = "SFMyNTY.g3QAAAACbQAAAAtfY3NyZl90b2tlbm0AAAAYcGRUNzdBQzZJa05BOXo1QlB6V2JWMVJubQAAAAd1c2VyX2lkYQA.OOA1nbXcTc7Hj8ijSuYS4WikxRPeKQZ2y3KvywWdDKE"
 ```
@@ -168,8 +172,8 @@ Ce qui donne:
 %{"_csrf_token" => "pdT77AC6IkNA9z5BPzWbV1Rn", "user_id" => 0}
 ```
 
-Pour éviter cette problématique il faut activer le chiffrement des cookies avec une clé `secret_key_base` configurée dans `config/config.exs`.
-Autrement il est possible de faire appel à `Phoenix.Token.sign` avant d'utiliser `put_session/3`.
+> Note: une autre solution pour éviter cette problématique est d'utiliser `Phoenix.Token.sign` avant d'utiliser `put_session/3`, ou le stockage des sessions en mémoire (ETS).
+
 
 
 
@@ -270,23 +274,36 @@ defmodule AppTestWeb.AuthenticationController do
     #Fonction login appelée lors de la soumission du formulaire (POST sur /login)
     def login(conn, params) do
 
-        #Vérifie le login/mot de passe dans la base de données
-        %{"username" => username, "password" => password} = params
-        current_user = AppTest.Accounts.User
-                       |> AppTest.Repo.get_by(username: username, password: AppTest.Accounts.hash_password(password))
 
-        #Si aucun utilisateur n'a été trouvé, on affiche le message d'erreur
-        if is_nil(current_user) do
-            conn
-            |> put_flash(:error, "Nom d'utilisateur ou mot de passe incorrect.")
-            |> render("login.html")
-        
-        #Sinon on stock son ID en session et on redirige vers la page protégée
+        #Vérifie que chaque paramètre du formulaire est bien transmis
+        with {:ok, username} <- Map.fetch(params, "username"),
+             {:ok, password} <- Map.fetch(params, "password")
+        do
+
+            #Vérifie le login/mot de passe dans la base de données
+            current_user = AppTest.Accounts.User
+                        |> AppTest.Repo.get_by(username: username, password: AppTest.Accounts.hash_password(password))
+
+            #Si aucun utilisateur n'a été trouvé, on affiche le message d'erreur
+            if is_nil(current_user) do
+                conn
+                |> put_flash(:error, "Nom d'utilisateur ou mot de passe incorrect.")
+                |> render("login.html")
+
+            #Sinon on stock son ID en session et on redirige vers la page protégée
+            else
+                conn
+                |> put_session(:user_id, current_user.id)
+                |> redirect(to: Routes.hello_path(conn, :index))
+                |> halt()
+            end
+
+        #Si un champ du formulaire est manquant
         else
-            conn
-            |> put_session(:user_id, current_user.id)
-            |> redirect(to: Routes.hello_path(conn, :index))
-            |> halt()
+            :error ->
+                conn
+                |> put_flash(:error, "Nom d'utilisateur ou mot de passe incorrect.")
+                |> render("login.html")
         end
     end
 
