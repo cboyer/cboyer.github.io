@@ -184,6 +184,9 @@ npm install --prefix assets/</code></pre>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>  <span class="va">pool_size:</span> <span class="dv">10</span></span></code></pre></div>
 <h2 id="création-du-schéma-et-des-ressources-phoenix"><a name="schema"></a>Création du schéma et des ressources Phoenix</h2>
 <p>Phoenix permet d'initialiser la base de données ainsi que tous les éléments nécessaires (controleurs, templates, vues, modèles) pour interragir avec des données (actions CRUD).</p>
+<figure>
+<img src="./schema.svg" alt="" /><figcaption>Schéma de la base de données</figcaption>
+</figure>
 <h3 id="générer-le-schéma-et-les-ressources">Générer le schéma et les ressources:</h3>
 <p>Utiliser des contextes pour regrouper les fonctions générées selon une fonctionnalité de l'application (autentification, etc.) au lieu d'avoir un seul fichier très dense.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="co">#Générer les controleurs, vues, et contextes pour les ressources HTML.</span></span>
@@ -448,15 +451,17 @@ live_dashboard_path  GET     /dashboard/:node/:page                 Phoenix.Live
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>    users <span class="op">=</span> <span class="kw">case</span> <span class="cn">Map</span><span class="op">.</span>fetch(params, <span class="st">&quot;profile&quot;</span>) <span class="kw">do</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>        {<span class="va">:ok</span>, <span class="st">&quot;&quot;</span>} <span class="op">-&gt;</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a>            <span class="cn">ContextUser</span><span class="op">.</span>list_users_with_profile</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a>        {<span class="va">:ok</span>, user_type_filter} <span class="op">-&gt;</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>            <span class="cn">ContextUser</span><span class="op">.</span>list_users_with_profile(user_type_filter)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a>        <span class="va">:error</span> <span class="op">-&gt;</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true"></a>            <span class="cn">ContextUser</span><span class="op">.</span>list_users_with_profile</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true"></a>    <span class="kw">end</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true"></a>  profiles <span class="op">=</span> <span class="cn">TestBd</span><span class="op">.</span><span class="cn">ContextProfile</span><span class="op">.</span>list_profiles</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true"></a>  render(conn, <span class="st">&quot;index.html&quot;</span>, <span class="va">users:</span> users, <span class="va">profiles:</span> profiles)</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>        {<span class="va">:ok</span>, user_type_filter} <span class="op">-&gt;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a>            <span class="cn">ContextUser</span><span class="op">.</span>list_users_with_profile(user_type_filter)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true"></a>        <span class="va">:error</span> <span class="op">-&gt;</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true"></a>            <span class="cn">ContextUser</span><span class="op">.</span>list_users_with_profile</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true"></a>    profiles <span class="op">=</span> <span class="cn">TestBd</span><span class="op">.</span><span class="cn">ContextProfile</span><span class="op">.</span>list_profiles</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true"></a>    render(conn, <span class="st">&quot;index.html&quot;</span>, <span class="va">users:</span> users, <span class="va">profiles:</span> profiles)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
 <p>Ajouter un formulaire avec un menu déroulant <code>select</code> dans le template <code>lib/test_bd_web/templates/user/index.html.eex</code> qui va recevoir la liste des profils <code>@profiles</code> et transmettre au controleur <code>params</code> via une requête GET:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="op">&lt;%=</span> form_for <span class="ot">@conn</span>, <span class="cn">Routes</span><span class="op">.</span>user_path(<span class="ot">@conn</span>, <span class="va">:index</span>), [<span class="va">method:</span> <span class="va">:get</span>], <span class="kw">fn</span> f <span class="op">-&gt;</span> %<span class="op">&gt;</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>  <span class="op">&lt;%=</span> select f, <span class="va">:profile</span>, <span class="cn">Enum</span><span class="op">.</span>map(<span class="ot">@profiles</span>, <span class="op">&amp;</span>{<span class="op">&amp;</span><span class="dv">1</span><span class="op">.</span>profile, <span class="op">&amp;</span><span class="dv">1</span><span class="op">.</span>profile}), <span class="va">prompt:</span> <span class="st">&quot;Filtrer par profil&quot;</span>, <span class="va">onchange:</span> <span class="st">&quot;this.form.submit();&quot;</span>, <span class="va">class:</span> <span class="st">&quot;form-control&quot;</span> %<span class="op">&gt;</span></span>

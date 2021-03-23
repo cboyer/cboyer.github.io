@@ -101,6 +101,8 @@ config :test_bd, TestBd.Repo,
 
 Phoenix permet d'initialiser la base de données ainsi que tous les éléments nécessaires (controleurs, templates, vues, modèles) pour interragir avec des données (actions CRUD).
 
+![Schéma de la base de données](./schema.svg)
+
 ### Générer le schéma et les ressources:
 Utiliser des contextes pour regrouper les fonctions générées selon une fonctionnalité de l'application (autentification, etc.) au lieu d'avoir un seul fichier très dense.
 
@@ -428,14 +430,16 @@ def index(conn, params) do
     users = case Map.fetch(params, "profile") do
         {:ok, ""} ->
             ContextUser.list_users_with_profile
+
         {:ok, user_type_filter} ->
             ContextUser.list_users_with_profile(user_type_filter)
+
         :error ->
             ContextUser.list_users_with_profile
     end
 
-  profiles = TestBd.ContextProfile.list_profiles
-  render(conn, "index.html", users: users, profiles: profiles)
+    profiles = TestBd.ContextProfile.list_profiles
+    render(conn, "index.html", users: users, profiles: profiles)
 end
 ```
 

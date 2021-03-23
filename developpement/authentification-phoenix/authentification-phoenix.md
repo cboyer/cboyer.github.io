@@ -77,8 +77,7 @@ Pour ne pas stocker les mot de passe en clair nous allons utiliser une fonction 
 Ajouter une fonction de hashage `hash_password/1` dans le contrôleur `Accounts`, `lib/app_test/accounts.ex`.
 Également ajouter une fonction `logged?/1` pour vérifier si l'utilisateur est connecté en vérifiant la présence de son ID en session:
 ```Elixir
-def hash_password(password) when is_nil(password), do: ""
-def hash_password(password) when password == "",   do: ""
+def hash_password(password) when is_nil(password) or password == "", do: ""
 def hash_password(password) do
     :crypto.hash(:sha256, password)
     |> Base.encode16()
