@@ -60,7 +60,7 @@
 <!-- profiles -->
 <g id="node5" class="node">
 <title>profiles</title>
-<g id="a_node5"><a xlink:title="Contient les domaines: élément racine d&#39;une arborescence ProcessDoc. Utilisé pour définir les clients.">
+<g id="a_node5"><a xlink:title="Contient les profils.">
 <polygon fill="none" stroke="black" points="376,-126 232,-126 232,-90 376,-90 376,-126"/>
 <text text-anchor="start" x="274" y="-105.9" font-family="Times-Roman" font-size="12.00"> </text>
 <text text-anchor="start" x="278" y="-105.9" font-family="Times-Roman" font-weight="bold" font-size="12.00">profiles</text>

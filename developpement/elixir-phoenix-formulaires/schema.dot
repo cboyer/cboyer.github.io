@@ -27,7 +27,7 @@ subgraph cluster_users {
 }
 
 subgraph cluster_profiles {
-    "profiles" [label = < <B>profiles</B> > shape = "box" width = 2 tooltip="Contient les domaines: élément racine d'une arborescence ProcessDoc. Utilisé pour définir les clients."];
+    "profiles" [label = < <B>profiles</B> > shape = "box" width = 2 tooltip="Contient les profils."];
     "profiles.id" [label = "id"];
     "profiles.profile" [label = "profile"];
 }
