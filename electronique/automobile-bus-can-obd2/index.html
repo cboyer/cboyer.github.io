@@ -233,8 +233,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true"></a>}</span></code></pre></div>
 <p>Notons que la fonction <code>can.sendFrame()</code> pour récupérer le régime moteur <code>0x0C</code> est exécutée à la réception de la température de l'huile moteur <code>0x5C</code> car l'exécuter dans <code>tick()</code> directement à la suite de l'autre <code>can.sendFrame()</code> ne nous permet pas d'obtenir une réponse de l'ECU, probablement car il faut un délais entre les deux.</p>
 <p>Le réel intérêt d'utiliser l'interface de scripting est de pouvoir interagir avec l'ECU à la manière des outils du constructeur: par exemple la reprogrammation de l'ECU passe par une méthode d'authentification challenge-response suivie l'envoie d'octets. D'autres exemples sont disponibles <a href="https://github.com/collin80/SavvyCAN/tree/master/examples">ici</a>.</p>
-<h2 id="le-cas-subaru-impreza-2015">Le cas Subaru Impreza 2015</h2>
-<p>Sur le bus d'un Subaru Impreza 2015 beaucoup de messages sont envoyés à une fréquence élevée sans même que la clé de contact soit entrée:</p>
+<h2 id="le-cas-subaru">Le cas Subaru</h2>
+<p>Sur le bus d'une Subaru beaucoup de messages sont envoyés à une fréquence élevée sans même que la clé de contact soit entrée:</p>
 <table>
 <thead>
 <tr class="header">

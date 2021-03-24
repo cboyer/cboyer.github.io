@@ -117,9 +117,9 @@ Le réel intérêt d'utiliser l'interface de scripting est de pouvoir interagir 
 D'autres exemples sont disponibles [ici](https://github.com/collin80/SavvyCAN/tree/master/examples).
 
 
-## Le cas Subaru Impreza 2015
+## Le cas Subaru
 
-Sur le bus d'un Subaru Impreza 2015 beaucoup de messages sont envoyés à une fréquence élevée sans même que la clé de contact soit entrée:
+Sur le bus d'une Subaru beaucoup de messages sont envoyés à une fréquence élevée sans même que la clé de contact soit entrée:
 
 Time Stamp|ID|Extended|Dir|Bus|LEN|D1|D2|D3|D4|D5|D6|D7|D8
 :-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:

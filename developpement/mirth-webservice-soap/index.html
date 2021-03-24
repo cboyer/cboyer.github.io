@@ -168,7 +168,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  <span class="kw">&lt;soapenv:Header/&gt;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  <span class="kw">&lt;soapenv:Body&gt;</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    <span class="kw">&lt;ws:acceptMessage&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>      <span class="kw">&lt;arg0&gt;</span>test cyril<span class="kw">&lt;/arg0&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>      <span class="kw">&lt;arg0&gt;</span>test !!<span class="kw">&lt;/arg0&gt;</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    <span class="kw">&lt;/ws:acceptMessage&gt;</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>  <span class="kw">&lt;/soapenv:Body&gt;</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="kw">&lt;/soapenv:Envelope&gt;</span></span></code></pre></div>
@@ -180,7 +180,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>  <span class="kw">&lt;SOAP-ENV:Header&gt;&lt;/SOAP-ENV:Header&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>  <span class="kw">&lt;S:Body&gt;</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="kw">&lt;ns2:acceptMessageResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span>test cyril<span class="kw">&lt;/return&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span>test !!<span class="kw">&lt;/return&gt;</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    <span class="kw">&lt;/ns2:acceptMessageResponse&gt;</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>  <span class="kw">&lt;/S:Body&gt;</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="kw">&lt;/S:Envelope&gt;</span></span></code></pre></div>
@@ -221,13 +221,10 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">null</span>;</span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true"></a>  }</span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true"></a>}</span></code></pre></div>
-<p>Il faut bien utiliser <code>package com.mirth.connect.connectors.ws;</code> pour étendre la classe <code>AcceptMessage</code> qui est dans <code>com.mirth.connect.connectors.ws</code> sans quoi le web service retournera l'erreur: &gt; Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</p>
+<p>Il faut bien utiliser <code>package com.mirth.connect.connectors.ws;</code> pour étendre la classe <code>AcceptMessage</code> qui est dans <code>com.mirth.connect.connectors.ws</code> sans quoi le web service retournera l'erreur: "<em>Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</em>"</p>
 <p>Il est possible de définir le targetNamespace (par défaut sa valeur est <code>http://ws.connectors.connect.mirth.com/</code>), le serviceName et le portName en remplaçant l'annotation <code>@WebService</code> par:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="at">@WebService</span>(portName = <span class="st">&quot;SDDCwsPort&quot;</span>, serviceName = <span class="st">&quot;SDDCws&quot;</span>, targetNamespace = <span class="st">&quot;https://monurl.qc.ca/monservice&quot;</span>)</span></code></pre></div>
-<p>La requête SOAP devra mentionner le bon targetNamespace (<code>xmlns:ws="https://monurl.qc.ca/monservice"</code>) dans l'enveloppe sinon nous obtiendrons l'erreur:</p>
-<blockquote>
-<p>Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</p>
-</blockquote>
+<p>La requête SOAP devra mentionner le bon targetNamespace (<code>xmlns:ws="https://monurl.qc.ca/monservice"</code>) dans l'enveloppe sinon nous obtiendrons l'erreur: "<em>Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</em>"</p>
 <h3 id="compilation-de-la-classe">Compilation de la classe</h3>
 <pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java -cp &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;</code></pre>
 <p><code>ws-server.jar</code> est obligatoire pour étendre <code>AcceptMessage</code> et <code>donkey-server.jar</code> nécessaire si on utilise <code>webServiceReceiver.processData</code>.</p>
@@ -252,7 +249,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>  <span class="kw">&lt;soapenv:Header/&gt;</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>  <span class="kw">&lt;soapenv:Body&gt;</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>    <span class="kw">&lt;ws:hello&gt;</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>      <span class="kw">&lt;name&gt;</span>Cyril<span class="kw">&lt;/name&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>      <span class="kw">&lt;name&gt;</span>Test<span class="kw">&lt;/name&gt;</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>    <span class="kw">&lt;/ws:hello&gt;</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>  <span class="kw">&lt;/soapenv:Body&gt;</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a><span class="kw">&lt;/soapenv:Envelope&gt;</span></span></code></pre></div>
@@ -264,7 +261,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>  <span class="kw">&lt;SOAP-ENV:Header&gt;&lt;/SOAP-ENV:Header&gt;</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>  <span class="kw">&lt;S:Body&gt;</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>    <span class="kw">&lt;ns2:helloResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span>Hello Cyril !<span class="kw">&lt;/return&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>      <span class="kw">&lt;return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span>Hello Test !<span class="kw">&lt;/return&gt;</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a>    <span class="kw">&lt;/ns2:helloResponse&gt;</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a>  <span class="kw">&lt;/S:Body&gt;</span></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a><span class="kw">&lt;/S:Envelope&gt;</span></span></code></pre></div>
@@ -425,7 +422,7 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a>  <span class="kw">&lt;soapenv:Body&gt;</span></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a>    <span class="kw">&lt;ws:getPatient&gt;</span></span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a>         <span class="kw">&lt;patseq&gt;</span>mon patseq<span class="kw">&lt;/patseq&gt;</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a>         <span class="kw">&lt;name&gt;</span>Cyril<span class="kw">&lt;/name&gt;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a>         <span class="kw">&lt;name&gt;</span>name<span class="kw">&lt;/name&gt;</span></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true"></a>         <span class="kw">&lt;firstName&gt;</span>firstname<span class="kw">&lt;/firstName&gt;</span></span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true"></a>         <span class="kw">&lt;birthDate&gt;</span>birthdate<span class="kw">&lt;/birthDate&gt;</span></span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true"></a>         <span class="kw">&lt;ramqId&gt;</span>ramqid<span class="kw">&lt;/ramqId&gt;</span></span>

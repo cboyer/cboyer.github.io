@@ -67,7 +67,7 @@ Pour tester le canal nous devons envoyer notre requête SOAP avec la méthode `A
   <soapenv:Header/>
   <soapenv:Body>
     <ws:acceptMessage>
-      <arg0>test cyril</arg0>
+      <arg0>test !!</arg0>
     </ws:acceptMessage>
   </soapenv:Body>
 </soapenv:Envelope>
@@ -89,7 +89,7 @@ Le canal nous retourne alors:
   <SOAP-ENV:Header></SOAP-ENV:Header>
   <S:Body>
     <ns2:acceptMessageResponse xmlns:ns2="http://ws.connectors.connect.mirth.com/">
-      <return xmlns="">test cyril</return>
+      <return xmlns="">test !!</return>
     </ns2:acceptMessageResponse>
   </S:Body>
 </S:Envelope>
@@ -143,8 +143,7 @@ public class SDDCws extends AcceptMessage {
 ```
 
 
-Il faut bien utiliser `package com.mirth.connect.connectors.ws;` pour étendre la classe `AcceptMessage` qui est dans `com.mirth.connect.connectors.ws` sans quoi le web service retournera l'erreur:
-> Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello
+Il faut bien utiliser `package com.mirth.connect.connectors.ws;` pour étendre la classe `AcceptMessage` qui est dans `com.mirth.connect.connectors.ws` sans quoi le web service retournera l'erreur: "*Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello*"
 
 
 Il est possible de définir le targetNamespace (par défaut sa valeur est `http://ws.connectors.connect.mirth.com/`), le serviceName et le portName en remplaçant l'annotation `@WebService` par:
@@ -154,9 +153,7 @@ Il est possible de définir le targetNamespace (par défaut sa valeur est `http:
 ```
 
 
-La requête SOAP devra mentionner le bon targetNamespace (`xmlns:ws="https://monurl.qc.ca/monservice"`) dans l'enveloppe sinon nous obtiendrons l'erreur:
-
-> Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello
+La requête SOAP devra mentionner le bon targetNamespace (`xmlns:ws="https://monurl.qc.ca/monservice"`) dans l'enveloppe sinon nous obtiendrons l'erreur: "*Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello*"
 
 
 ### Compilation de la classe
@@ -209,7 +206,7 @@ Le fichier soap.xml à envoyer avec curl:
   <soapenv:Header/>
   <soapenv:Body>
     <ws:hello>
-      <name>Cyril</name>
+      <name>Test</name>
     </ws:hello>
   </soapenv:Body>
 </soapenv:Envelope>
@@ -231,7 +228,7 @@ Le canal nous répond alors:
   <SOAP-ENV:Header></SOAP-ENV:Header>
   <S:Body>
     <ns2:helloResponse xmlns:ns2="http://ws.connectors.connect.mirth.com/">
-      <return xmlns="">Hello Cyril !</return>
+      <return xmlns="">Hello Test !</return>
     </ns2:helloResponse>
   </S:Body>
 </S:Envelope>
@@ -427,7 +424,7 @@ La requête SOAP (fichier `soap.xml`):
   <soapenv:Body>
     <ws:getPatient>
 		 <patseq>mon patseq</patseq>
-		 <name>Cyril</name>
+		 <name>name</name>
 		 <firstName>firstname</firstName>
 		 <birthDate>birthdate</birthDate>
 		 <ramqId>ramqid</ramqId>
