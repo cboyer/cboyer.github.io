@@ -495,9 +495,14 @@ live_dashboard_path  GET     /dashboard/:node/:page                 Phoenix.Live
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true"></a>        <span class="va">join:</span> p <span class="kw">in</span> <span class="cn">TestBd</span><span class="op">.</span><span class="cn">ContextProfile</span><span class="op">.</span><span class="cn">Profile</span>, <span class="va">on:</span> u<span class="op">.</span>profile_id <span class="op">==</span> p<span class="op">.</span>id,</span>
 <span id="cb25-18"><a href="#cb25-18" aria-hidden="true"></a>        <span class="va">where:</span> p<span class="op">.</span>profile <span class="op">==</span> <span class="op">^</span>profile,</span>
 <span id="cb25-19"><a href="#cb25-19" aria-hidden="true"></a>        <span class="va">order_by:</span> [<span class="va">asc:</span> <span class="va">:name</span>],</span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true"></a>        <span class="va">select:</span> %<span class="cn">User</span>{<span class="va">id:</span> u<span class="op">.</span>id, <span class="va">name:</span> u<span class="op">.</span>name, <span class="va">profile:</span> %{<span class="va">profile:</span> p<span class="op">.</span>profile, <span class="va">profile_id:</span> p<span class="op">.</span>id}}</span></code></pre></div>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true"></a>        <span class="va">select:</span> %{<span class="va">id:</span> u<span class="op">.</span>id, <span class="va">name:</span> u<span class="op">.</span>name, <span class="va">profile:</span> %{<span class="va">profile:</span> p<span class="op">.</span>profile, <span class="va">profile_id:</span> p<span class="op">.</span>id}}</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true"></a>        </span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true"></a>        <span class="co">#Alternatives pour récupérer une structure %User{}:</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true"></a>        <span class="co">#select: %User{id: u.id, name: u.name, profile: %{profile: p.profile, profile_id: p.id}}</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true"></a>        <span class="co">#select: [:id, :name, p: [:id, :profile]]</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true"></a>        </span></code></pre></div>
 <blockquote>
-<p>Note: il est possible de structurer les données au besoin avec <code>select</code>. En utilisant <code>%User{}</code> nous aurons toutes les clés qui lui sont propres: celles non utilisées auront <code>nil</code> comme valeur.</p>
+<p>Note: en utilisant la structure <code>%User{}</code> dans le <code>select</code> nous obtenons tous ses champs. Ceux non précisés dans le <code>select</code> seront présents avec la valeur <code>nil</code>. En revanche une clé inconnue (désignant une colonne ne figurant pas dans la table) provoquera une erreur car la structure ne peut être étendue directement. Une autre façon de faire est d'utiliser une <code>map</code> avec les clés souhaitées. Un <code>preload</code> effectué sans <code>join</code> préalable entrainera une requête supplémentaire puis l'assemblage les données (moins performant).</p>
 </blockquote>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>

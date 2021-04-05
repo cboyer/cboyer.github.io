@@ -485,10 +485,17 @@ query = from u in User,
         join: p in TestBd.ContextProfile.Profile, on: u.profile_id == p.id,
         where: p.profile == ^profile,
         order_by: [asc: :name],
-        select: %User{id: u.id, name: u.name, profile: %{profile: p.profile, profile_id: p.id}}
+        select: %{id: u.id, name: u.name, profile: %{profile: p.profile, profile_id: p.id}}
+        
+        #Alternatives pour récupérer une structure %User{}:
+        #select: %User{id: u.id, name: u.name, profile: %{profile: p.profile, profile_id: p.id}}
+        #select: [:id, :name, p: [:id, :profile]]
+        
 ```
 
-> Note: il est possible de structurer les données au besoin avec `select`. En utilisant `%User{}` nous aurons toutes les clés qui lui sont propres: celles non utilisées auront `nil` comme valeur.
+> Note: en utilisant la structure `%User{}` dans le `select` nous obtenons tous ses champs. Ceux non précisés dans le `select` seront présents avec la valeur `nil`. En revanche une clé inconnue (désignant une colonne ne figurant pas dans la table) provoquera une erreur car la structure ne peut être étendue directement.
+> Une autre façon de faire est d'utiliser une `map` avec les clés souhaitées.
+> Un `preload` effectué sans `join` préalable entrainera une requête supplémentaire puis l'assemblage les données (moins performant).
 
 
 
