@@ -3,12 +3,22 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2021-04-05T19:06:28-04:00</updated>
+    <updated>2021-04-25T19:37:19-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
     <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <entry>
+        <title>Elixir/Phoenix: fenêtre modale avec LiveComponent et hook JavaScript</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-phoenix-modal/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:b30e715e-6e30-5929-8b54-9eee7b402f14</id>
+        <published>2021-04-25T17:59:11-04:00</published>
+        <updated>2021-04-25T17:59:11-04:00</updated>
+        <summary>Utiliser un LiveComponent et un hook JavaScript pour ouvrir une fenêtre modale.</summary>
+    </entry>
     <entry>
         <title>Authentification avec Phoenix</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
