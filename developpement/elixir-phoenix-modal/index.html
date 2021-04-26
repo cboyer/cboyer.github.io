@@ -125,7 +125,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <h1 class="title">Elixir/Phoenix: fenêtre modale avec LiveComponent et hook JavaScript</h1>
  <small class="date">Publié le 2021-04-25</small>
 </header>
-<p>Notre page principale se compose d'une LiveView <code>window_live.ex</code>, d'un LiveComponent <code>modal_component.ex</code>. L'idée est d'utiliser un LiveComponent qui affiche du contenu avec un évènement provenant de <code>window_live.ex</code> et se ferme avec un évènement provenant du client (via un hook JavaScript très simple sans eventHandler).</p>
+<p>Notre page principale se compose d'une LiveView <code>window_live.ex</code>, d'un LiveComponent <code>modal_component.ex</code> statefull. L'idée est d'utiliser un LiveComponent qui affiche du contenu avec un évènement provenant de <code>window_live.ex</code> et se ferme avec un évènement provenant du client (via un hook JavaScript très simple sans eventHandler).</p>
 <p>Ici <code>push_event/3</code> n'est pas utilisé dans le LiveView, ni <code>handleEvent</code> et <code>addEventListener</code> dans le hook JavaScript. En effet nous utilisons <code>updated()</code> qui est exécuté lors d'un rafraîchissement d'un élément du DOM (ici notre LiveComponent qui contient la fenêtre modale). De plus il n'y a pas besoin d'utiliser la propriété CSS <code>display</code>.</p>
 <p>Le LiveView <code>window_live.ex</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">MyAppWeb</span><span class="op">.</span><span class="cn">WindowLive</span> <span class="kw">do</span></span>
@@ -135,7 +135,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="kw">def</span> render(assigns) <span class="kw">do</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>        <span class="op">~</span>L<span class="st">&quot;&quot;&quot;</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="st">            &lt;%= live_component @socket, MyAppWeb.ModalComponent, id: :modal %&gt;</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="st">            &lt;%= link &quot;Ouvrir&quot;, to: &quot;#&quot;, &quot;phx-click&quot;: &quot;openmodal&quot;, &quot;phx-target&quot;: &quot;#modal&quot; %&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="st">            &lt;%= link &quot;Ouvrir&quot;, to: &quot;#&quot;, &quot;phx-click&quot;: &quot;openmodal&quot; %&gt;</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="st">        &quot;&quot;&quot;</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="kw">end</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a></span>
@@ -189,6 +189,9 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>        }</span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a>    <span class="kw">end</span></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<blockquote>
+<p>Note: il est possible d'envoyer l'évènement <code>openmodal</code> vers <code>MyAppWeb.ModalComponent</code> au lieu de <code>MyAppWeb.WindowLive</code> en ajoutant <code>"phx-target": "#modal"</code> dans lien qui génère l'évènement. Ne pas oulier <code>handle_event/3</code> dans <code>MyAppWeb.ModalComponent</code> pour réceptionner l'évènement.</p>
+</blockquote>
 <p>Le hook JavaScript dans <code>assets/js/app.js</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">let</span> Hooks <span class="op">=</span> {}<span class="op">;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>Hooks<span class="op">.</span><span class="at">ModalHook</span> <span class="op">=</span> {</span>

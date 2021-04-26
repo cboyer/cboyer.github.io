@@ -11,7 +11,7 @@ abstract: "Utiliser un LiveComponent et un hook JavaScript pour ouvrir une fenê
 ---
 
 
-Notre page principale se compose d'une LiveView `window_live.ex`, d'un LiveComponent `modal_component.ex`.
+Notre page principale se compose d'une LiveView `window_live.ex`, d'un LiveComponent `modal_component.ex` statefull.
 L'idée est d'utiliser un LiveComponent qui affiche du contenu avec un évènement provenant de `window_live.ex` et se ferme avec un évènement provenant du client (via un hook JavaScript très simple sans eventHandler).
 
 Ici `push_event/3` n'est pas utilisé dans le LiveView,  ni `handleEvent` et `addEventListener` dans le hook JavaScript. En effet nous utilisons `updated()` qui est exécuté lors d'un rafraîchissement d'un élément du DOM (ici notre LiveComponent qui contient la fenêtre modale). De plus il n'y a pas besoin d'utiliser la propriété CSS `display`.
@@ -26,7 +26,7 @@ defmodule MyAppWeb.WindowLive do
     def render(assigns) do
         ~L"""
             <%= live_component @socket, MyAppWeb.ModalComponent, id: :modal %>
-            <%= link "Ouvrir", to: "#", "phx-click": "openmodal", "phx-target": "#modal" %>
+            <%= link "Ouvrir", to: "#", "phx-click": "openmodal" %>
         """
     end
 
@@ -52,6 +52,7 @@ defmodule MyAppWeb.WindowLive do
 
 end
 ```
+
 
 Le LiveComponent `modal_component.ex` qui affiche obligatoirement une `div` dont l'id est `modal` avec `phx-hook="ModalHook"`.
 Il n'y a pas de contenu lorsque socket.assigns.modal == nil.
@@ -85,6 +86,10 @@ defmodule MyAppWeb.ModalComponent do
     end
 end
 ```
+
+> Note: il est possible d'envoyer l'évènement `openmodal` vers `MyAppWeb.ModalComponent` au lieu de `MyAppWeb.WindowLive` en ajoutant `"phx-target": "#modal"` dans lien qui génère l'évènement. 
+> Ne pas oulier `handle_event/3` dans `MyAppWeb.ModalComponent` pour réceptionner l'évènement.
+
 
 Le hook JavaScript dans `assets/js/app.js`:
 ```JavaScript
