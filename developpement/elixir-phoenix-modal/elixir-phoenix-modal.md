@@ -14,7 +14,7 @@ abstract: "Utiliser un LiveComponent et un hook JavaScript pour ouvrir une fenê
 Notre page principale se compose d'une LiveView `window_live.ex`, d'un LiveComponent `modal_component.ex`.
 L'idée est d'utiliser un LiveComponent qui affiche du contenu avec un évènement provenant de `window_live.ex` et se ferme avec un évènement provenant du client (via un hook JavaScript très simple sans eventHandler).
 
-Ici `push_event/3` n'est pas utilisé dans le LiveView,  ni `handleEvent` `addEventListener` dans le hook JavaScript. En effet nous utilisons `updated()` qui est exécuté lors d'un rafraîchissement d'un élément du DOM (ici notre LiveComponent qui contient le fenêtre modale). De plus il n'y a pas besoin d'utiliser la propriété CSS `display`.
+Ici `push_event/3` n'est pas utilisé dans le LiveView,  ni `handleEvent` et `addEventListener` dans le hook JavaScript. En effet nous utilisons `updated()` qui est exécuté lors d'un rafraîchissement d'un élément du DOM (ici notre LiveComponent qui contient la fenêtre modale). De plus il n'y a pas besoin d'utiliser la propriété CSS `display`.
 
 Le LiveView `window_live.ex`:
 
@@ -117,7 +117,7 @@ Hooks.ModalHook = {
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
 ```
 
-La partie CSS à jouter dans `priv/static/css/*` (pensez à inclure le fichier dans le layout `lib/my_app_web/templates/layout/root.html.leex`).
+La partie CSS à jouter dans `priv/static/css/myapp.css` (pensez à inclure le fichier dans le layout `lib/my_app_web/templates/layout/root.html.leex`).
 ```CSS
 .modal {
   position: fixed;
@@ -144,6 +144,7 @@ La partie CSS à jouter dans `priv/static/css/*` (pensez à inclure le fichier d
   float: right;
   font-size: 28px;
   font-weight: bold;
+  line-height:25px;
 }
 
 .close:hover,

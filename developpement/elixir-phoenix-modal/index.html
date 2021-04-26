@@ -126,7 +126,7 @@ code span.wa { color: #bf0303; } /* Warning */
  <small class="date">Publié le 2021-04-25</small>
 </header>
 <p>Notre page principale se compose d'une LiveView <code>window_live.ex</code>, d'un LiveComponent <code>modal_component.ex</code>. L'idée est d'utiliser un LiveComponent qui affiche du contenu avec un évènement provenant de <code>window_live.ex</code> et se ferme avec un évènement provenant du client (via un hook JavaScript très simple sans eventHandler).</p>
-<p>Ici <code>push_event/3</code> n'est pas utilisé dans le LiveView, ni <code>handleEvent</code> <code>addEventListener</code> dans le hook JavaScript. En effet nous utilisons <code>updated()</code> qui est exécuté lors d'un rafraîchissement d'un élément du DOM (ici notre LiveComponent qui contient le fenêtre modale). De plus il n'y a pas besoin d'utiliser la propriété CSS <code>display</code>.</p>
+<p>Ici <code>push_event/3</code> n'est pas utilisé dans le LiveView, ni <code>handleEvent</code> et <code>addEventListener</code> dans le hook JavaScript. En effet nous utilisons <code>updated()</code> qui est exécuté lors d'un rafraîchissement d'un élément du DOM (ici notre LiveComponent qui contient la fenêtre modale). De plus il n'y a pas besoin d'utiliser la propriété CSS <code>display</code>.</p>
 <p>Le LiveView <code>window_live.ex</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">defmodule</span> <span class="cn">MyAppWeb</span><span class="op">.</span><span class="cn">WindowLive</span> <span class="kw">do</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="im">use</span> <span class="cn">MyAppWeb</span>, <span class="va">:live_view</span></span>
@@ -217,7 +217,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a>}</span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true"></a></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true"></a><span class="kw">let</span> liveSocket <span class="op">=</span> <span class="kw">new</span> <span class="fu">LiveSocket</span>(<span class="st">&quot;/live&quot;</span><span class="op">,</span> <span class="bu">Socket</span><span class="op">,</span> {<span class="dt">params</span><span class="op">:</span> {<span class="dt">_csrf_token</span><span class="op">:</span> csrfToken}<span class="op">,</span> <span class="dt">hooks</span><span class="op">:</span> Hooks})</span></code></pre></div>
-<p>La partie CSS à jouter dans <code>priv/static/css/*</code> (pensez à inclure le fichier dans le layout <code>lib/my_app_web/templates/layout/root.html.leex</code>).</p>
+<p>La partie CSS à jouter dans <code>priv/static/css/myapp.css</code> (pensez à inclure le fichier dans le layout <code>lib/my_app_web/templates/layout/root.html.leex</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">.modal</span> {</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  <span class="kw">position</span>: <span class="dv">fixed</span><span class="op">;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>  <span class="kw">z-index</span>: <span class="dv">1</span><span class="op">;</span></span>
@@ -243,14 +243,15 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true"></a>  <span class="kw">float</span>: <span class="dv">right</span><span class="op">;</span></span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true"></a>  <span class="kw">font-size</span>: <span class="dv">28</span><span class="dt">px</span><span class="op">;</span></span>
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true"></a>  <span class="kw">font-weight</span>: <span class="dv">bold</span><span class="op">;</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true"></a>}</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true"></a></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true"></a><span class="fu">.close</span><span class="in">:hover</span><span class="op">,</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true"></a><span class="fu">.close</span><span class="in">:focus</span> {</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true"></a>  <span class="kw">color</span>: <span class="cn">black</span><span class="op">;</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true"></a>  <span class="kw">text-decoration</span>: <span class="dv">none</span><span class="op">;</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true"></a>  <span class="kw">cursor</span>: <span class="dv">pointer</span><span class="op">;</span></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true"></a>} </span></code></pre></div>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true"></a>  <span class="kw">line-height</span>:<span class="dv">25</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true"></a>}</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true"></a><span class="fu">.close</span><span class="in">:hover</span><span class="op">,</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true"></a><span class="fu">.close</span><span class="in">:focus</span> {</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true"></a>  <span class="kw">color</span>: <span class="cn">black</span><span class="op">;</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true"></a>  <span class="kw">text-decoration</span>: <span class="dv">none</span><span class="op">;</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true"></a>  <span class="kw">cursor</span>: <span class="dv">pointer</span><span class="op">;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true"></a>} </span></code></pre></div>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://www.w3schools.com/howto/howto_css_modals.asp">Fenêtre modale avec CSS/JavaScript</a></li>
