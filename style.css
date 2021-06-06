@@ -1,11 +1,8 @@
 body { font: 400 1.1em/1.3 Helvetica, Arial, sans-serif; color: #333; }
 h1.title { margin-bottom: 0; }
-h2 { margin-top: 3em; }
-h3, h4 { margin-top: 2.5em; }
+h2, h3, h4 { margin-top: 2.5em; }
 table { margin: 2em auto 3em auto; border-spacing: 10px; border-collapse: collapse; font-size: 0.8em; }
 th, td { border: 1px solid #dfe2e5; padding: 5px; padding: 3px 15px !important;  }
-a { color: #4183C4; text-decoration: none; }
-a:hover { text-decoration:underline; }
 p { text-rendering: optimizeLegibility; text-align: justify; }
 li code, p code { padding: 2px 5px; font-size: 1.1em; background: #eee; }
 ul { list-style-type: none; padding-left: 0; line-height: 1.2; }
@@ -13,11 +10,14 @@ ol { padding: 0; list-style: inside decimal; line-height: 1.1; }
 blockquote {margin: 0; border: 0 solid currentColor; border-left-width: 4px; padding-left: 1.5rem; margin-top: 1.5rem; margin-bottom: 5rem; }
 figure { margin: 10px 0 2.5em 0; text-align: center; }
 figcaption { font-style: italic; font-size: 0.8em; }
-.sourceCode, .console, .text { margin: 0 0 2.5em 0 !important; }
-pre.sourceCode { margin-bottom: 0 !important;}
-.button { width: 22px; }
+a { color: #4183C4; text-decoration: none; }
+a:hover { text-decoration:underline; }
 a.github, a.search, a.rss { fill: #000000; text-decoration: none; }
 svg:hover,path:hover { fill: #808080; pointer-events: all; }
+pre.sourceCode { margin-bottom: 0 !important;}
+.sourceCode, .console, .text, .text09em { margin: 0 0 2.5em 0 !important; }
+.text09em { font-size: 0.9em; }
+.button { width: 22px; }
 #links{ float: right; width: 80px; padding-top: 10px; text-align: right; height: 25px; }
 #footer { margin: 5em 0 5em 0; text-align: center; font-size: 0.8em; }
 #container, #header { margin: 10px auto 3em auto; max-width: 920px; }

@@ -3,12 +3,22 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2021-05-12T17:49:27-04:00</updated>
+    <updated>2021-06-05T23:01:01-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
     <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <entry>
+        <title>Traitement de données avec le langage Julia</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/julia/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:402a29c0-6b71-5295-b12a-100fc5fac300</id>
+        <published>2021-06-05T22:33:11-04:00</published>
+        <updated>2021-06-05T22:33:11-04:00</updated>
+        <summary>Quelques opérations avec le langage Julia.</summary>
+    </entry>
     <entry>
         <title>Elixir/Phoenix: fenêtre modale avec LiveComponent et hook JavaScript</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
