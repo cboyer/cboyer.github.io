@@ -384,3 +384,4 @@ sync
 
 - [Arbre externe](https://github.com/maximeh/buildroot/blob/master/docs/manual/customize-outside-br.txt)
 - [Exemple d'arbre externe sur Github](https://github.com/m-ka/br-external)
+- [Exemple d'arbre externe pour EBAZ4205](https://github.com/embed-me/ebaz4205_buildroot)
