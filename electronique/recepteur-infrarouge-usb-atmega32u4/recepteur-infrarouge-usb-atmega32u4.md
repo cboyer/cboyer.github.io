@@ -1,7 +1,7 @@
 ---
 title: "Récepteur infrarouge USB avec un ATmega32u4"
 date: "2018-04-20T18:45:18-04:00"
-updated: "2018-11-01T18:08:32-04:00"
+updated: "2021-06-14T16:00:00-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -160,7 +160,141 @@ Dans le cas où votre télécommande n'utiliserai pas les mêmes codes infraroug
 
 ## Limites
 
-Les touches `MEDIA_*` fonctionnent uniquement sur un système Linux, Windows ne les reconnait pas. Ceci n'est donc pas un problème pour les utilisateurs de [LibreELEC](https://libreelec.tv/)/[OpenELEC](https://www.openelec.tv/).
+Les touches `MEDIA_*` fonctionnent uniquement sur un système Linux, Windows et FreeBSD ne les reconnaissent pas. Ceci n'est donc pas un problème pour les utilisateurs de [LibreELEC](https://libreelec.tv/)/[OpenELEC](https://www.openelec.tv/).
+
+## IRremote: passage à la version 3.x
+
+Avec les versions récentes d'IRremote, certaines modifications de la librairie implique une actualisation du programme:
+
+```C
+#include <IRremote.h>
+#include <HID-Project.h>
+
+#define RECV_PIN 9
+
+unsigned long buf;
+unsigned int i = 0;
+
+
+void setup()
+{
+  //Uncomment to enable serial printing of IR codes
+  //Serial.begin(9600); 
+  buf = 0xFFFFFFFF;
+  IrReceiver.begin(RECV_PIN, DISABLE_LED_FEEDBACK);
+}
+
+void loop() {
+  if (IrReceiver.decode()){
+    //Uncomment to enable serial printing of IR codes
+    //Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);
+
+    switch(IrReceiver.decodedIRData.decodedRawData) {
+
+      case 0x33219B:
+        Keyboard.write(KEY_RETURN);
+        break;
+  
+      case 0x3D205B:
+        Keyboard.write(KEY_UP_ARROW);
+        break;
+        
+      case 0x3B209B:
+        Keyboard.write(KEY_RIGHT_ARROW);
+        break;
+        
+      case 0x34217B:
+        Keyboard.write(KEY_DOWN_ARROW);
+        break; 
+
+      case 0x3C207B:
+        Keyboard.write(KEY_LEFT_ARROW);
+        break; 
+
+      case 0x13259B:
+        Keyboard.write(KEY_ESC);
+        break; 
+
+      case 0x5275B:
+        Keyboard.write('z');
+        break; 
+
+      case 0x926DB:
+        Keyboard.write(KEY_PAGE_UP);
+        break;
+
+      case 0x826FB:
+        Keyboard.write(KEY_PAGE_DOWN);
+        break;
+
+      case 0x6FF900:
+        //Keyboard.write(MEDIA_VOL_UP);
+        Keyboard.write('+');
+        break;
+
+      case 0x6BF940:
+        //Keyboard.write(MEDIA_VOLUME_DOWN);
+        Keyboard.write('-');
+        break;
+
+      case 0xFFF000:
+        //Keyboard.write(MEDIA_VOLUME_MUTE);
+        Keyboard.write(KEY_F8);
+        break;
+
+      case 0x16253B:
+        //Keyboard.write(MEDIA_REWIND);
+        Keyboard.write('r');
+        break;
+
+      case 0x17251B:
+        //Keyboard.write(MEDIA_FAST_FORWARD);
+        Keyboard.write('f');
+        break;
+
+      case 0x3A20BB:
+        //Keyboard.write(MEDIA_PAUSE);
+        Keyboard.write(KEY_SPACE);
+        break;
+
+      case 0xC267B:
+        //Keyboard.write(MEDIA_PLAY_PAUSE);
+        Keyboard.write(KEY_SPACE);
+        break;
+
+      case 0xB269B:
+        //Keyboard.write(MEDIA_STOP);
+        Keyboard.write('x');
+        break;
+
+      case 0x37211B:
+        Keyboard.write('i');
+        break;
+
+      case 0x3920DB:
+        Keyboard.write('c');
+        break;
+
+      case 0x1025FB:
+        Keyboard.write('o');
+        break;
+    }
+
+    if (i < 4)
+      delay(200);
+
+    if (IrReceiver.decodedIRData.decodedRawData == buf)
+      i++;
+    else {
+      buf = IrReceiver.decodedIRData.decodedRawData;
+      i = 0;
+    }
+    
+    IrReceiver.resume();
+  }
+}
+```
+
 
 ## Liens complémentaires
 

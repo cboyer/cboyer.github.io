@@ -15,9 +15,9 @@
   <meta property="og:description" content="Utilisation des fonctions HID du microcontrôleur ATmega32u4 et un capteur infrarouge pour contrôler des systèmes/applications avec une télécommande." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2018-11-01T18:08:32-04:00" />
+  <meta property="og:updated_time" content="2021-06-14T16:00:00-04:00" />
   <meta property="article:published_time" content="2018-04-20T18:45:18-04:00" />
-  <meta property="article:modified_time" content="2018-11-01T18:08:32-04:00" />
+  <meta property="article:modified_time" content="2021-06-14T16:00:00-04:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
@@ -116,7 +116,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h1>Récepteur infrarouge USB avec un ATmega32u4</h1>
- <small class="date">Publié le 2018-04-20, dernière mise à jour: 2018-11-01</small>
+ <small class="date">Publié le 2018-04-20, dernière mise à jour: 2021-06-14</small>
 </header>
 <p>Beaucoup utilisent Kodi comme système multimédia avec leur TV. Que ce soit sur un Raspberry Pi, un mini PC ou bien un laptop, le besoin d'interagir à distance depuis son divan nous amène à considérer l'achat d'une télécommande USB. Bien que la norme HDMI intègre la fonction CEC pour commander des équipements avec la même télécommande, cette fonction n'est pas toujours présente sur les TV et équipement multimédia.</p>
 <p>Voyons comment créer son propre récepteur USB pour télécommande infrarouge avec un microcontrôleur ATmega32u4, un vieux décodeur Vidéotron dont nous allons récupérer le capteur et la télécommande.</p>
@@ -253,7 +253,135 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb1-121"><a href="#cb1-121" aria-hidden="true"></a>}</span></code></pre></div>
 <p>Dans le cas où votre télécommande n'utiliserai pas les mêmes codes infrarouge, décommentez les lignes indiquées pour qu'ils soient affichés dans la console de l'IDE. Remplacez les codes correspondant à la touche clavier voulue (exemple: <code>MEDIA_STOP</code>).</p>
 <h2 id="limites">Limites</h2>
-<p>Les touches <code>MEDIA_*</code> fonctionnent uniquement sur un système Linux, Windows ne les reconnait pas. Ceci n'est donc pas un problème pour les utilisateurs de <a href="https://libreelec.tv/">LibreELEC</a>/<a href="https://www.openelec.tv/">OpenELEC</a>.</p>
+<p>Les touches <code>MEDIA_*</code> fonctionnent uniquement sur un système Linux, Windows et FreeBSD ne les reconnaissent pas. Ceci n'est donc pas un problème pour les utilisateurs de <a href="https://libreelec.tv/">LibreELEC</a>/<a href="https://www.openelec.tv/">OpenELEC</a>.</p>
+<h2 id="irremote-passage-à-la-version-3.x">IRremote: passage à la version 3.x</h2>
+<p>Avec les versions récentes d'IRremote, certaines modifications de la librairie implique une actualisation du programme:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;IRremote.h&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;HID-Project.h&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="pp">#define RECV_PIN 9</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="dt">unsigned</span> <span class="dt">long</span> buf;</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="dt">unsigned</span> <span class="dt">int</span> i = <span class="dv">0</span>;</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="dt">void</span> setup()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>{</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>  <span class="co">//Uncomment to enable serial printing of IR codes</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>  <span class="co">//Serial.begin(9600); </span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>  buf = <span class="bn">0xFFFFFFFF</span>;</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>  IrReceiver.begin(RECV_PIN, DISABLE_LED_FEEDBACK);</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>}</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="dt">void</span> loop() {</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>  <span class="cf">if</span> (IrReceiver.decode()){</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>    <span class="co">//Uncomment to enable serial printing of IR codes</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>    <span class="co">//Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>    <span class="cf">switch</span>(IrReceiver.decodedIRData.decodedRawData) {</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x33219B</span>:</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>        Keyboard.write(KEY_RETURN);</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a>  </span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x3D205B</span>:</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a>        Keyboard.write(KEY_UP_ARROW);</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a>        </span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x3B209B</span>:</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a>        Keyboard.write(KEY_RIGHT_ARROW);</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a>        </span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x34217B</span>:</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a>        Keyboard.write(KEY_DOWN_ARROW);</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a>        <span class="cf">break</span>; </span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x3C207B</span>:</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true"></a>        Keyboard.write(KEY_LEFT_ARROW);</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true"></a>        <span class="cf">break</span>; </span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x13259B</span>:</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true"></a>        Keyboard.write(KEY_ESC);</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true"></a>        <span class="cf">break</span>; </span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x5275B</span>:</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true"></a>        Keyboard.write(<span class="ch">&#39;z&#39;</span>);</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true"></a>        <span class="cf">break</span>; </span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x926DB</span>:</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true"></a>        Keyboard.write(KEY_PAGE_UP);</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true"></a></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x826FB</span>:</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true"></a>        Keyboard.write(KEY_PAGE_DOWN);</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x6FF900</span>:</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true"></a>        <span class="co">//Keyboard.write(MEDIA_VOL_UP);</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true"></a>        Keyboard.write(<span class="ch">&#39;+&#39;</span>);</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x6BF940</span>:</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true"></a>        <span class="co">//Keyboard.write(MEDIA_VOLUME_DOWN);</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true"></a>        Keyboard.write(<span class="ch">&#39;-&#39;</span>);</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true"></a></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0xFFF000</span>:</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true"></a>        <span class="co">//Keyboard.write(MEDIA_VOLUME_MUTE);</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true"></a>        Keyboard.write(KEY_F8);</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x16253B</span>:</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true"></a>        <span class="co">//Keyboard.write(MEDIA_REWIND);</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true"></a>        Keyboard.write(<span class="ch">&#39;r&#39;</span>);</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true"></a></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x17251B</span>:</span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true"></a>        <span class="co">//Keyboard.write(MEDIA_FAST_FORWARD);</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true"></a>        Keyboard.write(<span class="ch">&#39;f&#39;</span>);</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true"></a></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x3A20BB</span>:</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true"></a>        <span class="co">//Keyboard.write(MEDIA_PAUSE);</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true"></a>        Keyboard.write(KEY_SPACE);</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true"></a></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0xC267B</span>:</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true"></a>        <span class="co">//Keyboard.write(MEDIA_PLAY_PAUSE);</span></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true"></a>        Keyboard.write(KEY_SPACE);</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true"></a></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0xB269B</span>:</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true"></a>        <span class="co">//Keyboard.write(MEDIA_STOP);</span></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true"></a>        Keyboard.write(<span class="ch">&#39;x&#39;</span>);</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true"></a></span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x37211B</span>:</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true"></a>        Keyboard.write(<span class="ch">&#39;i&#39;</span>);</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true"></a></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x3920DB</span>:</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true"></a>        Keyboard.write(<span class="ch">&#39;c&#39;</span>);</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true"></a></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true"></a>      <span class="cf">case</span> <span class="bn">0x1025FB</span>:</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true"></a>        Keyboard.write(<span class="ch">&#39;o&#39;</span>);</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true"></a>        <span class="cf">break</span>;</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true"></a>    }</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true"></a></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true"></a>    <span class="cf">if</span> (i &lt; <span class="dv">4</span>)</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true"></a>      delay(<span class="dv">200</span>);</span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true"></a></span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true"></a>    <span class="cf">if</span> (IrReceiver.decodedIRData.decodedRawData == buf)</span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true"></a>      i++;</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true"></a>    <span class="cf">else</span> {</span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true"></a>      buf = IrReceiver.decodedIRData.decodedRawData;</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true"></a>      i = <span class="dv">0</span>;</span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true"></a>    }</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true"></a>    </span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true"></a>    IrReceiver.resume();</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true"></a>  }</span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true"></a>}</span></code></pre></div>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://github.com/z3t0/Arduino-IRremote">https://github.com/z3t0/Arduino-IRremote</a></li>

@@ -200,14 +200,24 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a>    <span class="kw">end</span></span>
 <span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
 <p>Il est possible d'utiliser un module dédié <code>Worker</code> (à implémenter) au lieu d'une fonction pour traiter les données reçues:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">def</span> accept_loop(socket, ctrl_pid) <span class="kw">do</span></span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">def</span> accept_loop(socket) <span class="kw">do</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    with {<span class="va">:ok</span>, client_socket} <span class="op">&lt;-</span> <span class="va">:gen_tcp</span><span class="op">.</span>accept(socket) <span class="kw">do</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>        {<span class="va">:ok</span>, pid} <span class="op">=</span> <span class="cn">GenServer</span><span class="op">.</span>start(<span class="cn">Worker</span>, <span class="va">socket:</span> client_socket)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>        <span class="va">:gen_tcp</span><span class="op">.</span>controlling_process(client_socket, pid)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    <span class="kw">end</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    accept_loop(socket, ctrl_pid)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    accept_loop(socket)</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<h2 id="compilation-et-exécution">Compilation et exécution</h2>
+<p>Pour compiler le module <code>TcpServer</code>:</p>
+<pre class="console"><code>elixirc tcpserver.ex</code></pre>
+<p>Pour l'exécuter avec iEX, depuis le dossier où s'est effectuée la compilation (afin de disposer du fichier compilé <code>Elixir.TcpServer.beam</code>):</p>
+<pre class="console"><code>iex
+TcpServer.start_link()</code></pre>
+<p>Envoyer des données sur <code>localhost:1234</code>:</p>
+<pre class="console"><code>while true ; do  dd if=/dev/zero bs=4M count=1 status=progress &gt; /dev/tcp/localhost/1234  ; done</code></pre>
+<p>Également avec telnet (interactif):</p>
+<pre class="console"><code>telnet localhost 1234</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://openmymind.net/Elegant-TCP-with-Elixir-Part-1-TCP-as-Messages/">Elegant TCP with Elixir</a></li>

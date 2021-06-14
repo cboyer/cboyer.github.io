@@ -106,16 +106,38 @@ end
 
 Il est possible d'utiliser un module dédié `Worker` (à implémenter) au lieu d'une fonction pour traiter les données reçues:
 ```Elixir
-def accept_loop(socket, ctrl_pid) do
+def accept_loop(socket) do
     with {:ok, client_socket} <- :gen_tcp.accept(socket) do
         {:ok, pid} = GenServer.start(Worker, socket: client_socket)
         :gen_tcp.controlling_process(client_socket, pid)
     end
 
-    accept_loop(socket, ctrl_pid)
+    accept_loop(socket)
 end
 ```
 
+## Compilation et exécution
+
+Pour compiler le module `TcpServer`:
+```Console
+elixirc tcpserver.ex
+```
+
+Pour l'exécuter avec iEX, depuis le dossier où s'est effectuée la compilation (afin de disposer du fichier compilé `Elixir.TcpServer.beam`):
+```Console
+iex
+TcpServer.start_link()
+```
+
+Envoyer des données sur `localhost:1234`:
+```Console
+while true ; do  dd if=/dev/zero bs=4M count=1 status=progress > /dev/tcp/localhost/1234  ; done
+```
+
+Également avec telnet (interactif):
+```Console
+telnet localhost 1234
+```
 
 ## Liens complémentaires
 
