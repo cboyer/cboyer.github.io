@@ -95,7 +95,7 @@ defmodule TcpServer do
     def accept_loop(socket) do
         with {:ok, client_socket} <- :gen_tcp.accept(socket) do
             #Défini l'exécution de `recv_loop/1` comme processus qui reçoit les messages
-            recv_pid = spawn_link(__MODULE__, :recv_loop, [client_socket])
+            recv_pid = spawn(__MODULE__, :recv_loop, [client_socket])
             :gen_tcp.controlling_process(client_socket, recv_pid)
         end
 

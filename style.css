@@ -16,7 +16,7 @@ a.github, a.search, a.rss { fill: #000000; text-decoration: none; }
 svg:hover,path:hover { fill: #808080; pointer-events: all; }
 .title { font-size: 2em; font-weight: bold; margin: 20px 0 20px 0; }
 pre.sourceCode { margin-bottom: 0 !important;}
-.sourceCode, .console, .text, .text09em { margin: 0 0 2.5em 0 !important; }
+.sourceCode, .console, .text, .text09em { margin: 0 0 2.5em 0 !important; overflow: auto; }
 .text09em { font-size: 0.9em; }
 .button { width: 22px; }
 #links{ float: right; width: 80px; padding-top: 10px; text-align: right; height: 25px; }

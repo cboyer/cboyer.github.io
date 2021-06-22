@@ -192,7 +192,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a>    <span class="kw">def</span> accept_loop(socket) <span class="kw">do</span></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a>        with {<span class="va">:ok</span>, client_socket} <span class="op">&lt;-</span> <span class="va">:gen_tcp</span><span class="op">.</span>accept(socket) <span class="kw">do</span></span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a>            <span class="co">#Défini l&#39;exécution de `recv_loop/1` comme processus qui reçoit les messages</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a>            recv_pid <span class="op">=</span> spawn_link(__MODULE__, <span class="va">:recv_loop</span>, [client_socket])</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a>            recv_pid <span class="op">=</span> spawn(__MODULE__, <span class="va">:recv_loop</span>, [client_socket])</span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a>            <span class="va">:gen_tcp</span><span class="op">.</span>controlling_process(client_socket, recv_pid)</span>
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a>        <span class="kw">end</span></span>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a></span>
