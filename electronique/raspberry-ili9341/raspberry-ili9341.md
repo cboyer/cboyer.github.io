@@ -12,7 +12,7 @@ abstract: |
 ---
 
 fbcp-ili9341 permet de cloner la sortie HDMI sur un écran doté d'un contrôleur ILI9341 (bus SPI). 
-Il prend en charge le redimmensionnement automatique vers 320x240 pixel au coût d'une consommation CPU accrue. Pour ne pas utiliser cette fonctionnalité et limiter l'utilisation du CPU il faut définir la résolution HDMI à 320x240 en modifiant le fichier `config.txt`:
+Il prend en charge le redimensionnement automatique vers 320x240 pixel au coût d'une consommation CPU accrue. Pour ne pas utiliser cette fonctionnalité et limiter l'utilisation du CPU il faut définir la résolution HDMI à 320x240 en modifiant le fichier `config.txt`:
 
 ```text
 hdmi_group=2
