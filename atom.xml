@@ -3,7 +3,7 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2021-07-22T11:30:15-04:00</updated>
+    <updated>2021-07-23T17:53:42-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
@@ -16,7 +16,7 @@
         <category term="Linux"/>
         <id>urn:uuid:b335a0a7-775f-558a-b4c7-c77280108b9d</id>
         <published>2021-07-22T11:04:34-04:00</published>
-        <updated>2021-07-22T11:04:34-04:00</updated>
+        <updated>2021-07-23T17:53:00-04:00</updated>
         <summary>Développement d'une interface graphique Qt5/QML sur Raspberry Pi 3 avec Buildroot.</summary>
     </entry>
     <entry>

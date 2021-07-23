@@ -1,7 +1,7 @@
 ---
 title: "Interface graphique avec Buildroot, Qt5 et Raspberry Pi 3"
 date: "2021-07-22T11:04:34-04:00"
-updated: "2021-07-22T11:04:34-04:00"
+updated: "2021-07-23T17:53:00-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -42,20 +42,19 @@ Toolchain → Enable WCHAR support (BR2_TOOLCHAIN_BUILDROOT_WCHAR=y)
 Target packages → Hardware handling → rpi-userland (BR2_PACKAGE_RPI_USERLAND=y)
 
 Target packages → Graphic libraries and applications (graphic/text) → Qt5 (BR2_PACKAGE_QT5=y)
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → qt5quickcontrols2 (BR2_PACKAGE_QT5QUICKCONTROLS2=y)
+Target packages → Graphic libraries and applications (graphic/text) → Qt5 → Custom configuration options (BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS [=-skip qtconnectivity -skip qtnetwork -skip qtgamepad -no-feature-vnc -no-feature-accessibility -nomake tests])
 Target packages → Graphic libraries and applications (graphic/text) → Qt5 → eglfs support (BR2_PACKAGE_QT5BASE_EGLFS=y)
 Target packages → Graphic libraries and applications (graphic/text) → Qt5 → Default graphical platform (BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs")
-
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → qt5graphicaleffects (BR2_PACKAGE_QT5GRAPHICALEFFECTS=y)
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → qt5wayland (BR2_PACKAGE_QT5WAYLAND=y)
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → Enable compositor (BR2_PACKAGE_QT5WAYLAND_COMPOSITOR=y)
 ```
 
-Les librairies C `uClibc-ng` et `glibc` fonctionnent avec ces modules Qt5 (`musl` n'a pas été testé) cependant certains packages comme `qt5webengine` nécessitent `glibc`.
+Peuvent être désactivés:
+```text
+Target packages → Graphic libraries and applications (graphic/text) → mesa3d (BR2_PACKAGE_MESA3D=n)
+Target packages → Libraries → Graphics → libdrm (BR2_PACKAGE_LIBDRM=n)
+```
 
-Mesa3d n'est pas nécessaire.
-
-Les packages `qt5graphicaleffects` et `qt5wayland` ainsi que l'option `Enable compositor` ne sont pas obligatoires.
+Les librairies C `uClibc-ng` et `glibc` fonctionnent avec ces modules Qt5 (`musl` n'a pas été testée) cependant certains packages comme `qt5webengine` nécessitent `glibc`.
+D'autres packages comme `qt5quickcontrols2`, `qt5graphicaleffects` et `qt5wayland` peuvent être ajoutés selon les besoins applicatifs (ce qui n'est pas le cas pour notre application de test).
 
 
 Sauvegarde de la configuration Buildroot:
@@ -66,13 +65,14 @@ make savedefconfig BR2_DEFCONFIG=./buildrootqt5.config
 
 ### Configuration du noyau Linux
 
-Pour la configuration du noyau, aucun pilote graphique particulier (comme VC4) n'est nécessaire, il faut veiller à la présence des "Firmware Driver" (présents par défaut):
+Pour la configuration du noyau, aucun pilote graphique particulier (DRM, VC4) n'est nécessaire, il faut veiller à la présence des "Firmware Driver" (présents par défaut):
 ```Bash
 make linux-menuconfig
 ```
 
 ```text
 Firmware Drivers → Raspberry Pi Firmware Driver (RASPBERRYPI_FIRMWARE=y)
+Device Drivers > Graphics support > Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (DRM=n)
 ```
 
 Sauvegarde de la configuration du noyau:
@@ -201,7 +201,7 @@ QPA backends:
     EGLFS Raspberry Pi ................... yes
     EGLFS X11 ............................ no
   LinuxFB ................................ no
-  VNC .................................... yes
+  VNC .................................... no
 ```
 
 Copie de l'image générée vers la carte SD:
@@ -243,25 +243,23 @@ System configuration → Custom scripts to run before creating filesystem images
 System configuration → /dev management (Dynamic using devtmpfs + eudev) (BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y)
 Toolchain → Enable WCHAR support (BR2_TOOLCHAIN_BUILDROOT_WCHAR=y)
 
+Target packages → Libraries → Graphics → libdrm (BR2_PACKAGE_LIBDRM=y)
+Target packages → Libraries → Graphics → libdrm → vc4 (BR2_PACKAGE_LIBDRM_VC4=y)
 Target packages → Graphic libraries and applications (graphic/text) → mesa3d (BR2_PACKAGE_MESA3D=y)
 Target packages → Graphic libraries and applications (graphic/text) → mesa3d → Gallium vc4 driver (BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4=y)
 Target packages → Graphic libraries and applications (graphic/text) → mesa3d → OpenGL ES (BR2_PACKAGE_MESA3D_OPENGL_ES=y)
 
 Target packages → Graphic libraries and applications (graphic/text) → Qt5 (BR2_PACKAGE_QT5=y)
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → qt5quickcontrols2 (BR2_PACKAGE_QT5QUICKCONTROLS2=y)
+Target packages → Graphic libraries and applications (graphic/text) → Qt5 → Custom configuration options (BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS [=-skip qtconnectivity -skip qtnetwork -skip qtgamepad -no-feature-vnc -no-feature-accessibility -nomake tests])
 Target packages → Graphic libraries and applications (graphic/text) → Qt5 → eglfs support (BR2_PACKAGE_QT5BASE_EGLFS=y)
 Target packages → Graphic libraries and applications (graphic/text) → Qt5 → Default graphical platform (BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs")
-
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → qt5graphicaleffects (BR2_PACKAGE_QT5GRAPHICALEFFECTS=y)
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → qt5wayland (BR2_PACKAGE_QT5WAYLAND=y)
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → Enable compositor (BR2_PACKAGE_QT5WAYLAND_COMPOSITOR=y)
 ```
+
+Les packages *mesa3d → OpenGL ES (BR2_PACKAGE_MESA3D_OPENGL_ES=y)* et *rpi-userland (BR2_PACKAGE_RPI_USERLAND=y)* ne peuvent cohabiter pour fournir un support OpenGLES.
 
 Nous utiliserons un script post-build `output/post-build-config.sh` en plus de celui par défaut `board/raspberrypi3/post-build.sh`. Ils doivent être séparés par un espace.
 
 L'utilisation de udev (eudev) est util pour la détection automatique des périphériques et charger les modules requis ce qui permettra de rendre disponible le GPU dans `/dev/dri/card0`. Il est possible de se passer de udev en chargeant les modules requis manuellement (cas exposé plus tard).
-
-Les packages *mesa3d → OpenGL ES (BR2_PACKAGE_MESA3D_OPENGL_ES=y)* et *rpi-userland (BR2_PACKAGE_RPI_USERLAND=y)* ne peuvent cohabiter pour fournir un support OpenGLES.
 
 Pas besoin d'inclure mesa3d → Gallium v3d driver.
 
@@ -372,7 +370,7 @@ QPA backends:
     EGLFS Raspberry Pi ................... no
     EGLFS X11 ............................ no
   LinuxFB ................................ no
-  VNC .................................... yes
+  VNC .................................... no
 ```
 
 
@@ -453,3 +451,4 @@ Résultat dans `dmesg`:
 - [https://doc.qt.io/qt-5/inputs-linux-device.html](https://doc.qt.io/qt-5/inputs-linux-device.html)
 - [https://doc.qt.io/archives/qt-5.6/embedded-linux.html](https://doc.qt.io/archives/qt-5.6/embedded-linux.html)
 - [https://doc.qt.io/qt-5/qtquickcontrols-index.html#versions](https://doc.qt.io/qt-5/qtquickcontrols-index.html#versions)
+- [https://doc.qt.io/qt-5/configure-options.html](https://doc.qt.io/qt-5/configure-options.html)
