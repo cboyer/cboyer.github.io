@@ -144,13 +144,14 @@ Target packages → Graphic libraries and applications (graphic/text) → Qt5 �
 <pre class="text"><code>Target packages → Graphic libraries and applications (graphic/text) → mesa3d (BR2_PACKAGE_MESA3D=n)
 Target packages → Libraries → Graphics → libdrm (BR2_PACKAGE_LIBDRM=n)</code></pre>
 <p>Les librairies C <code>uClibc-ng</code> et <code>glibc</code> fonctionnent avec ces modules Qt5 (<code>musl</code> n'a pas été testée) cependant certains packages comme <code>qt5webengine</code> nécessitent <code>glibc</code>. D'autres packages comme <code>qt5quickcontrols2</code>, <code>qt5graphicaleffects</code> et <code>qt5wayland</code> peuvent être ajoutés selon les besoins applicatifs (ce qui n'est pas le cas pour notre application de test).</p>
+<p>Les options de compilation pour Qt peuvent être modifiées selon les besoins. Exemple: <em>-skip qtconnectivity -skip qtdoc -skip qtandroidextras -skip qtnetworkauth -skip qtpurchasing -skip qtgamepad -no-feature-vnc -no-feature-accessibility -no-feature udpsocket -no-feature-networkproxy -no-feature-socks5 -no-feature-networkdiskcache -no-feature-testlib -nomake tests</em>.</p>
 <p>Sauvegarde de la configuration Buildroot:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildrootqt5.config</span></code></pre></div>
 <h3 id="configuration-du-noyau-linux">Configuration du noyau Linux</h3>
 <p>Pour la configuration du noyau, aucun pilote graphique particulier (DRM, VC4) n'est nécessaire, il faut veiller à la présence des "Firmware Driver" (présents par défaut):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="fu">make</span> linux-menuconfig</span></code></pre></div>
 <pre class="text"><code>Firmware Drivers → Raspberry Pi Firmware Driver (RASPBERRYPI_FIRMWARE=y)
-Device Drivers &gt; Graphics support &gt; Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (DRM=n)</code></pre>
+Device Drivers → Graphics support → Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (DRM=n)</code></pre>
 <p>Sauvegarde de la configuration du noyau:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">cp</span> output/build/linux-custom/.config linux.config</span></code></pre></div>
 <h3 id="overlay">Overlay</h3>

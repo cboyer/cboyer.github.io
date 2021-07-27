@@ -19,6 +19,7 @@ L'objectif est d'obtenir un système minimaliste Linux sans serveur X permettant
 - [Utiliser eglfs_kms comme backend au lieu de eglfs_brcm](#eglfs_kms)
 
 
+
 ## <a name="eglfs_brcm"></a>Utiliser eglfs_brcm comme backend
 
 Le backend `eglfs_brcm` repose sur les pilotes graphiques propriétaires Broadcom afin de fournir un support pour OpenGLES/EGL avec les fichiers `/usr/lib/libbrcmEGL.so` et `/usr/lib/libbrcmGLESv2.so`. Ceux-ci sont fournis par le package `Rpi-userland` et les "Firmware Driver" dans le noyau.
@@ -56,6 +57,9 @@ Target packages → Libraries → Graphics → libdrm (BR2_PACKAGE_LIBDRM=n)
 Les librairies C `uClibc-ng` et `glibc` fonctionnent avec ces modules Qt5 (`musl` n'a pas été testée) cependant certains packages comme `qt5webengine` nécessitent `glibc`.
 D'autres packages comme `qt5quickcontrols2`, `qt5graphicaleffects` et `qt5wayland` peuvent être ajoutés selon les besoins applicatifs (ce qui n'est pas le cas pour notre application de test).
 
+Les options de compilation pour Qt peuvent être modifiées selon les besoins.
+Exemple: *-skip qtconnectivity -skip qtdoc -skip qtandroidextras -skip qtnetworkauth -skip qtpurchasing -skip qtgamepad -no-feature-vnc -no-feature-accessibility -no-feature udpsocket -no-feature-networkproxy -no-feature-socks5 -no-feature-networkdiskcache -no-feature-testlib -nomake tests*.
+
 
 Sauvegarde de la configuration Buildroot:
 ```Bash
@@ -72,7 +76,7 @@ make linux-menuconfig
 
 ```text
 Firmware Drivers → Raspberry Pi Firmware Driver (RASPBERRYPI_FIRMWARE=y)
-Device Drivers > Graphics support > Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (DRM=n)
+Device Drivers → Graphics support → Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (DRM=n)
 ```
 
 Sauvegarde de la configuration du noyau:
@@ -442,6 +446,7 @@ Résultat dans `dmesg`:
 [   41.021175] [vc_sm_connected_init]: start
 [   41.026489] [vc_sm_connected_init]: installed successfully
 ```
+
 
 
 
