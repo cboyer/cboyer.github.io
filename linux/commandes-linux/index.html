@@ -63,8 +63,11 @@ CTRL+A+D</code></pre>
 <pre class="console"><code>screen -r Telechargement</code></pre>
 <p>Afficher les chaînes de caractère d'un fichier binaire</p>
 <pre class="console"><code>strings file.bin</code></pre>
-<p>Récupérer des fichiers depuis une image disque</p>
-<pre class="console"><code>foremost -dv -i file.img</code></pre>
+<p>Récupérer des fichiers depuis une image disque (contenus dans un autre fichier)</p>
+<pre class="console"><code>binwalk file.bin -e --dd=&quot;.*&quot; --raw=&quot;ID3&quot;
+foremost -dv -i file.img
+scalpel file.img -o output
+bulk_extractor file.img -o out_folder</code></pre>
 <p>Trouver fichiers en double</p>
 <pre class="console"><code>find Pictures/  -type f -exec md5sum &#39;{}&#39; &#39;;&#39; | sort | uniq --all-repeated=separate -w 15 &gt; dupes.txt
 fdupes -rSm Pictures/</code></pre>

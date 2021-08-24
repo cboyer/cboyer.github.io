@@ -38,9 +38,12 @@ Afficher les chaînes de caractère d'un fichier binaire
 strings file.bin
 ```
 
-Récupérer des fichiers depuis une image disque
+Récupérer des fichiers depuis une image disque (contenus dans un autre fichier)
 ```console
+binwalk file.bin -e --dd=".*" --raw="ID3"
 foremost -dv -i file.img
+scalpel file.img -o output
+bulk_extractor file.img -o out_folder
 ```
 
 Trouver fichiers en double

@@ -35,6 +35,7 @@ Concernant l'interconnexion Raspberry/ILI9341, fbcp-ili9341 utilise par défaut 
 | 16/GPIO23 | LED     | Éclairage         |
 
 
+Pour ne pas utiliser la fonction de mise ne veille en cas d'inactivité, `LED` peut être connectée à `VCC` (3.3V).
 
 
 Pour compiler le programme (nécessite `git` et `cmake`):
@@ -54,7 +55,7 @@ cmake -DILI9341=ON -DGPIO_TFT_DATA_CONTROL=22 -DGPIO_TFT_RESET_PIN=27 -DGPIO_TFT
 sudo ./fbcp-ili9341
 ```
 
-L'option `-DBACKLIGHT_CONTROL=ON` ne peut être retirée sans quoi l'écran reste inactif. Pour retirer la mise en veille après un délais, il faut commenter la ligne `#define BACKLIGHT_CONTROL_FROM_KEYBOARD` dans le fichier `config.h`.
+L'option `-DBACKLIGHT_CONTROL=ON` ne peut être retirée sans quoi l'écran reste inactif. Pour retirer la mise en veille après un délais, il faut commenter la ligne `#define BACKLIGHT_CONTROL_FROM_KEYBOARD` dans le fichier `config.h` ou bien connecter `LED` à `VCC` (3.3V).
 
 Le binaire produit utilise les librairies suivantes:
 ```text

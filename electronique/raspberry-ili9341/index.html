@@ -175,6 +175,7 @@ hdmi_force_hotplug=1</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Pour ne pas utiliser la fonction de mise ne veille en cas d'inactivité, <code>LED</code> peut être connectée à <code>VCC</code> (3.3V).</p>
 <p>Pour compiler le programme (nécessite <code>git</code> et <code>cmake</code>):</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">git</span> clone https://github.com/juj/fbcp-ili9341</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="bu">cd</span> fbcp-ili9341</span>
@@ -188,7 +189,7 @@ hdmi_force_hotplug=1</code></pre>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="co">#Exécution, nécessite les droits root</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="fu">sudo</span> ./fbcp-ili9341</span></code></pre></div>
-<p>L'option <code>-DBACKLIGHT_CONTROL=ON</code> ne peut être retirée sans quoi l'écran reste inactif. Pour retirer la mise en veille après un délais, il faut commenter la ligne <code>#define BACKLIGHT_CONTROL_FROM_KEYBOARD</code> dans le fichier <code>config.h</code>.</p>
+<p>L'option <code>-DBACKLIGHT_CONTROL=ON</code> ne peut être retirée sans quoi l'écran reste inactif. Pour retirer la mise en veille après un délais, il faut commenter la ligne <code>#define BACKLIGHT_CONTROL_FROM_KEYBOARD</code> dans le fichier <code>config.h</code> ou bien connecter <code>LED</code> à <code>VCC</code> (3.3V).</p>
 <p>Le binaire produit utilise les librairies suivantes:</p>
 <pre class="text"><code>linux-vdso.so.1 (0x7eff9000)
 /usr/lib/arm-linux-gnueabihf/libarmmem-${PLATFORM}.so =&gt; /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so (0x76ee0000)
