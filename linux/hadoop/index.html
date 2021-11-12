@@ -26,6 +26,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -138,67 +139,67 @@ hadoop fs -mkdir /output</code></pre>
 <p>Envoyer les données sur le DFS</p>
 <pre class="console"><code>hadoop fs -put file01 /input</code></pre>
 <p>Example de WordCount.java</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">import</span><span class="im"> java.io.IOException;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="kw">import</span><span class="im"> java.util.StringTokenizer;</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.conf.Configuration;</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.fs.Path;</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.io.IntWritable;</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.io.Text;</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.mapreduce.Job;</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.mapreduce.Mapper;</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.mapreduce.Reducer;</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true"></a><span class="kw">import</span><span class="im"> org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true"></a></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> WordCount {</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="kw">class</span> TokenizerMapper</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true"></a>       <span class="kw">extends</span> Mapper&lt;<span class="bu">Object</span>, <span class="bu">Text</span>, <span class="bu">Text</span>, IntWritable&gt;{</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true"></a></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">final</span> <span class="dt">static</span> IntWritable one = <span class="kw">new</span> <span class="fu">IntWritable</span>(<span class="dv">1</span>);</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Text</span> word = <span class="kw">new</span> <span class="bu">Text</span>();</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true"></a></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">map</span>(<span class="bu">Object</span> key, <span class="bu">Text</span> value, <span class="bu">Context</span> context</span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true"></a>                    ) <span class="kw">throws</span> <span class="bu">IOException</span>, <span class="bu">InterruptedException</span> {</span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true"></a>      <span class="bu">StringTokenizer</span> itr = <span class="kw">new</span> <span class="bu">StringTokenizer</span>(value.<span class="fu">toString</span>());</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true"></a>      <span class="kw">while</span> (itr.<span class="fu">hasMoreTokens</span>()) {</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true"></a>        word.<span class="fu">set</span>(itr.<span class="fu">nextToken</span>());</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true"></a>        context.<span class="fu">write</span>(word, one);</span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true"></a>      }</span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true"></a>    }</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true"></a>  }</span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true"></a></span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="kw">class</span> IntSumReducer</span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true"></a>       <span class="kw">extends</span> Reducer&lt;<span class="bu">Text</span>,IntWritable,<span class="bu">Text</span>,IntWritable&gt; {</span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true"></a>    <span class="kw">private</span> IntWritable result = <span class="kw">new</span> <span class="fu">IntWritable</span>();</span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true"></a></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">reduce</span>(<span class="bu">Text</span> key, <span class="bu">Iterable</span>&lt;IntWritable&gt; values,</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true"></a>                       <span class="bu">Context</span> context</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true"></a>                       ) <span class="kw">throws</span> <span class="bu">IOException</span>, <span class="bu">InterruptedException</span> {</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true"></a>      <span class="dt">int</span> sum = <span class="dv">0</span>;</span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true"></a>      <span class="kw">for</span> (IntWritable val : values) {</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true"></a>        sum += val.<span class="fu">get</span>();</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true"></a>      }</span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true"></a>      result.<span class="fu">set</span>(sum);</span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true"></a>      context.<span class="fu">write</span>(key, result);</span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true"></a>    }</span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true"></a>  }</span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true"></a></span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span>(<span class="bu">String</span>[] args) <span class="kw">throws</span> <span class="bu">Exception</span> {</span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true"></a>    <span class="bu">Configuration</span> conf = <span class="kw">new</span> <span class="bu">Configuration</span>();</span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true"></a>    Job job = Job.<span class="fu">getInstance</span>(conf, <span class="st">&quot;word count&quot;</span>);</span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true"></a>    job.<span class="fu">setJarByClass</span>(WordCount.<span class="fu">class</span>);</span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true"></a>    job.<span class="fu">setMapperClass</span>(TokenizerMapper.<span class="fu">class</span>);</span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true"></a>    job.<span class="fu">setCombinerClass</span>(IntSumReducer.<span class="fu">class</span>);</span>
-<span id="cb10-54"><a href="#cb10-54" aria-hidden="true"></a>    job.<span class="fu">setReducerClass</span>(IntSumReducer.<span class="fu">class</span>);</span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true"></a>    job.<span class="fu">setOutputKeyClass</span>(<span class="bu">Text</span>.<span class="fu">class</span>);</span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true"></a>    job.<span class="fu">setOutputValueClass</span>(IntWritable.<span class="fu">class</span>);</span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true"></a>    FileInputFormat.<span class="fu">addInputPath</span>(job, <span class="kw">new</span> <span class="fu">Path</span>(args[<span class="dv">0</span>]));</span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true"></a>    FileOutputFormat.<span class="fu">setOutputPath</span>(job, <span class="kw">new</span> <span class="fu">Path</span>(args[<span class="dv">1</span>]));</span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true"></a>    <span class="bu">System</span>.<span class="fu">exit</span>(job.<span class="fu">waitForCompletion</span>(<span class="kw">true</span>) ? <span class="dv">0</span> : <span class="dv">1</span>);</span>
-<span id="cb10-60"><a href="#cb10-60" aria-hidden="true"></a>  }</span>
-<span id="cb10-61"><a href="#cb10-61" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">io</span><span class="op">.</span><span class="im">IOException</span><span class="op">;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">util</span><span class="op">.</span><span class="im">StringTokenizer</span><span class="op">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">apache</span><span class="op">.</span><span class="im">hadoop</span><span class="op">.</span><span class="im">conf</span><span class="op">.</span><span class="im">Configuration</span><span class="op">;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">apache</span><span class="op">.</span><span class="im">hadoop</span><span class="op">.</span><span class="im">fs</span><span class="op">.</span><span class="im">Path</span><span class="op">;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">apache</span><span class="op">.</span><span class="im">hadoop</span><span class="op">.</span><span class="im">io</span><span class="op">.</span><span class="im">IntWritable</span><span class="op">;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">apache</span><span class="op">.</span><span class="im">hadoop</span><span class="op">.</span><span class="im">io</span><span class="op">.</span><span class="im">Text</span><span class="op">;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">apache</span><span class="op">.</span><span class="im">hadoop</span><span class="op">.</span><span class="im">mapreduce</span><span class="op">.</span><span class="im">Job</span><span class="op">;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">apache</span><span class="op">.</span><span class="im">hadoop</span><span class="op">.</span><span class="im">mapreduce</span><span class="op">.</span><span class="im">Mapper</span><span class="op">;</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">apache</span><span class="op">.</span><span class="im">hadoop</span><span class="op">.</span><span class="im">mapreduce</span><span class="op">.</span><span class="im">Reducer</span><span class="op">;</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">apache</span><span class="op">.</span><span class="im">hadoop</span><span class="op">.</span><span class="im">mapreduce</span><span class="op">.</span><span class="im">lib</span><span class="op">.</span><span class="im">input</span><span class="op">.</span><span class="im">FileInputFormat</span><span class="op">;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">apache</span><span class="op">.</span><span class="im">hadoop</span><span class="op">.</span><span class="im">mapreduce</span><span class="op">.</span><span class="im">lib</span><span class="op">.</span><span class="im">output</span><span class="op">.</span><span class="im">FileOutputFormat</span><span class="op">;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> WordCount <span class="op">{</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="kw">class</span> TokenizerMapper</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>       <span class="kw">extends</span> Mapper<span class="op">&lt;</span><span class="bu">Object</span><span class="op">,</span> <span class="bu">Text</span><span class="op">,</span> <span class="bu">Text</span><span class="op">,</span> IntWritable<span class="op">&gt;{</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">final</span> <span class="dt">static</span> IntWritable one <span class="op">=</span> <span class="kw">new</span> <span class="fu">IntWritable</span><span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="bu">Text</span> word <span class="op">=</span> <span class="kw">new</span> <span class="bu">Text</span><span class="op">();</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">map</span><span class="op">(</span><span class="bu">Object</span> key<span class="op">,</span> <span class="bu">Text</span> value<span class="op">,</span> <span class="bu">Context</span> context</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>                    <span class="op">)</span> <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> <span class="bu">InterruptedException</span> <span class="op">{</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>      <span class="bu">StringTokenizer</span> itr <span class="op">=</span> <span class="kw">new</span> <span class="bu">StringTokenizer</span><span class="op">(</span>value<span class="op">.</span><span class="fu">toString</span><span class="op">());</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>      <span class="cf">while</span> <span class="op">(</span>itr<span class="op">.</span><span class="fu">hasMoreTokens</span><span class="op">())</span> <span class="op">{</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        word<span class="op">.</span><span class="fu">set</span><span class="op">(</span>itr<span class="op">.</span><span class="fu">nextToken</span><span class="op">());</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        context<span class="op">.</span><span class="fu">write</span><span class="op">(</span>word<span class="op">,</span> one<span class="op">);</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="kw">class</span> IntSumReducer</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>       <span class="kw">extends</span> Reducer<span class="op">&lt;</span><span class="bu">Text</span><span class="op">,</span>IntWritable<span class="op">,</span><span class="bu">Text</span><span class="op">,</span>IntWritable<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> IntWritable result <span class="op">=</span> <span class="kw">new</span> <span class="fu">IntWritable</span><span class="op">();</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">reduce</span><span class="op">(</span><span class="bu">Text</span> key<span class="op">,</span> <span class="bu">Iterable</span><span class="op">&lt;</span>IntWritable<span class="op">&gt;</span> values<span class="op">,</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>                       <span class="bu">Context</span> context</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>                       <span class="op">)</span> <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> <span class="bu">InterruptedException</span> <span class="op">{</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>      <span class="dt">int</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> <span class="op">(</span>IntWritable val <span class="op">:</span> values<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>        sum <span class="op">+=</span> val<span class="op">.</span><span class="fu">get</span><span class="op">();</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>      result<span class="op">.</span><span class="fu">set</span><span class="op">(</span>sum<span class="op">);</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>      context<span class="op">.</span><span class="fu">write</span><span class="op">(</span>key<span class="op">,</span> result<span class="op">);</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="kw">throws</span> <span class="bu">Exception</span> <span class="op">{</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Configuration</span> conf <span class="op">=</span> <span class="kw">new</span> <span class="bu">Configuration</span><span class="op">();</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>    Job job <span class="op">=</span> Job<span class="op">.</span><span class="fu">getInstance</span><span class="op">(</span>conf<span class="op">,</span> <span class="st">&quot;word count&quot;</span><span class="op">);</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>    job<span class="op">.</span><span class="fu">setJarByClass</span><span class="op">(</span>WordCount<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>    job<span class="op">.</span><span class="fu">setMapperClass</span><span class="op">(</span>TokenizerMapper<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>    job<span class="op">.</span><span class="fu">setCombinerClass</span><span class="op">(</span>IntSumReducer<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>    job<span class="op">.</span><span class="fu">setReducerClass</span><span class="op">(</span>IntSumReducer<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>    job<span class="op">.</span><span class="fu">setOutputKeyClass</span><span class="op">(</span><span class="bu">Text</span><span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>    job<span class="op">.</span><span class="fu">setOutputValueClass</span><span class="op">(</span>IntWritable<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>    FileInputFormat<span class="op">.</span><span class="fu">addInputPath</span><span class="op">(</span>job<span class="op">,</span> <span class="kw">new</span> <span class="fu">Path</span><span class="op">(</span>args<span class="op">[</span><span class="dv">0</span><span class="op">]));</span></span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>    FileOutputFormat<span class="op">.</span><span class="fu">setOutputPath</span><span class="op">(</span>job<span class="op">,</span> <span class="kw">new</span> <span class="fu">Path</span><span class="op">(</span>args<span class="op">[</span><span class="dv">1</span><span class="op">]));</span></span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>    <span class="bu">System</span><span class="op">.</span><span class="fu">exit</span><span class="op">(</span>job<span class="op">.</span><span class="fu">waitForCompletion</span><span class="op">(</span><span class="kw">true</span><span class="op">)</span> <span class="op">?</span> <span class="dv">0</span> <span class="op">:</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Compiler le code java</p>
 <pre class="console"><code>hadoop com.sun.tools.javac.Main WordCount.java
 jar cf wc.jar WordCount*.class</code></pre>

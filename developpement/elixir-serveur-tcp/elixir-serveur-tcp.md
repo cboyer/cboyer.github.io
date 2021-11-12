@@ -1,7 +1,7 @@
 ---
 title: "Serveur TCP avec Elixir et GenServer"
 date: "2021-06-12T19:53:11-04:00"
-updated: "2021-06-12T19:53:11-04:00"
+updated: "2021-12-12T18:04:11-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -52,7 +52,7 @@ defmodule TcpServer do
     def accept_loop(socket, ctrl_pid) do
         with {:ok, client_socket} <- :gen_tcp.accept(socket) do
             #Défini le processus identifié par `ctrl_pid` pour la réception des messages avec handle_info/2
-            :gen_tcp.controlling_process(client_socket, ctrl_pid)
+            :ok = :gen_tcp.controlling_process(client_socket, ctrl_pid)
         end
 
         accept_loop(socket, ctrl_pid)
@@ -96,7 +96,7 @@ defmodule TcpServer do
         with {:ok, client_socket} <- :gen_tcp.accept(socket) do
             #Défini l'exécution de `recv_loop/1` comme processus qui reçoit les messages
             recv_pid = spawn(__MODULE__, :recv_loop, [client_socket])
-            :gen_tcp.controlling_process(client_socket, recv_pid)
+            :ok = :gen_tcp.controlling_process(client_socket, recv_pid)
         end
 
         accept_loop(socket)
@@ -109,12 +109,25 @@ Il est possible d'utiliser un module dédié `Worker` (à implémenter) au lieu 
 def accept_loop(socket) do
     with {:ok, client_socket} <- :gen_tcp.accept(socket) do
         {:ok, pid} = GenServer.start(Worker, socket: client_socket)
-        :gen_tcp.controlling_process(client_socket, pid)
+        :ok = :gen_tcp.controlling_process(client_socket, pid)
     end
 
     accept_loop(socket)
 end
 ```
+
+Également il est possible d'utiliser `Task.start/1`:
+```Elixir
+def accept_loop(socket) do
+    with {:ok, client_socket} <- :gen_tcp.accept(socket) do
+        {:ok, pid} = Task.start(fn -> recv_loop(client_socket) end)
+        :ok = :gen_tcp.controlling_process(client_socket, pid)
+    end
+
+    accept_loop(socket)
+end
+```
+
 
 ## Compilation et exécution
 
@@ -142,3 +155,4 @@ telnet localhost 1234
 ## Liens complémentaires
 
 - [Elegant TCP with Elixir](https://openmymind.net/Elegant-TCP-with-Elixir-Part-1-TCP-as-Messages/)
+- [Build an Elixir Redis Server that's 100x faster than HTTP](https://docs.statetrace.com/blog/redis-server/)

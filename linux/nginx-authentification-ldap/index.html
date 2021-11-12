@@ -26,6 +26,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -134,21 +135,21 @@ make
 sudo make install</code></pre>
 <p>Après compilation, NGINX s'installe dans <code>/usr/local/nginx</code>.</p>
 <p>Intègrons NGINX à systemd avec le fichier <code>/usr/lib/systemd/system/nginx.service</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">[Unit]</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="dt">Description</span><span class="ot">=</span><span class="st">nginx - high performance web server</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="dt">Documentation</span><span class="ot">=</span><span class="st">http://nginx.org/en/docs/</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="dt">After</span><span class="ot">=</span><span class="st">network-online.target remote-fs.target nss-lookup.target</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="dt">Wants</span><span class="ot">=</span><span class="st">network-online.target</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="kw">[Service]</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="dt">Type</span><span class="ot">=</span><span class="st">forking</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="dt">PIDFile</span><span class="ot">=</span><span class="st">/var/run/nginx.pid</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="dt">ExecStart</span><span class="ot">=</span><span class="st">/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="dt">ExecReload</span><span class="ot">=</span><span class="st">/bin/kill -s HUP $MAINPID</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="dt">ExecStop</span><span class="ot">=</span><span class="st">/bin/kill -s TERM $MAINPID</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="kw">[Install]</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="dt">WantedBy</span><span class="ot">=</span><span class="st">multi-user.target</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Unit]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Description</span><span class="ot">=</span><span class="st">nginx - high performance web server</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">Documentation</span><span class="ot">=</span><span class="st">http://nginx.org/en/docs/</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">After</span><span class="ot">=</span><span class="st">network-online.target remote-fs.target nss-lookup.target</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Wants</span><span class="ot">=</span><span class="st">network-online.target</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">[Service]</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="dt">Type</span><span class="ot">=</span><span class="st">forking</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="dt">PIDFile</span><span class="ot">=</span><span class="st">/var/run/nginx.pid</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="dt">ExecStart</span><span class="ot">=</span><span class="st">/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="dt">ExecReload</span><span class="ot">=</span><span class="st">/bin/kill -s HUP $MAINPID</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="dt">ExecStop</span><span class="ot">=</span><span class="st">/bin/kill -s TERM $MAINPID</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">[Install]</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="dt">WantedBy</span><span class="ot">=</span><span class="st">multi-user.target</span></span></code></pre></div>
 <p>On recharge les fichiers services:</p>
 <pre class="console"><code>sudo systemctl daemon-reload</code></pre>
 <p>Pour la suite, il suffit de suivre la documentation du module et modifier le fichier <code>/usr/local/nginx/conf/nginx.conf</code>.</p>

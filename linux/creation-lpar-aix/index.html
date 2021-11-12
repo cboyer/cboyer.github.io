@@ -26,6 +26,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -127,15 +128,15 @@ id</code></pre>
 <p>Installer la mise à jour du VIOS:</p>
 <pre class="console"><code>updateios -accept -dev /home/padmin/Extact/ -install</code></pre>
 <p>Changer le prompt:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;export ENV=/home/padmin/.kshrc&quot;</span> <span class="op">&gt;&gt;</span> /home/padmin/.profile</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;export ENV=/home/padmin/.kshrc&quot;</span> <span class="op">&gt;&gt;</span> /home/padmin/.profile</span></code></pre></div>
 <p>Créer le /home/padmin/.kshrc avec:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="bu">export</span> <span class="va">HOST=</span><span class="st">&quot;</span><span class="va">$(</span><span class="ex">/usr/bin/uname</span> -n<span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">if</span><span class="bu"> [</span> <span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;root&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  <span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> # &quot;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="kw">else</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>  <span class="va">PS1=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> $ &quot;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="kw">fi</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="kw">set</span> <span class="ex">-o</span> vi</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">HOST</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span><span class="ex">/usr/bin/uname</span> <span class="at">-n</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;root&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">PS1</span><span class="op">=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> # &quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">PS1</span><span class="op">=</span><span class="st">&quot;</span><span class="kw">`</span><span class="fu">whoami</span><span class="kw">`</span><span class="st">@</span><span class="va">$HOST</span><span class="st">:</span><span class="va">$PWD</span><span class="st"> $ &quot;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-o</span> vi</span></code></pre></div>
 <p>Changer la date (mmJJHHMMAAAA):</p>
 <pre class="console"><code>chdate 070913232015</code></pre>
 <p>Détails des interfaces:</p>

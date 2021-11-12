@@ -26,6 +26,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -126,8 +127,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 id="utiliser-eglfs_brcm-comme-backend"><a name="eglfs_brcm"></a>Utiliser eglfs_brcm comme backend</h2>
 <p>Le backend <code>eglfs_brcm</code> repose sur les pilotes graphiques propriétaires Broadcom afin de fournir un support pour OpenGLES/EGL avec les fichiers <code>/usr/lib/libbrcmEGL.so</code> et <code>/usr/lib/libbrcmGLESv2.so</code>. Ceux-ci sont fournis par le package <code>Rpi-userland</code> et les "Firmware Driver" dans le noyau.</p>
 <h3 id="configuration-buildroot">Configuration Buildroot</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">make</span> raspberrypi3_defconfig</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="fu">make</span> menuconfig</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> raspberrypi3_defconfig</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> menuconfig</span></code></pre></div>
 <pre class="text"><code>System configuration → System hostname (BR2_TARGET_GENERIC_HOSTNAME=&quot;buildrootqt5&quot;)
 System configuration → Root password (BR2_TARGET_GENERIC_ROOT_PASSWD=&quot;root&quot;)
 System configuration → remount root filesystem read-write during boot (BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=n)
@@ -146,101 +147,101 @@ Target packages → Libraries → Graphics → libdrm (BR2_PACKAGE_LIBDRM=n)</co
 <p>Les librairies C <code>uClibc-ng</code> et <code>glibc</code> fonctionnent avec ces modules Qt5 (<code>musl</code> n'a pas été testée) cependant certains packages comme <code>qt5webengine</code> nécessitent <code>glibc</code>. D'autres packages comme <code>qt5quickcontrols2</code>, <code>qt5graphicaleffects</code> et <code>qt5wayland</code> peuvent être ajoutés selon les besoins applicatifs (ce qui n'est pas le cas pour notre application de test).</p>
 <p>Les options de compilation pour Qt peuvent être modifiées selon les besoins. Exemple: <em>-skip qtconnectivity -skip qtdoc -skip qtandroidextras -skip qtnetworkauth -skip qtpurchasing -skip qtgamepad -no-feature-vnc -no-feature-accessibility -no-feature udpsocket -no-feature-networkproxy -no-feature-socks5 -no-feature-networkdiskcache -no-feature-testlib -nomake tests</em>.</p>
 <p>Sauvegarde de la configuration Buildroot:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildrootqt5.config</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildrootqt5.config</span></code></pre></div>
 <h3 id="configuration-du-noyau-linux">Configuration du noyau Linux</h3>
 <p>Pour la configuration du noyau, aucun pilote graphique particulier (DRM, VC4) n'est nécessaire, il faut veiller à la présence des "Firmware Driver" (présents par défaut):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="fu">make</span> linux-menuconfig</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> linux-menuconfig</span></code></pre></div>
 <pre class="text"><code>Firmware Drivers → Raspberry Pi Firmware Driver (RASPBERRYPI_FIRMWARE=y)
 Device Drivers → Graphics support → Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (DRM=n)</code></pre>
 <p>Sauvegarde de la configuration du noyau:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">cp</span> output/build/linux-custom/.config linux.config</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> output/build/linux-custom/.config linux.config</span></code></pre></div>
 <h3 id="overlay">Overlay</h3>
 <p>Pour inclure nos fichiers nous allons utiliser un overlay, tous les fichiers contenu dans <code>output/rootfs_overlay</code> (considéré par Buildroot comme référence à la racine) seront présents dans l'image finale.</p>
 <p><code>output/rootfs_overlay/usr/share/fonts/dejavu-sans-webfont.ttf</code>: Qt5 ne fournit plus de police de caractères, il faut au minimum une police TTF sur le système. Buildroot peut également inclure des polices: <em>Target packages → Fonts, cursors, icons, sounds and themes → DejaVu fonts (BR2_PACKAGE_DEJAVU)</em>.</p>
 <p><code>output/rootfs_overlay/root/test.sh</code>: script de lancement de l'application QML <code>box.qml</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="co">#!/bin/sh</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_PLATFORM=</span>eglfs</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_INTEGRATION=</span>eglfs_brcm</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_ALWAYS_SET_MODE=</span>1</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_XKB_CONFIG_ROOT=</span>/tmp</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a><span class="co">#Backends Qt5 disponibles, à titre indicatif</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_PLATFORM_PLUGIN_PATH=</span>/usr/lib/qt/plugins/platforms</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true"></a><span class="co">#Dossier des polices TTF</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_FONTDIR=</span>/usr/share/fonts</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true"></a><span class="co">#Active le clavier dans le terminal en arrière plan (permet notamment le CTRL+C)</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_ENABLE_TERMINAL_KEYBOARD=</span>1</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true"></a><span class="co">#Cache le curseur de la souris</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_HIDECURSOR=</span>1</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true"></a></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true"></a><span class="ex">qmlscene</span> box.qml -platform eglfs</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_PLATFORM</span><span class="op">=</span>eglfs</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_INTEGRATION</span><span class="op">=</span>eglfs_brcm</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_ALWAYS_SET_MODE</span><span class="op">=</span>1</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_XKB_CONFIG_ROOT</span><span class="op">=</span>/tmp</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Backends Qt5 disponibles, à titre indicatif</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_PLATFORM_PLUGIN_PATH</span><span class="op">=</span>/usr/lib/qt/plugins/platforms</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Dossier des polices TTF</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_FONTDIR</span><span class="op">=</span>/usr/share/fonts</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Active le clavier dans le terminal en arrière plan (permet notamment le CTRL+C)</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_ENABLE_TERMINAL_KEYBOARD</span><span class="op">=</span>1</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Cache le curseur de la souris</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_HIDECURSOR</span><span class="op">=</span>1</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="ex">qmlscene</span> box.qml <span class="at">-platform</span> eglfs</span></code></pre></div>
 <blockquote>
 <p>Il n'est pas necéssaire d'utiliser <code>export LD_LIBRARY_PATH=/opt/vc/lib/:$LD_LIBRARY_PATH</code> car le package Rpi-userland place les librairies dans <code>/usr/lib</code> au lieu de <code>/opt/vc/lib</code>.</p>
 </blockquote>
 <p><code>output/rootfs_overlay/root/box.qml</code>: l'application QML de test qui sera exécutée avec <code>qmlscene</code>. Il s'agit d'une boîte rouge déplaçable avec les flềches du clavier et les cliques d'une souris.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode qml"><code class="sourceCode qml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="kw">import</span><span class="st"> QtQuick 2.0</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="kw">Item</span> {</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>    <span class="dt">width</span><span class="op">:</span> <span class="dv">800</span><span class="op">;</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">600</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>    <span class="dt">focus</span><span class="op">:</span> <span class="kw">true</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>    <span class="ex">Keys</span><span class="op">.</span><span class="at">onPressed</span><span class="op">:</span> {</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Enter</span>) {</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>            rect<span class="op">.</span><span class="at">x</span> <span class="op">=</span> <span class="dv">600</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>            rect<span class="op">.</span><span class="at">y</span> <span class="op">=</span> <span class="dv">400</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>        }</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Space</span>) {</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true"></a>            rect<span class="op">.</span><span class="at">x</span> <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true"></a>            rect<span class="op">.</span><span class="at">y</span> <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true"></a>        }</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Left</span>) {</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true"></a>            rect<span class="op">.</span><span class="at">x</span> <span class="op">=</span> rect<span class="op">.</span><span class="at">x</span> <span class="op">-</span> <span class="dv">50</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true"></a>        }</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Right</span>) {</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true"></a>            rect<span class="op">.</span><span class="at">x</span> <span class="op">=</span> rect<span class="op">.</span><span class="at">x</span> <span class="op">+</span> <span class="dv">50</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true"></a>        }</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Down</span>) {</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true"></a>            rect<span class="op">.</span><span class="at">y</span> <span class="op">=</span> rect<span class="op">.</span><span class="at">y</span> <span class="op">+</span> <span class="dv">50</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true"></a>        }</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Up</span>) {</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true"></a>            rect<span class="op">.</span><span class="at">y</span> <span class="op">=</span> rect<span class="op">.</span><span class="at">y</span> <span class="op">-</span> <span class="dv">50</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true"></a>        }</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true"></a>    }</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true"></a></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true"></a>    <span class="kw">Rectangle</span> {</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true"></a>        anchors<span class="op">.</span><span class="at">fill</span><span class="op">:</span> parent</span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true"></a>        <span class="dt">color</span><span class="op">:</span> <span class="st">&quot;black&quot;</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true"></a>    }</span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true"></a></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true"></a>    <span class="kw">Rectangle</span> {</span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true"></a>        <span class="dt">id</span><span class="op">:</span> rect</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true"></a>        <span class="dt">width</span><span class="op">:</span> <span class="dv">100</span><span class="op">;</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">100</span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true"></a>        <span class="dt">color</span><span class="op">:</span> <span class="st">&quot;red&quot;</span></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true"></a></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true"></a>        <span class="kw">Behavior</span> on x { <span class="kw">PropertyAnimation</span> { <span class="dt">duration</span><span class="op">:</span> <span class="dv">500</span> } }</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true"></a>        <span class="kw">Behavior</span> on y { <span class="kw">PropertyAnimation</span> { <span class="dt">duration</span><span class="op">:</span> <span class="dv">500</span> } }</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true"></a></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true"></a>        <span class="kw">Text</span> {</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true"></a>            <span class="dt">text</span><span class="op">:</span> <span class="st">&quot;Hello</span><span class="sc">\n</span><span class="st">world!&quot;</span></span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true"></a>            font<span class="op">.</span><span class="at">pointSize</span><span class="op">:</span> <span class="dv">24</span><span class="op">;</span> font<span class="op">.</span><span class="at">bold</span><span class="op">:</span> <span class="kw">true</span></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true"></a>        }</span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true"></a>    }</span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true"></a></span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true"></a>    <span class="kw">MouseArea</span> {</span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true"></a>        anchors<span class="op">.</span><span class="at">fill</span><span class="op">:</span> parent</span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true"></a>        <span class="dt">onClicked</span><span class="op">:</span> { rect<span class="op">.</span><span class="at">x</span> <span class="op">=</span> mouse<span class="op">.</span><span class="at">x</span><span class="op">;</span> rect<span class="op">.</span><span class="at">y</span> <span class="op">=</span> mouse<span class="op">.</span><span class="at">y</span><span class="op">;</span> }</span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true"></a>    }</span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode qml"><code class="sourceCode qml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span><span class="im"> QtQuick 2.0</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ot">Item</span> {</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">width</span><span class="op">:</span> <span class="dv">800</span><span class="op">;</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">600</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">focus</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Keys</span><span class="op">.</span><span class="at">onPressed</span><span class="op">:</span> {</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Enter</span>) {</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            rect<span class="op">.</span><span class="at">x</span> <span class="op">=</span> <span class="dv">600</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            rect<span class="op">.</span><span class="at">y</span> <span class="op">=</span> <span class="dv">400</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Space</span>) {</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            rect<span class="op">.</span><span class="at">x</span> <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>            rect<span class="op">.</span><span class="at">y</span> <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Left</span>) {</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>            rect<span class="op">.</span><span class="at">x</span> <span class="op">=</span> rect<span class="op">.</span><span class="at">x</span> <span class="op">-</span> <span class="dv">50</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Right</span>) {</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>            rect<span class="op">.</span><span class="at">x</span> <span class="op">=</span> rect<span class="op">.</span><span class="at">x</span> <span class="op">+</span> <span class="dv">50</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Down</span>) {</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>            rect<span class="op">.</span><span class="at">y</span> <span class="op">=</span> rect<span class="op">.</span><span class="at">y</span> <span class="op">+</span> <span class="dv">50</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (event<span class="op">.</span><span class="at">key</span> <span class="op">==</span> <span class="ex">Qt</span><span class="op">.</span><span class="at">Key_Up</span>) {</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>            rect<span class="op">.</span><span class="at">y</span> <span class="op">=</span> rect<span class="op">.</span><span class="at">y</span> <span class="op">-</span> <span class="dv">50</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    <span class="ot">Rectangle</span> {</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>        anchors<span class="op">.</span><span class="at">fill</span><span class="op">:</span> parent</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>        <span class="dt">color</span><span class="op">:</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    <span class="ot">Rectangle</span> {</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>        <span class="dt">id</span><span class="op">:</span> rect</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>        <span class="dt">width</span><span class="op">:</span> <span class="dv">100</span><span class="op">;</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">100</span></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>        <span class="dt">color</span><span class="op">:</span> <span class="st">&quot;red&quot;</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>        <span class="ot">Behavior</span> on x { <span class="ot">PropertyAnimation</span> { <span class="dt">duration</span><span class="op">:</span> <span class="dv">500</span> } }</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>        <span class="ot">Behavior</span> on y { <span class="ot">PropertyAnimation</span> { <span class="dt">duration</span><span class="op">:</span> <span class="dv">500</span> } }</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>        <span class="ot">Text</span> {</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>            <span class="dt">text</span><span class="op">:</span> <span class="st">&quot;Hello</span><span class="sc">\n</span><span class="st">world!&quot;</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>            font<span class="op">.</span><span class="at">pointSize</span><span class="op">:</span> <span class="dv">24</span><span class="op">;</span> font<span class="op">.</span><span class="at">bold</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>    <span class="ot">MouseArea</span> {</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>        anchors<span class="op">.</span><span class="at">fill</span><span class="op">:</span> parent</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>        <span class="dt">onClicked</span><span class="op">:</span> { rect<span class="op">.</span><span class="at">x</span> <span class="op">=</span> mouse<span class="op">.</span><span class="at">x</span><span class="op">;</span> rect<span class="op">.</span><span class="at">y</span> <span class="op">=</span> mouse<span class="op">.</span><span class="at">y</span><span class="op">;</span> }</span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <blockquote>
 <p>Si la résolution est supérieur à 800x600 pixels, l'application utilisera l'ensemble de l'espace disponible sans tenir compte des dimmensions <code>width: 800; height: 600</code>.</p>
 </blockquote>
 <h3 id="compilation">Compilation</h3>
 <p>Lancer la compilation et la création de l'image:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="fu">make</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
 <p>Pour vérifier les options de compilation du package <code>qt5base</code>, notamment les backends disponibles:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="fu">cat</span> ./output/build/qt5base-5.15.2/config.summary</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ./output/build/qt5base-5.15.2/config.summary</span></code></pre></div>
 <pre class="text"><code>QPA backends:
   DirectFB ............................... no
   EGLFS .................................. yes
@@ -258,14 +259,14 @@ Device Drivers → Graphics support → Direct Rendering Manager (XFree86 4.1.0 
   LinuxFB ................................ no
   VNC .................................... no</code></pre>
 <p>Copie de l'image générée vers la carte SD:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="fu">sudo</span> dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</span></code></pre></div>
 <p>Après démarrer le système sur le Raspberry, exécuter <code>test.sh</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="fu">sh</span> test.sh</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> test.sh</span></code></pre></div>
 <h2 id="utiliser-eglfs_kms-comme-backend-au-lieu-de-eglfs_brcm"><a name="eglfs_kms"></a>Utiliser eglfs_kms comme backend au lieu de eglfs_brcm</h2>
 <p>Au lieu d'utiliser le pilote propriétaire Broadcom, nous allons utiliser le backend OpenGLES libre fourni avec Mesa3d ainsi que le pilote VC4.</p>
 <h3 id="configuration-buildroot-1">Configuration Buildroot</h3>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="fu">make</span> raspberrypi3_defconfig</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a><span class="fu">make</span> menuconfig</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> raspberrypi3_defconfig</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> menuconfig</span></code></pre></div>
 <pre class="text"><code>System configuration → System hostname (BR2_TARGET_GENERIC_HOSTNAME=&quot;buildrootqt5&quot;)
 System configuration → Root password (BR2_TARGET_GENERIC_ROOT_PASSWD=&quot;root&quot;)
 System configuration → remount root filesystem read-write during boot (BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=n)
@@ -290,62 +291,62 @@ Target packages → Graphic libraries and applications (graphic/text) → Qt5 �
 <p>L'utilisation de udev (eudev) est util pour la détection automatique des périphériques et charger les modules requis ce qui permettra de rendre disponible le GPU dans <code>/dev/dri/card0</code>. Il est possible de se passer de udev en chargeant les modules requis manuellement (cas exposé plus tard).</p>
 <p>Pas besoin d'inclure mesa3d → Gallium v3d driver.</p>
 <p>Sauvegarde de la configuration Buildroot:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildrootqt5_vc4.config</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildrootqt5_vc4.config</span></code></pre></div>
 <h3 id="configuration-du-noyau-linux-1">Configuration du noyau Linux</h3>
 <p>Pour la configuration du noyau, il faut inclure le pilote VC4:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="fu">make</span> linux-menuconfig</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> linux-menuconfig</span></code></pre></div>
 <pre class="text"><code>Device Drivers → Graphics support → Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (CONFIG_DRM=y)
 Device Drivers → Graphics support → Broadcom VC4 Graphics (CONFIG_DRM_VC4=m)</code></pre>
 <blockquote>
 <p>Pas besoin d'inclure <em>Device Drivers → Graphics support → Broadcom V3D 3.x and newer (CONFIG_DRM_V3D)</em></p>
 </blockquote>
 <p>Sauvegarde de la configuration du noyau:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="fu">cp</span> output/build/linux-custom/.config linux_vc4.config</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> output/build/linux-custom/.config linux_vc4.config</span></code></pre></div>
 <h3 id="overlay-1">Overlay</h3>
 <p>Le contenu de l'overlay <code>output/rootfs_overlay</code> reste le même sauf pour le script <code>output/rootfs_overlay/root/test.sh</code> qui intègre une valeur différente pour <code>QT_QPA_EGLFS_INTEGRATION</code> et une nouvelle variable <code>QT_QPA_EGLFS_NO_LIBINPUT</code>:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="co">#!/bin/sh</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_PLATFORM=</span>eglfs</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_INTEGRATION=</span>eglfs_kms</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_ALWAYS_SET_MODE=</span>1</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_XKB_CONFIG_ROOT=</span>/tmp</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a><span class="co">#Backends Qt5 disponibles, à titre indicatif</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_PLATFORM_PLUGIN_PATH=</span>/usr/lib/qt/plugins/platforms</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a><span class="co">#Dossier des polices TTF</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_FONTDIR=</span>/usr/share/fonts</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true"></a></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true"></a><span class="co">#Active le clavier dans le terminal en arrière plan (permet notamment le CTRL+C)</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_ENABLE_TERMINAL_KEYBOARD=</span>1</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true"></a></span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true"></a><span class="co">#Désactive Libinput, corrige le problème de clavier non fonctionnel</span></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_NO_LIBINPUT=</span>1</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true"></a></span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true"></a><span class="co">#Cache le curseur de la souris</span></span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_HIDECURSOR=</span>1</span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true"></a></span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true"></a><span class="ex">qmlscene</span> box.qml -platform eglfs</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_PLATFORM</span><span class="op">=</span>eglfs</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_INTEGRATION</span><span class="op">=</span>eglfs_kms</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_ALWAYS_SET_MODE</span><span class="op">=</span>1</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_XKB_CONFIG_ROOT</span><span class="op">=</span>/tmp</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Backends Qt5 disponibles, à titre indicatif</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_PLATFORM_PLUGIN_PATH</span><span class="op">=</span>/usr/lib/qt/plugins/platforms</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Dossier des polices TTF</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_FONTDIR</span><span class="op">=</span>/usr/share/fonts</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Active le clavier dans le terminal en arrière plan (permet notamment le CTRL+C)</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_ENABLE_TERMINAL_KEYBOARD</span><span class="op">=</span>1</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Désactive Libinput, corrige le problème de clavier non fonctionnel</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_NO_LIBINPUT</span><span class="op">=</span>1</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co">#Cache le curseur de la souris</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_HIDECURSOR</span><span class="op">=</span>1</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="ex">qmlscene</span> box.qml <span class="at">-platform</span> eglfs</span></code></pre></div>
 <blockquote>
 <p>Avec l'ajout de udev, Qt5 utilise son composant evdev qui nécessite la désactivation de Libinput avec <code>QT_QPA_EGLFS_NO_LIBINPUT=1</code>.</p>
 </blockquote>
 <h3 id="script-post-build">Script post-build</h3>
 <p>Le chargement du pilote VC4 au démarrage nécessite l'ajout des directives <code>gpu_mem=128</code> et <code>dtoverlay=vc4-kms-v3d</code> dans le fichier <code>config.txt</code> de la partition de boot. Pour cela nous utiliserons un script post-build <code>post-build-config.sh</code> dans le dossier <code>output/</code> (déjà configuré dans Buildroot).</p>
 <p>post-build-config.sh:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="co">#!/bin/sh</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a><span class="kw">set</span> <span class="ex">-u</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a><span class="kw">set</span> <span class="ex">-e</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a><span class="kw">if</span> ! <span class="fu">grep</span> -qE <span class="st">&#39;^gpu_mem=128&#39;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span>  <span class="kw">&amp;&amp;</span> ! <span class="fu">grep</span> -qE <span class="st">&#39;^dtoverlay=vc4-kms-v3d&#39;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span><span class="kw">;</span> <span class="kw">then</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;Adding &#39;gpu_mem=128&#39; and &#39;dtoverlay=vc4-kms-v3d&#39; to config.txt (load VC4).&quot;</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;gpu_mem=128&quot;</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;dtoverlay=vc4-kms-v3d&quot;</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true"></a><span class="kw">fi</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-u</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ot">! </span><span class="fu">grep</span> <span class="at">-qE</span> <span class="st">&#39;^gpu_mem=128&#39;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span>  <span class="kw">&amp;&amp;</span> <span class="ex">!</span> grep <span class="at">-qE</span> <span class="st">&#39;^dtoverlay=vc4-kms-v3d&#39;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;Adding &#39;gpu_mem=128&#39; and &#39;dtoverlay=vc4-kms-v3d&#39; to config.txt (load VC4).&quot;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;gpu_mem=128&quot;</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;dtoverlay=vc4-kms-v3d&quot;</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div>
 <p>Ne pas oublier de donner les droits d'exécution avec <code>chmod +x output/post-build-config.sh</code>.</p>
 <h3 id="compilation-1">Compilation</h3>
 <p>Lancer la compilation et la création de l'image:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="fu">make</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
 <p>Pour vérifier les options de compilation du package <code>qt5base</code>, notamment les backends disponibles:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="fu">cat</span> ./output/build/qt5base-5.15.2/config.summary</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ./output/build/qt5base-5.15.2/config.summary</span></code></pre></div>
 <pre class="text"><code>QPA backends:
   DirectFB ............................... no
   EGLFS .................................. yes
@@ -363,9 +364,9 @@ Device Drivers → Graphics support → Broadcom VC4 Graphics (CONFIG_DRM_VC4=m)
   LinuxFB ................................ no
   VNC .................................... no</code></pre>
 <p>Copie de l'image générée vers la carte SD:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="fu">sudo</span> dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</span></code></pre></div>
 <p>Après démarrer le système sur le Raspberry, exécuter <code>test.sh</code> pour lancer l'application QML:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="fu">sh</span> test.sh</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> test.sh</span></code></pre></div>
 <h3 id="se-passer-de-udev-eudev">Se passer de udev (eudev)</h3>
 <p>Il est possible de ne pas inclure udev (dans Buildroot: <em>System configuration → /dev management</em>). Les modules chargés automatiquement par udev (liste récupérée avec <code>lsmod</code>):</p>
 <pre class="text"><code>Module                  Size  Used by    Tainted: G  
@@ -389,11 +390,11 @@ uio_pdrv_genirq        16384  0
 uio                    20480  1 uio_pdrv_genirq
 fixed                  16384  0 </code></pre>
 <p>Pour se passer de udev et obtenir <code>/dev/dri/card0</code>, certains modules doivent être chargés (via un script ou manuellement) avec <code>modprobe</code>:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="co">#!/bin/sh</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a><span class="ex">modprobe</span> snd_soc_hdmi_codec</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a><span class="ex">modprobe</span> i2c_bcm2835</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true"></a><span class="ex">modprobe</span> vc4</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true"></a><span class="ex">modprobe</span> vc_sm_cma</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">modprobe</span> snd_soc_hdmi_codec</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="ex">modprobe</span> i2c_bcm2835</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="ex">modprobe</span> vc4</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="ex">modprobe</span> vc_sm_cma</span></code></pre></div>
 <p>Résultat dans <code>dmesg</code>:</p>
 <pre class="text"><code>[   40.318528] fb0: switching to vc4drmfb from simple
 [   40.325374] Console: switching to colour dummy device 80x30

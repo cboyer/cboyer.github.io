@@ -26,6 +26,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -177,18 +178,18 @@ hdmi_force_hotplug=1</code></pre>
 </table>
 <p>Pour ne pas utiliser la fonction de mise ne veille en cas d'inactivité, <code>LED</code> peut être connectée à <code>VCC</code> (3.3V).</p>
 <p>Pour compiler le programme (nécessite <code>git</code> et <code>cmake</code>):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">git</span> clone https://github.com/juj/fbcp-ili9341</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="bu">cd</span> fbcp-ili9341</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="fu">mkdir</span> build</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="co">#Supprime l&#39;option de mise en veille de l&#39;écran</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="fu">sed</span> -i <span class="st">&#39;/^#define BACKLIGHT_CONTROL_FROM_KEYBOARD/c\//#define BACKLIGHT_CONTROL_FROM_KEYBOARD&#39;</span> config.h</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="co">#Pour un Raspberry Pi 3 (-DARMV8A=ON) avec un écran générique (-DILI9341=ON)</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="fu">cmake</span> -DILI9341=ON -DGPIO_TFT_DATA_CONTROL=22 -DGPIO_TFT_RESET_PIN=27 -DGPIO_TFT_BACKLIGHT=23 -DSPI_BUS_CLOCK_DIVISOR=6 -DARMV8A=ON -DBACKLIGHT_CONTROL=ON -DSTATISTICS=0</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="co">#Exécution, nécessite les droits root</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="fu">sudo</span> ./fbcp-ili9341</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/juj/fbcp-ili9341</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> fbcp-ili9341</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> build</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Supprime l&#39;option de mise en veille de l&#39;écran</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">&#39;/^#define BACKLIGHT_CONTROL_FROM_KEYBOARD/c\//#define BACKLIGHT_CONTROL_FROM_KEYBOARD&#39;</span> config.h</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Pour un Raspberry Pi 3 (-DARMV8A=ON) avec un écran générique (-DILI9341=ON)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">-DILI9341</span><span class="op">=</span>ON <span class="at">-DGPIO_TFT_DATA_CONTROL</span><span class="op">=</span>22 <span class="at">-DGPIO_TFT_RESET_PIN</span><span class="op">=</span>27 <span class="at">-DGPIO_TFT_BACKLIGHT</span><span class="op">=</span>23 <span class="at">-DSPI_BUS_CLOCK_DIVISOR</span><span class="op">=</span>6 <span class="at">-DARMV8A</span><span class="op">=</span>ON <span class="at">-DBACKLIGHT_CONTROL</span><span class="op">=</span>ON <span class="at">-DSTATISTICS</span><span class="op">=</span>0</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Exécution, nécessite les droits root</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ./fbcp-ili9341</span></code></pre></div>
 <p>L'option <code>-DBACKLIGHT_CONTROL=ON</code> ne peut être retirée sans quoi l'écran reste inactif. Pour retirer la mise en veille après un délais, il faut commenter la ligne <code>#define BACKLIGHT_CONTROL_FROM_KEYBOARD</code> dans le fichier <code>config.h</code> ou bien connecter <code>LED</code> à <code>VCC</code> (3.3V).</p>
 <p>Le binaire produit utilise les librairies suivantes:</p>
 <pre class="text"><code>linux-vdso.so.1 (0x7eff9000)

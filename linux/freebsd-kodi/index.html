@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="HandheldFriendly" content="True">
+  <title>Installation de Kodi sous FreeBSD 13 - C. Boyer</title>
+  <meta name="description" content="Installation de Kodi sous FreeBSD 13" />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="FreeBSD, Kodi" />
+  <link rel="canonical" href="https://cboyer.github.io/linux/freebsd-kodi" />
+  <meta property="og:title" content="Installation de Kodi sous FreeBSD 13 - C. Boyer" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:description" content="Installation de Kodi sous FreeBSD 13" />
+  <meta property="og:site_name" content="cboyer.github.io" />
+  <meta property="og:type" content="website" />
+  <meta property="og:updated_time" content="2021-12-12T18:20:14-05:00" />
+  <meta property="article:published_time" content="2021-12-12T18:20:14-05:00" />
+  <meta property="article:modified_time" content="2021-12-12T18:20:14-05:00" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
+  <style>
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+</head>
+<body>
+  <header id="header">
+    <div id="links">
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+    <p class="title">cboyer.github.io</p>
+    <nav id="menu">
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
+    </nav>
+  </header>
+
+  <main id="container">
+<article>
+<header id="title-block-header">
+<h1>Installation de Kodi sous FreeBSD 13</h1>
+ <small class="date">Publié le 2021-12-12</small>
+</header>
+<p>Certains paramètres présentés sont spécifiques à la configuration matérielle d'un système avec Intel Braswell.</p>
+<h2 id="installation-de-kodi-depuis-les-paquets">Installation de Kodi depuis les paquets</h2>
+<p>Installation des paquets avec <code>pkg</code></p>
+<pre class="console"><code>pkg install kodi kodi-addon-pvr.iptvsimple libbluray libcec dav1d lcms2 libass libcrossguid curl ffmpeg libfmt fstrcmp lzo2 spdlog sqlite3 taglib waylandpp libGLU xorg-server xinit xorg-drivers drm-kmod xf86-video-intel libva-intel-driver libvdpau-va-gl xterm py38-sqlite3</code></pre>
+<p>Charger le module KMS au boot via <code>/etc/rc.conf</code></p>
+<pre class="console"><code>sysrc kld_list+=i915kms</code></pre>
+<h2 id="compilation-et-installation-de-kodi-avec-les-ports">Compilation et installation de Kodi avec les ports</h2>
+<pre class="console"><code>portsnap fetch extract
+cd /usr/ports/ports-mgmt/portmaster
+make install clean
+rehash
+portmaster -L | more
+portmaster --update-if-newer multimedia/kodi</code></pre>
+<p>La méthode traditionnelle sans <code>portsnap</code></p>
+<pre class="console"><code>cd /usr/ports
+make quicksearch name=kodi
+cd /usr/ports/multimedia/kodi
+make</code></pre>
+<h2 id="configuration-de-xorg">Configuration de Xorg</h2>
+<p>Générer automatiquement une configuration élémentaire</p>
+<pre class="console"><code>Xorg -configure
+mv xorg.conf.new /etc/X11/xorg.conf</code></pre>
+<p>Configuration avancée de Xorg, dans <code>/usr/local/etc/X11/xorg.conf.d/monitor.conf</code></p>
+<pre class="text"><code>Section &quot;Monitor&quot;
+    Identifier   &quot;Monitor0&quot;
+    VendorName   &quot;Monitor Vendor&quot;
+    ModelName    &quot;Monitor Model&quot;
+    Modeline &quot;1920x1080_60.00&quot;  172.80  1920 2040 2248 2576  1080 1081 1084 1118  -HSync +Vsync
+    Modeline &quot;3840x2160_30.00&quot;  339.57  3840 4080 4496 5152  2160 2161 2164 2197  -HSync +Vsync
+    #Option &quot;PreferredMode&quot; &quot;3840x2160@30.0&quot;
+    Option &quot;PreferredMode&quot; &quot;1920x1080@60.0&quot;
+EndSection</code></pre>
+<p>Pour activer l'accélération matérielle, dans <code>/usr/local/etc/X11/xorg.conf.d/card.conf</code></p>
+<pre class="text"><code>Section &quot;Device&quot;
+    Identifier &quot;Card0&quot;
+    Driver &quot;modesetting&quot;
+    Option &quot;DPMS&quot;
+    Option &quot;DRI&quot;
+    Option &quot;AccelMethod&quot; &quot;glamor&quot;
+EndSection</code></pre>
+<p>Création du compte utilisateur kodi</p>
+<pre class="console"><code>pw user add -n kodi -c &#39;Kodi Media Player&#39; -d /home/kodi -G video -m -s /bin/csh</code></pre>
+<blockquote>
+<p>Si l'utilisateur kodi peut être crée à l'installation de FreeBSD puis modifié avec <code>pw group mod wheel -m kodi</code> par exemple. Pour changer de shell <code>chsh -s /usr/local/bin/bash kodi</code>.</p>
+</blockquote>
+<p>Tester l'exécution de Kodi:</p>
+<pre class="console"><code>su -m kodi -c &#39;setenv HOME /home/kodi &amp;&amp; /usr/local/bin/xinit /usr/local/bin/kodi-standalone -- -nocursor :0 -nolisten tcp&#39;</code></pre>
+<h2 id="autologin-et-lancement-automatique-de-kodi">Autologin et lancement automatique de Kodi</h2>
+<p>Dans <code>/etc/gettytab</code></p>
+<pre class="text"><code># autologin kodi
+A|Al|Autologin console:\
+  :ht:np:sp#115200:al=kodi</code></pre>
+<p>Dans <code>/etc/ttys</code></p>
+<pre class="text"><code>#ttyv1  &quot;/usr/libexec/getty Pc&quot;         xterm   onifexists secure
+ttyv1   &quot;/usr/libexec/getty Al&quot;         xterm   onifexists secure</code></pre>
+<p>Ajouter dans <code>/home/kodi/.cshrc</code></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">setenv</span> LIBVA_DRIVER_NAME i965</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">setenv</span> LIBVA_DRIVERS_PATH /usr/local/lib/dri</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> XPID = <span class="kw">`</span><span class="ex">/usr/bin/pgrep</span> xinit<span class="kw">`</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">(</span> <span class="kw">{</span> <span class="bu">[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$XPID</span><span class="st">&quot;</span> <span class="bu">]</span> <span class="kw">}</span> <span class="kw">)</span> <span class="cf">then</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;X is already running&quot;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/usr/local/bin/xinit</span> /usr/local/bin/kodi-standalone <span class="at">--</span> <span class="at">-nocursor</span> :0 <span class="at">-nolisten</span> tcp</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">logout</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="ex">endif</span></span></code></pre></div>
+<h2 id="configuration-du-chargeur-damorçage">Configuration du chargeur d'amorçage</h2>
+<p>Ajouter dans <code>/boot/loader.conf</code>.</p>
+<pre class="text"><code>autoboot_delay=&quot;-1&quot;
+hw.vga.textmode=0
+kern.vt.fb.default_mode=&quot;800x600&quot;</code></pre>
+<h2 id="support-des-partitions-ext4">Support des partitions EXT4</h2>
+<pre class="console"><code>pkg install fusefs-lkl
+kldload fusefs
+sysrc kld_list+=fusefs</code></pre>
+<p>Pour tester</p>
+<pre class="console"><code>mount -t fuse -o rw,mountprog=/usr/local/bin/lklfuse,type=ext4,allow_other /dev/ada1s1 /data</code></pre>
+<p>Ajouter dans <code>/etc/fstab</code> pour que la partition soit montée au démarrage</p>
+<pre class="text"><code>/dev/ada1s1             /data           fuse    rw,mountprog=/usr/local/bin/lklfuse,type=ext4,allow_other,late 0 0</code></pre>
+<blockquote>
+<p>Pour les volumes NTFS il faut installer le paquet <code>fusefs-ntfs</code>.</p>
+</blockquote>
+<h2 id="installation-de-samba4">Installation de Samba4</h2>
+<p>pkg install samba413</p>
+<p>La configuration dans <code>/usr/local/etc/smb4.conf</code></p>
+<pre class="text"><code>[global]
+    workgroup = WORKGROUP
+    realm = WORKGROUP
+    netbios name = kodi
+
+[data]
+    path = /data
+    public = no
+    writable = yes
+    printable = no
+    guest ok = no
+    valid users = smbuser</code></pre>
+<pre class="console"><code>sysrc samba_server_enable=&quot;YES&quot;
+service samba_server start</code></pre>
+<h2 id="compilation-de-ipvr-simple-client">Compilation de IPVR Simple Client</h2>
+<p>La version de Kodi issue des ports appartient à la branche Matrix (version 19), IPVR Simple Client doit être issu de la même branche pour assurer sa compatibilité.</p>
+<pre class="console"><code>pkg install cmake git
+git clone --branch master https://github.com/xbmc/xbmc.git
+git clone --depth 1 --branch 19.0.2-Matrix https://github.com/kodi-pvr/pvr.iptvsimple
+cd pvr.iptvsimple &amp;&amp; mkdir build &amp;&amp; cd build
+cmake -DADDONS_TO_BUILD=pvr.iptvsimple -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons</code></pre>
+<p>Ajouter <code>-fPIC</code> dans les directives de <code>CMakeCache.txt</code></p>
+<pre class="text"><code>CMAKE_CXX_FLAGS:STRING=-fPIC
+CMAKE_C_FLAGS:STRING=-fPIC</code></pre>
+<p>Lancer la compilation</p>
+<pre class="console"><code>make</code></pre>
+<p>Copier les fichiers</p>
+<pre class="console"><code>cp ../../xbmc/addons/pvr.iptvsimple/pvr.iptvsimple.so* /usr/local/lib/kodi/addons/pvr.iptvsimple/
+cp ../../xbmc/addons/pvr.iptvsimple/addon.xml /usr/local/share/kodi/addons/pvr.iptvsimple/
+cp ../../xbmc/addons/pvr.iptvsimple/changelog.txt /usr/local/share/kodi/addons/pvr.iptvsimple/
+cp ../../xbmc/addons/pvr.iptvsimple/icon.png /usr/local/share/kodi/addons/pvr.iptvsimple/
+cp -r ../../xbmc/addons/pvr.iptvsimple/resources/ /usr/local/share/kodi/addons/pvr.iptvsimple/</code></pre>
+<h3 id="lectures-complémentaires">Lectures complémentaires</h3>
+<ul>
+<li><a href="https://docs.freebsd.org/en/books/handbook/ports/">https://docs.freebsd.org/en/books/handbook/ports/</a></li>
+<li><a href="https://amissing.link/freebsd-entertainment-center.html">https://amissing.link/freebsd-entertainment-center.html</a></li>
+<li><a href="https://forums.freebsd.org/threads/trouble-calling-startx-in-start-up-script.22304/#post-125992">https://forums.freebsd.org/threads/trouble-calling-startx-in-start-up-script.22304/#post-125992</a></li>
+<li><a href="https://forums.freebsd.org/threads/mounting-a-logical-ext4-partition-in-freebsd.72286/">https://forums.freebsd.org/threads/mounting-a-logical-ext4-partition-in-freebsd.72286/</a></li>
+</ul>
+</article>
+</main>
+
+<footer id="footer">
+  © 2015-2021 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>
+</footer>
+
+</body>
+</html>
