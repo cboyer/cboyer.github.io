@@ -1,7 +1,7 @@
 ---
 title: "Serveur TCP avec Elixir et GenServer"
 date: "2021-06-12T19:53:11-04:00"
-updated: "2021-12-12T18:04:11-05:00"
+updated: "2021-11-12T18:04:11-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
