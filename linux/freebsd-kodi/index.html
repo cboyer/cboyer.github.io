@@ -15,9 +15,9 @@
   <meta property="og:description" content="Installation de Kodi sous FreeBSD 13" />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2021-12-12T18:20:14-05:00" />
-  <meta property="article:published_time" content="2021-12-12T18:20:14-05:00" />
-  <meta property="article:modified_time" content="2021-12-12T18:20:14-05:00" />
+  <meta property="og:updated_time" content="2021-11-20T21:59:14-05:00" />
+  <meta property="article:published_time" content="2021-11-12T18:20:14-05:00" />
+  <meta property="article:modified_time" content="2021-11-20T21:59:14-05:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
@@ -117,7 +117,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h1>Installation de Kodi sous FreeBSD 13</h1>
- <small class="date">Publié le 2021-12-12</small>
+ <small class="date">Publié le 2021-11-12, dernière mise à jour: 2021-11-20</small>
 </header>
 <p>Certains paramètres présentés sont spécifiques à la configuration matérielle d'un système avec Intel Braswell.</p>
 <h2 id="installation-de-kodi-depuis-les-paquets">Installation de Kodi depuis les paquets</h2>
@@ -131,12 +131,12 @@ cd /usr/ports/ports-mgmt/portmaster
 make install clean
 rehash
 portmaster -L | more
-portmaster --update-if-newer multimedia/kodi</code></pre>
-<p>La méthode traditionnelle sans <code>portsnap</code></p>
+portmaster -GPd --update-if-newer multimedia/kodi</code></pre>
+<p>La méthode traditionnelle sans <code>portmaster</code></p>
 <pre class="console"><code>cd /usr/ports
 make quicksearch name=kodi
 cd /usr/ports/multimedia/kodi
-make</code></pre>
+make config-recursive</code></pre>
 <h2 id="configuration-de-xorg">Configuration de Xorg</h2>
 <p>Générer automatiquement une configuration élémentaire</p>
 <pre class="console"><code>Xorg -configure
@@ -156,7 +156,7 @@ EndSection</code></pre>
     Identifier &quot;Card0&quot;
     Driver &quot;modesetting&quot;
     Option &quot;DPMS&quot;
-    Option &quot;DRI&quot;
+    Option &quot;DRI&quot; &quot;3&quot;
     Option &quot;AccelMethod&quot; &quot;glamor&quot;
 EndSection</code></pre>
 <p>Création du compte utilisateur kodi</p>

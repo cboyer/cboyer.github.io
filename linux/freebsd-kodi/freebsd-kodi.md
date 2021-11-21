@@ -1,7 +1,7 @@
 ---
 title: "Installation de Kodi sous FreeBSD 13"
-date: "2021-12-12T18:20:14-05:00"
-updated: "2021-12-12T18:20:14-05:00"
+date: "2021-11-12T18:20:14-05:00"
+updated: "2021-11-20T21:59:14-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -36,15 +36,15 @@ cd /usr/ports/ports-mgmt/portmaster
 make install clean
 rehash
 portmaster -L | more
-portmaster --update-if-newer multimedia/kodi
+portmaster -GPd --update-if-newer multimedia/kodi
 ```
 
-La méthode traditionnelle sans `portsnap`
+La méthode traditionnelle sans `portmaster`
 ```Console
 cd /usr/ports
 make quicksearch name=kodi
 cd /usr/ports/multimedia/kodi
-make
+make config-recursive
 ```
 
 
@@ -75,7 +75,7 @@ Section "Device"
     Identifier "Card0"
     Driver "modesetting"
     Option "DPMS"
-    Option "DRI"
+    Option "DRI" "3"
     Option "AccelMethod" "glamor"
 EndSection
 ```
