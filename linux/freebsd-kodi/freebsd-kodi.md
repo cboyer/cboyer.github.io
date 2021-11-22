@@ -166,7 +166,7 @@ service samba_server start
 
 ## Compilation et installation de Kodi avec les ports uniquement
 
-Installation de l'arbre de sports et portmaster
+Installation de l'arbre des ports et portmaster
 ```Console
 portsnap fetch extract
 cd /usr/ports/ports-mgmt/portmaster
@@ -175,7 +175,7 @@ rehash
 portmaster -L
 ```
 
-Pour installer les ports, nous utiliserons `portmaster` qui permet notamment d'utiliser les paquets précompilés pour les dépendances avec `-P`.
+Pour installer les ports, nous utiliserons `portmaster` qui permet notamment d'utiliser les paquets précompilés pour les dépendances avec `-P` (non utilisé ici).
 La méthode traditionnelle pour installer des ports sans `portmaster` se résume à:
 ```Console
 cd /usr/ports
@@ -185,7 +185,7 @@ make config-recursive
 make
 ```
 
-Installer les source du noyau pour la version/architecture courante (nécessaire pour compiler certains pilotes par la suite)
+Installer les sources du noyau pour la version/architecture courante (nécessaire pour compiler certains pilotes par la suite)
 ```Console
 cd /tmp
 fetch ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/13.0-RELEASE/src.txz
