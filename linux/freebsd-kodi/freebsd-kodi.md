@@ -16,7 +16,8 @@ Certains paramètres présentés sont spécifiques à la configuration matériel
 
 ## Installation de Kodi depuis les paquets
 
-Installation des paquets avec `pkg`
+
+### Installation des paquets avec pkg
 
 ```Console
 pkg install kodi kodi-addon-pvr.iptvsimple libbluray libcec dav1d lcms2 libass libcrossguid curl ffmpeg libfmt fstrcmp lzo2 spdlog sqlite3 taglib waylandpp libGLU xorg-server xinit xorg-drivers drm-kmod xf86-video-intel libva-intel-driver libvdpau-va-gl xterm py38-sqlite3
@@ -28,27 +29,7 @@ sysrc kld_list+=i915kms
 ```
 
 
-## Compilation et installation de Kodi avec les ports
-
-```Console
-portsnap fetch extract
-cd /usr/ports/ports-mgmt/portmaster
-make install clean
-rehash
-portmaster -L | more
-portmaster -GPd --update-if-newer multimedia/kodi
-```
-
-La méthode traditionnelle sans `portmaster`
-```Console
-cd /usr/ports
-make quicksearch name=kodi
-cd /usr/ports/multimedia/kodi
-make config-recursive
-```
-
-
-## Configuration de Xorg
+### Configuration de Xorg
 
 Générer automatiquement une configuration élémentaire
 ```Console
@@ -94,7 +75,7 @@ Tester l'exécution de Kodi:
 su -m kodi -c 'setenv HOME /home/kodi && /usr/local/bin/xinit /usr/local/bin/kodi-standalone -- -nocursor :0 -nolisten tcp'
 ```
 
-## Autologin et lancement automatique de Kodi
+### Autologin et lancement automatique de Kodi
 
 Dans `/etc/gettytab` 
 ```Text
@@ -123,7 +104,7 @@ else
 endif
 ```
 
-## Configuration du chargeur d'amorçage
+### Configuration du chargeur d'amorçage
 
 Ajouter dans `/boot/loader.conf`.
 ```Text
@@ -133,7 +114,7 @@ kern.vt.fb.default_mode="800x600"
 ```
 
 
-## Support des partitions EXT4
+### Support des partitions EXT4
 
 ```Console
 pkg install fusefs-lkl
@@ -154,7 +135,7 @@ Ajouter dans `/etc/fstab` pour que la partition soit montée au démarrage
 > Pour les volumes NTFS il faut installer le paquet `fusefs-ntfs`.
 
 
-## Installation de Samba4
+### Installation de Samba4
 
 pkg install samba413
 
@@ -180,12 +161,70 @@ service samba_server start
 ```
 
 
-## Compilation de IPVR Simple Client
+
+
+
+## Compilation et installation de Kodi avec les ports uniquement
+
+Installation de l'arbre de sports et portmaster
+```Console
+portsnap fetch extract
+cd /usr/ports/ports-mgmt/portmaster
+make install clean
+rehash
+portmaster -L
+```
+
+Pour installer les ports, nous utiliserons `portmaster` qui permet notamment d'utiliser les paquets précompilés pour les dépendances avec `-P`.
+La méthode traditionnelle pour installer des ports sans `portmaster` se résume à:
+```Console
+cd /usr/ports
+make quicksearch name=htop
+cd /usr/ports/sysutils/htop
+make config-recursive
+make
+```
+
+Installer les source du noyau pour la version/architecture courante (nécessaire pour compiler certains pilotes par la suite)
+```Console
+cd /tmp
+fetch ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/13.0-RELEASE/src.txz
+tar -C / -zxvf src.txz
+rm /tmp/src.txz
+```
+
+Installer le pilote DRM
+```Console
+portmaster -Gd graphics/drm-kmod
+sysrc kld_list+=i915kms
+kldload i915kms
+```
+
+Installer le pilote i965 (non contenu dans mesa-dri) et VAAPI pour le décodage matérielle
+```Console
+cd graphics/mesa-devel
+make config
+portmaster -Gd graphics/mesa-devel
+portmaster -Gd multimedia/libva-intel-driver
+```
+
+Configuration et compilation de Kodi (options GBM/OpenGLES)
+```Console
+cd /usr/ports/multimedia/kodi
+make config
+portmaster -Gd --update-if-newer multimedia/kodi
+mkdir /usr/local/lib/kodi/addons
+```
+
+
+
+### Compilation de IPVR Simple Client
 
 La version de Kodi issue des ports appartient à la branche Matrix (version 19), IPVR Simple Client doit être issu de la même branche pour assurer sa compatibilité.
 ```Console
 pkg install cmake git
-git clone --branch master https://github.com/xbmc/xbmc.git
+cd /tmp
+git clone --branch 19.3-Matrix https://github.com/xbmc/xbmc.git
 git clone --depth 1 --branch 19.0.2-Matrix https://github.com/kodi-pvr/pvr.iptvsimple
 cd pvr.iptvsimple && mkdir build && cd build
 cmake -DADDONS_TO_BUILD=pvr.iptvsimple -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
@@ -204,19 +243,87 @@ make
 
 Copier les fichiers
 ```Console
+mkdir /usr/local/lib/kodi/addons/pvr.iptvsimple/
+mkdir /usr/local/share/kodi/addons/pvr.iptvsimple/
+
 cp ../../xbmc/addons/pvr.iptvsimple/pvr.iptvsimple.so* /usr/local/lib/kodi/addons/pvr.iptvsimple/
 cp ../../xbmc/addons/pvr.iptvsimple/addon.xml /usr/local/share/kodi/addons/pvr.iptvsimple/
 cp ../../xbmc/addons/pvr.iptvsimple/changelog.txt /usr/local/share/kodi/addons/pvr.iptvsimple/
 cp ../../xbmc/addons/pvr.iptvsimple/icon.png /usr/local/share/kodi/addons/pvr.iptvsimple/
-cp -r ../../xbmc/addons/pvr.iptvsimple/resources/ /usr/local/share/kodi/addons/pvr.iptvsimple/
+cp -r ../../xbmc/addons/pvr.iptvsimple/resources/ /usr/local/share/kodi/addons/pvr.iptvsimple/resources
 ```
+
+
+### Installer inputstream.ffmpegdirect
+
+```Console
+cd /tmp
+git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.ffmpegdirect.git
+cd inputstream.ffmpegdirect && mkdir build && cd build
+cmake -DADDONS_TO_BUILD=inputstream.ffmpegdirect -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
+gmake
+
+mkdir /usr/local/lib/kodi/addons/inputstream.ffmpegdirect
+mkdir /usr/local/share/kodi/addons/inputstream.ffmpegdirect
+
+cp ../../xbmc/build/addons/inputstream.ffmpegdirect/inputstream.ffmpegdirect.so* /usr/local/lib/kodi/addons/inputstream.ffmpegdirect
+cp ../../xbmc/build/addons/inputstream.ffmpegdirect/addon.xml /usr/local/share/kodi/addons/inputstream.ffmpegdirect
+cp ../../xbmc/build/addons/inputstream.ffmpegdirect/changelog.txt /usr/local/share/kodi/addons/inputstream.ffmpegdirect
+cp ../../xbmc/build/addons/inputstream.ffmpegdirect/icon.png /usr/local/share/kodi/addons/inputstream.ffmpegdirect
+cp -r ../../xbmc/build/addons/inputstream.ffmpegdirect/resources/ /usr/local/share/kodi/addons/inputstream.ffmpegdirect/resources
+```
+
+### Installer inputstream.adaptive
+
+```Console
+cd /tmp
+git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.adaptive
+cd inputstream.adaptive && mkdir build && cd build
+cmake -DADDONS_TO_BUILD=inputstream.adaptive -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
+gmake
+
+mkdir /usr/local/lib/kodi/addons/inputstream.adaptive
+mkdir /usr/local/share/kodi/addons/inputstream.adaptive
+
+cp ../../xbmc/build/addons/inputstream.adaptive/inputstream.adaptive.so* /usr/local/lib/kodi/addons/inputstream.adaptive
+cp ../../xbmc/build/addons/inputstream.adaptive/libssd_wv.so /usr/local/lib/kodi/addons/inputstream.adaptive
+cp ../../xbmc/build/addons/inputstream.adaptive/addon.xml /usr/local/share/kodi/addons/inputstream.adaptive
+cp -r ../../xbmc/build/addons/inputstream.adaptive/resources/ /usr/local/share/kodi/addons/inputstream.adaptive/resources
+```
+
+### Installer inputstream.rtmp
+
+```Console
+cd /tmp
+git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.rtmp
+cd inputstream.rtmp && mkdir build && cd build
+cmake -DADDONS_TO_BUILD=inputstream.rtmp -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/kodi-build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
+```
+
+Ajouter `set(OPENSSL_TARGET BSD-x86_64)` dans `../depends/common/openssl/CMakeLists.txt` avant la suite de fonctions `list`.
+Ajouter `-fPIC` dans les directives de `CMakeCache.txt`
+```Text
+CMAKE_CXX_FLAGS:STRING=-fPIC
+CMAKE_C_FLAGS:STRING=-fPIC
+```
+
+Lancer la compilation
+```Console
+make
+
+mkdir /usr/local/lib/kodi/addons/inputstream.rtmp
+mkdir /usr/local/share/kodi/addons/inputstream.rtmp
+
+cp ../../xbmc/kodi-build/addons/inputstream.rtmp/inputstream.rtmp.so* /usr/local/lib/kodi/addons/inputstream.rtmp
+cp ../../xbmc/kodi-build/addons/inputstream.rtmp/addon.xml /usr/local/share/kodi/addons/inputstream.rtmp
+cp ../../xbmc/kodi-build/addons/inputstream.rtmp/icon.png /usr/local/share/kodi/addons/inputstream.rtmp
+cp -r ../../xbmc/kodi-build/addons/inputstream.rtmp/resources/ /usr/local/share/kodi/addons/inputstream.rtmp/resources
+```
+
+
 
 ### Lectures complémentaires
 - [https://docs.freebsd.org/en/books/handbook/ports/](https://docs.freebsd.org/en/books/handbook/ports/)
 - [https://amissing.link/freebsd-entertainment-center.html](https://amissing.link/freebsd-entertainment-center.html)
 - [https://forums.freebsd.org/threads/trouble-calling-startx-in-start-up-script.22304/#post-125992](https://forums.freebsd.org/threads/trouble-calling-startx-in-start-up-script.22304/#post-125992)
 - [https://forums.freebsd.org/threads/mounting-a-logical-ext4-partition-in-freebsd.72286/](https://forums.freebsd.org/threads/mounting-a-logical-ext4-partition-in-freebsd.72286/)
-
-
-
-
