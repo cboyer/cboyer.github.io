@@ -1,7 +1,7 @@
 ---
 title: "Installation de Kodi sous FreeBSD 13"
 date: "2021-11-12T18:20:14-05:00"
-updated: "2021-11-20T21:59:14-05:00"
+updated: "2021-11-22T17:34:14-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"

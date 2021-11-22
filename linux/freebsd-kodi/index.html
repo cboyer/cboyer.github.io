@@ -15,9 +15,9 @@
   <meta property="og:description" content="Installation de Kodi sous FreeBSD 13" />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2021-11-20T21:59:14-05:00" />
+  <meta property="og:updated_time" content="2021-11-22T17:34:14-05:00" />
   <meta property="article:published_time" content="2021-11-12T18:20:14-05:00" />
-  <meta property="article:modified_time" content="2021-11-20T21:59:14-05:00" />
+  <meta property="article:modified_time" content="2021-11-22T17:34:14-05:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
@@ -117,27 +117,15 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h1>Installation de Kodi sous FreeBSD 13</h1>
- <small class="date">Publié le 2021-11-12, dernière mise à jour: 2021-11-20</small>
+ <small class="date">Publié le 2021-11-12, dernière mise à jour: 2021-11-22</small>
 </header>
 <p>Certains paramètres présentés sont spécifiques à la configuration matérielle d'un système avec Intel Braswell.</p>
 <h2 id="installation-de-kodi-depuis-les-paquets">Installation de Kodi depuis les paquets</h2>
-<p>Installation des paquets avec <code>pkg</code></p>
+<h3 id="installation-des-paquets-avec-pkg">Installation des paquets avec pkg</h3>
 <pre class="console"><code>pkg install kodi kodi-addon-pvr.iptvsimple libbluray libcec dav1d lcms2 libass libcrossguid curl ffmpeg libfmt fstrcmp lzo2 spdlog sqlite3 taglib waylandpp libGLU xorg-server xinit xorg-drivers drm-kmod xf86-video-intel libva-intel-driver libvdpau-va-gl xterm py38-sqlite3</code></pre>
 <p>Charger le module KMS au boot via <code>/etc/rc.conf</code></p>
 <pre class="console"><code>sysrc kld_list+=i915kms</code></pre>
-<h2 id="compilation-et-installation-de-kodi-avec-les-ports">Compilation et installation de Kodi avec les ports</h2>
-<pre class="console"><code>portsnap fetch extract
-cd /usr/ports/ports-mgmt/portmaster
-make install clean
-rehash
-portmaster -L | more
-portmaster -GPd --update-if-newer multimedia/kodi</code></pre>
-<p>La méthode traditionnelle sans <code>portmaster</code></p>
-<pre class="console"><code>cd /usr/ports
-make quicksearch name=kodi
-cd /usr/ports/multimedia/kodi
-make config-recursive</code></pre>
-<h2 id="configuration-de-xorg">Configuration de Xorg</h2>
+<h3 id="configuration-de-xorg">Configuration de Xorg</h3>
 <p>Générer automatiquement une configuration élémentaire</p>
 <pre class="console"><code>Xorg -configure
 mv xorg.conf.new /etc/X11/xorg.conf</code></pre>
@@ -166,7 +154,7 @@ EndSection</code></pre>
 </blockquote>
 <p>Tester l'exécution de Kodi:</p>
 <pre class="console"><code>su -m kodi -c &#39;setenv HOME /home/kodi &amp;&amp; /usr/local/bin/xinit /usr/local/bin/kodi-standalone -- -nocursor :0 -nolisten tcp&#39;</code></pre>
-<h2 id="autologin-et-lancement-automatique-de-kodi">Autologin et lancement automatique de Kodi</h2>
+<h3 id="autologin-et-lancement-automatique-de-kodi">Autologin et lancement automatique de Kodi</h3>
 <p>Dans <code>/etc/gettytab</code></p>
 <pre class="text"><code># autologin kodi
 A|Al|Autologin console:\
@@ -175,22 +163,22 @@ A|Al|Autologin console:\
 <pre class="text"><code>#ttyv1  &quot;/usr/libexec/getty Pc&quot;         xterm   onifexists secure
 ttyv1   &quot;/usr/libexec/getty Al&quot;         xterm   onifexists secure</code></pre>
 <p>Ajouter dans <code>/home/kodi/.cshrc</code></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">setenv</span> LIBVA_DRIVER_NAME i965</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">setenv</span> LIBVA_DRIVERS_PATH /usr/local/lib/dri</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> XPID = <span class="kw">`</span><span class="ex">/usr/bin/pgrep</span> xinit<span class="kw">`</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">(</span> <span class="kw">{</span> <span class="bu">[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$XPID</span><span class="st">&quot;</span> <span class="bu">]</span> <span class="kw">}</span> <span class="kw">)</span> <span class="cf">then</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;X is already running&quot;</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/usr/local/bin/xinit</span> /usr/local/bin/kodi-standalone <span class="at">--</span> <span class="at">-nocursor</span> :0 <span class="at">-nolisten</span> tcp</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">logout</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="ex">endif</span></span></code></pre></div>
-<h2 id="configuration-du-chargeur-damorçage">Configuration du chargeur d'amorçage</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">setenv</span> LIBVA_DRIVER_NAME i965</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">setenv</span> LIBVA_DRIVERS_PATH /usr/local/lib/dri</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> XPID = <span class="kw">`</span><span class="ex">/usr/bin/pgrep</span> xinit<span class="kw">`</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">(</span> <span class="kw">{</span> <span class="bu">[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$XPID</span><span class="st">&quot;</span> <span class="bu">]</span> <span class="kw">}</span> <span class="kw">)</span> <span class="cf">then</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;X is already running&quot;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/usr/local/bin/xinit</span> /usr/local/bin/kodi-standalone <span class="at">--</span> <span class="at">-nocursor</span> :0 <span class="at">-nolisten</span> tcp</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">logout</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="ex">endif</span></span></code></pre></div>
+<h3 id="configuration-du-chargeur-damorçage">Configuration du chargeur d'amorçage</h3>
 <p>Ajouter dans <code>/boot/loader.conf</code>.</p>
 <pre class="text"><code>autoboot_delay=&quot;-1&quot;
 hw.vga.textmode=0
 kern.vt.fb.default_mode=&quot;800x600&quot;</code></pre>
-<h2 id="support-des-partitions-ext4">Support des partitions EXT4</h2>
+<h3 id="support-des-partitions-ext4">Support des partitions EXT4</h3>
 <pre class="console"><code>pkg install fusefs-lkl
 kldload fusefs
 sysrc kld_list+=fusefs</code></pre>
@@ -201,7 +189,7 @@ sysrc kld_list+=fusefs</code></pre>
 <blockquote>
 <p>Pour les volumes NTFS il faut installer le paquet <code>fusefs-ntfs</code>.</p>
 </blockquote>
-<h2 id="installation-de-samba4">Installation de Samba4</h2>
+<h3 id="installation-de-samba4">Installation de Samba4</h3>
 <p>pkg install samba413</p>
 <p>La configuration dans <code>/usr/local/etc/smb4.conf</code></p>
 <pre class="text"><code>[global]
@@ -218,10 +206,43 @@ sysrc kld_list+=fusefs</code></pre>
     valid users = smbuser</code></pre>
 <pre class="console"><code>sysrc samba_server_enable=&quot;YES&quot;
 service samba_server start</code></pre>
-<h2 id="compilation-de-ipvr-simple-client">Compilation de IPVR Simple Client</h2>
+<h2 id="compilation-et-installation-de-kodi-avec-les-ports-uniquement">Compilation et installation de Kodi avec les ports uniquement</h2>
+<p>Installation de l'arbre de sports et portmaster</p>
+<pre class="console"><code>portsnap fetch extract
+cd /usr/ports/ports-mgmt/portmaster
+make install clean
+rehash
+portmaster -L</code></pre>
+<p>Pour installer les ports, nous utiliserons <code>portmaster</code> qui permet notamment d'utiliser les paquets précompilés pour les dépendances avec <code>-P</code>. La méthode traditionnelle pour installer des ports sans <code>portmaster</code> se résume à:</p>
+<pre class="console"><code>cd /usr/ports
+make quicksearch name=htop
+cd /usr/ports/sysutils/htop
+make config-recursive
+make</code></pre>
+<p>Installer les source du noyau pour la version/architecture courante (nécessaire pour compiler certains pilotes par la suite)</p>
+<pre class="console"><code>cd /tmp
+fetch ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/13.0-RELEASE/src.txz
+tar -C / -zxvf src.txz
+rm /tmp/src.txz</code></pre>
+<p>Installer le pilote DRM</p>
+<pre class="console"><code>portmaster -Gd graphics/drm-kmod
+sysrc kld_list+=i915kms
+kldload i915kms</code></pre>
+<p>Installer le pilote i965 (non contenu dans mesa-dri) et VAAPI pour le décodage matérielle</p>
+<pre class="console"><code>cd graphics/mesa-devel
+make config
+portmaster -Gd graphics/mesa-devel
+portmaster -Gd multimedia/libva-intel-driver</code></pre>
+<p>Configuration et compilation de Kodi (options GBM/OpenGLES)</p>
+<pre class="console"><code>cd /usr/ports/multimedia/kodi
+make config
+portmaster -Gd --update-if-newer multimedia/kodi
+mkdir /usr/local/lib/kodi/addons</code></pre>
+<h3 id="compilation-de-ipvr-simple-client">Compilation de IPVR Simple Client</h3>
 <p>La version de Kodi issue des ports appartient à la branche Matrix (version 19), IPVR Simple Client doit être issu de la même branche pour assurer sa compatibilité.</p>
 <pre class="console"><code>pkg install cmake git
-git clone --branch master https://github.com/xbmc/xbmc.git
+cd /tmp
+git clone --branch 19.3-Matrix https://github.com/xbmc/xbmc.git
 git clone --depth 1 --branch 19.0.2-Matrix https://github.com/kodi-pvr/pvr.iptvsimple
 cd pvr.iptvsimple &amp;&amp; mkdir build &amp;&amp; cd build
 cmake -DADDONS_TO_BUILD=pvr.iptvsimple -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons</code></pre>
@@ -231,11 +252,61 @@ CMAKE_C_FLAGS:STRING=-fPIC</code></pre>
 <p>Lancer la compilation</p>
 <pre class="console"><code>make</code></pre>
 <p>Copier les fichiers</p>
-<pre class="console"><code>cp ../../xbmc/addons/pvr.iptvsimple/pvr.iptvsimple.so* /usr/local/lib/kodi/addons/pvr.iptvsimple/
+<pre class="console"><code>mkdir /usr/local/lib/kodi/addons/pvr.iptvsimple/
+mkdir /usr/local/share/kodi/addons/pvr.iptvsimple/
+
+cp ../../xbmc/addons/pvr.iptvsimple/pvr.iptvsimple.so* /usr/local/lib/kodi/addons/pvr.iptvsimple/
 cp ../../xbmc/addons/pvr.iptvsimple/addon.xml /usr/local/share/kodi/addons/pvr.iptvsimple/
 cp ../../xbmc/addons/pvr.iptvsimple/changelog.txt /usr/local/share/kodi/addons/pvr.iptvsimple/
 cp ../../xbmc/addons/pvr.iptvsimple/icon.png /usr/local/share/kodi/addons/pvr.iptvsimple/
-cp -r ../../xbmc/addons/pvr.iptvsimple/resources/ /usr/local/share/kodi/addons/pvr.iptvsimple/</code></pre>
+cp -r ../../xbmc/addons/pvr.iptvsimple/resources/ /usr/local/share/kodi/addons/pvr.iptvsimple/resources</code></pre>
+<h3 id="installer-inputstream.ffmpegdirect">Installer inputstream.ffmpegdirect</h3>
+<pre class="console"><code>cd /tmp
+git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.ffmpegdirect.git
+cd inputstream.ffmpegdirect &amp;&amp; mkdir build &amp;&amp; cd build
+cmake -DADDONS_TO_BUILD=inputstream.ffmpegdirect -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
+gmake
+
+mkdir /usr/local/lib/kodi/addons/inputstream.ffmpegdirect
+mkdir /usr/local/share/kodi/addons/inputstream.ffmpegdirect
+
+cp ../../xbmc/build/addons/inputstream.ffmpegdirect/inputstream.ffmpegdirect.so* /usr/local/lib/kodi/addons/inputstream.ffmpegdirect
+cp ../../xbmc/build/addons/inputstream.ffmpegdirect/addon.xml /usr/local/share/kodi/addons/inputstream.ffmpegdirect
+cp ../../xbmc/build/addons/inputstream.ffmpegdirect/changelog.txt /usr/local/share/kodi/addons/inputstream.ffmpegdirect
+cp ../../xbmc/build/addons/inputstream.ffmpegdirect/icon.png /usr/local/share/kodi/addons/inputstream.ffmpegdirect
+cp -r ../../xbmc/build/addons/inputstream.ffmpegdirect/resources/ /usr/local/share/kodi/addons/inputstream.ffmpegdirect/resources</code></pre>
+<h3 id="installer-inputstream.adaptive">Installer inputstream.adaptive</h3>
+<pre class="console"><code>cd /tmp
+git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.adaptive
+cd inputstream.adaptive &amp;&amp; mkdir build &amp;&amp; cd build
+cmake -DADDONS_TO_BUILD=inputstream.adaptive -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
+gmake
+
+mkdir /usr/local/lib/kodi/addons/inputstream.adaptive
+mkdir /usr/local/share/kodi/addons/inputstream.adaptive
+
+cp ../../xbmc/build/addons/inputstream.adaptive/inputstream.adaptive.so* /usr/local/lib/kodi/addons/inputstream.adaptive
+cp ../../xbmc/build/addons/inputstream.adaptive/libssd_wv.so /usr/local/lib/kodi/addons/inputstream.adaptive
+cp ../../xbmc/build/addons/inputstream.adaptive/addon.xml /usr/local/share/kodi/addons/inputstream.adaptive
+cp -r ../../xbmc/build/addons/inputstream.adaptive/resources/ /usr/local/share/kodi/addons/inputstream.adaptive/resources</code></pre>
+<h3 id="installer-inputstream.rtmp">Installer inputstream.rtmp</h3>
+<pre class="console"><code>cd /tmp
+git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.rtmp
+cd inputstream.rtmp &amp;&amp; mkdir build &amp;&amp; cd build
+cmake -DADDONS_TO_BUILD=inputstream.rtmp -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/kodi-build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons</code></pre>
+<p>Ajouter <code>set(OPENSSL_TARGET BSD-x86_64)</code> dans <code>../depends/common/openssl/CMakeLists.txt</code> avant la suite de fonctions <code>list</code>. Ajouter <code>-fPIC</code> dans les directives de <code>CMakeCache.txt</code></p>
+<pre class="text"><code>CMAKE_CXX_FLAGS:STRING=-fPIC
+CMAKE_C_FLAGS:STRING=-fPIC</code></pre>
+<p>Lancer la compilation</p>
+<pre class="console"><code>make
+
+mkdir /usr/local/lib/kodi/addons/inputstream.rtmp
+mkdir /usr/local/share/kodi/addons/inputstream.rtmp
+
+cp ../../xbmc/kodi-build/addons/inputstream.rtmp/inputstream.rtmp.so* /usr/local/lib/kodi/addons/inputstream.rtmp
+cp ../../xbmc/kodi-build/addons/inputstream.rtmp/addon.xml /usr/local/share/kodi/addons/inputstream.rtmp
+cp ../../xbmc/kodi-build/addons/inputstream.rtmp/icon.png /usr/local/share/kodi/addons/inputstream.rtmp
+cp -r ../../xbmc/kodi-build/addons/inputstream.rtmp/resources/ /usr/local/share/kodi/addons/inputstream.rtmp/resources</code></pre>
 <h3 id="lectures-complémentaires">Lectures complémentaires</h3>
 <ul>
 <li><a href="https://docs.freebsd.org/en/books/handbook/ports/">https://docs.freebsd.org/en/books/handbook/ports/</a></li>
