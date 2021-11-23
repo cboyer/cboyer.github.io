@@ -3,7 +3,7 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2021-11-22T17:39:39-05:00</updated>
+    <updated>2021-11-23T16:31:39-05:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
@@ -296,7 +296,7 @@
         <category term="Linux"/>
         <id>urn:uuid:c790f5b1-24ff-54d2-a68e-346d7e78ff9f</id>
         <published>2018-05-04T17:56:14-04:00</published>
-        <updated>2018-11-01T18:08:32-04:00</updated>
+        <updated>2021-11-23T18:08:32-04:00</updated>
         <summary>Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires.</summary>
     </entry>
     <entry>

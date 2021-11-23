@@ -1,7 +1,7 @@
 ---
 title: "Filtrer les publicités avec un serveur DNS Unbound"
 date: "2018-05-04T17:56:14-04:00"
-updated: "2018-11-01T18:08:32-04:00"
+updated: "2021-11-23T18:08:32-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -28,55 +28,86 @@ La configuration d'Unbound `/etc/unbound/unbound.conf`:
 
 ```yaml
 server:
-	interface: 0.0.0.0
-	verbosity: 1
-	use-syslog: yes
-	username: "unbound"
-	directory: "/etc/unbound"
-	pidfile: "/var/run/unbound/unbound.pid"
-	logfile: "/var/log/unbound/unbound.log"
-	include: /etc/unbound/local.conf
-	include: /etc/unbound/blacklist.conf
-	log-time-ascii: yes
-	do-ip4: yes
+        username: unbound
+        directory: /var/unbound
+        chroot: /var/unbound
+        pidfile: /var/run/local_unbound.pid
+        interface: 0.0.0.0
+        port: 53
+        module-config: "validator iterator"
+        access-control: 127.0.0.1 allow
+        access-control: 192.168.10.0/24 allow
+        #unblock-lan-zones: yes
+        #insecure-lan-zones: yes
+        aggressive-nsec: yes
+        #so-sndbuf: 8M
+        cache-min-ttl: 3600s
+        cache-max-ttl: 86400s
+        cache-max-negative-ttl: 86400s
+        msg-cache-size: 128M
+        rrset-cache-size: 256M
+        rrset-roundrobin: yes
+        #num-threads: 4
+        logfile: unbound.log
+        verbosity: 1
+        log-time-ascii: yes
+        val-log-level: 2
+        use-syslog: no
+        do-ip4: yes
         do-ip6: no
-        do-udp: yes
         do-tcp: yes
-        do-daemonize: yes
-	so-sndbuf: 8m
-	msg-cache-size: 8m
-	rrset-cache-size: 8m
-	cache-min-ttl: 3600s
-	cache-max-ttl: 86400
-	cache-max-negative-ttl: 86400
+        do-udp: yes
+        do-daemonize: no
+        hide-identity: yes
+        hide-version: yes
+        qname-minimisation: yes
+        minimal-responses: yes
+        harden-glue: yes
+        harden-dnssec-stripped: yes
+        disable-dnssec-lame-check: yes
+        prefetch: yes
+        prefetch-key: yes
+        val-clean-additional: yes
+        unwanted-reply-threshold: 10000
+        tls-cert-bundle: "/usr/local/share/certs/ca-root-nss.crt"
+        ssl-cert-bundle: "/usr/local/share/certs/ca-root-nss.crt"
+        use-caps-for-id: yes
 
 remote-control:
-        control-enable: no
+        control-enable: yes
+        control-interface: /var/run/local_unbound.ctl
+        control-use-cert: no
 
 forward-zone:
-	name: "."
-	forward-addr: 1.1.1.1@853
-	forward-addr: 1.0.0.1@853
-   	forward-ssl-upstream: yes
-	#forward-addr: 80.67.169.12
-	#forward-addr: 80.67.169.40
+        name: "."
+        #forward-ssl-upstream: yes
+        forward-tls-upstream: yes
+        #forward-addr: 1.1.1.1@853#Cloudflare.com
+        #forward-addr: 1.0.0.1@853#Cloudflare.com
+        #forward-addr: 8.8.8.8@853#Google.com
+        #forward-addr: 80.241.218.68@853#fdns1.dismail.de
+        #forward-addr: 159.69.114.157@853#fdns2.dismail.de
+        #forward-addr: 146.255.56.98@853#dot1.applied-privacy.net
+        forward-addr: 116.202.176.26@853#dot.libredns.gr
+
+include: /var/unbound/conf.d/*.conf	
 ```
 
 Vous trouverez la description de tous ces paramètres dans la documentation officielle d'Unbound: [https://www.unbound.net/documentation/unbound.conf.html](https://www.unbound.net/documentation/unbound.conf.html)
 
-Pour résumer, Unbound fait office de cache DNS en résolvant les requêtes avec les DNS Cloudflare (connexion sécurisée par TLS). Les deux autres adresses commentées correspondent aux serveurs DNS de la [FDN](https://www.fdn.fr/actions/dns) dans le cas où vous ne feriez pas confiance à Cloudflare. Les DNS de Google sont vraiment à éviter pour des raisons évidentes.
+Pour résumer, Unbound fait office de cache DNS en résolvant les requêtes avec le DNS LibreDNS (connexion sécurisée par TLS). Les DNS de Google/Cloudflare sont vraiment à éviter pour des raisons évidentes.
 
-Le fichier `/etc/unbound/local.conf` contiendra nos entrées locales, par exemple:
+Le fichier `/etc/unbound/conf.d/local.conf` contiendra nos entrées locales, par exemple:
 
 ```console
 local-zone: "serveur" redirect
-local-data: "serveur A 192.168.10.100"
+local-data: "serveur A 192.168.10.104"
 
 local-zone: "patate" redirect
 local-data: "patate A 192.168.10.12"
 ```
 
-Le fichier `/etc/unbound/blacklist.conf` contiendra les domaines à bloquer.
+Le fichier `/etc/unbound/conf.d/blacklist.conf` contiendra les domaines à bloquer.
 Pour cela, je vous propose les listes de Steven Black qui sont tenues à jour fréquemment et disponibles sur son dépôt Github: [https://github.com/StevenBlack/hosts](https://github.com/StevenBlack/hosts).
 Le problème est que le formatage de cette liste est adapté pour un fichier hosts et non pour Unbound.
 Remédions à la situation avec un simple script Bash:
@@ -85,10 +116,7 @@ Remédions à la situation avec un simple script Bash:
 ```bash
 #!/bin/bash
 
-wget https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts
-egrep '^0.0.0.0' hosts | awk '{print $2}' | sed '1d' | sed -e 's/^/local-zone: "/' | sed -e 's/$/" refuse/' > /etc/unbound/blacklist.conf
-rm -f hosts
-
+curl -s https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts | grep "^0.0.0.0" | awk 'BEGIN{ print "server:"} NR>1{ print "\tlocal-zone: " $2 " always_refuse" }' > /etc/unbound/conf.d/blacklist.conf
 ```
 
 Adaptez l'URL selon votre choix parmi les différentes listes disponibles. Ce script peut parfaitement être ajouté dans la crontab pour une synchronisation régulière: pour cela ajoutez un redémarrage du service en dernière ligne.

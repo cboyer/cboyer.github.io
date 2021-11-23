@@ -182,7 +182,7 @@ cd /usr/ports
 make quicksearch name=htop
 cd /usr/ports/sysutils/htop
 make config-recursive
-make
+make install clean
 ```
 
 Installer les sources du noyau pour la version/architecture courante (nécessaire pour compiler certains pilotes par la suite)
