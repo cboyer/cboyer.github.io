@@ -100,6 +100,9 @@ Pour résumer, Unbound fait office de cache DNS en résolvant les requêtes avec
 Le fichier `/etc/unbound/conf.d/local.conf` contiendra nos entrées locales, par exemple:
 
 ```console
+local-zone: "domaine.com." static
+local-data: "host1.domaine.com A 192.168.10.114"
+
 local-zone: "serveur" redirect
 local-data: "serveur A 192.168.10.104"
 

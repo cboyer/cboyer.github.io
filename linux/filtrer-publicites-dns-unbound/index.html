@@ -193,7 +193,10 @@ yum install unbound</code></pre>
 <p>Vous trouverez la description de tous ces paramètres dans la documentation officielle d'Unbound: <a href="https://www.unbound.net/documentation/unbound.conf.html">https://www.unbound.net/documentation/unbound.conf.html</a></p>
 <p>Pour résumer, Unbound fait office de cache DNS en résolvant les requêtes avec le DNS LibreDNS (connexion sécurisée par TLS). Les DNS de Google/Cloudflare sont vraiment à éviter pour des raisons évidentes.</p>
 <p>Le fichier <code>/etc/unbound/conf.d/local.conf</code> contiendra nos entrées locales, par exemple:</p>
-<pre class="console"><code>local-zone: &quot;serveur&quot; redirect
+<pre class="console"><code>local-zone: &quot;domaine.com.&quot; static
+local-data: &quot;host1.domaine.com A 192.168.10.114&quot;
+
+local-zone: &quot;serveur&quot; redirect
 local-data: &quot;serveur A 192.168.10.104&quot;
 
 local-zone: &quot;patate&quot; redirect
