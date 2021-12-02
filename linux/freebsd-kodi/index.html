@@ -206,9 +206,17 @@ sysrc kld_list+=fusefs</code></pre>
     valid users = smbuser</code></pre>
 <pre class="console"><code>sysrc samba_server_enable=&quot;YES&quot;
 service samba_server start</code></pre>
-<h2 id="compilation-et-installation-de-kodi-avec-les-ports-uniquement">Compilation et installation de Kodi avec les ports uniquement</h2>
+<h2 id="compilation-et-installation-de-kodi-avec-les-portssources-uniquement">Compilation et installation de Kodi avec les ports/sources uniquement</h2>
+<p>Définition de certaines options par défaut lors de la compilation des ports dans <code>/etc/make.conf</code></p>
+<pre class="text"><code>DEFAULT_VERSIONS= python=3.9 python3=3.9
+OPTIONS_UNSET= X11 GUI CUPS DOCS EXAMPLES PERL
+WITHOUT= X11 GUI CUPS DOCS EXAMPLES PERL
+
+#Pour un port particulier
+#devel_gettext-tools_UNSET+=EXAMPLES</code></pre>
 <p>Installation de l'arbre des ports et portmaster</p>
 <pre class="console"><code>portsnap fetch extract
+cd /usr/ports
 cd /usr/ports/ports-mgmt/portmaster
 make install clean
 rehash
@@ -219,6 +227,8 @@ make quicksearch name=htop
 cd /usr/ports/sysutils/htop
 make config-recursive
 make install clean</code></pre>
+<p>Installation de <code>git</code> et <code>cmake</code></p>
+<pre class="console"><code>portmaster devel/git@tiny devel/cmake</code></pre>
 <p>Installer les sources du noyau pour la version/architecture courante (nécessaire pour compiler certains pilotes par la suite)</p>
 <pre class="console"><code>cd /tmp
 fetch ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/13.0-RELEASE/src.txz
@@ -233,15 +243,14 @@ kldload i915kms</code></pre>
 make config
 portmaster -Gd graphics/mesa-devel
 portmaster -Gd multimedia/libva-intel-driver</code></pre>
-<p>Configuration et compilation de Kodi (options GBM/OpenGLES)</p>
+<p>Configuration et compilation de Kodi (options GBM/OpenGLES pour se passer du serveur X)</p>
 <pre class="console"><code>cd /usr/ports/multimedia/kodi
 make config
 portmaster -Gd --update-if-newer multimedia/kodi
 mkdir /usr/local/lib/kodi/addons</code></pre>
 <h3 id="compilation-de-ipvr-simple-client">Compilation de IPVR Simple Client</h3>
 <p>La version de Kodi issue des ports appartient à la branche Matrix (version 19), IPVR Simple Client doit être issu de la même branche pour assurer sa compatibilité.</p>
-<pre class="console"><code>pkg install cmake git
-cd /tmp
+<pre class="console"><code>cd /tmp
 git clone --branch 19.3-Matrix https://github.com/xbmc/xbmc.git
 git clone --depth 1 --branch 19.0.2-Matrix https://github.com/kodi-pvr/pvr.iptvsimple
 cd pvr.iptvsimple &amp;&amp; mkdir build &amp;&amp; cd build

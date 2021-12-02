@@ -93,6 +93,10 @@ forward-zone:
 include: /var/unbound/conf.d/*.conf	
 ```
 
+> Sous FreeBSD il faut définir `do-daemonize: yes` pour ne pas bloquer le démarrage du système. Installer également `security/ca_root_nss` pour `/usr/local/share/certs/ca-root-nss.crt` (dont `/etc/ssl/cert.pem` est un lien symbolique).
+
+
+
 Vous trouverez la description de tous ces paramètres dans la documentation officielle d'Unbound: [https://www.unbound.net/documentation/unbound.conf.html](https://www.unbound.net/documentation/unbound.conf.html)
 
 Pour résumer, Unbound fait office de cache DNS en résolvant les requêtes avec le DNS LibreDNS (connexion sécurisée par TLS). Les DNS de Google/Cloudflare sont vraiment à éviter pour des raisons évidentes.

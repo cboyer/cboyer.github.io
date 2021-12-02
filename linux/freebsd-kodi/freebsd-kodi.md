@@ -164,11 +164,22 @@ service samba_server start
 
 
 
-## Compilation et installation de Kodi avec les ports uniquement
+## Compilation et installation de Kodi avec les ports/sources uniquement
+
+Définition de certaines options par défaut lors de la compilation des ports dans `/etc/make.conf`
+```Text
+DEFAULT_VERSIONS= python=3.9 python3=3.9
+OPTIONS_UNSET= X11 GUI CUPS DOCS EXAMPLES PERL
+WITHOUT= X11 GUI CUPS DOCS EXAMPLES PERL
+
+#Pour un port particulier
+#devel_gettext-tools_UNSET+=EXAMPLES
+```
 
 Installation de l'arbre des ports et portmaster
 ```Console
 portsnap fetch extract
+cd /usr/ports
 cd /usr/ports/ports-mgmt/portmaster
 make install clean
 rehash
@@ -183,6 +194,11 @@ make quicksearch name=htop
 cd /usr/ports/sysutils/htop
 make config-recursive
 make install clean
+```
+
+Installation de `git` et `cmake`
+```Console
+portmaster devel/git@tiny devel/cmake
 ```
 
 Installer les sources du noyau pour la version/architecture courante (nécessaire pour compiler certains pilotes par la suite)
@@ -208,7 +224,7 @@ portmaster -Gd graphics/mesa-devel
 portmaster -Gd multimedia/libva-intel-driver
 ```
 
-Configuration et compilation de Kodi (options GBM/OpenGLES)
+Configuration et compilation de Kodi (options GBM/OpenGLES pour se passer du serveur X)
 ```Console
 cd /usr/ports/multimedia/kodi
 make config
@@ -222,7 +238,6 @@ mkdir /usr/local/lib/kodi/addons
 
 La version de Kodi issue des ports appartient à la branche Matrix (version 19), IPVR Simple Client doit être issu de la même branche pour assurer sa compatibilité.
 ```Console
-pkg install cmake git
 cd /tmp
 git clone --branch 19.3-Matrix https://github.com/xbmc/xbmc.git
 git clone --depth 1 --branch 19.0.2-Matrix https://github.com/kodi-pvr/pvr.iptvsimple

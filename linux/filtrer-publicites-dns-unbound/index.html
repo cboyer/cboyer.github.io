@@ -190,6 +190,9 @@ yum install unbound</code></pre>
 <span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">forward-addr</span><span class="kw">:</span><span class="at"> 116.202.176.26@853</span><span class="co">#dot.libredns.gr</span></span>
 <span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span><span class="kw">:</span><span class="at"> /var/unbound/conf.d/*.conf </span></span></code></pre></div>
+<blockquote>
+<p>Sous FreeBSD il faut définir <code>do-daemonize: yes</code> pour ne pas bloquer le démarrage du système. Installer également <code>security/ca_root_nss</code> pour <code>/usr/local/share/certs/ca-root-nss.crt</code> (dont <code>/etc/ssl/cert.pem</code> est un lien symbolique).</p>
+</blockquote>
 <p>Vous trouverez la description de tous ces paramètres dans la documentation officielle d'Unbound: <a href="https://www.unbound.net/documentation/unbound.conf.html">https://www.unbound.net/documentation/unbound.conf.html</a></p>
 <p>Pour résumer, Unbound fait office de cache DNS en résolvant les requêtes avec le DNS LibreDNS (connexion sécurisée par TLS). Les DNS de Google/Cloudflare sont vraiment à éviter pour des raisons évidentes.</p>
 <p>Le fichier <code>/etc/unbound/conf.d/local.conf</code> contiendra nos entrées locales, par exemple:</p>
