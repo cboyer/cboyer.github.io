@@ -166,11 +166,13 @@ service samba_server start
 
 ## Compilation et installation de Kodi avec les ports/sources uniquement
 
+### Récupèration des ports et installation des outils
+
 Définition de certaines options par défaut lors de la compilation des ports dans `/etc/make.conf`
 ```Text
 DEFAULT_VERSIONS= python=3.9 python3=3.9
-OPTIONS_UNSET= X11 GUI CUPS DOCS EXAMPLES  LUA
-WITHOUT= X11 GUI CUPS DOCS EXAMPLES PERL LUA
+OPTIONS_UNSET= X11 GUI CUPS DOCS EXAMPLES DOXYGEN PERL LUA
+WITHOUT= X11 GUI CUPS DOCS EXAMPLES DOXYGEN PERL LUA
 
 #Pour un port particulier
 #devel_gettext-tools_UNSET+=EXAMPLES
@@ -186,7 +188,14 @@ rehash
 portmaster -L
 ```
 
-L'outil `portmaster` permet l'installation de ports (en remplacement de `make install clean`. Notons qu'il permet d'utiliser les paquets précompilés pour les dépendances avec `-P` (non utilisé ici).
+L'outil `portmaster` permet l'installation de ports à la place de `make install clean`.
+Quelques paramètres utiles pour l'utilisation de `portmaster`:
+
+- `-P` permet d'utiliser les paquets précompilés pour les dépendances
+- `-G` accepter la configuration par défaut (pas d'interaction)
+- `-B` ne conserve pas de backup de l'ancien package après mise à jour (pas d'interaction)
+- `-d` nettoie les distfiles
+
 Les commandes complémentaires pour la gestion des ports:
 ```Console
 #Chercher un port par son nom (depuis /usr/ports)
@@ -199,7 +208,7 @@ make config-recursive
 make rmconfig-recursive
 
 #Pour tout nettoyer (depuis /usr/ports)
-find -s . -type d -name 'work' -exec "make clean && make rmconfig" '{}' \;
+find -s . -type d -name 'work' -exec make rmconfig '{}' \; -exec make clean '{}' \;
 ```
 
 Installation de `git` et `cmake`
@@ -207,6 +216,7 @@ Installation de `git` et `cmake`
 portmaster devel/git@tiny devel/cmake
 ```
 
+### Installation des ports 
 Installer les sources du noyau pour la version/architecture courante (nécessaire pour compiler certains pilotes par la suite)
 ```Console
 cd /tmp
@@ -217,30 +227,31 @@ rm /tmp/src.txz
 
 Installer le pilote DRM
 ```Console
-portmaster -Gd graphics/drm-kmod
+portmaster -Bd graphics/drm-kmod
 sysrc kld_list+=i915kms
 kldload i915kms
 ```
 
-Installer le pilote i965 (non contenu dans mesa-dri) et VAAPI pour le décodage matérielle
+Installer le pilote i965 (non contenu dans mesa-dri) et VAAPI pour le décodage matériel
 ```Console
 cd graphics/mesa-devel
 make config
-portmaster -Gd graphics/mesa-devel
-portmaster -Gd multimedia/libva-intel-driver
+portmaster -Bd graphics/mesa-devel
+portmaster -Bd multimedia/libva-intel-driver
 ```
 
 Configuration et compilation de Kodi (options GBM/OpenGLES pour se passer du serveur X)
 ```Console
 cd /usr/ports/multimedia/kodi
 make config
-portmaster -Gd --update-if-newer multimedia/kodi
+portmaster -Bd --update-if-newer multimedia/kodi
 mkdir /usr/local/lib/kodi/addons
 ```
 
 
+### Compilation des addons Kodi depuis les sources
 
-### Compilation de IPVR Simple Client
+#### IPVR Simple Client
 
 La version de Kodi issue des ports appartient à la branche Matrix (version 19), IPVR Simple Client doit être issu de la même branche pour assurer sa compatibilité.
 ```Console
@@ -257,13 +268,9 @@ CMAKE_CXX_FLAGS:STRING=-fPIC
 CMAKE_C_FLAGS:STRING=-fPIC
 ```
 
-Lancer la compilation
+Lancer la compilation et copier les fichiers
 ```Console
 make
-```
-
-Copier les fichiers
-```Console
 mkdir /usr/local/lib/kodi/addons/pvr.iptvsimple/
 mkdir /usr/local/share/kodi/addons/pvr.iptvsimple/
 
@@ -275,7 +282,7 @@ cp -r ../../xbmc/addons/pvr.iptvsimple/resources/ /usr/local/share/kodi/addons/p
 ```
 
 
-### Installer inputstream.ffmpegdirect
+#### inputstream.ffmpegdirect
 
 ```Console
 cd /tmp
@@ -294,7 +301,7 @@ cp ../../xbmc/build/addons/inputstream.ffmpegdirect/icon.png /usr/local/share/ko
 cp -r ../../xbmc/build/addons/inputstream.ffmpegdirect/resources/ /usr/local/share/kodi/addons/inputstream.ffmpegdirect/resources
 ```
 
-### Installer inputstream.adaptive
+#### inputstream.adaptive
 
 ```Console
 cd /tmp
@@ -312,7 +319,7 @@ cp ../../xbmc/build/addons/inputstream.adaptive/addon.xml /usr/local/share/kodi/
 cp -r ../../xbmc/build/addons/inputstream.adaptive/resources/ /usr/local/share/kodi/addons/inputstream.adaptive/resources
 ```
 
-### Installer inputstream.rtmp
+#### inputstream.rtmp
 
 ```Console
 cd /tmp
@@ -328,10 +335,9 @@ CMAKE_CXX_FLAGS:STRING=-fPIC
 CMAKE_C_FLAGS:STRING=-fPIC
 ```
 
-Lancer la compilation
+Lancer la compilation et copier les fichiers
 ```Console
 make
-
 mkdir /usr/local/lib/kodi/addons/inputstream.rtmp
 mkdir /usr/local/share/kodi/addons/inputstream.rtmp
 

@@ -207,10 +207,11 @@ sysrc kld_list+=fusefs</code></pre>
 <pre class="console"><code>sysrc samba_server_enable=&quot;YES&quot;
 service samba_server start</code></pre>
 <h2 id="compilation-et-installation-de-kodi-avec-les-portssources-uniquement">Compilation et installation de Kodi avec les ports/sources uniquement</h2>
+<h3 id="récupèration-des-ports-et-installation-des-outils">Récupèration des ports et installation des outils</h3>
 <p>Définition de certaines options par défaut lors de la compilation des ports dans <code>/etc/make.conf</code></p>
 <pre class="text"><code>DEFAULT_VERSIONS= python=3.9 python3=3.9
-OPTIONS_UNSET= X11 GUI CUPS DOCS EXAMPLES  LUA
-WITHOUT= X11 GUI CUPS DOCS EXAMPLES PERL LUA
+OPTIONS_UNSET= X11 GUI CUPS DOCS EXAMPLES DOXYGEN PERL LUA
+WITHOUT= X11 GUI CUPS DOCS EXAMPLES DOXYGEN PERL LUA
 
 #Pour un port particulier
 #devel_gettext-tools_UNSET+=EXAMPLES</code></pre>
@@ -221,7 +222,14 @@ cd /usr/ports/ports-mgmt/portmaster
 make install clean
 rehash
 portmaster -L</code></pre>
-<p>L'outil <code>portmaster</code> permet l'installation de ports (en remplacement de <code>make install clean</code>. Notons qu'il permet d'utiliser les paquets précompilés pour les dépendances avec <code>-P</code> (non utilisé ici). Les commandes complémentaires pour la gestion des ports:</p>
+<p>L'outil <code>portmaster</code> permet l'installation de ports à la place de <code>make install clean</code>. Quelques paramètres utiles pour l'utilisation de <code>portmaster</code>:</p>
+<ul>
+<li><code>-P</code> permet d'utiliser les paquets précompilés pour les dépendances</li>
+<li><code>-G</code> accepter la configuration par défaut (pas d'interaction)</li>
+<li><code>-B</code> ne conserve pas de backup de l'ancien package après mise à jour (pas d'interaction)</li>
+<li><code>-d</code> nettoie les distfiles</li>
+</ul>
+<p>Les commandes complémentaires pour la gestion des ports:</p>
 <pre class="console"><code>#Chercher un port par son nom (depuis /usr/ports)
 make quicksearch name=htop
 
@@ -232,29 +240,31 @@ make config-recursive
 make rmconfig-recursive
 
 #Pour tout nettoyer (depuis /usr/ports)
-find -s . -type d -name &#39;work&#39; -exec &quot;make clean &amp;&amp; make rmconfig&quot; &#39;{}&#39; \;</code></pre>
+find -s . -type d -name &#39;work&#39; -exec make rmconfig &#39;{}&#39; \; -exec make clean &#39;{}&#39; \;</code></pre>
 <p>Installation de <code>git</code> et <code>cmake</code></p>
 <pre class="console"><code>portmaster devel/git@tiny devel/cmake</code></pre>
+<h3 id="installation-des-ports">Installation des ports</h3>
 <p>Installer les sources du noyau pour la version/architecture courante (nécessaire pour compiler certains pilotes par la suite)</p>
 <pre class="console"><code>cd /tmp
 fetch ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/13.0-RELEASE/src.txz
 tar -C / -zxvf src.txz
 rm /tmp/src.txz</code></pre>
 <p>Installer le pilote DRM</p>
-<pre class="console"><code>portmaster -Gd graphics/drm-kmod
+<pre class="console"><code>portmaster -Bd graphics/drm-kmod
 sysrc kld_list+=i915kms
 kldload i915kms</code></pre>
-<p>Installer le pilote i965 (non contenu dans mesa-dri) et VAAPI pour le décodage matérielle</p>
+<p>Installer le pilote i965 (non contenu dans mesa-dri) et VAAPI pour le décodage matériel</p>
 <pre class="console"><code>cd graphics/mesa-devel
 make config
-portmaster -Gd graphics/mesa-devel
-portmaster -Gd multimedia/libva-intel-driver</code></pre>
+portmaster -Bd graphics/mesa-devel
+portmaster -Bd multimedia/libva-intel-driver</code></pre>
 <p>Configuration et compilation de Kodi (options GBM/OpenGLES pour se passer du serveur X)</p>
 <pre class="console"><code>cd /usr/ports/multimedia/kodi
 make config
-portmaster -Gd --update-if-newer multimedia/kodi
+portmaster -Bd --update-if-newer multimedia/kodi
 mkdir /usr/local/lib/kodi/addons</code></pre>
-<h3 id="compilation-de-ipvr-simple-client">Compilation de IPVR Simple Client</h3>
+<h3 id="compilation-des-addons-kodi-depuis-les-sources">Compilation des addons Kodi depuis les sources</h3>
+<h4 id="ipvr-simple-client">IPVR Simple Client</h4>
 <p>La version de Kodi issue des ports appartient à la branche Matrix (version 19), IPVR Simple Client doit être issu de la même branche pour assurer sa compatibilité.</p>
 <pre class="console"><code>cd /tmp
 git clone --branch 19.3-Matrix https://github.com/xbmc/xbmc.git
@@ -264,10 +274,9 @@ cmake -DADDONS_TO_BUILD=pvr.iptvsimple -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TY
 <p>Ajouter <code>-fPIC</code> dans les directives de <code>CMakeCache.txt</code></p>
 <pre class="text"><code>CMAKE_CXX_FLAGS:STRING=-fPIC
 CMAKE_C_FLAGS:STRING=-fPIC</code></pre>
-<p>Lancer la compilation</p>
-<pre class="console"><code>make</code></pre>
-<p>Copier les fichiers</p>
-<pre class="console"><code>mkdir /usr/local/lib/kodi/addons/pvr.iptvsimple/
+<p>Lancer la compilation et copier les fichiers</p>
+<pre class="console"><code>make
+mkdir /usr/local/lib/kodi/addons/pvr.iptvsimple/
 mkdir /usr/local/share/kodi/addons/pvr.iptvsimple/
 
 cp ../../xbmc/addons/pvr.iptvsimple/pvr.iptvsimple.so* /usr/local/lib/kodi/addons/pvr.iptvsimple/
@@ -275,7 +284,7 @@ cp ../../xbmc/addons/pvr.iptvsimple/addon.xml /usr/local/share/kodi/addons/pvr.i
 cp ../../xbmc/addons/pvr.iptvsimple/changelog.txt /usr/local/share/kodi/addons/pvr.iptvsimple/
 cp ../../xbmc/addons/pvr.iptvsimple/icon.png /usr/local/share/kodi/addons/pvr.iptvsimple/
 cp -r ../../xbmc/addons/pvr.iptvsimple/resources/ /usr/local/share/kodi/addons/pvr.iptvsimple/resources</code></pre>
-<h3 id="installer-inputstream.ffmpegdirect">Installer inputstream.ffmpegdirect</h3>
+<h4 id="inputstream.ffmpegdirect">inputstream.ffmpegdirect</h4>
 <pre class="console"><code>cd /tmp
 git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.ffmpegdirect.git
 cd inputstream.ffmpegdirect &amp;&amp; mkdir build &amp;&amp; cd build
@@ -290,7 +299,7 @@ cp ../../xbmc/build/addons/inputstream.ffmpegdirect/addon.xml /usr/local/share/k
 cp ../../xbmc/build/addons/inputstream.ffmpegdirect/changelog.txt /usr/local/share/kodi/addons/inputstream.ffmpegdirect
 cp ../../xbmc/build/addons/inputstream.ffmpegdirect/icon.png /usr/local/share/kodi/addons/inputstream.ffmpegdirect
 cp -r ../../xbmc/build/addons/inputstream.ffmpegdirect/resources/ /usr/local/share/kodi/addons/inputstream.ffmpegdirect/resources</code></pre>
-<h3 id="installer-inputstream.adaptive">Installer inputstream.adaptive</h3>
+<h4 id="inputstream.adaptive">inputstream.adaptive</h4>
 <pre class="console"><code>cd /tmp
 git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.adaptive
 cd inputstream.adaptive &amp;&amp; mkdir build &amp;&amp; cd build
@@ -304,7 +313,7 @@ cp ../../xbmc/build/addons/inputstream.adaptive/inputstream.adaptive.so* /usr/lo
 cp ../../xbmc/build/addons/inputstream.adaptive/libssd_wv.so /usr/local/lib/kodi/addons/inputstream.adaptive
 cp ../../xbmc/build/addons/inputstream.adaptive/addon.xml /usr/local/share/kodi/addons/inputstream.adaptive
 cp -r ../../xbmc/build/addons/inputstream.adaptive/resources/ /usr/local/share/kodi/addons/inputstream.adaptive/resources</code></pre>
-<h3 id="installer-inputstream.rtmp">Installer inputstream.rtmp</h3>
+<h4 id="inputstream.rtmp">inputstream.rtmp</h4>
 <pre class="console"><code>cd /tmp
 git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.rtmp
 cd inputstream.rtmp &amp;&amp; mkdir build &amp;&amp; cd build
@@ -312,9 +321,8 @@ cmake -DADDONS_TO_BUILD=inputstream.rtmp -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_
 <p>Ajouter <code>set(OPENSSL_TARGET BSD-x86_64)</code> dans <code>../depends/common/openssl/CMakeLists.txt</code> avant la suite de fonctions <code>list</code>. Ajouter <code>-fPIC</code> dans les directives de <code>CMakeCache.txt</code></p>
 <pre class="text"><code>CMAKE_CXX_FLAGS:STRING=-fPIC
 CMAKE_C_FLAGS:STRING=-fPIC</code></pre>
-<p>Lancer la compilation</p>
+<p>Lancer la compilation et copier les fichiers</p>
 <pre class="console"><code>make
-
 mkdir /usr/local/lib/kodi/addons/inputstream.rtmp
 mkdir /usr/local/share/kodi/addons/inputstream.rtmp
 
