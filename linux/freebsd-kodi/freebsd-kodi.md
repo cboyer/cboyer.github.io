@@ -169,8 +169,8 @@ service samba_server start
 Définition de certaines options par défaut lors de la compilation des ports dans `/etc/make.conf`
 ```Text
 DEFAULT_VERSIONS= python=3.9 python3=3.9
-OPTIONS_UNSET= X11 GUI CUPS DOCS EXAMPLES PERL
-WITHOUT= X11 GUI CUPS DOCS EXAMPLES PERL
+OPTIONS_UNSET= X11 GUI CUPS DOCS EXAMPLES  LUA
+WITHOUT= X11 GUI CUPS DOCS EXAMPLES PERL LUA
 
 #Pour un port particulier
 #devel_gettext-tools_UNSET+=EXAMPLES
@@ -186,14 +186,20 @@ rehash
 portmaster -L
 ```
 
-Pour installer les ports, nous utiliserons `portmaster` qui permet notamment d'utiliser les paquets précompilés pour les dépendances avec `-P` (non utilisé ici).
-La méthode traditionnelle pour installer des ports sans `portmaster` se résume à:
+L'outil `portmaster` permet l'installation de ports (en remplacement de `make install clean`. Notons qu'il permet d'utiliser les paquets précompilés pour les dépendances avec `-P` (non utilisé ici).
+Les commandes complémentaires pour la gestion des ports:
 ```Console
-cd /usr/ports
+#Chercher un port par son nom (depuis /usr/ports)
 make quicksearch name=htop
-cd /usr/ports/sysutils/htop
+
+#Configurer le port courant et ses dépendances
 make config-recursive
-make install clean
+
+#Pour supprimer la configuration du port et ses dépendances
+make rmconfig-recursive
+
+#Pour tout nettoyer (depuis /usr/ports)
+find -s . -type d -name 'work' -exec "make clean && make rmconfig" '{}' \;
 ```
 
 Installation de `git` et `cmake`
