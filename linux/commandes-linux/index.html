@@ -146,7 +146,7 @@ lsof -ni tcp:22
 lsof -ni &#39;udp@192.168.66.66:123&#39;</code></pre>
 <p>Recherche les occurences de "meta" dans tous les fichiers php de /var/www/drupal</p>
 <pre class="console"><code>find /var/www/drupal/ -name &quot;*.php&quot; -exec grep -H meta {} \;
-find /var/www/drupal/ -name &quot;*.php&quot; -print | xargs grep &quot;meta&quot;</code></pre>
+find /var/www/drupal/ -type f -print0 | xargs -0 egrep -i &quot;*meta*&quot;</code></pre>
 <p>Recherche récursive d'un motif et retourne le fichier</p>
 <pre class="console"><code>grep -rl &#39;chose&#39; ./</code></pre>
 <p>Recherche récursive d'un motif et le remplacer</p>
