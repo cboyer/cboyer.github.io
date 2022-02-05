@@ -1,7 +1,7 @@
 ---
 title: "Confidentialité et paramètres avancés dans Firefox"
 date: "2018-11-17T11:58:22-04:00"
-updated: "2018-11-17T11:58:22-04:00"
+updated: "2021-01-15T17:02:22-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -88,6 +88,14 @@ Désactiver le suivi de vos clicks:
 browser.send_pings = false
 ```
 
+Menu plus compacts (interlignes réduits)
+```javascript
+browser.compactmode.show = true
+browser.uidensity = 1
+```
+
+
 ## Liens complémentaires
 
  - [https://gist.github.com/0XDE57/fbd302cef7693e62c769](https://gist.github.com/0XDE57/fbd302cef7693e62c769)
+ - 

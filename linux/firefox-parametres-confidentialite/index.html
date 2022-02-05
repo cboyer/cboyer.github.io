@@ -15,9 +15,9 @@
   <meta property="og:description" content="Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2018-11-17T11:58:22-04:00" />
+  <meta property="og:updated_time" content="2021-01-15T17:02:22-05:00" />
   <meta property="article:published_time" content="2018-11-17T11:58:22-04:00" />
-  <meta property="article:modified_time" content="2018-11-17T11:58:22-04:00" />
+  <meta property="article:modified_time" content="2021-01-15T17:02:22-05:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
@@ -117,7 +117,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h1>Confidentialité et paramètres avancés dans Firefox</h1>
- <small class="date">Publié le 2018-11-17</small>
+ <small class="date">Publié le 2018-11-17, dernière mise à jour: 2021-01-15</small>
 </header>
 <p>Firefox possède de nombreux paramètres qui ne sont pas accessibles par les menus de l'interface graphique (Édition &gt; Préférences). Pour y accéder, tapez <code>about:config</code> dans la barre d'adresse (une confirmation va vous être demandée car certaines modifications peuvent entrainer des disfonctionnements). Voici quelques paramètres intéressants que j'utilise pour la confidentialité. Une liste plus complète est disponible dans les sources.</p>
 <p>Il est important de noter que certains risquent de vous refuser l'accès à leurs services (ou de mal fonctionner) s'ils ne peuvent plus abuser de vos données personnelles. Cela a été le cas pour moi avec un site d'hébergement de photo qui me refusait clairement l'accès car je ne transmettais plus d'entête Referer (page consultée précédemment). Modifier les paramètres relatifs aux cookies pose énormément de problèmes car c'est là que se situent principalement les abus d'accès aux données personnelles.</p>
@@ -148,9 +148,13 @@ code span.wa { color: #bf0303; } /* Warning */
 <div class="sourceCode" id="cb10"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>toolkit<span class="op">.</span><span class="at">telemetry</span><span class="op">.</span><span class="at">cachedClientID</span> <span class="op">=</span> blank</span></code></pre></div>
 <p>Désactiver le suivi de vos clicks:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>browser<span class="op">.</span><span class="at">send_pings</span> <span class="op">=</span> <span class="kw">false</span></span></code></pre></div>
+<p>Menu plus compacts (interlignes réduits)</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>browser<span class="op">.</span><span class="at">compactmode</span><span class="op">.</span><span class="at">show</span> <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>browser<span class="op">.</span><span class="at">uidensity</span> <span class="op">=</span> <span class="dv">1</span></span></code></pre></div>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://gist.github.com/0XDE57/fbd302cef7693e62c769">https://gist.github.com/0XDE57/fbd302cef7693e62c769</a></li>
+<li></li>
 </ul>
 </article>
 </main>

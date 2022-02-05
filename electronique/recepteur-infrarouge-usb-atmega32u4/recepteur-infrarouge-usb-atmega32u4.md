@@ -1,7 +1,7 @@
 ---
 title: "Récepteur infrarouge USB avec un ATmega32u4"
 date: "2018-04-20T18:45:18-04:00"
-updated: "2021-06-14T16:00:00-04:00"
+updated: "2022-01-30T18:11:00-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -30,143 +30,9 @@ Nous utiliserons un "CJMCU Beetle" pour ses dimensions particulièrement adapté
 
 ![Montage](cjmcu.jpg)
 
-Pour programmer l'ATmega32u4 nous utiliserons l'IDE Arduino configuré pour une carte Arduino Leonardo et les librairies IRremote, HID-Project:
+Pour programmer l'ATmega32u4 nous utiliserons l'IDE Arduino configuré pour une carte Arduino Leonardo et les librairies IRremote (version 3.5), HID-Project:
 
 ```c
-#include <IRremote.h>
-#include <HID-Project.h>
-
-#define RECV_PIN 9
-
-IRrecv irrecv(RECV_PIN);
-decode_results results;
-unsigned long buf;
-unsigned int i = 0;
-
-void setup()
-{
-  //Décommenter pour afficher les codes IR dans la console
-  //Serial.begin(9600);
-  irrecv.enableIRIn();
-}
-
-void loop() {
-  if (irrecv.decode(&results)) {
-    //Décommenter pour afficher les codes IR dans la console
-    //Serial.println(results.value, HEX);
-
-    //Maintient d'un bouton enfoncé
-    if (results.value == 0xFFFFFFFF){
-      i++;
-      if(i >= 6){
-        results.value = buf;
-        delay(20);
-      }
-    }
-    else{
-      buf = results.value;
-      i = 0;
-    }
-
-    switch(results.value) {
-
-      case 0x366133:
-        Keyboard.write(KEY_RETURN);
-        break;
-
-      case 0x36812F:
-        Keyboard.write(KEY_UP_ARROW);
-        break;
-
-      case 0x364137:
-        Keyboard.write(KEY_RIGHT_ARROW);
-        break;
-
-      case 0x37A10B:
-        Keyboard.write(KEY_DOWN_ARROW);
-        break;
-
-      case 0x37810F:
-        Keyboard.write(KEY_LEFT_ARROW);
-        break;
-
-      case 0x366932:
-        Keyboard.write(KEY_ESC);
-        break;
-
-      case 0x36D924:
-        Keyboard.write(KEY_PAGE_UP);
-        break;
-
-      case 0x37D904:
-        Keyboard.write(KEY_PAGE_DOWN);
-        break;
-
-      case 0x36093E:
-        Keyboard.write(MEDIA_VOL_UP);
-        break;
-
-      case 0x37091E:
-        Keyboard.write(MEDIA_VOLUME_DOWN);
-        break;
-
-      case 0x36892E:
-        Keyboard.write(MEDIA_VOLUME_MUTE);
-        break;
-
-      case 0x37291A:
-        Keyboard.write(MEDIA_REWIND);
-        break;
-
-      case 0x36293A:
-        Keyboard.write(MEDIA_FAST_FORWARD);
-        break;
-
-      case 0x374117:
-        Keyboard.write(MEDIA_PAUSE);
-        break;
-
-      case 0x37990C:
-        Keyboard.write(MEDIA_PLAY_PAUSE);
-        break;
-
-      case 0x365934:
-        Keyboard.write(MEDIA_STOP);
-        break;
-
-      case 0x377111:
-        Keyboard.write(MEDIA_NEXT);
-        break;
-
-      case 0x36F121:
-        Keyboard.write(MEDIA_PREVIOUS);
-        break;
-
-      case 0x36213B:
-        Keyboard.write('i');
-        break;
-
-      case 0x36C127:
-        Keyboard.write('c');
-        break;
-    }
-    irrecv.resume();
-  }
-  delay(10);
-}
-```
-
-Dans le cas où votre télécommande n'utiliserai pas les mêmes codes infrarouge, décommentez les lignes indiquées pour qu'ils soient affichés dans la console de l'IDE. Remplacez les codes correspondant à la touche clavier voulue (exemple: `MEDIA_STOP`).
-
-## Limites
-
-Les touches `MEDIA_*` fonctionnent uniquement sur un système Linux, Windows et FreeBSD ne les reconnaissent pas. Ceci n'est donc pas un problème pour les utilisateurs de [LibreELEC](https://libreelec.tv/)/[OpenELEC](https://www.openelec.tv/).
-
-## IRremote: passage à la version 3.x
-
-Avec les versions récentes d'IRremote, certaines modifications de la librairie implique une actualisation du programme:
-
-```C
 #include <IRremote.h>
 #include <HID-Project.h>
 
@@ -181,11 +47,12 @@ void setup()
   //Uncomment to enable serial printing of IR codes
   //Serial.begin(9600); 
   buf = 0xFFFFFFFF;
-  IrReceiver.begin(RECV_PIN, DISABLE_LED_FEEDBACK);
+  Keyboard.begin();
+  IrReceiver.begin(RECV_PIN, NULL);
 }
 
 void loop() {
-  if (IrReceiver.decode()){
+  if (IrReceiver.decode()) {
     //Uncomment to enable serial printing of IR codes
     //Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);
 
@@ -198,7 +65,7 @@ void loop() {
       case 0x3D205B:
         Keyboard.write(KEY_UP_ARROW);
         break;
-        
+
       case 0x3B209B:
         Keyboard.write(KEY_RIGHT_ARROW);
         break;
@@ -215,9 +82,13 @@ void loop() {
         Keyboard.write(KEY_ESC);
         break; 
 
-      case 0x5275B:
+      case 0x1025FB:
+        Keyboard.write('o');
+        break;
+
+      case 0xF261B:
         Keyboard.write('z');
-        break; 
+        break;
 
       case 0x926DB:
         Keyboard.write(KEY_PAGE_UP);
@@ -228,43 +99,44 @@ void loop() {
         break;
 
       case 0x6FF900:
-        //Keyboard.write(MEDIA_VOL_UP);
-        Keyboard.write('+');
+        //buf[2] = 128;
+        Keyboard.write(MEDIA_VOL_UP);
+        //Keyboard.write('+');
         break;
 
       case 0x6BF940:
-        //Keyboard.write(MEDIA_VOLUME_DOWN);
-        Keyboard.write('-');
+        Keyboard.write(MEDIA_VOLUME_DOWN);
+        //Keyboard.write('-');
         break;
 
       case 0xFFF000:
-        //Keyboard.write(MEDIA_VOLUME_MUTE);
-        Keyboard.write(KEY_F8);
+        Keyboard.write(MEDIA_VOLUME_MUTE);
+        //Keyboard.write(KEY_F8);
         break;
 
       case 0x16253B:
-        //Keyboard.write(MEDIA_REWIND);
-        Keyboard.write('r');
+        Keyboard.write(MEDIA_REWIND);
+        //Keyboard.write('r');
         break;
 
       case 0x17251B:
-        //Keyboard.write(MEDIA_FAST_FORWARD);
-        Keyboard.write('f');
+        Keyboard.write(MEDIA_FAST_FORWARD);
+        //Keyboard.write('f');
         break;
 
       case 0x3A20BB:
-        //Keyboard.write(MEDIA_PAUSE);
-        Keyboard.write(KEY_SPACE);
+        Keyboard.write(MEDIA_PAUSE);
+        //Keyboard.write(KEY_SPACE);
         break;
 
       case 0xC267B:
-        //Keyboard.write(MEDIA_PLAY_PAUSE);
-        Keyboard.write(KEY_SPACE);
+        Keyboard.write(MEDIA_PLAY_PAUSE);
+        //Keyboard.write(KEY_SPACE);
         break;
 
       case 0xB269B:
-        //Keyboard.write(MEDIA_STOP);
-        Keyboard.write('x');
+        Keyboard.write(MEDIA_STOP);
+        //Keyboard.write('x');
         break;
 
       case 0x37211B:
@@ -275,8 +147,12 @@ void loop() {
         Keyboard.write('c');
         break;
 
-      case 0x1025FB:
-        Keyboard.write('o');
+      case 0x5275B:
+        Keyboard.write(KEY_F11);
+        break;
+
+      case 0xE263B:
+        Keyboard.write(KEY_DELETE);
         break;
     }
 
@@ -289,11 +165,17 @@ void loop() {
       buf = IrReceiver.decodedIRData.decodedRawData;
       i = 0;
     }
-    
+
     IrReceiver.resume();
   }
 }
 ```
+
+Dans le cas où votre télécommande n'utiliserai pas les mêmes codes infrarouge, décommentez les lignes indiquées pour qu'ils soient affichés dans la console de l'IDE. Remplacez les codes correspondant à la touche clavier voulue (exemple: `MEDIA_STOP`).
+
+## Limites
+
+Les touches `MEDIA_*` fonctionnent uniquement sur un système Linux, Windows et FreeBSD ne les reconnaissent pas. Ceci n'est donc pas un problème pour les utilisateurs de [LibreELEC](https://libreelec.tv/)/[OpenELEC](https://www.openelec.tv/).
 
 
 ## Liens complémentaires
