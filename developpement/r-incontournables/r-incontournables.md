@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2020-06-02T20:30:29-04:00"
+updated: "2022-02-18T17:30:29-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -122,9 +122,15 @@ sql <- paste('SELECT client_id FROM myTable WHERE client_id IN (', client_id, ')
 
 ## <a name="files"></a>Opérations sur les fichiers
 
+Charger un fichier Excel (XSLX/XLS)
+```R
+require(readxl)
+liste <- read_excel("./mon_fichier.xlsx", sheet = "acceuil")
+```
+
 Charger un fichier CSV
 ```R
-mon_dataframe <- read.csv("C:/fichier.csv", header = TRUE, sep = ";", encoding = "UTF-8", stringsAsFactors = FALSE)
+mon_dataframe <- read.csv("C:/fichier.csv", header = TRUE, sep = ";", na.strings = "", fileEncoding = "UTF-8", stringsAsFactors = FALSE)
 ```
 
 Écrire le contenu d'un dataframe dans un fichier CSV
@@ -139,18 +145,6 @@ fd <- file("C:/fichier.txt")
 writeLines(text, fd)
 close(fd)
 ```
-
-Charger un fichier Excel (XSLX/XLS)
-```R
-require(xlsx)
-liste <- read.xlsx("./mon_fichier.xlsx", sheetName = 1, encoding = "UTF-8")
-
-#Cleanup colonnes avec style mais vides
-drops <- as.vector(paste("NA..", seq(1:20000), sep = '' ))
-drops <- c('NA.', drops)
-liste <- liste[ , !(names(liste) %in% drops)]
-```
-
 
 ## <a name="stats"></a>Statistiques
 

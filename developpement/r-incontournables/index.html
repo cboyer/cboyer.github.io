@@ -15,9 +15,9 @@
   <meta property="og:description" content="Opérations incontournables avec le langage R." />
   <meta property="og:site_name" content="cboyer.github.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2020-06-02T20:30:29-04:00" />
+  <meta property="og:updated_time" content="2022-02-18T17:30:29-05:00" />
   <meta property="article:published_time" content="2019-05-25T10:09:13-04:00" />
-  <meta property="article:modified_time" content="2020-06-02T20:30:29-04:00" />
+  <meta property="article:modified_time" content="2022-02-18T17:30:29-05:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
@@ -117,7 +117,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <article>
 <header id="title-block-header">
 <h1>R: les incontournables</h1>
- <small class="date">Publié le 2019-05-25, dernière mise à jour: 2020-06-02</small>
+ <small class="date">Publié le 2019-05-25, dernière mise à jour: 2022-02-18</small>
 </header>
 <ul>
 <li><a href="#optionsexec">Options d'exécution</a></li>
@@ -194,23 +194,18 @@ code span.wa { color: #bf0303; } /* Warning */
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>client_id <span class="ot">&lt;-</span> <span class="fu">toString</span>(<span class="fu">sprintf</span>(<span class="st">&quot;&#39;%s&#39;&quot;</span>, liste<span class="sc">$</span>client_id))</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sql <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&#39;SELECT client_id FROM myTable WHERE client_id IN (&#39;</span>, client_id, <span class="st">&#39;)&#39;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <h2 id="opérations-sur-les-fichiers"><a name="files"></a>Opérations sur les fichiers</h2>
-<p>Charger un fichier CSV</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mon_dataframe <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">&quot;;&quot;</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<p>Écrire le contenu d'un dataframe dans un fichier CSV</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(mon_dataframe, <span class="at">file =</span> <span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>, <span class="at">sep =</span> <span class="st">&#39;,&#39;</span>, <span class="at">na =</span> <span class="st">&#39;&#39;</span>)</span></code></pre></div>
-<p>Écrire une variable dans un fichier texte</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>text <span class="ot">&lt;-</span> <span class="st">&quot;String example&quot;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fd <span class="ot">&lt;-</span> <span class="fu">file</span>(<span class="st">&quot;C:/fichier.txt&quot;</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(text, fd)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">close</span>(fd)</span></code></pre></div>
 <p>Charger un fichier Excel (XSLX/XLS)</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(xlsx)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>liste <span class="ot">&lt;-</span> <span class="fu">read.xlsx</span>(<span class="st">&quot;./mon_fichier.xlsx&quot;</span>, <span class="at">sheetName =</span> <span class="dv">1</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Cleanup colonnes avec style mais vides</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>drops <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">paste</span>(<span class="st">&quot;NA..&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20000</span>), <span class="at">sep =</span> <span class="st">&#39;&#39;</span> ))</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>drops <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;NA.&#39;</span>, drops)</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>liste <span class="ot">&lt;-</span> liste[ , <span class="sc">!</span>(<span class="fu">names</span>(liste) <span class="sc">%in%</span> drops)]</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(readxl)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>liste <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;./mon_fichier.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;acceuil&quot;</span>)</span></code></pre></div>
+<p>Charger un fichier CSV</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mon_dataframe <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">&quot;;&quot;</span>, <span class="at">na.strings =</span> <span class="st">&quot;&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>Écrire le contenu d'un dataframe dans un fichier CSV</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(mon_dataframe, <span class="at">file =</span> <span class="st">&quot;C:/fichier.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>, <span class="at">sep =</span> <span class="st">&#39;,&#39;</span>, <span class="at">na =</span> <span class="st">&#39;&#39;</span>)</span></code></pre></div>
+<p>Écrire une variable dans un fichier texte</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>text <span class="ot">&lt;-</span> <span class="st">&quot;String example&quot;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fd <span class="ot">&lt;-</span> <span class="fu">file</span>(<span class="st">&quot;C:/fichier.txt&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(text, fd)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">close</span>(fd)</span></code></pre></div>
 <h2 id="statistiques"><a name="stats"></a>Statistiques</h2>
 <p>Factoriser des valeurs</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ventes<span class="sc">$</span>annee <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(ventes<span class="sc">$</span>annee)</span></code></pre></div>
