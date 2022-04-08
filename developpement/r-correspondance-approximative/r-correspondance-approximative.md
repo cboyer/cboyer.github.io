@@ -113,4 +113,4 @@ results$distance <- distances[coord_correspondances]
 
 On utilise ici les colonnes de `coord_correspondances` pour récupérer des lignes respectivement depuis `x` et `y`. 
 La colonne `distance` (distance de Levenshtein) indique également l'exactitude de la correspondance: plus elle est petite plus la correspondance est certaine (0 indiquant une égalité stricte).
-Notons que R signale un doublon entre les lignes 3 et 3.1.
+Notons que R signale la duplication d'une ligne (3 et 3.1) car il y a plusieurs correspondances pour l'id 12.

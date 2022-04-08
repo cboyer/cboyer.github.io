@@ -188,7 +188,7 @@ V  [4,]    5    6    3</code></pre>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 2   11 arbre    2 arbuste        3</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3.1 12 fruit    2 arbuste        4</span></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 4   13 baton    3  bateau        3</span></span></code></pre></div>
-<p>On utilise ici les colonnes de <code>coord_correspondances</code> pour récupérer des lignes respectivement depuis <code>x</code> et <code>y</code>. La colonne <code>distance</code> (distance de Levenshtein) indique également l'exactitude de la correspondance: plus elle est petite plus la correspondance est certaine (0 indiquant une égalité stricte). Notons que R signale un doublon entre les lignes 3 et 3.1.</p>
+<p>On utilise ici les colonnes de <code>coord_correspondances</code> pour récupérer des lignes respectivement depuis <code>x</code> et <code>y</code>. La colonne <code>distance</code> (distance de Levenshtein) indique également l'exactitude de la correspondance: plus elle est petite plus la correspondance est certaine (0 indiquant une égalité stricte). Notons que R signale la duplication d'une ligne (3 et 3.1) car il y a plusieurs correspondances pour l'id 12.</p>
 </article>
 </main>
 

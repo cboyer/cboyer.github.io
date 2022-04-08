@@ -226,7 +226,12 @@ Compléter un dataframe en récupérant la colonne d'un autre dataframe selon un
 stations$Manufacturer <- manufacturers$OrganizationName[match(stations$ManufacturerID, manufacturers$ManufacturerID)]
 
 #Sur plusieurs colonnes
+stations <- merge(x=stations, y=manufacturers[, c("ManufacturerID", "ManufacturerName", "OrganizationName")], by.x=c("ManufacturerID", "ManufacturerName"), by.y=c("ManufacturerID", "ManufacturerName"), all.x=TRUE)
 stations$Manufacturer <- manufacturers$OrganizationName[match( paste(stations$ManufacturerID, stations$ManufacturerName), paste(manufacturers$ManufacturerID, manufacturers$ManufacturerName) )]
+
+#Alternative Dplyr
+stations <- stations %>%
+  left_join(manufacturers %>% select(ManufacturerID, ManufacturerName, OrganizationName), by=c("ManufacturerID" = "ManufacturerID", "ManufacturerName" = "ManufacturerName"))
 ```
 
 Supprimer les lignes dont la valeur d'une colonne spécifique se répète (conserve un seul des éléments dédoublés)
