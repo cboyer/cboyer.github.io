@@ -156,3 +156,4 @@ telnet localhost 1234
 
 - [Elegant TCP with Elixir](https://openmymind.net/Elegant-TCP-with-Elixir-Part-1-TCP-as-Messages/)
 - [Build an Elixir Redis Server that's 100x faster than HTTP](https://docs.statetrace.com/blog/redis-server/)
+- [A guide on how to use Ranch with Elixir](https://github.com/asciibeats/elixir_ranch)
