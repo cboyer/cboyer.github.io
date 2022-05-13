@@ -194,6 +194,11 @@ Changer l'encodage d'une colonne de type `character`
 Encoding(users$firstname) <- "ISO-8859-1"
 ```
 
+Conversion d'une chaîne de caractères vers POSIXct
+```R
+df$datetime = as.POSIXct(strptime(df$datetime, format="%Y-%m-%dT%H:%M:%S"))
+```
+
 Reformater une date
 ```R
 ventes$annee_expedition <- format( as.Date(ventes$date_expedition, format = "%Y-%m-%d"),"%Y")
@@ -378,6 +383,7 @@ stats <- all_data %>%
 
 ## <a name="graphiques"></a>Graphiques
 
+### Avec la librairie ggplot2
 Histogramme horizontal avec palette de couleurs adaptée (données issues de `table()`)
 ```R
 library(ggplot2)
@@ -410,6 +416,39 @@ ggplot(FreqAnomalyComb,
        scale_fill_manual(values = customPalette) + 
        theme(legend.position = "none", plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+### Avec les librairies Plotly et Dplyr
+Courbe simple avec Dplyr et Plotly
+```R
+logs %>%
+  mutate(datetime = strptime(datetime, format="%Y-%m-%dT%H:%M") %>% as.POSIXct() ) %>%
+  filter(datetime >= as.POSIXct("2022-05-11 10:00", format = "%Y-%m-%d %H:%M") & datetime <= as.POSIXct("2022-05-11 16:00", format = "%Y-%m-%d %H:%M"))
+  group_by(datetime) %>%
+  summarise(bytes = sum(bytes)) %>%
+  plot_ly(x = ~datetime, y = ~bytes, name = "Octets par minute", type = 'scatter', mode = 'lines+markers')
+```
+
+Histogramme simple
+```R
+logs %>%
+  group_by(request, datetime) %>%
+  summarise(n = n()) %>%
+  plot_ly(x = ~datetime, y = ~n, name = ~request, type='bar') %>%
+  layout(barmode="stack", bargap=0.1)
+```
+
+Histogramme groupé
+```R
+logs %>%
+  group_by(request, datetime) %>%
+  summarise(n = n()) %>%
+  group_by(datetime) %>%
+  summarise(different = n(), total = sum(n)) %>%
+  plot_ly(x = ~datetime, y = ~different, name = "requêtes différentes", type='bar') %>%
+  add_trace(y = ~total, name = 'total des requêtes') %>%
+  layout(yaxis = list(title = 'Requêtes'), barmode = 'stack')
+```
+
 
 
 
