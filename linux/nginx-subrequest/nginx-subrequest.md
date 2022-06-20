@@ -194,5 +194,5 @@ def auth():
 
 
 
-## Liens complémentaires
+# Liens complémentaires
  - [https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/](https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/)

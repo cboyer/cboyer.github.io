@@ -21,15 +21,9 @@
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
   <style>
-    body { margin: 1em; }
-    img { max-width: 100%; height: auto; }
-    table { margin-top: 1em; }
-    @media (min-width: 42em) { body { margin: 1em auto; max-width: 40em; } }
-    ul { list-style: none; padding: 0;}
-    p code { font-size: 1.24em; }
-  </style>
-  <style>pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
@@ -94,11 +88,37 @@ code span.ss { color: #ff5500; } /* SpecialString */
 code span.st { color: #bf0303; } /* String */
 code span.va { color: #0057ae; } /* Variable */
 code span.vs { color: #bf0303; } /* VerbatimString */
-code span.wa { color: #bf0303; } /* Warning */</style>
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
 </head>
 <body>
-  <h1>Automobile, bus CAN et norme OBD2</h1>
-  <em>Publié le 2018-11-01, dernière mise à jour: 2019-12-14</em>
+  <header id="header">
+    <div id="links">
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+    <p class="title">cboyer.github.io</p>
+    <nav id="menu">
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
+    </nav>
+  </header>
+
+  <main id="container">
+<article>
+<header id="title-block-header">
+<h1>Automobile, bus CAN et norme OBD2</h1>
+ <small class="date">Publié le 2018-11-01, dernière mise à jour: 2019-12-14</small>
+</header>
 <p>Pour établir la communication avec l'ordinateur embarqué d'une automobile (appelé ECU pour Electronic Control Unit), rien de bien compliqué car la technologie mis en oeuvre ici (CAN pour Controller Area Network) date en partie des années 1980 et n'intègre pas les concepts issus des enjeux d'aujourd'hui (authentification, cryptage etc.). N'oublions pas que ces systèmes embarqués sont très limités en terme de capacité de traitement tout en étant soumis à des contraintes de temps dans lesquelles ils doivent être en mesure d'opérer.</p>
 <p>La couche physique (niveau 1 OSI), fonctionne selon une topologie de type bus: tous les noeuds connectés au bus reçoivent chaque message émis (broadcast) ce qui nécessite d'introduire la notion d'identification afin d'être en mesure d'identifier un noeud comme destinataire ou émetteur d'un message. L'identification des noeuds s'effectue par la couche liaison de donnée (niveau 2 OSI) qui est normalisée ISO avec deux variantes: l'une fonctionnant avec 11 bits et l'autre (dite "extended") sur 29 bits. On ne peut pas parler d'adressage formel car un noeud peut écouter sur un identifiant et répondre avec un autre (c'est le cas de l'ECU).</p>
 <p>La norme OBD2 (On-Board Diagnostics 2) intervient au niveau 7 OSI: elle standardise en partie l'identification et la codification des données qui transitent sur le bus. Légalement encadré, une partie du protocole est normalisé et documenté incluant bon nombre de <a href="https://en.wikipedia.org/wiki/OBD-II_PIDs#Service_01">métriques</a> et les <a href="https://github.com/mytrile/obd-trouble-codes">codes de diagnostique</a>. En revanche il demeure une partie inconnue qui est propre aux constructeurs qu'il va falloir découvrir avec un peu de rétro-ingénierie.</p>
@@ -522,6 +542,12 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <li><a href="https://en.wikipedia.org/wiki/OBD-II_PIDs#Service_01">Identifiants OBD2 et formules de calcul</a></li>
 <li><a href="http://www.savvycan.com/docs/index.html">Documentation SavvyCAN</a></li>
 </ul>
-  <em>©2015-2022 C. Boyer, contenu sous <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+</article>
+</main>
+
+<footer id="footer">
+  © 2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>
+</footer>
+
 </body>
 </html>

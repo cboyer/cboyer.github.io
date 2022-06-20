@@ -21,15 +21,9 @@
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
+  <link rel="stylesheet" type="text/css" href="../../style.css" />
   <style>
-    body { margin: 1em; }
-    img { max-width: 100%; height: auto; }
-    table { margin-top: 1em; }
-    @media (min-width: 42em) { body { margin: 1em auto; max-width: 40em; } }
-    ul { list-style: none; padding: 0;}
-    p code { font-size: 1.24em; }
-  </style>
-  <style>pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
@@ -94,11 +88,37 @@ code span.ss { color: #ff5500; } /* SpecialString */
 code span.st { color: #bf0303; } /* String */
 code span.va { color: #0057ae; } /* Variable */
 code span.vs { color: #bf0303; } /* VerbatimString */
-code span.wa { color: #bf0303; } /* Warning */</style>
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
 </head>
 <body>
-  <h1>Correspondance approximative (fuzzy matching) avec R</h1>
-  <em>Publié le 2022-02-03</em>
+  <header id="header">
+    <div id="links">
+      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
+          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="github-icon">GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
+      </a>
+      <a href="../../atom.xml" class="rss" title="Flux Atom">
+          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title id="atom-icon">Flux Atom</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
+          </svg>
+      </a>
+    </div>
+    <p class="title">cboyer.github.io</p>
+    <nav id="menu">
+      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
+    </nav>
+  </header>
+
+  <main id="container">
+<article>
+<header id="title-block-header">
+<h1>Correspondance approximative (fuzzy matching) avec R</h1>
+ <small class="date">Publié le 2022-02-03</small>
+</header>
 <p>On considère deux ensembles de données <code>x</code> et <code>y</code> pour lesquels nous cherchons à établir des correspondances selon une de leur colonne tout en tolérant une certaine approximation.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">13</span>, <span class="at">name =</span> <span class="fu">c</span>(<span class="st">&quot;jouet&quot;</span>, <span class="st">&quot;arbre&quot;</span>, <span class="st">&quot;fruit&quot;</span>, <span class="st">&quot;baton&quot;</span>))</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">name =</span> <span class="fu">c</span>(<span class="st">&quot;jouer&quot;</span>, <span class="st">&quot;arbuste&quot;</span>, <span class="st">&quot;bateau&quot;</span>))</span></code></pre></div>
@@ -117,7 +137,7 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 10 arbre  bateau
 11 fruit  bateau
 12 baton  bateau</code></pre>
-<p>Chaque comparaison sera effectuée en calculant la distance de Levenshtein qui caractérise le nombre d'opération (insertion, suppression, substitution) pour que les deux chaînes soient égales. La distance de Levenshtein constitue alors un indicateur de similitude entre deux chaîne de caractère: plus elle est faible plus les chaînes sont similaires, 0 impliquant une égalité stricte. Pour calculer cette distance nous utiliserons <code>stringdistmatrix()</code> de la librairie <code>stringdist</code>. <code>utils::adist()</code> peut être une alternative mais elle offre moins d'options (méthodes et pondération) et est beaucoup moins performante car elle n'est pas multithreadée. <code>stringdistmatrix()</code> est sensible à la casse, pour améliorer les chances d'obtenir des correspondances il peut être nécessaire de traiter les données des deux colonnes <code>x$name</code> et <code>y$name</code>, par exemple:</p>
+<p>Chaque comparaison sera effectuée en calculant la distance de Levenshtein qui caractérise le nombre d'opération (insertion, suppression, substitution) pour que les deux chaînes soient égales. La distance de Levenshtein constitue alors un indicateur de similitude entre deux chaîne de caractère: plus elle est faible plus les chaînes sont similaires, 0 impliquant une égalité stricte. Pour calculer cette distance nous utiliserons la fonction <code>stringdistmatrix</code> de la librairie <code>stringdist</code>. <code>utils::adist</code> peut être une alternative mais elle offre moins d'options (méthodes et pondération) et est beaucoup moins performante car elle n'est pas multithreadée. <code>stringdistmatrix()</code> est sensible à la casse, pour améliorer les chances d'obtenir des correspondances il peut être nécessaire de traiter les données des deux colonnes <code>x$name</code> et <code>y$name</code>, par exemple:</p>
 <ul>
 <li>passage en minuscule avec <code>tolower(x$name)</code></li>
 <li>retrait des accents avec <code>iconv(x$name, to="ASCII//TRANSLIT")</code></li>
@@ -142,33 +162,39 @@ V  [4,]    5    6    3</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Retourne les coordonnées (1,3) et (2,4) sous forme de matrice:</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      [,<span class="dv">1</span>] [,<span class="dv">2</span>]</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>,]    <span class="dv">1</span>    <span class="dv">3</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a> [<span class="dv">2</span>,]    <span class="dv">2</span>    <span class="dv">4</span></span></code></pre></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#      [,1] [,2]</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># [1,]    1    3</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># [2,]    2    4</span></span></code></pre></div>
 <h2 id="filtrer-les-distances">Filtrer les distances</h2>
 <p>Maintenant que nous possèdons toutes les distances, fixons notre seuil à 4 en récupérant les coordonnées des valeurs (distances de Levenshtein) de la matrice <code>distances</code> qui sont inférieures ou égales à 4:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>coord_correspondances <span class="ot">&lt;-</span> <span class="fu">which</span>(distances <span class="sc">&lt;=</span> <span class="dv">4</span>, <span class="at">arr.ind =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#       x   y</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>      row col</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>,]   <span class="dv">1</span>   <span class="dv">1</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a> [<span class="dv">2</span>,]   <span class="dv">3</span>   <span class="dv">1</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a> [<span class="dv">3</span>,]   <span class="dv">2</span>   <span class="dv">2</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a> [<span class="dv">4</span>,]   <span class="dv">3</span>   <span class="dv">2</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a> [<span class="dv">5</span>,]   <span class="dv">4</span>   <span class="dv">3</span></span></code></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#        x   y</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#      row col</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># [1,]   1   1</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># [2,]   3   1</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># [3,]   2   2</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># [4,]   3   2</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># [5,]   4   3</span></span></code></pre></div>
 <p>C'est cette nouvelle matrice qui contient les coordonnées où <code>distances</code> contient une distance inférieure ou égale à 4. Pour l'exploiter et assembler les données dans un dataframe <code>results</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> x[coord_correspondances[, <span class="dv">1</span>], ]</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>id_y <span class="ot">&lt;-</span> y[coord_correspondances[, <span class="dv">2</span>], ]<span class="sc">$</span>id</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>name_y <span class="ot">&lt;-</span> y[coord_correspondances[, <span class="dv">2</span>], ]<span class="sc">$</span>name</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>distance <span class="ot">&lt;-</span> distances[coord_correspondances]</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#    id  name id_y  name_y distance</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a> <span class="dv">1</span>   <span class="dv">10</span> jouet    <span class="dv">1</span>   jouer        <span class="dv">1</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a> <span class="dv">3</span>   <span class="dv">12</span> fruit    <span class="dv">1</span>   jouer        <span class="dv">4</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a> <span class="dv">2</span>   <span class="dv">11</span> arbre    <span class="dv">2</span> arbuste        <span class="dv">3</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a> <span class="fl">3.1</span> <span class="dv">12</span> fruit    <span class="dv">2</span> arbuste        <span class="dv">4</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a> <span class="dv">4</span>   <span class="dv">13</span> baton    <span class="dv">3</span>  bateau        <span class="dv">3</span></span></code></pre></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     id  name id_y  name_y distance</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 1   10 jouet    1   jouer        1</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3   12 fruit    1   jouer        4</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 2   11 arbre    2 arbuste        3</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3.1 12 fruit    2 arbuste        4</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 4   13 baton    3  bateau        3</span></span></code></pre></div>
 <p>On utilise ici les colonnes de <code>coord_correspondances</code> pour récupérer des lignes respectivement depuis <code>x</code> et <code>y</code>. La colonne <code>distance</code> (distance de Levenshtein) indique également l'exactitude de la correspondance: plus elle est petite plus la correspondance est certaine (0 indiquant une égalité stricte). Notons que R signale la duplication d'une ligne (3 et 3.1) car il y a plusieurs correspondances pour l'id 12.</p>
-  <em>©2015-2022 C. Boyer, contenu sous <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+</article>
+</main>
+
+<footer id="footer">
+  © 2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>
+</footer>
+
 </body>
 </html>
