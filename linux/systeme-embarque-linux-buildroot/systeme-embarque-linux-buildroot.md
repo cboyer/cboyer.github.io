@@ -161,7 +161,6 @@ sync
 umount mnt/boot mnt/root mnt/boot_temp
 losetup -d "$LOOP"
 
-chown cyril:cyril "$IMG_OUTPUT"
 echo -e "Done !"
 ```
 
@@ -197,13 +196,19 @@ Pour faire correctement les choses, il faudrait utiliser un *post-script* ou enc
 
 ## Les bonnes pratiques
 
- - Ne pas utiliser le compte `root` pour l'applicatif, question de sécurité (implique d'utiliser un port réseau > 1024).
- - Configurer `/` en lecture seule pour la sécurité et surtout éviter les problème de corruption de la carte SD en cas de coupure électrique.
- - Ne pas inclure de service d'accès à distance `OpenSSH`.
- - Laisser éventuellement un accès physique via un TTY sur la sortie HDMI pour la configuration IP et investiguer en cas de problème.
- - Ne pas configurer d'autologin sur TTY au boot pour maintenir l'authentification via login/mot de passe.
- - Inclure les modules `iptables` dans le noyau et définir des règles de parfeu via `initd` afin de protéger l'applicatif si l'environnement réseau est jugé incertain.
- - Lancer l'applicatif via un script `initd` composée d'une boucle pour le relancer automatiquement en cas de crash.
+Ne pas utiliser le compte `root` pour l'applicatif, question de sécurité (implique d'utiliser un port réseau > 1024).
+
+Configurer `/` en lecture seule pour la sécurité et surtout éviter les problème de corruption de la carte SD en cas de coupure électrique.
+
+Ne pas inclure de service d'accès à distance `OpenSSH`.
+
+Laisser éventuellement un accès physique via un TTY sur la sortie HDMI pour la configuration IP et investiguer en cas de problème.
+
+Ne pas configurer d'autologin sur TTY au boot pour maintenir l'authentification via login/mot de passe.
+
+Inclure les modules `iptables` dans le noyau et définir des règles de parfeu via `initd` afin de protéger l'applicatif si l'environnement réseau est jugé incertain.
+
+Lancer l'applicatif via un script `initd` composée d'une boucle pour le relancer automatiquement en cas de crash.
 
 ## Les alternatives à Buildroot
 

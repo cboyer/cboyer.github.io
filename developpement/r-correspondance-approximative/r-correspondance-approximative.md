@@ -35,8 +35,8 @@ Pour déterminer une éventuelle correspondance nous allons être amené à comp
 ```
 
 Chaque comparaison sera effectuée en calculant la distance de Levenshtein qui caractérise le nombre d'opération (insertion, suppression, substitution) pour que les deux chaînes soient égales. La distance de Levenshtein constitue alors un indicateur de similitude entre deux chaîne de caractère: plus elle est faible plus les chaînes sont similaires, 0 impliquant une égalité stricte.
-Pour calculer cette distance nous utiliserons la fonction `stringdistmatrix` de la librairie `stringdist`. 
-`utils::adist` peut être une alternative mais elle offre moins d'options (méthodes et pondération) et est beaucoup moins performante car elle n'est pas multithreadée.
+Pour calculer cette distance nous utiliserons `stringdistmatrix()` de la librairie `stringdist`. 
+`utils::adist()` peut être une alternative mais elle offre moins d'options (méthodes et pondération) et est beaucoup moins performante car elle n'est pas multithreadée.
 `stringdistmatrix()` est sensible à la casse, pour améliorer les chances d'obtenir des correspondances il peut être nécessaire de traiter les données des deux colonnes `x$name` et `y$name`, par exemple:
 
  - passage en minuscule avec `tolower(x$name)`
@@ -77,9 +77,9 @@ R permet de récupérer des valeurs contenues dans une matrice en lui passant de
 cbind(c(1,2), c(3,4))
 
 # Retourne les coordonnées (1,3) et (2,4) sous forme de matrice:
-#      [,1] [,2]
-# [1,]    1    3
-# [2,]    2    4
+      [,1] [,2]
+ [1,]    1    3
+ [2,]    2    4
 ```
 
 ## Filtrer les distances
@@ -87,13 +87,13 @@ Maintenant que nous possèdons toutes les distances, fixons notre seuil à 4 en 
 ```R
 coord_correspondances <- which(distances <= 4, arr.ind = TRUE)
 
-#        x   y
-#      row col
-# [1,]   1   1
-# [2,]   3   1
-# [3,]   2   2
-# [4,]   3   2
-# [5,]   4   3
+#       x   y
+      row col
+ [1,]   1   1
+ [2,]   3   1
+ [3,]   2   2
+ [4,]   3   2
+ [5,]   4   3
 ```
 
 C'est cette nouvelle matrice qui contient les coordonnées où `distances` contient une distance inférieure ou égale à 4. Pour l'exploiter et assembler les données dans un dataframe `results`:
@@ -103,12 +103,12 @@ results$id_y <- y[coord_correspondances[, 2], ]$id
 results$name_y <- y[coord_correspondances[, 2], ]$name
 results$distance <- distances[coord_correspondances]
 
-#     id  name id_y  name_y distance
-# 1   10 jouet    1   jouer        1
-# 3   12 fruit    1   jouer        4
-# 2   11 arbre    2 arbuste        3
-# 3.1 12 fruit    2 arbuste        4
-# 4   13 baton    3  bateau        3
+#    id  name id_y  name_y distance
+ 1   10 jouet    1   jouer        1
+ 3   12 fruit    1   jouer        4
+ 2   11 arbre    2 arbuste        3
+ 3.1 12 fruit    2 arbuste        4
+ 4   13 baton    3  bateau        3
 ```
 
 On utilise ici les colonnes de `coord_correspondances` pour récupérer des lignes respectivement depuis `x` et `y`. 
