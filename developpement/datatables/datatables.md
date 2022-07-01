@@ -11,7 +11,7 @@ abstract: "Afficher des données avec DataTables."
 ---
 
 ## Arborescence des fichiers
-
+```
 ├─ css
 |  └── jquery.dataTables.min.css
 ├─ images
@@ -23,6 +23,7 @@ abstract: "Afficher des données avec DataTables."
 |  └── jquery.dataTables.min.js
 ├─ index.html
 └─ stats.php
+```
 
 ## Récupérer les données avec PHP depuis une base de données
 
