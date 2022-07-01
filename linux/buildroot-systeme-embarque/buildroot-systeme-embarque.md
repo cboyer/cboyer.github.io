@@ -20,46 +20,46 @@ Voici les grandes lignes pour produire un système fonctionnel.
 
 Commençons par récupérer Buildroot:
 
-```bash
+```Console
 git clone https://github.com/buildroot/buildroot
 cd buildroot
 ```
 
 Charger la configuration par défaut pour Raspberry Pi 2 (sera ajustée à nos besoins par la suite):
 
-```bash
+```Console
 make raspberrypi2_defconfig
 ```
 
 Paramétrer le système (basé sur `raspberrypi2_defconfig`), les applications à inclure et l'image en sortie.
 Si on utilise `U-Boot` comme bootloader, mettre la valeur `rpi` dans `Bootloaders > Select U-Boot > U-Boot board name`
 
-```bash
+```Console
 make menuconfig
 ```
 
 Sauvegarder la configuration Buildroot si on veut la stocker quelque part en particulier:
 
-```bash
+```Console
 make savedefconfig BR2_DEFCONFIG=./buildroot_config
 ```
 
 Pour la charger dans Buildroot:
 
-```bash
+```Console
 make defconfig BR2_DEFCONFIG=./buildroot_config
 ```
 
 Copier la configuration du noyau (supprimée après un `make clean`):
 
-```bash
+```Console
 mkdir -p output/build/linux-custom/
 cp kernel_config output/build/linux-custom/.config
 ```
 
 Paramétrer le noyau:
 
-```bash
+```Console
 make linux-menuconfig
 ```
 
@@ -68,25 +68,25 @@ Cela a été mon cas avec le driver pour l'interface Ethernet [SMSC95XX](https:/
 
 Pour recompiler le noyau uniquement après un changement dans sa configuration:
 
-```bash
+```Console
 make linux-build
 ```
 
 Paramétrer Busybox:
 
-```bash
+```Console
 make busybox-menuconfig
 ```
 
 Paramétrer UBoot (si utilisé):
 
-```bash
+```Console
 make uboot-menuconfig
 ```
 
 Lancer la compilation:
 
-```bash
+```Console
 make
 ```
 
@@ -99,7 +99,7 @@ Au final je suis parvenu à une partition `/` de 30Mo, `/boot` de 10Mo et une ut
 L'image générée après compilation m'a posée problème avec Qemu pour faire mes tests: il semble y avoir un problème d'offset dans la table de partition bien que le Raspberry Pi arrive parfaitement à exécuter le système.
 J'ai donc généré moi même l'image depuis l'archive `rootfs.tar.gz` et `boot.vfat` produits par Buildroot avec le script suivant (utilise `bsdtar` et nécessite `sudo` pour l'exécution):
 
-```bash
+```Console
 IMG_SIZE="60M"
 IMG_DIR="/opt/buildroot/buildroot/output/images"
 IMG_OUTPUT="rpi2.img"
@@ -160,14 +160,11 @@ echo -e "UNMOUNTING IMAGE FILESYSTEMS"
 sync
 umount mnt/boot mnt/root mnt/boot_temp
 losetup -d "$LOOP"
-
-chown cyril:cyril "$IMG_OUTPUT"
-echo -e "Done !"
 ```
 
 Lancer l'image avec Qemu pour les tests
 
-```bash
+```Console
 qemu-system-arm -M raspi2 -cpu arm1176 -m 1G -smp 4 \
 -append "ro earlyprintk loglevel=8 console=ttyAMA0,115200 dwc_otg.lpm_enable=0 rootfstype=ext4 root=/dev/mmcblk0p2 rootwait" \
 -dtb output/images/bcm2709-rpi-2-b.dtb -drive if=sd,driver=raw,file=rpi2.img \
@@ -176,7 +173,7 @@ qemu-system-arm -M raspi2 -cpu arm1176 -m 1G -smp 4 \
 
 Pour envoyer votre image sur un support physique (carte SD dans notre cas):
 
-```bash
+```Console
 dd bs=4M if=rpi2.img of=/dev/mmcblk0 status=progress
 sync
 ```
@@ -186,7 +183,7 @@ sync
 Il est nécessaire d'ajouter des fichiers `.dtb` dans la partition `/boot` afin de faire fonctionner certains composants comme le capteur DS18B20.
 Pour cela, monter la partition `/boot` du fichier `rpi2.img` avec `losetup` et `mount` comme dans le script précédent puis:
 
-```bash
+```Console
 mkdir mnt/boot/overlays
 dtc -O dtb -o w1-gpio-overlay.dtb output/build/linux-custom/arch/arm/boot/dts/overlays/w1-gpio-overlay.dts
 cp w1-gpio-overlay.dtb mnt/boot/overlays

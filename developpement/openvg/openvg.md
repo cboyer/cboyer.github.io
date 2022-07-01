@@ -10,7 +10,6 @@ keywords: [OpenVG, Raspberry, Raspberry Pi, OpenGLES, C, 2D, accélération mat�
 abstract: "Générer des images en 2D avec l'accélération matérielle sur Raspberry Pi via OpenVG."
 ---
 
-## Introduction
 
 Il est possible de générer des images 2D sur Raspberry Pi tout en bénéficiant de l'accélération matérielle pour obtenir de meilleurs performances.
 L'accélération matérielle repose sur la possibilité d'effectuer les opérations par le circuit graphique (GPU) au lieu du processeur. 

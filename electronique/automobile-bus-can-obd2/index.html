@@ -2,28 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="HandheldFriendly" content="True">
   <title>Automobile, bus CAN et norme OBD2 - C. Boyer</title>
   <meta name="description" content="Dialoguer avec l'ordinateur de bord d'un véhicule automobile via OBD2." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="automobile, can, bus, obd2, macchina, savvycan" />
-  <link rel="canonical" href="https://cboyer.github.io/electronique/automobile-bus-can-obd2" />
-  <meta property="og:title" content="Automobile, bus CAN et norme OBD2 - C. Boyer" />
-  <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Dialoguer avec l'ordinateur de bord d'un véhicule automobile via OBD2." />
-  <meta property="og:site_name" content="cboyer.github.io" />
-  <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2019-12-14T15:29:32-05:00" />
-  <meta property="article:published_time" content="2018-11-01T18:08:32-04:00" />
-  <meta property="article:modified_time" content="2019-12-14T15:29:32-05:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
-  <link rel="stylesheet" type="text/css" href="../../style.css" />
   <style>
-pre > code.sourceCode { white-space: pre; position: relative; }
+    body { margin: 1em; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    ul { list-style: none; padding: 0;}
+    p code { font-size: 1.1em; }
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+  </style>
+  <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
@@ -88,37 +84,11 @@ code span.ss { color: #ff5500; } /* SpecialString */
 code span.st { color: #bf0303; } /* String */
 code span.va { color: #0057ae; } /* Variable */
 code span.vs { color: #bf0303; } /* VerbatimString */
-code span.wa { color: #bf0303; } /* Warning */
-  </style>
+code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
-  <header id="header">
-    <div id="links">
-      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
-          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="github-icon">GitHub</title>
-            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
-          </svg>
-      </a>
-      <a href="../../atom.xml" class="rss" title="Flux Atom">
-          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="atom-icon">Flux Atom</title>
-            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
-          </svg>
-      </a>
-    </div>
-    <p class="title">cboyer.github.io</p>
-    <nav id="menu">
-      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
-    </nav>
-  </header>
-
-  <main id="container">
-<article>
-<header id="title-block-header">
-<h1>Automobile, bus CAN et norme OBD2</h1>
- <small class="date">Publié le 2018-11-01, dernière mise à jour: 2019-12-14</small>
-</header>
+  <h1>Automobile, bus CAN et norme OBD2</h1>
+  <em>Publié le 2018-11-01, dernière mise à jour: 2019-12-14</em>
 <p>Pour établir la communication avec l'ordinateur embarqué d'une automobile (appelé ECU pour Electronic Control Unit), rien de bien compliqué car la technologie mis en oeuvre ici (CAN pour Controller Area Network) date en partie des années 1980 et n'intègre pas les concepts issus des enjeux d'aujourd'hui (authentification, cryptage etc.). N'oublions pas que ces systèmes embarqués sont très limités en terme de capacité de traitement tout en étant soumis à des contraintes de temps dans lesquelles ils doivent être en mesure d'opérer.</p>
 <p>La couche physique (niveau 1 OSI), fonctionne selon une topologie de type bus: tous les noeuds connectés au bus reçoivent chaque message émis (broadcast) ce qui nécessite d'introduire la notion d'identification afin d'être en mesure d'identifier un noeud comme destinataire ou émetteur d'un message. L'identification des noeuds s'effectue par la couche liaison de donnée (niveau 2 OSI) qui est normalisée ISO avec deux variantes: l'une fonctionnant avec 11 bits et l'autre (dite "extended") sur 29 bits. On ne peut pas parler d'adressage formel car un noeud peut écouter sur un identifiant et répondre avec un autre (c'est le cas de l'ECU).</p>
 <p>La norme OBD2 (On-Board Diagnostics 2) intervient au niveau 7 OSI: elle standardise en partie l'identification et la codification des données qui transitent sur le bus. Légalement encadré, une partie du protocole est normalisé et documenté incluant bon nombre de <a href="https://en.wikipedia.org/wiki/OBD-II_PIDs#Service_01">métriques</a> et les <a href="https://github.com/mytrile/obd-trouble-codes">codes de diagnostique</a>. En revanche il demeure une partie inconnue qui est propre aux constructeurs qu'il va falloir découvrir avec un peu de rétro-ingénierie.</p>
@@ -227,8 +197,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Notons que la fonction <code>can.sendFrame()</code> pour récupérer le régime moteur <code>0x0C</code> est exécutée à la réception de la température de l'huile moteur <code>0x5C</code> car l'exécuter dans <code>tick()</code> directement à la suite de l'autre <code>can.sendFrame()</code> ne nous permet pas d'obtenir une réponse de l'ECU, probablement car il faut un délais entre les deux.</p>
 <p>Le réel intérêt d'utiliser l'interface de scripting est de pouvoir interagir avec l'ECU à la manière des outils du constructeur: par exemple la reprogrammation de l'ECU passe par une méthode d'authentification challenge-response suivie l'envoie d'octets. D'autres exemples sont disponibles <a href="https://github.com/collin80/SavvyCAN/tree/master/examples">ici</a>.</p>
-<h2 id="le-cas-subaru">Le cas Subaru</h2>
-<p>Sur le bus d'une Subaru beaucoup de messages sont envoyés à une fréquence élevée sans même que la clé de contact soit entrée:</p>
+<h2 id="données-du-bus-can">Données du bus CAN</h2>
+<p>Sur le bus beaucoup de messages sont envoyés à une fréquence élevée sans même que la clé de contact soit entrée:</p>
 <table>
 <thead>
 <tr class="header">
@@ -533,21 +503,12 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>La représentation hexadécimale ne nous montre pas comment sont codées les données, c'est la représentation binaire qui va nous montrer qu'un bit donné dans cet octet représente l'état d'un système spécifique (phares, etc.). Ici le 7ème bit (en partant de la droite) décrit l'état des essuie-glaces (1 pour déployés, 0 pour non déployés). On remarque un chevauchement des bits pour les phares de positions, de croisement et de route: ceci implique que lors d'un appel de phare (bits 4 et 5 à 1) on ne peut distinguer si ce sont les phares de position (bit 3 à 1) ou de croisement (bits 3 et 4) qui sont actifs car le bit 3 et 4 sera à 1 dans les deux cas.</p>
 <p>On peut observer le même principe avec les freins (frein à main et pédale de frein) dans le 7ème octet de l'ID 154.</p>
 <p>Vous l'aurez compris, l'état de chaque système de l'automobile est transmis en temps réel sur le bus.</p>
-<h2 id="lautomobile-et-le-phénomène-du-tout-connecté">L'automobile et le phénomène du "tout connecté"</h2>
-<p>Les automobiles d'aujourd'hui sont électroniquement très bavardes. Avec autant de données produites, il ne faudra pas attendre longtemps avant de pouvoir observer l'intérêt de certaines compagnies et des autorités. Imaginez le potentiel d'un dispositif de type boite noir (comme sur les avions de ligne) enregistrant toutes ces données pour décrire votre trajet avec précision (vitesse, régime moteur, consommation essence, etc.) couplé à une interface sans-fils. En cas d'accident il serait possible d'investiguer avec d'autres informations que les seuls dires des conducteurs. Ceci permettrait aux forces de police de constater des infractions (excès de vitesse) sans vous prendre sur le fait, tout en passant à proximité de votre véhicule (ou depuis un bureau). Les compagnies d'assurance ou de location pourrait vérifier le comportement d'un conducteur (régime moteur, vitesse, etc...) et réclamer des montants supplémentaires.</p>
-<p>OBD2 n'étant pas complètement standardisé, l'absence de stockage de ces données et d'interfaces pour y accéder nous protègent de telles dérives, mais pour combien de temps.</p>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://docs.macchina.cc/">Documentation Macchina M2</a></li>
 <li><a href="https://en.wikipedia.org/wiki/OBD-II_PIDs#Service_01">Identifiants OBD2 et formules de calcul</a></li>
 <li><a href="http://www.savvycan.com/docs/index.html">Documentation SavvyCAN</a></li>
 </ul>
-</article>
-</main>
-
-<footer id="footer">
-  © 2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>
-</footer>
-
+  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>

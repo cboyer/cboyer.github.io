@@ -1,5 +1,5 @@
 ---
-title: "Quelques commandes utiles sous Linux"
+title: "Commandes Linux en vrac"
 date: "2017-04-12T13:23:14-04:00"
 updated: "2021-02-16T13:23:14-04:00"
 author: "C. Boyer"

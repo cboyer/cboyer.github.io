@@ -2,28 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="HandheldFriendly" content="True">
-  <title>Liaison bluetooth entre ESP32 et Raspberry Pi 3 - C. Boyer</title>
+  <title>Liaison bluetooth ESP32 - Raspberry Pi 3 - C. Boyer</title>
   <meta name="description" content="<p>Liaison bluetooth entre ESP32 et Raspberry Pi 3.</p>" />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Raspberry, Buildroot, ESP32, bluetooth, rfcomm, BluetoothSerial" />
-  <link rel="canonical" href="https://cboyer.github.io/linux/buildroot-raspberry-esp32-bluetooth" />
-  <meta property="og:title" content="Liaison bluetooth entre ESP32 et Raspberry Pi 3 - C. Boyer" />
-  <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="<p>Liaison bluetooth entre ESP32 et Raspberry Pi 3.</p>" />
-  <meta property="og:site_name" content="cboyer.github.io" />
-  <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2021-07-27T17:37:34-04:00" />
-  <meta property="article:published_time" content="2021-07-27T17:37:34-04:00" />
-  <meta property="article:modified_time" content="2021-07-27T17:37:34-04:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
-  <link rel="stylesheet" type="text/css" href="../../style.css" />
   <style>
-pre > code.sourceCode { white-space: pre; position: relative; }
+    body { margin: 1em; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    ul { list-style: none; padding: 0;}
+    p code { font-size: 1.1em; }
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+  </style>
+  <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
@@ -88,37 +84,11 @@ code span.ss { color: #ff5500; } /* SpecialString */
 code span.st { color: #bf0303; } /* String */
 code span.va { color: #0057ae; } /* Variable */
 code span.vs { color: #bf0303; } /* VerbatimString */
-code span.wa { color: #bf0303; } /* Warning */
-  </style>
+code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
-  <header id="header">
-    <div id="links">
-      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
-          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="github-icon">GitHub</title>
-            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
-          </svg>
-      </a>
-      <a href="../../atom.xml" class="rss" title="Flux Atom">
-          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="atom-icon">Flux Atom</title>
-            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
-          </svg>
-      </a>
-    </div>
-    <p class="title">cboyer.github.io</p>
-    <nav id="menu">
-      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
-    </nav>
-  </header>
-
-  <main id="container">
-<article>
-<header id="title-block-header">
-<h1>Liaison bluetooth entre ESP32 et Raspberry Pi 3</h1>
- <small class="date">Publié le 2021-07-27</small>
-</header>
+  <h1>Liaison bluetooth ESP32 - Raspberry Pi 3</h1>
+  <em>Publié le 2021-07-27</em>
 <p>L'article a été rédigé en utilisant un Raspberry Pi 3 avec Buildroot 2021.05-514-g74adec4f3a. L'objectif est de transmettre des données via bluetooth classique d'un ESP32 vers un Raspberry Pi (unidirectionnel) avec le protocol RFCOMM. L'exemple présenté ici est facilement modifiable pour une liaison bidirectionnelle ainsi que l'implémentation d'une méthode d'authentification/chiffrement.</p>
 <h2 id="esp32">ESP32</h2>
 <p>L'ESP32 va relayer les données entrantes du port série vers bluetooth (rfcomm) grâce à la librairie <code>BluetoothSerial</code> qui est utilisable avec l'IDE Arduino et le SDK Espressif.</p>
@@ -136,152 +106,157 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <h2 id="raspberry-pi-configuration-buildroot">Raspberry Pi: configuration Buildroot</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> raspberrypi3_defconfig</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> menuconfig</span></code></pre></div>
-<pre class="text"><code>System configuration → System hostname (BR2_TARGET_GENERIC_HOSTNAME=&quot;buildrootqt5&quot;)
-System configuration → Root password (BR2_TARGET_GENERIC_ROOT_PASSWD=&quot;root&quot;)
-System configuration → remount root filesystem read-write during boot (BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=n)
-System configuration → Root filesystem overlay directories (BR2_ROOTFS_OVERLAY=output/rootfs_overlay)
+<pre class="console"><code>make raspberrypi3_defconfig
+make menuconfig</code></pre>
+<pre class="text"><code>System configuration
+├─ System hostname (BR2_TARGET_GENERIC_HOSTNAME=&quot;buildrootqt5&quot;)
+├─ Root password (BR2_TARGET_GENERIC_ROOT_PASSWD=&quot;root&quot;)
+├─ remount root filesystem read-write during boot (BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=n)
+└─ Root filesystem overlay directories (BR2_ROOTFS_OVERLAY=output/rootfs_overlay)
 
-Target packages → Hardware handling → Firmware → rpi-firmware (BR2_PACKAGE_RPI_BT_FIRMWARE=y)
-Target packages → Networking applications → bluez-utils (BR2_PACKAGE_BLUEZ5_UTILS=y)
-Target packages → Networking applications → build CLI client (BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y)
-Target packages → Networking applications → install deprecated tools (BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED=y) pour avoir rfcomm</code></pre>
+Target packages
+├─ Hardware handling
+|  └─ Firmware
+|     └─ rpi-firmware (BR2_PACKAGE_RPI_BT_FIRMWARE=y)
+└─ Networking applications
+   ├─ bluez-utils (BR2_PACKAGE_BLUEZ5_UTILS=y)
+   ├─ build CLI client (BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y)
+   └─ install deprecated tools (BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED=y) pour avoir rfcomm</code></pre>
 <p>Sauvegarde de la configuration Buildroot:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildroot_bt.config</span></code></pre></div>
+<pre class="console"><code>make savedefconfig BR2_DEFCONFIG=./buildroot_bt.config</code></pre>
 <h2 id="configuration-du-noyau-linux">Configuration du noyau Linux</h2>
 <p>Pour la configuration du noyau, aucun pilote graphique particulier (DRM, VC4) n'est nécessaire, il faut veiller à la présence des "Firmware Driver" (présents par défaut):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> linux-menuconfig</span></code></pre></div>
-<pre class="text"><code>Firmware Drivers → Raspberry Pi Firmware Driver (RASPBERRYPI_FIRMWARE=y)
-Networking support → Bluetooth subsystem support (CONFIG_BT=m)
-Networking support → Bluetooth subsystem support → Bluetooth Classic (BR/EDR) features (CONFIG_BT_BREDR=y)
-Networking support → Bluetooth subsystem support → RFCOMM protocol support (CONFIG_BT_RFCOMM=m)
-Networking support → Bluetooth subsystem support → RFCOMM TTY support (CONFIG_BT_RFCOMM_TTY=y)
-Networking support → Bluetooth subsystem support → Bluetooth device drivers → HCI UART driver (CONFIG_BT_HCIUART=m)
-Networking support → Bluetooth subsystem support → Bluetooth device drivers → Broadcom protocol support (CONFIG_BT_HCIUART_BCM=y)</code></pre>
+<pre class="console"><code>make linux-menuconfig</code></pre>
+<pre class="text"><code>Firmware Drivers
+└─ Raspberry Pi Firmware Driver (RASPBERRYPI_FIRMWARE=y)
+
+Networking support
+└─ Bluetooth subsystem support (CONFIG_BT=m)
+   ├─ Bluetooth Classic (BR/EDR) features (CONFIG_BT_BREDR=y)
+   ├─ RFCOMM protocol support (CONFIG_BT_RFCOMM=m)
+   ├─ RFCOMM TTY support (CONFIG_BT_RFCOMM_TTY=y)
+   └─ Bluetooth device drivers
+      ├─ HCI UART driver (CONFIG_BT_HCIUART=m)
+      └─ Broadcom protocol support (CONFIG_BT_HCIUART_BCM=y)</code></pre>
 <blockquote>
 <p>Inutil d'inclure les protocoles BNEP qui sert à l'émulation Ethernet et HIDP pour le support des claviers/souris via bluetooth. Le module <code>rfcomm</code> doit être compilé en tant que module.</p>
 </blockquote>
 <p>Sauvegarde de la configuration du noyau:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> output/build/linux-custom/.config linux_bt.config</span></code></pre></div>
+<pre class="console"><code>cp output/build/linux-custom/.config linux_bt.config</code></pre>
 <h2 id="configuration-bluetooth">Configuration bluetooth</h2>
 <p>Pour inclure nos fichiers nous allons utiliser un overlay, tous les fichiers contenu dans <code>output/rootfs_overlay</code> (considéré par Buildroot comme référence à la racine) seront présents dans l'image finale.</p>
 <p>Le périphérique bluetooth du Raspberry est interfacé via UART. Pour un Pi Zero W et Pi 3, avec la présence de la ligne <code>dtoverlay=miniuart-bt</code> dans <code>boot/config.txt</code>, le périphérique bluetooth est accessible via <code>/dev/ttyS0</code> et non <code>/dev/ttyAMA0</code>.</p>
 <h3 id="configuration-avec-btattachbluetoothctl">Configuration avec btattach/bluetoothctl</h3>
 <p>Ajouter un script dans l'overlay <code>output/rootfs_overlay/root/bt.sh</code> pour activer le bluetooth:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#attache le périphérique pour obtenir l&#39;interface hci0 (charge les modules nécessaires comme btbcm et hci_uart). Fonctionne en arrière plan en permanence.</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/bin/btattach</span> <span class="at">-B</span> /dev/ttyS0 <span class="at">-P</span> bcm <span class="at">-S</span> 921600 <span class="at">-N</span> <span class="kw">&amp;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">/bin/sleep</span> 10</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#active l&#39;interface sans la rendre visible via bluetooth</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/bin/bluetoothctl</span> power on</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/bin/bluetoothctl</span> discoverable off</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#obtient le port série /dev/rfcomm0 (pas besoin de &quot;pairer&quot; ni connecter)</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="ex">/sbin/modprobe</span> rfcomm</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/bin/rfcomm</span> bind rfcomm0 11:22:33:44:55:66</span></code></pre></div>
-<blockquote>
+<pre class="text"><code>#!/bin/sh
+
+# Attache le périphérique pour obtenir l&#39;interface hci0 (charge les modules nécessaires
+# comme btbcm et hci_uart). Fonctionne en arrière plan en permanence.
+/usr/bin/btattach -B /dev/ttyS0 -P bcm -S 921600 -N &amp;
+/bin/sleep 10
+
+# Active l&#39;interface sans la rendre visible via bluetooth
+/usr/bin/bluetoothctl power on
+/usr/bin/bluetoothctl discoverable off
+
+# Obtient le port série /dev/rfcomm0 (pas besoin de &quot;pairer&quot; ni connecter)
+/sbin/modprobe rfcomm
+/usr/bin/rfcomm bind rfcomm0 11:22:33:44:55:66</code></pre>
 <p><code>btattach</code> doit être exécuté en arrière plan et induit un certain délais pour rendre l'interface disponible.</p>
-</blockquote>
 <h3 id="configuration-avec-hciattachhciconfig-outils-désuets">Configuration avec hciattach/hciconfig (outils désuets)</h3>
 <p>Le script <code>output/rootfs_overlay/root/bt.sh</code> pour activer le bluetooth avec les outils BlueZ désuets:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#attache le périphérique pour obtenir l&#39;interface hci0 (charge les modules nécessaires comme btbcm et hci_uart)</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/bin/hciattach</span> /dev/ttyS0 bcm43xx 921600 noflow <span class="at">-</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#active l&#39;interface</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/bin/hciconfig</span> hci0 up</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#obtient le port série /dev/rfcomm0 (pas besoin de &quot;pairer&quot; ni connecter)</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="ex">/sbin/modprobe</span> rfcomm</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/bin/rfcomm</span> bind rfcomm0 11:22:33:44:55:66</span></code></pre></div>
-<blockquote>
+<pre class="text"><code>#!/bin/sh
+
+# Attache le périphérique pour obtenir l&#39;interface hci0 (charge les modules nécessaires comme btbcm et hci_uart)
+/usr/bin/hciattach /dev/ttyS0 bcm43xx 921600 noflow -
+
+# Active l&#39;interface
+/usr/bin/hciconfig hci0 up
+
+# Obtient le port série /dev/rfcomm0 (pas besoin de &quot;pairer&quot; ni connecter)
+/sbin/modprobe rfcomm
+/usr/bin/rfcomm bind rfcomm0 11:22:33:44:55:66</code></pre>
 <p>Bien que désuet, <code>hciattach</code> présente l'avantage de s'exécuter très rapidement et de rendre la main ce qui n'implique pas de <code>sleep</code> dans le script.</p>
-</blockquote>
 <p>Pour tester l'interface bluetooth: <code>l2ping 11:22:33:44:55:66</code>.</p>
 <h3 id="compilation">Compilation</h3>
-<p>Lancer la compilation et la création de l'image:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
+<p>Lancer la compilation et la création de l'image: <code>make</code>.</p>
 <p>Copie de l'image générée vers la carte SD:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</span></code></pre></div>
+<pre class="console"><code>sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</code></pre>
 <p>Après avoir démarré le système sur le Raspberry, exécuter <code>bt.sh</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> bt.sh</span></code></pre></div>
+<pre class="console"><code>sh bt.sh</code></pre>
 <p>Les données reçues sont disponibles via le port série <code>/dev/rfcomm0</code> (affichables avec <code>cat</code>).</p>
 <h2 id="se-passer-de-rfcomm-et-des-outils-désuets">Se passer de rfcomm et des outils désuets</h2>
 <p>Pour se passer des outils désuets <code>hci*</code> (dont l'outil <code>rfcomm</code>), il est possible d'écrire un programme C similaire qui va nous permettre de réceptionner les données. Le module <code>rfcomm</code> est toujours nécessaire coté noyau. Le programme affiche sur STDOUT les données dès leur réception sans réassembler le message (une chaîne de caractères peut être reçue en plusieurs fois).</p>
 <p>Programme <code>clientrfcomm.c</code></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sys/socket.h&gt;</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;bluetooth/bluetooth.h&gt;</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;bluetooth/rfcomm.h&gt;</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;signal.h&gt;</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> <span class="dt">volatile</span> keep_running <span class="op">=</span> true<span class="op">;</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> exit_handle<span class="op">(</span><span class="dt">int</span> sig<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    keep_running <span class="op">=</span> false<span class="op">;</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> sockaddr_rc addr <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">};</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> sigaction act<span class="op">;</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> s<span class="op">,</span> status<span class="op">,</span> bytes_read<span class="op">;</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> dest<span class="op">[</span><span class="dv">18</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="ch">&#39;\0&#39;</span> <span class="op">};</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> buf<span class="op">[</span><span class="dv">1024</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="ch">&#39;\0&#39;</span> <span class="op">};</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint8_t</span> channel <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>argc <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Usage: %s &lt;address&gt; &lt;channel&gt;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> argv<span class="op">[</span><span class="dv">0</span><span class="op">]);</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>        exit<span class="op">(</span>EXIT_FAILURE<span class="op">);</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    snprintf<span class="op">(</span>dest<span class="op">,</span> <span class="kw">sizeof</span> dest<span class="op">,</span> <span class="st">&quot;%s&quot;</span><span class="op">,</span> argv<span class="op">[</span><span class="dv">1</span><span class="op">]);</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    channel <span class="op">=</span> atoi<span class="op">(</span>argv<span class="op">[</span><span class="dv">2</span><span class="op">]);</span></span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    act<span class="op">.</span>sa_handler <span class="op">=</span> exit_handle<span class="op">;</span></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    sigemptyset <span class="op">(&amp;</span>act<span class="op">.</span>sa_mask<span class="op">);</span></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>    act<span class="op">.</span>sa_flags <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>    sigaction<span class="op">(</span>SIGINT<span class="op">,</span>  <span class="op">&amp;</span>act<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    sigaction<span class="op">(</span>SIGTERM<span class="op">,</span> <span class="op">&amp;</span>act<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> socket<span class="op">(</span>AF_BLUETOOTH<span class="op">,</span> SOCK_STREAM<span class="op">,</span> BTPROTO_RFCOMM<span class="op">);</span></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>    addr<span class="op">.</span>rc_family <span class="op">=</span> AF_BLUETOOTH<span class="op">;</span></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>    addr<span class="op">.</span>rc_channel <span class="op">=</span> channel<span class="op">;</span></span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>    str2ba<span class="op">(</span>dest<span class="op">,</span> <span class="op">&amp;</span>addr<span class="op">.</span>rc_bdaddr<span class="op">);</span></span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>    status <span class="op">=</span> connect<span class="op">(</span>s<span class="op">,</span> <span class="op">(</span><span class="kw">struct</span> sockaddr <span class="op">*)&amp;</span>addr<span class="op">,</span> <span class="kw">sizeof</span> addr<span class="op">);</span></span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>status <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>        perror<span class="op">(</span><span class="st">&quot;Connection error&quot;</span><span class="op">);</span></span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>        exit<span class="op">(</span>EXIT_FAILURE<span class="op">);</span></span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span><span class="op">(</span>keep_running<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>        bytes_read <span class="op">=</span> read<span class="op">(</span>s<span class="op">,</span> buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">);</span></span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>        buf<span class="op">[</span>bytes_read<span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;\0&#39;</span><span class="op">;</span></span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>bytes_read <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;received: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> buf<span class="op">);</span></span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>            fflush<span class="op">(</span>stdout<span class="op">);</span></span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>            buf<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;\0&#39;</span><span class="op">;</span></span>
-<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>    close<span class="op">(</span>s<span class="op">);</span></span>
-<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> EXIT_SUCCESS<span class="op">;</span></span>
-<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sys/socket.h&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;bluetooth/bluetooth.h&gt;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;bluetooth/rfcomm.h&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;signal.h&gt;</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> <span class="dt">volatile</span> keep_running <span class="op">=</span> true<span class="op">;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> exit_handle<span class="op">(</span><span class="dt">int</span> sig<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    keep_running <span class="op">=</span> false<span class="op">;</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> sockaddr_rc addr <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">};</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> sigaction act<span class="op">;</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> s<span class="op">,</span> status<span class="op">,</span> bytes_read<span class="op">;</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> dest<span class="op">[</span><span class="dv">18</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="ch">&#39;\0&#39;</span> <span class="op">};</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> buf<span class="op">[</span><span class="dv">1024</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="ch">&#39;\0&#39;</span> <span class="op">};</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint8_t</span> channel <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>argc <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Usage: %s &lt;address&gt; &lt;channel&gt;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> argv<span class="op">[</span><span class="dv">0</span><span class="op">]);</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        exit<span class="op">(</span>EXIT_FAILURE<span class="op">);</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    snprintf<span class="op">(</span>dest<span class="op">,</span> <span class="kw">sizeof</span> dest<span class="op">,</span> <span class="st">&quot;%s&quot;</span><span class="op">,</span> argv<span class="op">[</span><span class="dv">1</span><span class="op">]);</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    channel <span class="op">=</span> atoi<span class="op">(</span>argv<span class="op">[</span><span class="dv">2</span><span class="op">]);</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>    act<span class="op">.</span>sa_handler <span class="op">=</span> exit_handle<span class="op">;</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>    sigemptyset <span class="op">(&amp;</span>act<span class="op">.</span>sa_mask<span class="op">);</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>    act<span class="op">.</span>sa_flags <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>    sigaction<span class="op">(</span>SIGINT<span class="op">,</span>  <span class="op">&amp;</span>act<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>    sigaction<span class="op">(</span>SIGTERM<span class="op">,</span> <span class="op">&amp;</span>act<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> socket<span class="op">(</span>AF_BLUETOOTH<span class="op">,</span> SOCK_STREAM<span class="op">,</span> BTPROTO_RFCOMM<span class="op">);</span></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>    addr<span class="op">.</span>rc_family <span class="op">=</span> AF_BLUETOOTH<span class="op">;</span></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>    addr<span class="op">.</span>rc_channel <span class="op">=</span> channel<span class="op">;</span></span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>    str2ba<span class="op">(</span>dest<span class="op">,</span> <span class="op">&amp;</span>addr<span class="op">.</span>rc_bdaddr<span class="op">);</span></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>    status <span class="op">=</span> connect<span class="op">(</span>s<span class="op">,</span> <span class="op">(</span><span class="kw">struct</span> sockaddr <span class="op">*)&amp;</span>addr<span class="op">,</span> <span class="kw">sizeof</span> addr<span class="op">);</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>status <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>        perror<span class="op">(</span><span class="st">&quot;Connection error&quot;</span><span class="op">);</span></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>        exit<span class="op">(</span>EXIT_FAILURE<span class="op">);</span></span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span><span class="op">(</span>keep_running<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>        bytes_read <span class="op">=</span> read<span class="op">(</span>s<span class="op">,</span> buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">);</span></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>        buf<span class="op">[</span>bytes_read<span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;\0&#39;</span><span class="op">;</span></span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>bytes_read <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;received: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> buf<span class="op">);</span></span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>            fflush<span class="op">(</span>stdout<span class="op">);</span></span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>            buf<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;\0&#39;</span><span class="op">;</span></span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>    close<span class="op">(</span>s<span class="op">);</span></span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> EXIT_SUCCESS<span class="op">;</span></span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Pour compiler/tester le programme sur la machine host:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dnf install bluez-libs-devel</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-Wall</span> <span class="at">-Werror</span> <span class="at">-O2</span> clientrfcomm.c <span class="at">-lbluetooth</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">client_rfcomm</span> 11:22:33:44:55:66 1</span></code></pre></div>
+<pre class="console"><code>sudo dnf install bluez-libs-devel
+gcc -Wall -Werror -O2 clientrfcomm.c -lbluetooth
+client_rfcomm 11:22:33:44:55:66 1</code></pre>
 <p>Pour inclure ce programme dans l'image destinée au Raspberry sous forme de package, il faut construire un arbre externe avec la structure suivante (depuis la racine Buildroot):</p>
 <pre class="text"><code>br-external/
 ├── Config.in                   Regroupe dynamiquement tous les descriptifs Kconfig des packages
@@ -294,21 +269,21 @@ Networking support → Bluetooth subsystem support → Bluetooth device drivers 
         └── src             
             ├── clientrfcomm.c  Fichier source
             └── Makefile        Makefile</code></pre>
-<p><em>br-external/external.desc</em></p>
+<h4 id="br-externalexternal.desc">br-external/external.desc</h4>
 <pre class="text"><code>name: BTCOMPONENTS
 desc: Bluetooth components for Raspberry Pi 3</code></pre>
-<p><em>br-external/Config.in:</em></p>
+<h4 id="br-externalconfig.in">br-external/Config.in</h4>
 <pre class="text"><code>source &quot;$BR2_EXTERNAL_BTCOMPONENTS_PATH/package/clientrfcomm/Config.in&quot;</code></pre>
-<p><em>br-external/external.mk</em></p>
+<h4 id="br-externalexternal.mk">br-external/external.mk</h4>
 <pre class="text"><code>include $(sort $(wildcard $(BR2_EXTERNAL_BTCOMPONENTS_PATH)/package/*/*.mk))</code></pre>
-<p><em>br-external/package/clientrfcomm/Config.in</em></p>
+<h4 id="br-externalpackageclientrfcommconfig.in">br-external/package/clientrfcomm/Config.in</h4>
 <pre class="text"><code>config BR2_PACKAGE_CLIENTRFCOMM
     bool &quot;Client RFCOMM&quot;
     help
       Client bluetooth RFCOMM.
 
       https://cboyer.github.io/</code></pre>
-<p><em>br-external/package/clientrfcomm/external.mk</em></p>
+<h4 id="br-externalpackageclientrfcommexternal.mk">br-external/package/clientrfcomm/external.mk</h4>
 <pre class="text"><code>################################################################################
 #
 # clientrfcomm
@@ -328,7 +303,7 @@ define CLIENTRFCOMM_INSTALL_TARGET_CMDS
 endef
 
 $(eval $(generic-package))</code></pre>
-<p><em>br-external/package/clientrfcomm/src/Makefile</em></p>
+<h4 id="br-externalpackageclientrfcommsrcmakefile">br-external/package/clientrfcomm/src/Makefile</h4>
 <pre class="text"><code>CC = gcc
 CFLAGS = -Wall -Werror -O2
 
@@ -341,18 +316,12 @@ clean:
     rm clientrfcomm</code></pre>
 <p>Ne pas oublier le code source dans <em>br-external/package/clientrfcomm/src/clientrfcomm.c</em>.</p>
 <p>Pour inclure notre package "Client RFCOMM" (présent dans le menu "External options")</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> BR2_EXTERNAL=./br-external menuconfig</span></code></pre></div>
+<pre class="console"><code>make BR2_EXTERNAL=./br-external menuconfig</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://buildroot.org/downloads/manual/manual.html">https://buildroot.org/downloads/manual/manual.html</a></li>
 <li><a href="https://people.csail.mit.edu/albert/bluez-intro/x502.html">https://people.csail.mit.edu/albert/bluez-intro/x502.html</a></li>
 </ul>
-</article>
-</main>
-
-<footer id="footer">
-  © 2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>
-</footer>
-
+  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>

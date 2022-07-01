@@ -2,28 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="HandheldFriendly" content="True">
   <title>Traitement de données avec le langage Julia - C. Boyer</title>
   <meta name="description" content="Quelques opérations avec le langage Julia." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Julia, datascience, données, R" />
-  <link rel="canonical" href="https://cboyer.github.io/developpement/julia" />
-  <meta property="og:title" content="Traitement de données avec le langage Julia - C. Boyer" />
-  <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Quelques opérations avec le langage Julia." />
-  <meta property="og:site_name" content="cboyer.github.io" />
-  <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2021-06-05T22:33:11-04:00" />
-  <meta property="article:published_time" content="2021-06-05T22:33:11-04:00" />
-  <meta property="article:modified_time" content="2021-06-05T22:33:11-04:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
-  <link rel="stylesheet" type="text/css" href="../../style.css" />
   <style>
-pre > code.sourceCode { white-space: pre; position: relative; }
+    body { margin: 1em; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    ul { list-style: none; padding: 0;}
+    p code { font-size: 1.1em; }
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+  </style>
+  <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
@@ -88,58 +84,37 @@ code span.ss { color: #ff5500; } /* SpecialString */
 code span.st { color: #bf0303; } /* String */
 code span.va { color: #0057ae; } /* Variable */
 code span.vs { color: #bf0303; } /* VerbatimString */
-code span.wa { color: #bf0303; } /* Warning */
-  </style>
+code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
-  <header id="header">
-    <div id="links">
-      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
-          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="github-icon">GitHub</title>
-            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
-          </svg>
-      </a>
-      <a href="../../atom.xml" class="rss" title="Flux Atom">
-          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="atom-icon">Flux Atom</title>
-            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
-          </svg>
-      </a>
-    </div>
-    <p class="title">cboyer.github.io</p>
-    <nav id="menu">
-      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
-    </nav>
-  </header>
-
-  <main id="container">
-<article>
-<header id="title-block-header">
-<h1>Traitement de données avec le langage Julia</h1>
- <small class="date">Publié le 2021-06-05</small>
-</header>
+  <h1>Traitement de données avec le langage Julia</h1>
+  <em>Publié le 2021-06-05</em>
 <h2 id="installer-des-packages">Installer des packages</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> Pkg<span class="op">;</span> Pkg.add(<span class="st">&quot;DataFrames&quot;</span>)<span class="op">;</span> Pkg.add(<span class="st">&quot;CSV&quot;</span>)<span class="op">;</span> Pkg.add(<span class="st">&quot;Pipe&quot;</span>) </span></code></pre></div>
 <h2 id="charger-un-csv">Charger un CSV</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> DataFrames<span class="op">,</span> CSV<span class="op">,</span> Pipe</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>CSV.<span class="cn">read</span>(<span class="st">&quot;./data.csv&quot;</span><span class="op">,</span>          <span class="co">#Chemin vers le fichier CSV</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>         DataFrame<span class="op">,</span>             <span class="co">#Type de données à retourner</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>         delim<span class="op">=</span><span class="st">&quot;;&quot;</span><span class="op">,</span>             <span class="co">#Séparateur de colonne</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>         quotechar<span class="op">=</span><span class="ch">&#39;&quot;&#39;</span><span class="op">,</span>         <span class="co">#Délimiteur de chaîne de caractères</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>         decimal<span class="op">=</span><span class="ch">&#39;.&#39;</span><span class="op">,</span>           <span class="co">#Séparateur partieentière/décimale d&#39;un nombre réel</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>         missingstring<span class="op">=</span><span class="st">&quot;NA&quot;</span><span class="op">,</span>    <span class="co">#Chaîne à utiliser pour les valeurs manquantes</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>         datarow<span class="op">=</span><span class="fl">2</span><span class="op">,</span>             <span class="co">#Considère seulement les données à partir de la seconde ligne (ignore l&#39;entête)</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>         header<span class="op">=</span>[<span class="st">&quot;Contrat&quot;</span><span class="op">,</span> <span class="st">&quot;Datetime&quot;</span><span class="op">,</span> <span class="st">&quot;kWh&quot;</span><span class="op">,</span> <span class="st">&quot;CodeConsommation&quot;</span><span class="op">,</span> <span class="st">&quot;Température&quot;</span><span class="op">,</span> <span class="st">&quot;CodeTempérature&quot;</span>]<span class="op">,</span> </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>         types<span class="op">=</span>[<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Float32</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Int32</span><span class="op">,</span> <span class="dt">String</span>]</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>DataFrame(CSV.File(<span class="st">&quot;./data.csv&quot;</span><span class="op">,</span> delim<span class="op">=</span><span class="st">&quot;;&quot;</span><span class="op">,</span> quotechar<span class="op">=</span><span class="ch">&#39;&quot;&#39;</span><span class="op">,</span> decimal<span class="op">=</span><span class="ch">&#39;.&#39;</span><span class="op">,</span> missingstring<span class="op">=</span><span class="st">&quot;NA&quot;</span><span class="op">,</span> datarow<span class="op">=</span><span class="fl">2</span><span class="op">,</span> </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                   header<span class="op">=</span>[<span class="st">&quot;Contrat&quot;</span><span class="op">,</span> <span class="st">&quot;Datetime&quot;</span><span class="op">,</span> <span class="st">&quot;kWh&quot;</span><span class="op">,</span> <span class="st">&quot;CodeConsommation&quot;</span><span class="op">,</span> <span class="st">&quot;Température&quot;</span><span class="op">,</span> <span class="st">&quot;CodeTempérature&quot;</span>]<span class="op">,</span> </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                   types<span class="op">=</span>[<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Float32</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Int32</span><span class="op">,</span> <span class="dt">String</span>]<span class="op">,</span> dateformat<span class="op">=</span><span class="st">&quot;yyyy-mm-dd HH:MM:SS&quot;</span>))</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="pp">@pipe</span> <span class="st">&quot;./data.csv&quot;</span> <span class="op">|&gt;</span> CSV.File(_<span class="op">,</span> delim<span class="op">=</span><span class="st">&quot;;&quot;</span><span class="op">,</span> types<span class="op">=</span>[<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Float32</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Int32</span><span class="op">,</span> <span class="dt">String</span>]<span class="op">,</span> datarow<span class="op">=</span><span class="fl">2</span><span class="op">,</span> header<span class="op">=</span>[<span class="st">&quot;Contrat&quot;</span><span class="op">,</span> <span class="st">&quot;Datetime&quot;</span><span class="op">,</span> <span class="st">&quot;kWh&quot;</span><span class="op">,</span> <span class="st">&quot;CodeConsommation&quot;</span><span class="op">,</span> <span class="st">&quot;Température&quot;</span><span class="op">,</span> <span class="st">&quot;CodeTempérature&quot;</span>]) <span class="op">|&gt;</span> DataFrame(_)</span></code></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>CSV.<span class="cn">read</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;./data.csv&quot;</span><span class="op">,</span>          <span class="co">#Chemin vers le fichier CSV</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>   DataFrame<span class="op">,</span>             <span class="co">#Type de données à retourner</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   delim<span class="op">=</span><span class="st">&quot;;&quot;</span><span class="op">,</span>             <span class="co">#Séparateur de colonne</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   quotechar<span class="op">=</span><span class="ch">&#39;&quot;&#39;</span><span class="op">,</span>         <span class="co">#Délimiteur de chaîne de caractères</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>   decimal<span class="op">=</span><span class="ch">&#39;.&#39;</span><span class="op">,</span>           <span class="co">#Séparateur partieentière/décimale d&#39;un nombre réel</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>   missingstring<span class="op">=</span><span class="st">&quot;NA&quot;</span><span class="op">,</span>    <span class="co">#Chaîne à utiliser pour les valeurs manquantes</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>   datarow<span class="op">=</span><span class="fl">2</span><span class="op">,</span>             <span class="co">#Considère seulement les données à partir de la seconde ligne (ignore l&#39;entête)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>   header<span class="op">=</span>[<span class="st">&quot;Contrat&quot;</span><span class="op">,</span> <span class="st">&quot;Datetime&quot;</span><span class="op">,</span> <span class="st">&quot;kWh&quot;</span><span class="op">,</span> <span class="st">&quot;CodeConsommation&quot;</span><span class="op">,</span> <span class="st">&quot;Température&quot;</span><span class="op">,</span> <span class="st">&quot;CodeTempérature&quot;</span>]<span class="op">,</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>   types<span class="op">=</span>[<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Float32</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Int32</span><span class="op">,</span> <span class="dt">String</span>]</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>DataFrame(</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>   CSV.File(</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;./data.csv&quot;</span><span class="op">,</span> delim<span class="op">=</span><span class="st">&quot;;&quot;</span><span class="op">,</span> quotechar<span class="op">=</span><span class="ch">&#39;&quot;&#39;</span><span class="op">,</span> decimal<span class="op">=</span><span class="ch">&#39;.&#39;</span><span class="op">,</span> missingstring<span class="op">=</span><span class="st">&quot;NA&quot;</span><span class="op">,</span> datarow<span class="op">=</span><span class="fl">2</span><span class="op">,</span> </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>      header<span class="op">=</span>[<span class="st">&quot;Contrat&quot;</span><span class="op">,</span> <span class="st">&quot;Datetime&quot;</span><span class="op">,</span> <span class="st">&quot;kWh&quot;</span><span class="op">,</span> <span class="st">&quot;CodeConsommation&quot;</span><span class="op">,</span> <span class="st">&quot;Température&quot;</span><span class="op">,</span> <span class="st">&quot;CodeTempérature&quot;</span>]<span class="op">,</span> </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>      types<span class="op">=</span>[<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Float32</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Int32</span><span class="op">,</span> <span class="dt">String</span>]<span class="op">,</span> dateformat<span class="op">=</span><span class="st">&quot;yyyy-mm-dd HH:MM:SS&quot;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>   )</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="pp">@pipe</span> <span class="st">&quot;./data.csv&quot;</span> <span class="op">|&gt;</span> CSV.File(_<span class="op">,</span> delim<span class="op">=</span><span class="st">&quot;;&quot;</span><span class="op">,</span> types<span class="op">=</span>[<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Float32</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Int32</span><span class="op">,</span> <span class="dt">String</span>]<span class="op">,</span> datarow<span class="op">=</span><span class="fl">2</span><span class="op">,</span> header<span class="op">=</span>[<span class="st">&quot;Contrat&quot;</span><span class="op">,</span> <span class="st">&quot;Datetime&quot;</span><span class="op">,</span> <span class="st">&quot;kWh&quot;</span><span class="op">,</span> <span class="st">&quot;CodeConsommation&quot;</span><span class="op">,</span> <span class="st">&quot;Température&quot;</span><span class="op">,</span> <span class="st">&quot;CodeTempérature&quot;</span>]) <span class="op">|&gt;</span> DataFrame(_)</span></code></pre></div>
 <p>Julia comprend un opérateur pipe <code>|&gt;</code> mais son utilisation est très limitée comparée au langage Elixir: il ne gère que les fonctions à un seul paramètre et sans saut de lignes. Le package <code>Pipe</code> permet d'étendre le pipe aux fonctions avec plusieurs paramètres en spécifiant la position avec <code>_</code> et la macro <code>@pipe</code>.</p>
 <h2 id="résumé-des-données">Résumé des données</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>describe(t)</span></code></pre></div>
@@ -159,22 +134,22 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>t[<span class="op">:,</span> [<span class="op">:</span>Datetime<span class="op">,</span> <span class="op">:</span>kWh]]</span></code></pre></div>
 <p>L'opérateur <code>[]</code> est plus rapide et moins couteux en mémoire.</p>
 <h2 id="filtrer">Filtrer</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Pour filtrer les missing</span></span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pour filtrer les &quot;missing&quot;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>filter(x <span class="op">-&gt;</span> ismissing(x.kWh)<span class="op">,</span> k)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>t[.<span class="op">!</span>ismissing.(t.kWh)<span class="op">,</span> <span class="op">:</span>kWh]</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Pour filtrer sur une valeur</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Pour filtrer selon une valeur</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>filter(x <span class="op">-&gt;</span> x.kWh <span class="op">==</span> <span class="fl">0.5</span><span class="op">,</span> t)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>t[t.kWh .<span class="op">==</span> <span class="fl">0.5</span> <span class="op">,</span> <span class="op">:</span>]</span></code></pre></div>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>t[t.kWh .<span class="op">==</span> <span class="fl">0.5</span><span class="op">,</span> <span class="op">:</span>]</span></code></pre></div>
 <p>Ajouter la macro <code>@time</code> au début de l'instruction permet d'afficher le temps d'exécution ainsi que la consommation mémoire de l'opération. L'utilisation de l'opérateur <code>[]</code> est beaucoup plus rapide et moins couteuse en mémoire.</p>
 <p>Autre façon de filtrer les missing:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Sur le dataframe au complet</span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sur le dataframe au complet</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dropmissing<span class="op">!</span>(t)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Sur une colonne particulière</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sur une colonne particulière</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>dropmissing<span class="op">!</span>(t<span class="op">,</span> <span class="op">:</span>kWh)</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>k.kWh .<span class="op">=</span> ifelse.(ismissing.(k.kWh)<span class="op">,</span> <span class="fl">0.0</span><span class="op">,</span> k.kWh)</span></code></pre></div>
-<p>Le <code>!</code> effectue les modifications directement sur le dataframe sans en retourner un nouveau. La fonction <code>skipmissing</code> fonctionne sur un vecteur.</p>
+<p>Le <code>!</code> effectue les modifications directement sur le dataframe sans en retourner un nouveau. Le <code>.</code> permet de diffuser l'opération sur une colonne (vectorisation). La fonction <code>skipmissing</code> fonctionne sur un vecteur.</p>
 <h2 id="transformer-des-données">Transformer des données</h2>
 <div class="sourceCode" id="cb8"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>k.kWh .<span class="op">=</span> ifelse.(k.kWh .<span class="op">&lt;</span> <span class="fl">1.0</span><span class="op">,</span> <span class="cn">missing</span><span class="op">,</span> k.kWh)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>k[k.kWh .<span class="op">&lt;</span> <span class="fl">1.0</span><span class="op">,</span> <span class="op">:</span>kWh] .<span class="op">=</span> <span class="cn">missing</span></span>
@@ -189,12 +164,6 @@ code span.wa { color: #bf0303; } /* Warning */
 <li><a href="https://dataframes.juliadata.org/stable/man/missing/">https://dataframes.juliadata.org/stable/man/missing/</a></li>
 <li><a href="https://jcharistech.wordpress.com/julia-dataframes-cheat-sheets/">https://jcharistech.wordpress.com/julia-dataframes-cheat-sheets/</a></li>
 </ul>
-</article>
-</main>
-
-<footer id="footer">
-  © 2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>
-</footer>
-
+  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>

@@ -31,12 +31,10 @@ defmodule MyAppWeb.WindowLive do
     end
 
     def mount(_params, session, socket) do
-        {:ok, socket
-              |> assign(:modal, nil)
-        }
+        {:ok, socket |> assign(:modal, nil)}
     end
 
-    #Évènement `closemodal` envoyé par le hook JavaScript (client) pour fermer la fenêtre modale (LiveComponent)
+    # Évènement `closemodal` du hook (client) pour fermer la fenêtre modale (LiveComponent)
     def handle_event("closemodal", _params, socket) do
 
         #Modifie socket.assigns.modal et force MyAppWeb.ModalComponent à se rafraîchir
@@ -44,7 +42,7 @@ defmodule MyAppWeb.WindowLive do
         {:noreply, socket}
     end
 
-    #Évènement `openmodal` qui permet le rafraîchissement du LiveComponent (avec un changement de valeur de `modal`)
+    # Évènement `openmodal` rafraîchit le LiveComponent (avec un changement de valeur de modal)
     def handle_event("openmodal", _params, socket) do
         send_update(MyAppWeb.ModalComponent, id: :modal, modal: "test")
         {:noreply, socket}
@@ -55,7 +53,7 @@ end
 
 
 Le LiveComponent `modal_component.ex` qui affiche obligatoirement une `div` dont l'id est `modal` avec `phx-hook="ModalHook"`.
-Il n'y a pas de contenu lorsque socket.assigns.modal == nil.
+Il n'y a pas de contenu lorsque `socket.assigns.modal == nil`.
 ```Elixir
 defmodule MyAppWeb.ModalComponent do
     use MyAppWeb, :live_component
@@ -80,9 +78,7 @@ defmodule MyAppWeb.ModalComponent do
     end
 
     def mount(socket) do
-        {:ok, socket
-              |> assign(:modal, nil)
-        }
+        {:ok, socket |> assign(:modal, nil)}
     end
 end
 ```
@@ -95,21 +91,23 @@ Le hook JavaScript dans `assets/js/app.js`:
 ```JavaScript
 let Hooks = {};
 Hooks.ModalHook = {
-    //Exécuté lorsque le LiveComponent a été rafraîchi, pas besoin de handleEvent/addEventListener ni signaux.
+    // Exécuté lorsque le LiveComponent a été rafraîchi
+    // pas besoin de handleEvent/addEventListener ni signaux.
     updated(){
         let self = this;
         var modal = document.getElementById("modal-window");
 
-        //S'assure que la fenêtre modale possède un contenu (lorsque socket.assigns.modal != nil)
+        // S'assure que la fenêtre modale possède un contenu (lorsque socket.assigns.modal != nil)
         if(modal !== null) {
             var span = document.getElementsByClassName("close")[0];
 
-            //Un clique sur la croix: envoyer le signal `closemodal` à `window_live.ex`
+            // Un clique sur la croix: envoyer le signal closemodal à window_live.ex
             span.onclick = function() {
                 self.pushEvent("closemodal", {});
             }
 
-            //Un clique à l'extérieur de la fenêtre modale: envoyer le signal `closemodal` à `window_live.ex`
+            // Un clique à l'extérieur de la fenêtre modale: 
+            // envoyer le signal closemodal à window_live.ex
             window.onclick = function(event) {
                 if (event.target == modal) {
                     self.pushEvent("closemodal", {});

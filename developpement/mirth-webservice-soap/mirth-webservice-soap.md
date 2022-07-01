@@ -103,7 +103,7 @@ Le canal nous retourne alors:
 Le même problème se pose pour la réponse SOAP (si on utilise du XML dans `return`, les caractères seront remplacés par des caractères HTML.
 
 
-## Créer son web service à l'aide d'une classe Java (archive JAR)
+## Créer son web service à l'aide d'une classe Java
 
 Pour utiliser notre propre WSDL et XSD, nous pouvons étendre nous même la classe `com.mirth.connect.connectors.ws.acceptMessage`.
 Pour cela nous aurons besoin du JDK pour compiler et générer l'archive JAR.
@@ -159,7 +159,8 @@ La requête SOAP devra mentionner le bon targetNamespace (`xmlns:ws="https://mon
 ### Compilation de la classe
 
 ```Console
-"C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe" SDDCws.java -cp "C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar"
+"C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe" SDDCws.java -cp  ^
+"C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar"
 ```
 
 
@@ -216,7 +217,8 @@ Le fichier soap.xml à envoyer avec curl:
 Pour envoyer la requête:
 
 ```Console
-curl.exe --header "Content-Type: text/xml;charset=UTF-8" --data @soap.xml http://localhost:8081/services/query -u mirth:mirth
+curl.exe --header "Content-Type: text/xml;charset=UTF-8" ^
+         --data @soap.xml http://localhost:8081/services/query -u mirth:mirth
 ```
 
 
@@ -386,7 +388,8 @@ public class Patient implements Serializable{
 Accélérons les choses avec un petit script pour obtenir l'archive JAR.
 
 ```Console
-"C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe" SDDCws.java Patient.java -cp "C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar"
+"C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe" SDDCws.java Patient.java ^
+-cp "C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar"
 
 xcopy /Y .\SDDCws.class .\com\mirth\connect\connectors\ws\
 xcopy /Y .\Patient.class .\com\mirth\connect\connectors\ws\
@@ -437,7 +440,8 @@ La requête SOAP (fichier `soap.xml`):
 Envoi avec curl:
 
 ```Console
-curl.exe --header "Content-Type: text/xml;charset=UTF-8" --data @soap.xml http://localhost:8081/services/query -u mirth:mirth
+curl.exe --header "Content-Type: text/xml;charset=UTF-8" ^
+         --data @soap.xml http://localhost:8081/services/query -u mirth:mirth
 ```
 
 
@@ -572,7 +576,8 @@ public class SDDCws extends AcceptMessage {
 Il faut ajouter le fichier `PatientList.java`.
 
 ```Console
-"C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe" SDDCws.java Patient.java PatientList.java -cp "C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar"
+"C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe" SDDCws.java Patient.java PatientList.java ^
+-cp "C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar"
 
 xcopy /Y .\SDDCws.class .\com\mirth\connect\connectors\ws\
 xcopy /Y .\Patient.class .\com\mirth\connect\connectors\ws\

@@ -39,7 +39,7 @@ Dépendances systèmes à installer:
 `inotify-tools` permet de bénéficier de la fonctionalité live-reload de Phoenix.
 `erlang-parsetools` pour compiler l'application (lié à gettext).
 
-```Bash
+```Console
 sudo dnf install erlang-parsetools inotify-tools
 ```
 

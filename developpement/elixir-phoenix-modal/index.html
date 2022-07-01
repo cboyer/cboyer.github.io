@@ -2,28 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="HandheldFriendly" content="True">
   <title>Elixir/Phoenix: fenêtre modale avec LiveComponent et hook JavaScript - C. Boyer</title>
   <meta name="description" content="Utiliser un LiveComponent et un hook JavaScript pour ouvrir une fenêtre modale." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Elixir, Phoenix, Liveview, LiveComponent, hooks, mix, iex" />
-  <link rel="canonical" href="https://cboyer.github.io/developpement/elixir-phoenix-modal" />
-  <meta property="og:title" content="Elixir/Phoenix: fenêtre modale avec LiveComponent et hook JavaScript - C. Boyer" />
-  <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Utiliser un LiveComponent et un hook JavaScript pour ouvrir une fenêtre modale." />
-  <meta property="og:site_name" content="cboyer.github.io" />
-  <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2021-04-25T17:59:11-04:00" />
-  <meta property="article:published_time" content="2021-04-25T17:59:11-04:00" />
-  <meta property="article:modified_time" content="2021-04-25T17:59:11-04:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
-  <link rel="stylesheet" type="text/css" href="../../style.css" />
   <style>
-pre > code.sourceCode { white-space: pre; position: relative; }
+    body { margin: 1em; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    ul { list-style: none; padding: 0;}
+    p code { font-size: 1.1em; }
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+  </style>
+  <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
@@ -88,37 +84,11 @@ code span.ss { color: #ff5500; } /* SpecialString */
 code span.st { color: #bf0303; } /* String */
 code span.va { color: #0057ae; } /* Variable */
 code span.vs { color: #bf0303; } /* VerbatimString */
-code span.wa { color: #bf0303; } /* Warning */
-  </style>
+code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
-  <header id="header">
-    <div id="links">
-      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
-          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="github-icon">GitHub</title>
-            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
-          </svg>
-      </a>
-      <a href="../../atom.xml" class="rss" title="Flux Atom">
-          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="atom-icon">Flux Atom</title>
-            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
-          </svg>
-      </a>
-    </div>
-    <p class="title">cboyer.github.io</p>
-    <nav id="menu">
-      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
-    </nav>
-  </header>
-
-  <main id="container">
-<article>
-<header id="title-block-header">
-<h1>Elixir/Phoenix: fenêtre modale avec LiveComponent et hook JavaScript</h1>
- <small class="date">Publié le 2021-04-25</small>
-</header>
+  <h1>Elixir/Phoenix: fenêtre modale avec LiveComponent et hook JavaScript</h1>
+  <em>Publié le 2021-04-25</em>
 <p>Notre page principale se compose d'une LiveView <code>window_live.ex</code>, d'un LiveComponent <code>modal_component.ex</code> statefull. L'idée est d'utiliser un LiveComponent qui affiche du contenu avec un évènement provenant de <code>window_live.ex</code> et se ferme avec un évènement provenant du client (via un hook JavaScript très simple sans eventHandler).</p>
 <p>Ici <code>push_event/3</code> n'est pas utilisé dans le LiveView, ni <code>handleEvent</code> et <code>addEventListener</code> dans le hook JavaScript. En effet nous utilisons <code>updated()</code> qui est exécuté lors d'un rafraîchissement d'un élément du DOM (ici notre LiveComponent qui contient la fenêtre modale). De plus il n'y a pas besoin d'utiliser la propriété CSS <code>display</code>.</p>
 <p>Le LiveView <code>window_live.ex</code>:</p>
@@ -134,27 +104,25 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> mount(_params, session, socket) <span class="kw">do</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        {<span class="va">:ok</span>, socket</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>              <span class="op">|&gt;</span> assign(<span class="va">:modal</span>, <span class="cn">nil</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Évènement `closemodal` envoyé par le hook JavaScript (client) pour fermer la fenêtre modale (LiveComponent)</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> handle_event(<span class="st">&quot;closemodal&quot;</span>, _params, socket) <span class="kw">do</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Modifie socket.assigns.modal et force MyAppWeb.ModalComponent à se rafraîchir</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        send_update(<span class="cn">MyAppWeb</span><span class="op">.</span><span class="cn">ModalComponent</span>, <span class="va">id:</span> <span class="va">:modal</span>, <span class="va">modal:</span> <span class="cn">nil</span>)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        {<span class="va">:noreply</span>, socket}</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Évènement `openmodal` qui permet le rafraîchissement du LiveComponent (avec un changement de valeur de `modal`)</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> handle_event(<span class="st">&quot;openmodal&quot;</span>, _params, socket) <span class="kw">do</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        send_update(<span class="cn">MyAppWeb</span><span class="op">.</span><span class="cn">ModalComponent</span>, <span class="va">id:</span> <span class="va">:modal</span>, <span class="va">modal:</span> <span class="st">&quot;test&quot;</span>)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        {<span class="va">:noreply</span>, socket}</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
-<p>Le LiveComponent <code>modal_component.ex</code> qui affiche obligatoirement une <code>div</code> dont l'id est <code>modal</code> avec <code>phx-hook="ModalHook"</code>. Il n'y a pas de contenu lorsque socket.assigns.modal == nil.</p>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        {<span class="va">:ok</span>, socket <span class="op">|&gt;</span> assign(<span class="va">:modal</span>, <span class="cn">nil</span>)}</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Évènement `closemodal` du hook (client) pour fermer la fenêtre modale (LiveComponent)</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> handle_event(<span class="st">&quot;closemodal&quot;</span>, _params, socket) <span class="kw">do</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Modifie socket.assigns.modal et force MyAppWeb.ModalComponent à se rafraîchir</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        send_update(<span class="cn">MyAppWeb</span><span class="op">.</span><span class="cn">ModalComponent</span>, <span class="va">id:</span> <span class="va">:modal</span>, <span class="va">modal:</span> <span class="cn">nil</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        {<span class="va">:noreply</span>, socket}</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Évènement `openmodal` rafraîchit le LiveComponent (avec un changement de valeur de modal)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> handle_event(<span class="st">&quot;openmodal&quot;</span>, _params, socket) <span class="kw">do</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        send_update(<span class="cn">MyAppWeb</span><span class="op">.</span><span class="cn">ModalComponent</span>, <span class="va">id:</span> <span class="va">:modal</span>, <span class="va">modal:</span> <span class="st">&quot;test&quot;</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        {<span class="va">:noreply</span>, socket}</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<p>Le LiveComponent <code>modal_component.ex</code> qui affiche obligatoirement une <code>div</code> dont l'id est <code>modal</code> avec <code>phx-hook="ModalHook"</code>. Il n'y a pas de contenu lorsque <code>socket.assigns.modal == nil</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">defmodule</span> <span class="cn">MyAppWeb</span><span class="op">.</span><span class="cn">ModalComponent</span> <span class="kw">do</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">use</span> <span class="cn">MyAppWeb</span>, <span class="va">:live_component</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -178,42 +146,42 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> mount(socket) <span class="kw">do</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        {<span class="va">:ok</span>, socket</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>              <span class="op">|&gt;</span> assign(<span class="va">:modal</span>, <span class="cn">nil</span>)</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        {<span class="va">:ok</span>, socket <span class="op">|&gt;</span> assign(<span class="va">:modal</span>, <span class="cn">nil</span>)}</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <blockquote>
 <p>Note: il est possible d'envoyer l'évènement <code>openmodal</code> vers <code>MyAppWeb.ModalComponent</code> au lieu de <code>MyAppWeb.WindowLive</code> en ajoutant <code>"phx-target": "#modal"</code> dans lien qui génère l'évènement. Ne pas oulier <code>handle_event/3</code> dans <code>MyAppWeb.ModalComponent</code> pour réceptionner l'évènement.</p>
 </blockquote>
 <p>Le hook JavaScript dans <code>assets/js/app.js</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> Hooks <span class="op">=</span> {}<span class="op">;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Hooks<span class="op">.</span><span class="at">ModalHook</span> <span class="op">=</span> {</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">//Exécuté lorsque le LiveComponent a été rafraîchi, pas besoin de handleEvent/addEventListener ni signaux.</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">updated</span>(){</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> self <span class="op">=</span> <span class="kw">this</span><span class="op">;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> modal <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;modal-window&quot;</span>)<span class="op">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="co">//S&#39;assure que la fenêtre modale possède un contenu (lorsque socket.assigns.modal != nil)</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(modal <span class="op">!==</span> <span class="kw">null</span>) {</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>            <span class="kw">var</span> span <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementsByClassName</span>(<span class="st">&quot;close&quot;</span>)[<span class="dv">0</span>]<span class="op">;</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            <span class="co">//Un clique sur la croix: envoyer le signal `closemodal` à `window_live.ex`</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            span<span class="op">.</span><span class="at">onclick</span> <span class="op">=</span> <span class="kw">function</span>() {</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                self<span class="op">.</span><span class="fu">pushEvent</span>(<span class="st">&quot;closemodal&quot;</span><span class="op">,</span> {})<span class="op">;</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>            <span class="co">//Un clique à l&#39;extérieur de la fenêtre modale: envoyer le signal `closemodal` à `window_live.ex`</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            <span class="bu">window</span><span class="op">.</span><span class="at">onclick</span> <span class="op">=</span> <span class="kw">function</span>(<span class="bu">event</span>) {</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (<span class="bu">event</span><span class="op">.</span><span class="at">target</span> <span class="op">==</span> modal) {</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>                    self<span class="op">.</span><span class="fu">pushEvent</span>(<span class="st">&quot;closemodal&quot;</span><span class="op">,</span> {})<span class="op">;</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                }</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> liveSocket <span class="op">=</span> <span class="kw">new</span> <span class="fu">LiveSocket</span>(<span class="st">&quot;/live&quot;</span><span class="op">,</span> <span class="bu">Socket</span><span class="op">,</span> {<span class="dt">params</span><span class="op">:</span> {<span class="dt">_csrf_token</span><span class="op">:</span> csrfToken}<span class="op">,</span> <span class="dt">hooks</span><span class="op">:</span> Hooks})</span></code></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Exécuté lorsque le LiveComponent a été rafraîchi</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// pas besoin de handleEvent/addEventListener ni signaux.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">updated</span>(){</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> self <span class="op">=</span> <span class="kw">this</span><span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> modal <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;modal-window&quot;</span>)<span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="co">// S&#39;assure que la fenêtre modale possède un contenu (lorsque socket.assigns.modal != nil)</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(modal <span class="op">!==</span> <span class="kw">null</span>) {</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="kw">var</span> span <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementsByClassName</span>(<span class="st">&quot;close&quot;</span>)[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Un clique sur la croix: envoyer le signal closemodal à window_live.ex</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>            span<span class="op">.</span><span class="at">onclick</span> <span class="op">=</span> <span class="kw">function</span>() {</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                self<span class="op">.</span><span class="fu">pushEvent</span>(<span class="st">&quot;closemodal&quot;</span><span class="op">,</span> {})<span class="op">;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Un clique à l&#39;extérieur de la fenêtre modale: </span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>            <span class="co">// envoyer le signal closemodal à window_live.ex</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            <span class="bu">window</span><span class="op">.</span><span class="at">onclick</span> <span class="op">=</span> <span class="kw">function</span>(<span class="bu">event</span>) {</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (<span class="bu">event</span><span class="op">.</span><span class="at">target</span> <span class="op">==</span> modal) {</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                    self<span class="op">.</span><span class="fu">pushEvent</span>(<span class="st">&quot;closemodal&quot;</span><span class="op">,</span> {})<span class="op">;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> liveSocket <span class="op">=</span> <span class="kw">new</span> <span class="fu">LiveSocket</span>(<span class="st">&quot;/live&quot;</span><span class="op">,</span> <span class="bu">Socket</span><span class="op">,</span> {<span class="dt">params</span><span class="op">:</span> {<span class="dt">_csrf_token</span><span class="op">:</span> csrfToken}<span class="op">,</span> <span class="dt">hooks</span><span class="op">:</span> Hooks})</span></code></pre></div>
 <p>La partie CSS à jouter dans <code>priv/static/css/myapp.css</code> (pensez à inclure le fichier dans le layout <code>lib/my_app_web/templates/layout/root.html.leex</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.modal</span> {</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">position</span>: <span class="dv">fixed</span><span class="op">;</span></span>
@@ -255,12 +223,6 @@ code span.wa { color: #bf0303; } /* Warning */
 <li><a href="https://hexdocs.pm/phoenix_live_view/Phoenix.LiveComponent.html">LiveComponent</a></li>
 <li><a href="https://hexdocs.pm/phoenix_live_view/js-interop.html">Hooks JavaScript</a></li>
 </ul>
-</article>
-</main>
-
-<footer id="footer">
-  © 2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>
-</footer>
-
+  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>

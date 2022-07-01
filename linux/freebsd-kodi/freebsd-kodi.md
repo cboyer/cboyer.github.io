@@ -20,7 +20,9 @@ Certains paramètres présentés sont spécifiques à la configuration matériel
 ### Installation des paquets avec pkg
 
 ```Console
-pkg install kodi kodi-addon-pvr.iptvsimple libbluray libcec dav1d lcms2 libass libcrossguid curl ffmpeg libfmt fstrcmp lzo2 spdlog sqlite3 taglib waylandpp libGLU xorg-server xinit xorg-drivers drm-kmod xf86-video-intel libva-intel-driver libvdpau-va-gl xterm py38-sqlite3
+pkg install kodi kodi-addon-pvr.iptvsimple libbluray libcec dav1d lcms2 libass libcrossguid \
+    curl ffmpeg libfmt fstrcmp lzo2 spdlog sqlite3 taglib waylandpp libGLU xorg-server xinit \
+    xorg-drivers drm-kmod xf86-video-intel libva-intel-driver libvdpau-va-gl xterm py38-sqlite3
 ```
 
 Charger le module KMS au boot via `/etc/rc.conf`
@@ -129,7 +131,7 @@ mount -t fuse -o rw,mountprog=/usr/local/bin/lklfuse,type=ext4,allow_other /dev/
 
 Ajouter dans `/etc/fstab` pour que la partition soit montée au démarrage
 ```Text
-/dev/ada1s1             /data           fuse    rw,mountprog=/usr/local/bin/lklfuse,type=ext4,allow_other,late 0 0
+/dev/ada1s1     /data       fuse        rw,mountprog=/usr/local/bin/lklfuse,type=ext4,allow_other,late 0 0
 ```
 
 > Pour les volumes NTFS il faut installer le paquet `fusefs-ntfs`.
@@ -259,7 +261,8 @@ cd /tmp
 git clone --branch 19.3-Matrix https://github.com/xbmc/xbmc.git
 git clone --depth 1 --branch 19.0.2-Matrix https://github.com/kodi-pvr/pvr.iptvsimple
 cd pvr.iptvsimple && mkdir build && cd build
-cmake -DADDONS_TO_BUILD=pvr.iptvsimple -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
+cmake -DADDONS_TO_BUILD=pvr.iptvsimple -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug \
+      -DCMAKE_INSTALL_PREFIX=../../xbmc/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
 ```
 
 Ajouter `-fPIC` dans les directives de `CMakeCache.txt`
@@ -288,7 +291,8 @@ cp -r ../../xbmc/addons/pvr.iptvsimple/resources/ /usr/local/share/kodi/addons/p
 cd /tmp
 git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.ffmpegdirect.git
 cd inputstream.ffmpegdirect && mkdir build && cd build
-cmake -DADDONS_TO_BUILD=inputstream.ffmpegdirect -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
+cmake -DADDONS_TO_BUILD=inputstream.ffmpegdirect -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug \
+      -DCMAKE_INSTALL_PREFIX=../../xbmc/build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
 gmake
 
 mkdir /usr/local/lib/kodi/addons/inputstream.ffmpegdirect
@@ -307,7 +311,8 @@ cp -r ../../xbmc/build/addons/inputstream.ffmpegdirect/resources/ /usr/local/sha
 cd /tmp
 git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.adaptive
 cd inputstream.adaptive && mkdir build && cd build
-cmake -DADDONS_TO_BUILD=inputstream.adaptive -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
+cmake -DADDONS_TO_BUILD=inputstream.adaptive -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug \
+      -DCMAKE_INSTALL_PREFIX=../../xbmc/build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
 gmake
 
 mkdir /usr/local/lib/kodi/addons/inputstream.adaptive
@@ -325,7 +330,8 @@ cp -r ../../xbmc/build/addons/inputstream.adaptive/resources/ /usr/local/share/k
 cd /tmp
 git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.rtmp
 cd inputstream.rtmp && mkdir build && cd build
-cmake -DADDONS_TO_BUILD=inputstream.rtmp -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/kodi-build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
+cmake -DADDONS_TO_BUILD=inputstream.rtmp -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug \
+      -DCMAKE_INSTALL_PREFIX=../../xbmc/kodi-build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons
 ```
 
 Ajouter `set(OPENSSL_TARGET BSD-x86_64)` dans `../depends/common/openssl/CMakeLists.txt` avant la suite de fonctions `list`.

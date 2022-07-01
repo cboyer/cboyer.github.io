@@ -14,7 +14,6 @@ Beaucoup utilisent Kodi comme système multimédia avec leur TV. Que ce soit sur
 
 Voyons comment créer son propre récepteur USB pour télécommande infrarouge avec un microcontrôleur ATmega32u4,  un vieux décodeur Vidéotron dont nous allons récupérer le capteur et la télécommande.
 
-Les mises à jour de ce projet sont disponibles sur Github: [https://github.com/cboyer/remote-arduino](https://github.com/cboyer/remote-arduino).
 
 ## Principe de fonctionnement
 

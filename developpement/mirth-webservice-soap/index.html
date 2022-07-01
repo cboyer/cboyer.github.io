@@ -2,28 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="HandheldFriendly" content="True">
   <title>Création d’un web service SOAP avec Mirth - C. Boyer</title>
   <meta name="description" content="Création d’un web service SOAP avec Mirth." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Mirth, SOAP, web service, XML, java, JAXB, JAR, WSDL, XSD" />
-  <link rel="canonical" href="https://cboyer.github.io/developpement/mirth-webservice-soap" />
-  <meta property="og:title" content="Création d’un web service SOAP avec Mirth - C. Boyer" />
-  <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Création d’un web service SOAP avec Mirth." />
-  <meta property="og:site_name" content="cboyer.github.io" />
-  <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2019-08-02T19:34:21-04:00" />
-  <meta property="article:published_time" content="2019-08-02T19:34:21-04:00" />
-  <meta property="article:modified_time" content="2019-08-02T19:34:21-04:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
-  <link rel="stylesheet" type="text/css" href="../../style.css" />
   <style>
-pre > code.sourceCode { white-space: pre; position: relative; }
+    body { margin: 1em; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    ul { list-style: none; padding: 0;}
+    p code { font-size: 1.1em; }
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+  </style>
+  <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
@@ -88,37 +84,11 @@ code span.ss { color: #ff5500; } /* SpecialString */
 code span.st { color: #bf0303; } /* String */
 code span.va { color: #0057ae; } /* Variable */
 code span.vs { color: #bf0303; } /* VerbatimString */
-code span.wa { color: #bf0303; } /* Warning */
-  </style>
+code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
-  <header id="header">
-    <div id="links">
-      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
-          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="github-icon">GitHub</title>
-            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
-          </svg>
-      </a>
-      <a href="../../atom.xml" class="rss" title="Flux Atom">
-          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="atom-icon">Flux Atom</title>
-            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
-          </svg>
-      </a>
-    </div>
-    <p class="title">cboyer.github.io</p>
-    <nav id="menu">
-      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
-    </nav>
-  </header>
-
-  <main id="container">
-<article>
-<header id="title-block-header">
-<h1>Création d’un web service SOAP avec Mirth</h1>
- <small class="date">Publié le 2019-08-02</small>
-</header>
+  <h1>Création d’un web service SOAP avec Mirth</h1>
+  <em>Publié le 2019-08-02</em>
 <p>Cet article a été écrit en utilisant la version 3.2 de Mirth.</p>
 <h2 id="terminologie-des-web-services">Terminologie des web services:</h2>
 <ul>
@@ -183,7 +153,7 @@ code span.wa { color: #bf0303; } /* Warning */
 <li>L'enveloppe XML/WSDL/XSD est imposée par <code>com.mirth.connect.connectors.ws.DefaultAcceptMessage</code> (par exemple <code>arg0</code>, <code>AcceptMessage</code> dans la requête SOAP).</li>
 <li>Une seule données peut être transmise via <code>arg0</code> à moins d’utiliser un séparateur comme CSV (utiliser du XML ne respecte pas le standard SOAP et devra être traité via preprocessor dans <code>&lt;![CDATA[]]&gt;</code> pour éviter les problèmes de caractères spécifiques à XML). Le même problème se pose pour la réponse SOAP (si on utilise du XML dans <code>return</code>, les caractères seront remplacés par des caractères HTML.</li>
 </ul>
-<h2 id="créer-son-web-service-à-laide-dune-classe-java-archive-jar">Créer son web service à l'aide d'une classe Java (archive JAR)</h2>
+<h2 id="créer-son-web-service-à-laide-dune-classe-java">Créer son web service à l'aide d'une classe Java</h2>
 <p>Pour utiliser notre propre WSDL et XSD, nous pouvons étendre nous même la classe <code>com.mirth.connect.connectors.ws.acceptMessage</code>. Pour cela nous aurons besoin du JDK pour compiler et générer l'archive JAR.</p>
 <p>Code source (<code>SDDCws.java</code>, le fichier doit avoir le même nom que la classe sinon le compilateur vous le fera savoir!):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
@@ -220,7 +190,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <div class="sourceCode" id="cb6"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">@WebService</span><span class="op">(</span>portName <span class="op">=</span> <span class="st">&quot;SDDCwsPort&quot;</span><span class="op">,</span> serviceName <span class="op">=</span> <span class="st">&quot;SDDCws&quot;</span><span class="op">,</span> targetNamespace <span class="op">=</span> <span class="st">&quot;https://monurl.qc.ca/monservice&quot;</span><span class="op">)</span></span></code></pre></div>
 <p>La requête SOAP devra mentionner le bon targetNamespace (<code>xmlns:ws="https://monurl.qc.ca/monservice"</code>) dans l'enveloppe sinon nous obtiendrons l'erreur: "<em>Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</em>"</p>
 <h3 id="compilation-de-la-classe">Compilation de la classe</h3>
-<pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java -cp &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;</code></pre>
+<pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java -cp  ^
+&quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;</code></pre>
 <p><code>ws-server.jar</code> est obligatoire pour étendre <code>AcceptMessage</code> et <code>donkey-server.jar</code> nécessaire si on utilise <code>webServiceReceiver.processData</code>.</p>
 <h3 id="création-de-larchive-jar">Création de l'archive JAR</h3>
 <p>il faut copier <code>SDDCws.class</code> dans <code>com/mirth/connect/connectors/ws</code>.</p>
@@ -248,7 +219,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">soapenv:Body</span>&gt;</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">soapenv:Envelope</span>&gt;</span></code></pre></div>
 <p>Pour envoyer la requête:</p>
-<pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
+<pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; ^
+         --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous répond alors:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
@@ -391,7 +363,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <h3 id="compilation-packaging-et-installation">Compilation, packaging et installation</h3>
 <p>Accélérons les choses avec un petit script pour obtenir l'archive JAR.</p>
-<pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java Patient.java -cp &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;
+<pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java Patient.java ^
+-cp &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;
 
 xcopy /Y .\SDDCws.class .\com\mirth\connect\connectors\ws\
 xcopy /Y .\Patient.class .\com\mirth\connect\connectors\ws\
@@ -424,7 +397,8 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">soapenv:Body</span>&gt;</span>
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">soapenv:Envelope</span>&gt;</span></code></pre></div>
 <p>Envoi avec curl:</p>
-<pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
+<pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; ^
+         --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous retourne bien les données:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
@@ -535,7 +509,8 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <h3 id="compilation-packaging-et-installation-1">Compilation, packaging et installation</h3>
 <p>Il faut ajouter le fichier <code>PatientList.java</code>.</p>
-<pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java Patient.java PatientList.java -cp &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;
+<pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java Patient.java PatientList.java ^
+-cp &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;
 
 xcopy /Y .\SDDCws.class .\com\mirth\connect\connectors\ws\
 xcopy /Y .\Patient.class .\com\mirth\connect\connectors\ws\
@@ -587,12 +562,6 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <li><a href="https://howtodoinjava.com/jaxb/jaxb-annotations">https://howtodoinjava.com/jaxb/jaxb-annotations</a></li>
 <li><a href="https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/">https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/</a></li>
 </ul>
-</article>
-</main>
-
-<footer id="footer">
-  © 2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>
-</footer>
-
+  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>

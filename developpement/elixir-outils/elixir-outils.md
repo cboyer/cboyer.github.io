@@ -10,6 +10,8 @@ keywords: [Elixir, mix, iex, développement]
 abstract: "Aide mémoire Elixir: les outils."
 ---
 
+Elixir fourni un ensemble d'outils simplifiant la gestion des dépendances et la publication de l'application (releases).
+
 ## Mix
 
 Mix est l'outil de gestion pour les applications Elixir.

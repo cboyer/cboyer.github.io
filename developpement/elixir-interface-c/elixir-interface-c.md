@@ -32,7 +32,8 @@ int main () {
     char in[MAX_SIZE_DATA] = "\0";
     char out[MAX_SIZE_DATA + sizeof add] = "\0";
 
-    /* Utilisation de read() avec STDIN_FILENO fonctionne également, fgets suppose l'utilisation de '\n' comme fin de chaîne */
+    /* Utilisation de read() avec STDIN_FILENO fonctionne également */
+    /* fgets suppose l'utilisation de '\n' comme fin de chaîne */
     while (fgets(in, sizeof in - 1, stdin) != 0) {
         strncat(out, add, strlen(add));
         strncat(out, in, strlen(in));

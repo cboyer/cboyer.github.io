@@ -32,7 +32,6 @@ airodump-ng --band abg -w output.csv --output-format csv wlp3s0mon
 ```
 
 Ici `wlp3s0` correspond au nom de l'interface WiFi utilisée pour l'écoute (mode monitor) et sera accessible via une nouvelle interface `wlp3s0mon`.
-Nous utiliserons l'extrait de données suivant à titre d'exemple: [airmonng_data.csv](./airmonng_data.csv)
 
 
 ## Traitement des données
@@ -165,7 +164,6 @@ D'autre types de diagrammes (graphe/réseau) sont utilisables afin de mieux pré
 
 ## Liens complémentaires
 
- - [Script R complet](./wifi.R)
  - [https://bost.ocks.org/mike/sankey/](https://bost.ocks.org/mike/sankey/)
  - [https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/](https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/)
  - [https://www.jessesadler.com/post/network-analysis-with-r/](https://www.jessesadler.com/post/network-analysis-with-r/)

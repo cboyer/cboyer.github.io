@@ -59,22 +59,26 @@ dbDisconnect(con)
 MSSQL via ODBC sans sources configurées (DSN)
 ```R
 require(DBI)
-con <- dbConnect(odbc::odbc(),
-                 Driver = "SQL Server",
-                 Server = "1.2.3.4",
-                 Database = "mydb",
-                 UID = "login",
-                 PWD = "password")
+con <- dbConnect(
+  odbc::odbc(),
+  Driver = "SQL Server",
+  Server = "1.2.3.4",
+  Database = "mydb",
+  UID = "login",
+  PWD = "password"
+)
 ```
 
 Oracle via ODBC sans sources configurées (DSN)
 ```R
 require(DBI)
-con <- dbConnect(odbc::odbc(),
-                 Driver = "Oracle dans OraClient12Home1",
-                 DBQ = "//1.2.3.4:1521/mydatabase",
-                 UID = "login",
-                 PWD = "password")
+con <- dbConnect(
+  odbc::odbc(),
+  Driver = "Oracle dans OraClient12Home1",
+  DBQ = "//1.2.3.4:1521/mydatabase",
+  UID = "login",
+  PWD = "password"
+)
 ```
 
 Oracle via JDBC
@@ -100,12 +104,14 @@ dbDisconnect(conn)
 Lister les tables et colonnes d'une base de données
 ```R
 require(DBI)
-con <- dbConnect(odbc::odbc(),
-                 Driver = "SQL Server",
-                 Server = "1.2.3.4",
-                 Database = "mydb",
-                 UID = "domaine\\login",
-                 PWD = "password")
+con <- dbConnect(
+  odbc::odbc(),
+  Driver = "SQL Server",
+  Server = "1.2.3.4",
+  Database = "mydb",
+  UID = "domaine\\login",
+  PWD = "password"
+)
 
 tables <- dbListTables(con)
 describe <- lapply(tables, function(x, conn) {
@@ -122,7 +128,7 @@ sql <- paste('SELECT client_id FROM myTable WHERE client_id IN (', client_id, ')
 
 ## <a name="files"></a>Opérations sur les fichiers
 
-Charger un fichier Excel (XSLX/XLS)
+Charger un fichier Excel
 ```R
 require(readxl)
 liste <- read_excel("./mon_fichier.xlsx", sheet = "acceuil")
@@ -236,7 +242,8 @@ stations$Manufacturer <- manufacturers$OrganizationName[match( paste(stations$Ma
 
 #Alternative Dplyr
 stations <- stations %>%
-  left_join(manufacturers %>% select(ManufacturerID, ManufacturerName, OrganizationName), by=c("ManufacturerID" = "ManufacturerID", "ManufacturerName" = "ManufacturerName"))
+  left_join(manufacturers %>% 
+  select(ManufacturerID, ManufacturerName, OrganizationName), by=c("ManufacturerID" = "ManufacturerID", "ManufacturerName" = "ManufacturerName"))
 ```
 
 Supprimer les lignes dont la valeur d'une colonne spécifique se répète (conserve un seul des éléments dédoublés)
@@ -294,8 +301,9 @@ aggregate(last_login_date ~ ., data = users, FUN = max)
 aggregate(last_login_date ~ login + type, data = users, FUN = max)
 
 #Alternative avec dplyr:
-users <- users %>% group_by(login, type) %>%
-                   summarize(max_login_date = max(last_login_date))
+users <- users %>% 
+  group_by(login, type) %>%
+  summarize(max_login_date = max(last_login_date))
 ```
 
 Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)
@@ -354,30 +362,39 @@ users_windows <- rbind(users_windowsNT, users_windowsXP)
 Calcul des taux de saisie de chaque champ
 ```R
 saisies <- formulaires %>%
-           select(Valeur, Type, TypeChamps, Champs) %>%
-           mutate(IsEmpty = ifelse(is.na(Valeur), TRUE, FALSE) ) %>%
-           group_by(IsEmpty, Type, TypeChamps, Champs) %>%
-           summarize(Vide = length(Type[IsEmpty == TRUE]), Saisi = length(Type[IsEmpty == FALSE])) %>%
-           group_by(Type, TypeChamps, Champs) %>%
-           summarize(Vide = sum(Vide), Saisi = sum(Saisi), Saisi_p = round( (Saisi / (Vide + Saisi))*100, digits = 2) )
+  select(Valeur, Type, TypeChamps, Champs) %>%
+  mutate(IsEmpty = ifelse(is.na(Valeur), TRUE, FALSE) ) %>%
+  group_by(IsEmpty, Type, TypeChamps, Champs) %>%
+  summarize(
+    Vide = length(Type[IsEmpty == TRUE]), 
+    Saisi = length(Type[IsEmpty == FALSE])
+  ) %>%
+  group_by(Type, TypeChamps, Champs) %>%
+  summarize(
+    Vide = sum(Vide), 
+    Saisi = sum(Saisi), 
+    Saisi_p = round((Saisi / (Vide + Saisi))*100, digits = 2)
+  )
 ```
 
 ```R
 stats <- all_data %>%
-           mutate(Groupment = case_when(
-                Source == 'A' & Status == 'failed' & (Details != 'Aucune adresse courriel' | is.na(Details)) ~ "Incorrecte",
-                Source == 'A' & Details == 'Aucune adresse courriel' ~ "Vide",
-                Source == 'B' & Status == 'sent' ~ "Envoyé",
-                Source == 'C' ~ "Replay",
-                TRUE ~ "Unknown"
-           )) %>%
-           filter(Groupment %in% c("Adresse incorrecte", "Sans adresse", "Envoyé")) %>%
-           group_by(ID_Extraction, Groupment) %>%
-           summarize(NBResult = length(ID_msg)) %>%
-           pivot_wider(id_cols = c("ID_Extraction"), names_from = Groupment, values_from = NBResult) %>%
-           mutate(ID_Extraction = strptime(ID_Extraction, format="%Y%m%d%H%M%S"), 
-                    Total = Vide + Incorrecte + Envoyé) %>%
-           rename("Date" = ID_Extraction)
+  mutate(Groupment = case_when(
+    Source == 'A' & Status == 'failed' & (Details != 'Aucune adresse courriel' | is.na(Details)) ~ "Incorrecte",
+    Source == 'A' & Details == 'Aucune adresse courriel' ~ "Vide",
+    Source == 'B' & Status == 'sent' ~ "Envoyé",
+    Source == 'C' ~ "Replay",
+    TRUE ~ "Unknown"
+  )) %>%
+  filter(Groupment %in% c("Adresse incorrecte", "Sans adresse", "Envoyé")) %>%
+  group_by(ID_Extraction, Groupment) %>%
+  summarize(NBResult = length(ID_msg)) %>%
+  pivot_wider(id_cols = c("ID_Extraction"), names_from = Groupment, values_from = NBResult) %>%
+  mutate(
+    ID_Extraction = strptime(ID_Extraction, format="%Y%m%d%H%M%S"), 
+    Total = Vide + Incorrecte + Envoyé
+  ) %>%
+  rename("Date" = ID_Extraction)
 ```
 
 
@@ -392,29 +409,27 @@ nbcolors <- length(unique(FreqAnomaly$Var1))
 customPalette <- colorRampPalette(brewer.pal(9, "Blues"))(nbcolors)
 customPalette[customPalette == "#F7FBFF"] <- "#498fd1" #Pour remplacer une couleur
 
-ggplot(FreqAnomaly,
-       aes(x = reorder(Var1, Freq), y = Freq, fill = Var1, label = Freq)) + 
-       geom_bar(stat = "identity", position = "dodge") +
-       geom_text(size = 3, position = position_dodge(width = 0.0), vjust = +0.25, hjust = -0.25) +
-       theme_minimal() +
-       labs(title = "Titre", x = "", y = "", color = "") +
-       #scale_fill_brewer(palette="Blues") + 
-       scale_fill_manual(values = customPalette) +
-       theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) + 
-       coord_flip()
+ggplot(FreqAnomaly, aes(x = reorder(Var1, Freq), y = Freq, fill = Var1, label = Freq)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(size = 3, position = position_dodge(width = 0.0), vjust = +0.25, hjust = -0.25) +
+  theme_minimal() +
+  labs(title = "Titre", x = "", y = "", color = "") +
+  #scale_fill_brewer(palette="Blues") + 
+  scale_fill_manual(values = customPalette) +
+  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) + 
+  coord_flip()
 ```
 
 Histogramme vertical avec palette de couleurs adaptée et labels inclinés (données issues de `table()`)
 ```R
-ggplot(FreqAnomalyComb,
-       aes(x = reorder(Var1, -Freq), y = Freq, fill = Var1, label = Freq)) + 
-       geom_bar(stat = "identity", position = "dodge") +
-       geom_text(size = 3, position = position_dodge(width = 0.9), vjust = -0.25) +
-       theme_minimal() +
-       labs(title = "Titre", x = "", y = "", color = "") +
-       #scale_fill_brewer(palette="Blues") + 
-       scale_fill_manual(values = customPalette) + 
-       theme(legend.position = "none", plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 45, hjust = 1))
+ggplot(FreqAnomalyComb, aes(x = reorder(Var1, -Freq), y = Freq, fill = Var1, label = Freq)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(size = 3, position = position_dodge(width = 0.9), vjust = -0.25) +
+  theme_minimal() +
+  labs(title = "Titre", x = "", y = "", color = "") +
+  #scale_fill_brewer(palette="Blues") + 
+  scale_fill_manual(values = customPalette) + 
+  theme(legend.position = "none", plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ### Avec les librairies Plotly et Dplyr

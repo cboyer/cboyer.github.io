@@ -1,5 +1,5 @@
 ---
-title: "Création manuelle d'un LPAR AIX depuis le VIOS"
+title: "Création manuelle d'un LPAR AIX"
 date: "2015-07-09T13:23:14-04:00"
 updated: "2018-11-17T13:09:10-04:00"
 author: "C. Boyer"
@@ -35,13 +35,13 @@ updateios -accept -dev /home/padmin/Extact/ -install
 
 Changer le prompt:
 
-```bash
+```console
 echo "export ENV=/home/padmin/.kshrc" >> /home/padmin/.profile
 ```
 
 Créer le /home/padmin/.kshrc avec:
 
-```bash
+```console
 export HOST="$(/usr/bin/uname -n)"
 if [ "`whoami`" = "root" ]; then
   PS1="`whoami`@$HOST:$PWD # "
@@ -82,7 +82,14 @@ smit
 Configuration IP:
 
 ```console
-mktcpip -hostname violab02 -inetaddr 192.168.0.22 -interface en0 -start -netmask 255.255.255.0 -gateway 192.168.0.100 -nsrvaddr 192.168.0.15 -nsrvdomain ibmlabo.lab
+mktcpip -hostname violab02 \
+        -inetaddr 192.168.0.22 \
+        -interface en0 -start \
+        -netmask 255.255.255.0 \
+        -gateway 192.168.0.100 \
+        -nsrvaddr 192.168.0.15 \
+        -nsrvdomain ibmlabo.lab
+
 smitty tcpip
 ```
 
@@ -158,7 +165,10 @@ lshwres --level lpar -r virtualio --rsubtype eth
 Créer le LPAR (`virtual_eth_adapters` = *slot_num/ieee_virtual_eth/port_vlan_id/addl_vlan_ids/is_trunk/trunk_priority*):
 
 ```console
-mksyscfg -r lpar -i 'name=aixlab02,profile_name=aixlab02,lpar_env=aixlinux,min_mem=8192,desired_mem=16384,max_mem=32768,proc_mode=shared,min_procs=1,desired_procs=2,max_procs=4,min_proc_units=1,desired_proc_units=2,max_proc_units=4,sharing_mode=uncap,uncap_weight=128,boot_mode=norm,auto_start=1,"virtual_scsi_adapters=2/client/1/vioserver/11/1","virtual_eth_adapters=4/0/2//0/0"'
+mksyscfg -r lpar -i 'name=aixlab02,profile_name=aixlab02,lpar_env=aixlinux,min_mem=8192,desired_mem=16384,
+max_mem=32768,proc_mode=shared,min_procs=1,desired_procs=2,max_procs=4,min_proc_units=1,desired_proc_units=2,
+max_proc_units=4,sharing_mode=uncap,uncap_weight=128,boot_mode=norm,auto_start=1,
+"virtual_scsi_adapters=2/client/1/vioserver/11/1","virtual_eth_adapters=4/0/2//0/0"'
 ```
 
 Éditer un profil LPAR (le LPAR doit être off):

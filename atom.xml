@@ -3,7 +3,7 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2022-05-13T16:41:11-04:00</updated>
+    <updated>2022-07-01T15:20:57-04:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
@@ -40,7 +40,7 @@
         <summary>Modification de firmware</summary>
     </entry>
     <entry>
-        <title>Liaison bluetooth entre ESP32 et Raspberry Pi 3</title>
+        <title>Liaison bluetooth ESP32 - Raspberry Pi 3</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-raspberry-esp32-bluetooth/" hreflang="fr"/>
         <category term="Linux"/>
@@ -52,9 +52,9 @@
     <entry>
         <title>Interface graphique avec Buildroot, Qt5 et Raspberry Pi 3</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-qt5-raspberry/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-raspberry-qt5/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:b335a0a7-775f-558a-b4c7-c77280108b9d</id>
+        <id>urn:uuid:58c61b45-aaf7-5c0b-b5cd-3c9f8a1df3eb</id>
         <published>2021-07-22T11:04:34-04:00</published>
         <updated>2021-07-23T17:53:00-04:00</updated>
         <summary>Développement d'une interface graphique Qt5/QML sur Raspberry Pi 3 avec Buildroot.</summary>
@@ -102,9 +102,9 @@
     <entry>
         <title>Authentification avec Phoenix</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/authentification-phoenix/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-phoenix-authentification/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:0eabdf5c-e677-50fe-8959-c31a71265d12</id>
+        <id>urn:uuid:977a440b-0567-5b44-98da-8e9b04c0c97a</id>
         <published>2021-03-13T19:04:11-05:00</published>
         <updated>2021-03-17T10:28:23-04:00</updated>
         <summary>Authentification avec Phoenix</summary>
@@ -162,9 +162,9 @@
     <entry>
         <title>Interfacer un programme C avec Elixir grâce aux Ports</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/interface-c-elixir/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-interface-c/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:14d178c3-0a64-546d-97a6-0196dd526359</id>
+        <id>urn:uuid:a9ef37ff-7650-599d-9aa0-cb7ee6835e4e</id>
         <published>2020-05-30T14:27:04-04:00</published>
         <updated>2020-05-30T14:27:04-04:00</updated>
         <summary>Interfacer un programme C via STDIN/STDOUT avec les Ports Elixir.</summary>
@@ -172,9 +172,9 @@
     <entry>
         <title>Accélération matérielle 2D avec OpenVG sur Raspberry Pi</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/rpi-openvg/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/openvg/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:18ef72b3-5f41-5049-835c-48da994651ae</id>
+        <id>urn:uuid:f709e798-88ff-58cc-a4ef-5c76970ca102</id>
         <published>2020-05-03T19:14:27-04:00</published>
         <updated>2020-05-03T19:14:27-04:00</updated>
         <summary>Générer des images en 2D avec l'accélération matérielle sur Raspberry Pi via OpenVG.</summary>
@@ -182,9 +182,9 @@
     <entry>
         <title>Les outils Elixir</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/outils-elixir/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-outils/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:b4351106-0b65-583e-9040-6f38efeeb04a</id>
+        <id>urn:uuid:a2b2f868-0a08-5867-95af-4a85d22bf039</id>
         <published>2019-11-16T13:24:27-05:00</published>
         <updated>2019-11-16T13:24:27-05:00</updated>
         <summary>Aide mémoire Elixir: les outils.</summary>
@@ -202,9 +202,9 @@
     <entry>
         <title>Exemple d'application Elixir</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/application-elixir/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-application/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:04579599-738f-58f5-9851-b220f1f28348</id>
+        <id>urn:uuid:26f794cb-571b-5b25-a986-cf1d92b5770e</id>
         <published>2019-06-19T19:04:11-04:00</published>
         <updated>2019-11-14T21:40:11-05:00</updated>
         <summary>Exemple d'application Elixir.</summary>
@@ -222,9 +222,9 @@
     <entry>
         <title>Analyse du trafic WiFi avec Airodump-ng et R</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/analyse-wifi-airmonng-r/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/r-wifi/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:c4465176-e0c8-5705-8be3-0b0714fe57cf</id>
+        <id>urn:uuid:a65906f6-7502-575f-9311-151bbbdcbc2f</id>
         <published>2019-03-04T14:22:12-04:00</published>
         <updated>2019-03-04T14:22:12-04:00</updated>
         <summary>Analyse du trafic WiFi avec Airodump-ng et R.</summary>
@@ -232,9 +232,9 @@
     <entry>
         <title>Implémentation du protocole Zabbix dans Mirth Connect</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/zabbix-protocole-mirth/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/mirth-zabbix/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:6a162e5c-d592-5b90-8251-7f904b7f1a9a</id>
+        <id>urn:uuid:a038e9cf-4f07-5fe7-8221-750b15c0eefb</id>
         <published>2018-12-08T18:23:15-04:00</published>
         <updated>2020-06-13T10:36:47-04:00</updated>
         <summary>Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener.</summary>
@@ -262,9 +262,9 @@
     <entry>
         <title>Système embarqué Linux avec Buildroot</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/systeme-embarque-linux-buildroot/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-systeme-embarque/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:2ac30941-2388-5665-bfde-17e8d32ba124</id>
+        <id>urn:uuid:d9c61bc9-be36-5536-a7db-fd7f77ea260a</id>
         <published>2018-08-09T11:29:00-04:00</published>
         <updated>2018-11-04T12:42:12-05:00</updated>
         <summary>Création d'un système embarqué Linux avec Buildroot pour Raspberry Pi 2.</summary>
@@ -300,7 +300,7 @@
         <summary>Utilisation de NGINX en reverse proxy pour rediriger vers une page d'authentification personnalisée.</summary>
     </entry>
     <entry>
-        <title>Filtrer les publicités avec un serveur DNS Unbound</title>
+        <title>Filtrer les publicités avec Unbound</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/filtrer-publicites-dns-unbound/" hreflang="fr"/>
         <category term="Linux"/>
@@ -360,7 +360,7 @@
         <summary>Tests avec Hadoop</summary>
     </entry>
     <entry>
-        <title>Quelques commandes utiles sous Linux</title>
+        <title>Commandes Linux en vrac</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/commandes-linux/" hreflang="fr"/>
         <category term="Linux"/>
@@ -380,7 +380,7 @@
         <summary>Configuration d'un volume GlusterFS sous CentOS.</summary>
     </entry>
     <entry>
-        <title>Cluster Linux avec Pacemaker/Corosync/PCS</title>
+        <title>Cluster Linux avec Pacemaker, Corosync et PCS</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/cluster-linux/" hreflang="fr"/>
         <category term="Linux"/>
@@ -390,7 +390,7 @@
         <summary>Cluster Linux avec Pacemaker/Corosync/PCS</summary>
     </entry>
     <entry>
-        <title>Création manuelle d'un LPAR AIX depuis le VIOS</title>
+        <title>Création manuelle d'un LPAR AIX</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/creation-lpar-aix/" hreflang="fr"/>
         <category term="Linux"/>

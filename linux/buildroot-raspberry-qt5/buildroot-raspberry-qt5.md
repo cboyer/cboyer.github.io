@@ -34,24 +34,34 @@ make menuconfig
 ```
 
 ```text
-System configuration → System hostname (BR2_TARGET_GENERIC_HOSTNAME="buildrootqt5")
-System configuration → Root password (BR2_TARGET_GENERIC_ROOT_PASSWD="root")
-System configuration → remount root filesystem read-write during boot (BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=n)
-System configuration → Root filesystem overlay directories (BR2_ROOTFS_OVERLAY=output/rootfs_overlay)
+System configuration
+├─ System hostname (BR2_TARGET_GENERIC_HOSTNAME="buildrootqt5")
+├─ Root password (BR2_TARGET_GENERIC_ROOT_PASSWD="root")
+├─ remount root filesystem read-write during boot (BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=n)
+└─ Root filesystem overlay directories (BR2_ROOTFS_OVERLAY=output/rootfs_overlay)
 
-Toolchain → Enable WCHAR support (BR2_TOOLCHAIN_BUILDROOT_WCHAR=y)
-Target packages → Hardware handling → rpi-userland (BR2_PACKAGE_RPI_USERLAND=y)
+Toolchain
+└─ Enable WCHAR support (BR2_TOOLCHAIN_BUILDROOT_WCHAR=y)
 
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 (BR2_PACKAGE_QT5=y)
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → Custom configuration options (BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS [=-skip qtconnectivity -skip qtnetwork -skip qtgamepad -no-feature-vnc -no-feature-accessibility -nomake tests])
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → eglfs support (BR2_PACKAGE_QT5BASE_EGLFS=y)
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → Default graphical platform (BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs")
+Target packages
+├─ Hardware handling
+|  └─ rpi-userland (BR2_PACKAGE_RPI_USERLAND=y)
+|
+└─ Graphic libraries and applications (graphic/text)
+   └─ Qt5 (BR2_PACKAGE_QT5=y)
+      ├─ Custom configuration options (BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS 
+      |  [=-skip qtconnectivity -skip qtnetwork -skip qtgamepad -no-feature-vnc -no-feature-accessibility -nomake tests])
+      ├─ eglfs support (BR2_PACKAGE_QT5BASE_EGLFS=y)
+      └─ Default graphical platform (BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs")
 ```
 
 Peuvent être désactivés:
 ```text
-Target packages → Graphic libraries and applications (graphic/text) → mesa3d (BR2_PACKAGE_MESA3D=n)
-Target packages → Libraries → Graphics → libdrm (BR2_PACKAGE_LIBDRM=n)
+Target packages
+├─ Graphic libraries and applications (graphic/text) → mesa3d (BR2_PACKAGE_MESA3D=n)
+└─ Libraries
+   └─ Graphics
+      └─ libdrm (BR2_PACKAGE_LIBDRM=n)
 ```
 
 Les librairies C `uClibc-ng` et `glibc` fonctionnent avec ces modules Qt5 (`musl` n'a pas été testée) cependant certains packages comme `qt5webengine` nécessitent `glibc`.
@@ -75,8 +85,12 @@ make linux-menuconfig
 ```
 
 ```text
-Firmware Drivers → Raspberry Pi Firmware Driver (RASPBERRYPI_FIRMWARE=y)
-Device Drivers → Graphics support → Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (DRM=n)
+Firmware Drivers
+└─ Raspberry Pi Firmware Driver (RASPBERRYPI_FIRMWARE=y)
+
+Device Drivers
+└─ Graphics support
+   └─ Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (DRM=n)
 ```
 
 Sauvegarde de la configuration du noyau:
@@ -89,7 +103,13 @@ cp output/build/linux-custom/.config linux.config
 Pour inclure nos fichiers nous allons utiliser un overlay, tous les fichiers contenu dans `output/rootfs_overlay` (considéré par Buildroot comme référence à la racine) seront présents dans l'image finale.
 
 `output/rootfs_overlay/usr/share/fonts/dejavu-sans-webfont.ttf`: Qt5 ne fournit plus de police de caractères, il faut au minimum une police TTF sur le système. 
-Buildroot peut également inclure des polices: *Target packages → Fonts, cursors, icons, sounds and themes → DejaVu fonts (BR2_PACKAGE_DEJAVU)*. 
+Buildroot peut également inclure des polices avec: 
+
+```text
+Target packages
+└─ Fonts, cursors, icons, sounds and themes
+   └─ DejaVu fonts (BR2_PACKAGE_DEJAVU)
+```
 
 `output/rootfs_overlay/root/test.sh`: script de lancement de l'application QML `box.qml`.
 ```Bash
@@ -238,25 +258,32 @@ make menuconfig
 ```
 
 ```text
-System configuration → System hostname (BR2_TARGET_GENERIC_HOSTNAME="buildrootqt5")
-System configuration → Root password (BR2_TARGET_GENERIC_ROOT_PASSWD="root")
-System configuration → remount root filesystem read-write during boot (BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=n)
-System configuration → Root filesystem overlay directories (BR2_ROOTFS_OVERLAY=output/rootfs_overlay)
-System configuration → Custom scripts to run before creating filesystem images (BR2_ROOTFS_POST_BUILD_SCRIPT=board/raspberrypi3/post-build.sh output/post-build-config.sh)
+System configuration
+├─ System hostname (BR2_TARGET_GENERIC_HOSTNAME="buildrootqt5")
+├─ Root password (BR2_TARGET_GENERIC_ROOT_PASSWD="root")
+├─ remount root filesystem read-write during boot (BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=n)
+├─ Root filesystem overlay directories (BR2_ROOTFS_OVERLAY=output/rootfs_overlay)
+├─ Custom scripts to run before creating filesystem images 
+|  (BR2_ROOTFS_POST_BUILD_SCRIPT=board/raspberrypi3/post-build.sh output/post-build-config.sh)
+└─ /dev management (Dynamic using devtmpfs + eudev) (BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y)
 
-System configuration → /dev management (Dynamic using devtmpfs + eudev) (BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y)
-Toolchain → Enable WCHAR support (BR2_TOOLCHAIN_BUILDROOT_WCHAR=y)
+Toolchain
+└─ Enable WCHAR support (BR2_TOOLCHAIN_BUILDROOT_WCHAR=y)
 
-Target packages → Libraries → Graphics → libdrm (BR2_PACKAGE_LIBDRM=y)
-Target packages → Libraries → Graphics → libdrm → vc4 (BR2_PACKAGE_LIBDRM_VC4=y)
-Target packages → Graphic libraries and applications (graphic/text) → mesa3d (BR2_PACKAGE_MESA3D=y)
-Target packages → Graphic libraries and applications (graphic/text) → mesa3d → Gallium vc4 driver (BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4=y)
-Target packages → Graphic libraries and applications (graphic/text) → mesa3d → OpenGL ES (BR2_PACKAGE_MESA3D_OPENGL_ES=y)
-
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 (BR2_PACKAGE_QT5=y)
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → Custom configuration options (BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS [=-skip qtconnectivity -skip qtnetwork -skip qtgamepad -no-feature-vnc -no-feature-accessibility -nomake tests])
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → eglfs support (BR2_PACKAGE_QT5BASE_EGLFS=y)
-Target packages → Graphic libraries and applications (graphic/text) → Qt5 → Default graphical platform (BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs")
+Target packages
+├─ Libraries
+|  └─ Graphics
+|     └─ libdrm (BR2_PACKAGE_LIBDRM=y)
+|        └─ vc4 (BR2_PACKAGE_LIBDRM_VC4=y)
+└─ Graphic libraries and applications (graphic/text)
+   ├─ mesa3d (BR2_PACKAGE_MESA3D=y)
+   |  ├─ Gallium vc4 driver (BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4=y)
+   |  └─ OpenGL ES (BR2_PACKAGE_MESA3D_OPENGL_ES=y)
+   └─ Qt5 (BR2_PACKAGE_QT5=y)
+      ├─ Custom configuration options (BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS
+      |  [=-skip qtconnectivity -skip qtnetwork -skip qtgamepad -no-feature-vnc -no-feature-accessibility -nomake tests])
+      ├─ eglfs support (BR2_PACKAGE_QT5BASE_EGLFS=y)
+      └─ Default graphical platform (BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs")
 ```
 
 Les packages *mesa3d → OpenGL ES (BR2_PACKAGE_MESA3D_OPENGL_ES=y)* et *rpi-userland (BR2_PACKAGE_RPI_USERLAND=y)* ne peuvent cohabiter pour fournir un support OpenGLES.
@@ -282,8 +309,10 @@ make linux-menuconfig
 ```
 
 ```text
-Device Drivers → Graphics support → Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (CONFIG_DRM=y)
-Device Drivers → Graphics support → Broadcom VC4 Graphics (CONFIG_DRM_VC4=m)
+Device Drivers
+└─ Graphics support
+   ├─ Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (CONFIG_DRM=y)
+   └─ Broadcom VC4 Graphics (CONFIG_DRM_VC4=m)
 ```
 > Pas besoin d'inclure *Device Drivers → Graphics support → Broadcom V3D 3.x and newer (CONFIG_DRM_V3D)*
 

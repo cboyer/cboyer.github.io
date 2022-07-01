@@ -11,7 +11,7 @@ abstract: "Création d'un système embarqué Linux avec Buildroot et Qemu pour R
 ---
 
 
-Un autre article sur l'utilisation de Buildroot avec un Raspberry Pi, quelque peu similaire au [précédent](../systeme-embarque-linux-buildroot/) à ceci près qu'il comporte davantage de détails.
+Un autre article sur l'utilisation de Buildroot avec un Raspberry Pi, quelque peu similaire au [précédent](../buildroot-systeme-embarque/) à ceci près qu'il comporte davantage de détails.
 Il présente notamment l'intégration d'éléments externes à Buildroot (comme une application) et la prise en charge du réseau sous Qemu.
 Nous utilisons ici Buildroot 2021.02-rc3 pour obtenir une image 64 bits compatible avec le Raspberry Pi 3.
 
@@ -19,7 +19,7 @@ Nous utilisons ici Buildroot 2021.02-rc3 pour obtenir une image 64 bits compatib
 ## Paramétrage de l'image, du noyau et Busybox
 
 Commençons par télécharger Buildroot depuit son dépôt Github
-```bash
+```Console
 git clone https://github.com/buildroot/buildroot
 cd buildroot
 ```
@@ -27,12 +27,12 @@ cd buildroot
 ### Paramétrage de l'image
 
 Charger la configuration par défaut pour Raspberry Pi 3 qui nous servira de base pour être ajustée selon nos besoins
-```bash
+```Console
 make raspberrypi3_64_defconfig
 ```
 
 Paramétrage de l'image buildroot
-```bash
+```Console
 make menuconfig
 ```
 
@@ -52,19 +52,19 @@ Quelques modifications depuis la configuration de base `raspberrypi3_64_defconfi
 
 La configuration Buildroot peut être sauvegardée à un endroit autre que celui par défaut (`buildroot/.config`). 
 Cela va nous permettre plus tard d'exporter la configuration dans un arbre externe.
-```bash
+```Console
 make savedefconfig BR2_DEFCONFIG=./buildroot_config
 ```
 
 Pour la charger dans Buildroot:
-```bash
+```Console
 make defconfig BR2_DEFCONFIG=./buildroot_config
 ```
 
 ### Paramétrage du noyau Linux
 
 Paramétrer le noyau:
-```bash
+```Console
 make linux-menuconfig
 ```
 
@@ -88,7 +88,7 @@ Device Drivers
 ### Paramétrage de BusyBox
 Paramétrer BusyBox permet de sélectionner les binaires à intégrer comme `ls`, `find`, `xargs`, etc. Il ne peuvent pas tous être exclus car certains sont utilisés dans des scripts systèmes (par exemple `xargs` et `touch`).
 
-```bash
+```Console
 make busybox-menuconfig
 ```
 
@@ -126,7 +126,7 @@ desc: Exemple arbre externe
 ```
 
 #### Fichier br-external/external.mk
-```Bash
+```Console
 include $(sort $(wildcard $(BR2_EXTERNAL_MONDEPOT_PATH)/package/*/*.mk))
 ```
 
@@ -136,7 +136,7 @@ include $(sort $(wildcard $(BR2_EXTERNAL_MONDEPOT_PATH)/package/*/*.mk))
 L'intégration d'une application `hello` dans Buildroot consiste à créer un package qui contient le code source et les directives (Makefile) pour la compilation et l'installation.
 
 #### Fichier br-external/Config.in
-```Bash
+```Console
 source "$BR2_EXTERNAL_MONDEPOT_PATH/package/hello/Config.in"
 ```
 
@@ -230,7 +230,7 @@ exit $?
 
 
 Les nouveaux packages de l'arbre externe (`hello`) sont accessibles depuis les paramètres Buildroot dans un nouveau menu `External options` qui est disponible avec:
-```Bash
+```Console
 make BR2_EXTERNAL=./br-external menuconfig
 ```
 
@@ -240,14 +240,14 @@ Nous pouvons copier notre fichier de configuration Buildroot et celui du noyau d
 Ceci permet de regrouper tous les composants spécifiques à la création de l'image en les séparant des fichiers Buildroot d'origine.
 
 Copier la configuration du noyau
-```Bash
+```Console
 cp output/build/linux-custom/.config br-external/config/linux.config
 ```
 
 Pour charger automatiquement le fichier de configuration noyau par Buildroot, il faut activer l'utilisation d'une configuration spécifique puis saisir le chemin vers le fichier en question: `$(BR2_EXTERNAL_MONDEPOT_PATH)/config/linux.config`.
 L'opération est identique pour les patches, overlays et scripts en ajustant le dossier cible (non utilisés ici).
 
-```Bash
+```Console
 make BR2_EXTERNAL=./br-external menuconfig
 ```
 
@@ -262,12 +262,12 @@ make BR2_EXTERNAL=./br-external menuconfig
 
 
 Copie du fichier de configuration Buildroot
-```Bash
+```Console
 make savedefconfig BR2_DEFCONFIG=./br-external/config/raspberrypi3_64_custom_defconfig
 ```
 
 Pour recharger le fichier de configuration Buildroot depuis l'arbre externe
-```Bash
+```Console
 make defconfig BR2_DEFCONFIG=./br-external/config/raspberrypi3_64_custom_defconfig
 ```
 
@@ -276,7 +276,7 @@ make defconfig BR2_DEFCONFIG=./br-external/config/raspberrypi3_64_custom_defconf
 ## Compilation et création de l'image
 
 Pour compiler/recompiler séparément un élément (noyau, Busybox ou un package)
-```bash
+```Console
 make linux-build
 make busybox-build
 make hello-build
@@ -287,12 +287,12 @@ make linux-rebuild
 ```
 
 Pour générer l'image buildroot (comprend la compilation de tous les éléments qui compose l'image)
-```bash
+```Console
 make
 ```
 
 Pour retirer le package `hello` sans tout recompiler:
-```Bash
+```Console
 #Désélectionner le package hello dans External options
 make BR2_EXTERNAL=./br-external menuconfig
 
@@ -313,7 +313,7 @@ Ici le port 80 de la machine virtuelle Qemu est accessible via le port 5555 sur 
 La vm possède également accès au réseau externe et à internet.
 Cette configuration peut également être modifiée pour permettre l'accès via SSH en utilisant le port 22 au lieu de 80.
 
-```bash
+```Console
 qemu-system-aarch64 -M raspi3 -m 1024 \
     -kernel output/images/Image \
     -dtb output/images/bcm2710-rpi-3-b.dtb \
@@ -364,7 +364,7 @@ OK
 
 
 Pour effectuer un test réseau nous pouvons utiliser `nc` comme serveur HTTP improvisé sur la vm Qemu:
-```Bash
+```Console
 while true ; do  echo -e "HTTP/1.1 200 OK\n\n Bonjour réseau!" | nc -l -p 80  ; done
 ```
 
@@ -374,7 +374,7 @@ Notre application est compilée et présente dans l'image: `/usr/bin/hello`, cel
 
 Pour copier l'image sur une carte SD à destination d'un Raspberry Pi 3:
 
-```bash
+```Console
 dd bs=4M if=output/images/sdcard.img of=/dev/mmcblk0 status=progress
 sync
 ```

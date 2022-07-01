@@ -1,5 +1,5 @@
 ---
-title: "Cluster Linux avec Pacemaker/Corosync/PCS"
+title: "Cluster Linux avec Pacemaker, Corosync et PCS"
 date: "2016-10-30T13:23:14-04:00"
 updated: "2016-10-30T13:23:14-04:00"
 author: "C. Boyer"
@@ -153,4 +153,4 @@ pcs resource clear smtp_postfix SRV-TEST01A
 
 # Liens complémentaires
  - [https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Configuring_the_Red_Hat_High_Availability_Add-On_with_Pacemaker/ch-pcscommand-HAAR.html](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Configuring_the_Red_Hat_High_Availability_Add-On_with_Pacemaker/ch-pcscommand-HAAR.html)
- - [http://linux-ha.org/doc/man-pages/re-ra-postfix.html](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Configuring_the_Red_Hat_High_Availability_Add-On_with_Pacemaker/ch-pcscommand-HAAR.html)
+ - [http://linux-ha.org/doc/man-pages/re-ra-postfix.html](http://linux-ha.org/doc/man-pages/re-ra-postfix.html)

@@ -39,17 +39,21 @@ Pour calculer cette distance nous utiliserons la fonction `stringdistmatrix` de 
 `utils::adist` peut être une alternative mais elle offre moins d'options (méthodes et pondération) et est beaucoup moins performante car elle n'est pas multithreadée.
 `stringdistmatrix()` est sensible à la casse, pour améliorer les chances d'obtenir des correspondances il peut être nécessaire de traiter les données des deux colonnes `x$name` et `y$name`, par exemple:
 
- - passage en minuscule avec `tolower(x$name)`
- - retrait des accents avec `iconv(x$name, to="ASCII//TRANSLIT")`
- - retrait des espaces en début/fin de chaîne avec `trimws(x$name)`
- - retrait des signes de ponctuation avec `gsub("[[:punct:]]+", "", x$name)`
- - remplacement des espaces multiples avec `gsub("\\s+", " ", x$name)`
+```R
+tolower(x$name)                         # Passage en minuscule
+iconv(x$name, to="ASCII//TRANSLIT")     # Rretrait des accents
+trimws(x$name)                          # Retrait des espaces en début/fin de chaîne
+gsub("[[:punct:]]+", "", x$name)        # Retrait des signes de ponctuation
+gsub("\\s+", " ", x$name)               # Remplacement des espaces multiples
+```
 
+Calcul des distances de Levenshtein:
 ```R
 library(stringdist)
 distances <- stringdistmatrix(x$name, y$name, method = 'lv')
 ```
 
+La matrice `distances` retournée:
 ```Text
          y ----------->
 x        [,1] [,2] [,3]
@@ -75,25 +79,27 @@ R permet de récupérer des valeurs contenues dans une matrice en lui passant de
 
 ```R
 cbind(c(1,2), c(3,4))
-
-# Retourne les coordonnées (1,3) et (2,4) sous forme de matrice:
-#      [,1] [,2]
-# [1,]    1    3
-# [2,]    2    4
+```
+Retourne les coordonnées (1,3) et (2,4) sous forme de matrice:
+```Text
+     [,1] [,2]
+[1,]    1    3
+[2,]    2    4
 ```
 
 ## Filtrer les distances
 Maintenant que nous possèdons toutes les distances, fixons notre seuil à 4 en récupérant les coordonnées des valeurs (distances de Levenshtein) de la matrice `distances` qui sont inférieures ou égales à 4:
 ```R
 coord_correspondances <- which(distances <= 4, arr.ind = TRUE)
-
-#        x   y
-#      row col
-# [1,]   1   1
-# [2,]   3   1
-# [3,]   2   2
-# [4,]   3   2
-# [5,]   4   3
+```
+```Text
+       x   y
+     row col
+[1,]   1   1
+[2,]   3   1
+[3,]   2   2
+[4,]   3   2
+[5,]   4   3
 ```
 
 C'est cette nouvelle matrice qui contient les coordonnées où `distances` contient une distance inférieure ou égale à 4. Pour l'exploiter et assembler les données dans un dataframe `results`:
@@ -102,15 +108,16 @@ results <- x[coord_correspondances[, 1], ]
 results$id_y <- y[coord_correspondances[, 2], ]$id
 results$name_y <- y[coord_correspondances[, 2], ]$name
 results$distance <- distances[coord_correspondances]
-
-#     id  name id_y  name_y distance
-# 1   10 jouet    1   jouer        1
-# 3   12 fruit    1   jouer        4
-# 2   11 arbre    2 arbuste        3
-# 3.1 12 fruit    2 arbuste        4
-# 4   13 baton    3  bateau        3
+```
+```Text
+    id  name id_y  name_y distance
+1   10 jouet    1   jouer        1
+3   12 fruit    1   jouer        4
+3.1 12 fruit    2 arbuste        4
+2   11 arbre    2 arbuste        3
+4   13 baton    3  bateau        3
 ```
 
 On utilise ici les colonnes de `coord_correspondances` pour récupérer des lignes respectivement depuis `x` et `y`. 
 La colonne `distance` (distance de Levenshtein) indique également l'exactitude de la correspondance: plus elle est petite plus la correspondance est certaine (0 indiquant une égalité stricte).
-Notons que R signale la duplication d'une ligne (3 et 3.1) car il y a plusieurs correspondances pour l'id 12.
+Notons que R signale la duplication d'une ligne (3 et 3.1) car il y a plusieurs correspondances pour l'id 12 avec la même distance.

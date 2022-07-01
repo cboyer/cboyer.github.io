@@ -19,20 +19,25 @@ import Pkg; Pkg.add("DataFrames"); Pkg.add("CSV"); Pkg.add("Pipe")
 ```Julia
 using DataFrames, CSV, Pipe
 
-CSV.read("./data.csv",          #Chemin vers le fichier CSV
-         DataFrame,             #Type de données à retourner
-         delim=";",             #Séparateur de colonne
-         quotechar='"',         #Délimiteur de chaîne de caractères
-         decimal='.',           #Séparateur partieentière/décimale d'un nombre réel
-         missingstring="NA",    #Chaîne à utiliser pour les valeurs manquantes
-         datarow=2,             #Considère seulement les données à partir de la seconde ligne (ignore l'entête)
-         header=["Contrat", "Datetime", "kWh", "CodeConsommation", "Température", "CodeTempérature"], 
-         types=[String, String, Float32, String, Int32, String]
+CSV.read(
+   "./data.csv",          #Chemin vers le fichier CSV
+   DataFrame,             #Type de données à retourner
+   delim=";",             #Séparateur de colonne
+   quotechar='"',         #Délimiteur de chaîne de caractères
+   decimal='.',           #Séparateur partieentière/décimale d'un nombre réel
+   missingstring="NA",    #Chaîne à utiliser pour les valeurs manquantes
+   datarow=2,             #Considère seulement les données à partir de la seconde ligne (ignore l'entête)
+   header=["Contrat", "Datetime", "kWh", "CodeConsommation", "Température", "CodeTempérature"], 
+   types=[String, String, Float32, String, Int32, String]
 )
 
-DataFrame(CSV.File("./data.csv", delim=";", quotechar='"', decimal='.', missingstring="NA", datarow=2, 
-                   header=["Contrat", "Datetime", "kWh", "CodeConsommation", "Température", "CodeTempérature"], 
-                   types=[String, String, Float32, String, Int32, String], dateformat="yyyy-mm-dd HH:MM:SS"))
+DataFrame(
+   CSV.File(
+      "./data.csv", delim=";", quotechar='"', decimal='.', missingstring="NA", datarow=2, 
+      header=["Contrat", "Datetime", "kWh", "CodeConsommation", "Température", "CodeTempérature"], 
+      types=[String, String, Float32, String, Int32, String], dateformat="yyyy-mm-dd HH:MM:SS"
+   )
+)
 
 @pipe "./data.csv" |> CSV.File(_, delim=";", types=[String, String, Float32, String, Int32, String], datarow=2, header=["Contrat", "Datetime", "kWh", "CodeConsommation", "Température", "CodeTempérature"]) |> DataFrame(_)
 ```
@@ -73,13 +78,13 @@ L'opérateur `[]` est plus rapide et moins couteux en mémoire.
 ## Filtrer
 
 ```Julia
-#Pour filtrer les missing
+# Pour filtrer les "missing"
 filter(x -> ismissing(x.kWh), k)
 t[.!ismissing.(t.kWh), :kWh]
 
-#Pour filtrer sur une valeur
+# Pour filtrer selon une valeur
 filter(x -> x.kWh == 0.5, t)
-t[t.kWh .== 0.5 , :]
+t[t.kWh .== 0.5, :]
 ```
 
 Ajouter la macro `@time` au début de l'instruction permet d'afficher le temps d'exécution ainsi que la consommation mémoire de l'opération.
@@ -88,15 +93,16 @@ L'utilisation de l'opérateur `[]` est beaucoup plus rapide et moins couteuse en
 
 Autre façon de filtrer les missing:
 ```Julia
-#Sur le dataframe au complet
+# Sur le dataframe au complet
 dropmissing!(t)
 
-#Sur une colonne particulière
+# Sur une colonne particulière
 dropmissing!(t, :kWh)
 k.kWh .= ifelse.(ismissing.(k.kWh), 0.0, k.kWh)
 ```
 
 Le `!` effectue les modifications directement sur le dataframe sans en retourner un nouveau.
+Le `.` permet de diffuser l'opération sur une colonne (vectorisation).
 La fonction `skipmissing` fonctionne sur un vecteur.
 
 

@@ -12,14 +12,17 @@ abstract: "Afficher des données avec DataTables."
 
 ## Arborescence des fichiers
 
-- css/jquery.dataTables.min.css
-- images/sort_asc.png
-- images/sort_both.png
-- images/sort_desc.png'
-- js/jquery-3.5.1.js
-- js/jquery.dataTables.min.js
-- index.html
-- stats.php
+├─ css
+|  └── jquery.dataTables.min.css
+├─ images
+|  ├── sort_asc.png
+|  ├── sort_both.png
+|  └── sort_desc.png'
+├─ js
+|  ├── jquery-3.5.1.js
+|  └── jquery.dataTables.min.js
+├─ index.html
+└─ stats.php
 
 ## Récupérer les données avec PHP depuis une base de données
 

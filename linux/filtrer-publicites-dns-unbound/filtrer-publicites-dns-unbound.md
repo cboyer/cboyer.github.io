@@ -1,5 +1,5 @@
 ---
-title: "Filtrer les publicités avec un serveur DNS Unbound"
+title: "Filtrer les publicités avec Unbound"
 date: "2018-05-04T17:56:14-04:00"
 updated: "2022-02-03T17:42:32-04:00"
 author: "C. Boyer"

@@ -15,12 +15,12 @@ abstract: "Authentification avec Phoenix"
 
 Le soin est laissé au lecteur d'avoir un environnement Elixir/PostgreSQL fonctionnel.
 Il est toujours préférable d'utiliser la dernière version de Phoenix, pour une mise à jour:
-```Bash
+```console
 mix local.phx
 ```
 
 Créer le projet
-```Bash
+```console
 mix phx.new app_test
 cd app_test
 ```
@@ -37,19 +37,19 @@ config :test_bd, AppTest.Repo,
 ```
 
 Initialiser Ecto qui va créer la base de données si nécessaire
-```Bash
+```console
 mix ecto.create
 ```
 
 Création du contexte `Accounts`, du module `User` et de la table `users` avec ses colonnes:
-```Bash
+```console
 mix phx.gen.context Accounts User users username:string:unique password:string
 mix ecto.migrate
 ```
 
 Ajustement de la table `users` avec une migration Ecto pour insérer automatiquement `inserted_at` et `updated_at`:
 Ceci va nous permettre plus tard de faire des insertions sans nous préoccuper de ces deux colonnes qui ont une contrainte "non nulle".
-```Bash
+```console
 mix ecto.gen.migration alter_users_table
     * creating priv/repo/migrations/20210312192247_alter_users_table.exs
 ```
@@ -69,7 +69,7 @@ end
 ```
 
 Appliquer les changements (création du schéma et migrations):
-```Bash
+```console
 mix ecto.migrate
 ```
 
@@ -100,7 +100,7 @@ end
 > Note: le choix de SHA256 pour `hash_password/1` permet de se passer de librairies externes (cas de Bcrypt). Il est également possible de combiner plusieurs méthodes de hashage (plusieurs passe) pour renforcer la sécurité.
 
 Démarrer l'application en mode interactif avec iEX
-```Bash
+```console
 iex -S mix phx.server
 ```
 

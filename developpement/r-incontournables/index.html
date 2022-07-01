@@ -2,28 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="HandheldFriendly" content="True">
   <title>R: les incontournables - C. Boyer</title>
   <meta name="description" content="Opérations incontournables avec le langage R." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="R, RStudio, ODBC, SQL, MSSQL, Oracle, code snippets, développement" />
-  <link rel="canonical" href="https://cboyer.github.io/developpement/r-incontournables" />
-  <meta property="og:title" content="R: les incontournables - C. Boyer" />
-  <meta property="og:locale" content="fr_CA" />
-  <meta property="og:description" content="Opérations incontournables avec le langage R." />
-  <meta property="og:site_name" content="cboyer.github.io" />
-  <meta property="og:type" content="website" />
-  <meta property="og:updated_time" content="2022-02-18T17:30:29-05:00" />
-  <meta property="article:published_time" content="2019-05-25T10:09:13-04:00" />
-  <meta property="article:modified_time" content="2022-02-18T17:30:29-05:00" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
-  <link rel="stylesheet" type="text/css" href="../../style.css" />
   <style>
-pre > code.sourceCode { white-space: pre; position: relative; }
+    body { margin: 1em; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    ul { list-style: none; padding: 0;}
+    p code { font-size: 1.1em; }
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+  </style>
+  <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
@@ -88,37 +84,11 @@ code span.ss { color: #ff5500; } /* SpecialString */
 code span.st { color: #bf0303; } /* String */
 code span.va { color: #0057ae; } /* Variable */
 code span.vs { color: #bf0303; } /* VerbatimString */
-code span.wa { color: #bf0303; } /* Warning */
-  </style>
+code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
-  <header id="header">
-    <div id="links">
-      <a href="https://github.com/cboyer" class="github" title="GitHub" target="_blank">
-          <svg class="button" aria-labelledby="github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="github-icon">GitHub</title>
-            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
-          </svg>
-      </a>
-      <a href="../../atom.xml" class="rss" title="Flux Atom">
-          <svg class="button" aria-labelledby="atom-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <title id="atom-icon">Flux Atom</title>
-            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"></path>
-          </svg>
-      </a>
-    </div>
-    <p class="title">cboyer.github.io</p>
-    <nav id="menu">
-      <a href="../../index.html">Index</a> | <a href="../../developpement.html">Développement</a> | <a href="../../linux.html">Linux</a> | <a href="../../electronique.html">Électronique</a>
-    </nav>
-  </header>
-
-  <main id="container">
-<article>
-<header id="title-block-header">
-<h1>R: les incontournables</h1>
- <small class="date">Publié le 2019-05-25, dernière mise à jour: 2022-02-18</small>
-</header>
+  <h1>R: les incontournables</h1>
+  <em>Publié le 2019-05-25, dernière mise à jour: 2022-02-18</em>
 <ul>
 <li><a href="#optionsexec">Options d'exécution</a></li>
 <li><a href="#db">Base de données</a></li>
@@ -149,19 +119,23 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
 <p>MSSQL via ODBC sans sources configurées (DSN)</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(DBI)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(odbc<span class="sc">::</span><span class="fu">odbc</span>(),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Driver =</span> <span class="st">&quot;SQL Server&quot;</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Server =</span> <span class="st">&quot;1.2.3.4&quot;</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Database =</span> <span class="st">&quot;mydb&quot;</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">UID =</span> <span class="st">&quot;login&quot;</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">PWD =</span> <span class="st">&quot;password&quot;</span>)</span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  odbc<span class="sc">::</span><span class="fu">odbc</span>(),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Driver =</span> <span class="st">&quot;SQL Server&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Server =</span> <span class="st">&quot;1.2.3.4&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Database =</span> <span class="st">&quot;mydb&quot;</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">UID =</span> <span class="st">&quot;login&quot;</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">PWD =</span> <span class="st">&quot;password&quot;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Oracle via ODBC sans sources configurées (DSN)</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(DBI)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(odbc<span class="sc">::</span><span class="fu">odbc</span>(),</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Driver =</span> <span class="st">&quot;Oracle dans OraClient12Home1&quot;</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">DBQ =</span> <span class="st">&quot;//1.2.3.4:1521/mydatabase&quot;</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">UID =</span> <span class="st">&quot;login&quot;</span>,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">PWD =</span> <span class="st">&quot;password&quot;</span>)</span></code></pre></div>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  odbc<span class="sc">::</span><span class="fu">odbc</span>(),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Driver =</span> <span class="st">&quot;Oracle dans OraClient12Home1&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">DBQ =</span> <span class="st">&quot;//1.2.3.4:1521/mydatabase&quot;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">UID =</span> <span class="st">&quot;login&quot;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">PWD =</span> <span class="st">&quot;password&quot;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Oracle via JDBC</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(RJDBC)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>drv <span class="ot">&lt;-</span> <span class="fu">JDBC</span>(<span class="at">driverClass =</span> <span class="st">&quot;oracle.jdbc.OracleDriver&quot;</span>, <span class="at">classPath =</span> <span class="st">&quot;C:/JDBC/ojdbc8.jar&quot;</span>)</span>
@@ -178,23 +152,25 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(conn)</span></code></pre></div>
 <p>Lister les tables et colonnes d'une base de données</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(DBI)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(odbc<span class="sc">::</span><span class="fu">odbc</span>(),</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Driver =</span> <span class="st">&quot;SQL Server&quot;</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Server =</span> <span class="st">&quot;1.2.3.4&quot;</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Database =</span> <span class="st">&quot;mydb&quot;</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">UID =</span> <span class="st">&quot;domaine</span><span class="sc">\\</span><span class="st">login&quot;</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">PWD =</span> <span class="st">&quot;password&quot;</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> <span class="fu">dbListTables</span>(con)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>describe <span class="ot">&lt;-</span> <span class="fu">lapply</span>(tables, <span class="cf">function</span>(x, conn) {</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">table =</span> x, <span class="at">column =</span> <span class="fu">as.vector</span>(<span class="fu">dbListFields</span>(conn, x)))</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>}, <span class="at">conn =</span> con)</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>schema <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, describe)</span></code></pre></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  odbc<span class="sc">::</span><span class="fu">odbc</span>(),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Driver =</span> <span class="st">&quot;SQL Server&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Server =</span> <span class="st">&quot;1.2.3.4&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Database =</span> <span class="st">&quot;mydb&quot;</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">UID =</span> <span class="st">&quot;domaine</span><span class="sc">\\</span><span class="st">login&quot;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">PWD =</span> <span class="st">&quot;password&quot;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> <span class="fu">dbListTables</span>(con)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>describe <span class="ot">&lt;-</span> <span class="fu">lapply</span>(tables, <span class="cf">function</span>(x, conn) {</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">table =</span> x, <span class="at">column =</span> <span class="fu">as.vector</span>(<span class="fu">dbListFields</span>(conn, x)))</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>}, <span class="at">conn =</span> con)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>schema <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, describe)</span></code></pre></div>
 <p>Requête avec une liste formée depuis une colonne</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>client_id <span class="ot">&lt;-</span> <span class="fu">toString</span>(<span class="fu">sprintf</span>(<span class="st">&quot;&#39;%s&#39;&quot;</span>, liste<span class="sc">$</span>client_id))</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sql <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&#39;SELECT client_id FROM myTable WHERE client_id IN (&#39;</span>, client_id, <span class="st">&#39;)&#39;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <h2 id="opérations-sur-les-fichiers"><a name="files"></a>Opérations sur les fichiers</h2>
-<p>Charger un fichier Excel (XSLX/XLS)</p>
+<p>Charger un fichier Excel</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(readxl)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>liste <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;./mon_fichier.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;acceuil&quot;</span>)</span></code></pre></div>
 <p>Charger un fichier CSV</p>
@@ -257,7 +233,8 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Alternative Dplyr</span></span>
 <span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>stations <span class="ot">&lt;-</span> stations <span class="sc">%&gt;%</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(manufacturers <span class="sc">%&gt;%</span> <span class="fu">select</span>(ManufacturerID, ManufacturerName, OrganizationName), <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;ManufacturerID&quot;</span> <span class="ot">=</span> <span class="st">&quot;ManufacturerID&quot;</span>, <span class="st">&quot;ManufacturerName&quot;</span> <span class="ot">=</span> <span class="st">&quot;ManufacturerName&quot;</span>))</span></code></pre></div>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(manufacturers <span class="sc">%&gt;%</span> </span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(ManufacturerID, ManufacturerName, OrganizationName), <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;ManufacturerID&quot;</span> <span class="ot">=</span> <span class="st">&quot;ManufacturerID&quot;</span>, <span class="st">&quot;ManufacturerName&quot;</span> <span class="ot">=</span> <span class="st">&quot;ManufacturerName&quot;</span>))</span></code></pre></div>
 <p>Supprimer les lignes dont la valeur d'une colonne spécifique se répète (conserve un seul des éléments dédoublés)</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>users <span class="ot">&lt;-</span> duplicats[<span class="sc">!</span> <span class="fu">duplicated</span>(duplicats<span class="sc">$</span>UserID),]</span></code></pre></div>
 <p>Supprimer les lignes dont la valeur d'une colonne spécifique se répète (ne conserve aucun des éléments dédoublés)</p>
@@ -294,8 +271,9 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(last_login_date <span class="sc">~</span> login <span class="sc">+</span> type, <span class="at">data =</span> users, <span class="at">FUN =</span> max)</span>
 <span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Alternative avec dplyr:</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>users <span class="ot">&lt;-</span> users <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(login, type) <span class="sc">%&gt;%</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">summarize</span>(<span class="at">max_login_date =</span> <span class="fu">max</span>(last_login_date))</span></code></pre></div>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>users <span class="ot">&lt;-</span> users <span class="sc">%&gt;%</span> </span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(login, type) <span class="sc">%&gt;%</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">max_login_date =</span> <span class="fu">max</span>(last_login_date))</span></code></pre></div>
 <p>Regrouper les dates par login sur une même ligne (concatène les valeurs séparées par une virgule)</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(login_date <span class="sc">~</span> login, <span class="at">data =</span> users, <span class="at">FUN =</span> toString)</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(login_date <span class="sc">~</span> login, <span class="at">data =</span> users, <span class="at">FUN =</span> paste, <span class="at">collapse =</span> <span class="st">&quot;,&quot;</span>)</span>
@@ -332,27 +310,36 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 id="pipelines-dplyr"><a name="dplyr"></a>Pipelines Dplyr</h2>
 <p>Calcul des taux de saisie de chaque champ</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>saisies <span class="ot">&lt;-</span> formulaires <span class="sc">%&gt;%</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>           <span class="fu">select</span>(Valeur, Type, TypeChamps, Champs) <span class="sc">%&gt;%</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">IsEmpty =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(Valeur), <span class="cn">TRUE</span>, <span class="cn">FALSE</span>) ) <span class="sc">%&gt;%</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">group_by</span>(IsEmpty, Type, TypeChamps, Champs) <span class="sc">%&gt;%</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">Vide =</span> <span class="fu">length</span>(Type[IsEmpty <span class="sc">==</span> <span class="cn">TRUE</span>]), <span class="at">Saisi =</span> <span class="fu">length</span>(Type[IsEmpty <span class="sc">==</span> <span class="cn">FALSE</span>])) <span class="sc">%&gt;%</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">group_by</span>(Type, TypeChamps, Champs) <span class="sc">%&gt;%</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">Vide =</span> <span class="fu">sum</span>(Vide), <span class="at">Saisi =</span> <span class="fu">sum</span>(Saisi), <span class="at">Saisi_p =</span> <span class="fu">round</span>( (Saisi <span class="sc">/</span> (Vide <span class="sc">+</span> Saisi))<span class="sc">*</span><span class="dv">100</span>, <span class="at">digits =</span> <span class="dv">2</span>) )</span></code></pre></div>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Valeur, Type, TypeChamps, Champs) <span class="sc">%&gt;%</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">IsEmpty =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(Valeur), <span class="cn">TRUE</span>, <span class="cn">FALSE</span>) ) <span class="sc">%&gt;%</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(IsEmpty, Type, TypeChamps, Champs) <span class="sc">%&gt;%</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Vide =</span> <span class="fu">length</span>(Type[IsEmpty <span class="sc">==</span> <span class="cn">TRUE</span>]), </span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Saisi =</span> <span class="fu">length</span>(Type[IsEmpty <span class="sc">==</span> <span class="cn">FALSE</span>])</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Type, TypeChamps, Champs) <span class="sc">%&gt;%</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Vide =</span> <span class="fu">sum</span>(Vide), </span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Saisi =</span> <span class="fu">sum</span>(Saisi), </span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Saisi_p =</span> <span class="fu">round</span>((Saisi <span class="sc">/</span> (Vide <span class="sc">+</span> Saisi))<span class="sc">*</span><span class="dv">100</span>, <span class="at">digits =</span> <span class="dv">2</span>)</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> all_data <span class="sc">%&gt;%</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">Groupment =</span> <span class="fu">case_when</span>(</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>                Source <span class="sc">==</span> <span class="st">&#39;A&#39;</span> <span class="sc">&amp;</span> Status <span class="sc">==</span> <span class="st">&#39;failed&#39;</span> <span class="sc">&amp;</span> (Details <span class="sc">!=</span> <span class="st">&#39;Aucune adresse courriel&#39;</span> <span class="sc">|</span> <span class="fu">is.na</span>(Details)) <span class="sc">~</span> <span class="st">&quot;Incorrecte&quot;</span>,</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>                Source <span class="sc">==</span> <span class="st">&#39;A&#39;</span> <span class="sc">&amp;</span> Details <span class="sc">==</span> <span class="st">&#39;Aucune adresse courriel&#39;</span> <span class="sc">~</span> <span class="st">&quot;Vide&quot;</span>,</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>                Source <span class="sc">==</span> <span class="st">&#39;B&#39;</span> <span class="sc">&amp;</span> Status <span class="sc">==</span> <span class="st">&#39;sent&#39;</span> <span class="sc">~</span> <span class="st">&quot;Envoyé&quot;</span>,</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>                Source <span class="sc">==</span> <span class="st">&#39;C&#39;</span> <span class="sc">~</span> <span class="st">&quot;Replay&quot;</span>,</span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>                <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Unknown&quot;</span></span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>           )) <span class="sc">%&gt;%</span></span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(Groupment <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Adresse incorrecte&quot;</span>, <span class="st">&quot;Sans adresse&quot;</span>, <span class="st">&quot;Envoyé&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>           <span class="fu">group_by</span>(ID_Extraction, Groupment) <span class="sc">%&gt;%</span></span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">NBResult =</span> <span class="fu">length</span>(ID_msg)) <span class="sc">%&gt;%</span></span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>           <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(<span class="st">&quot;ID_Extraction&quot;</span>), <span class="at">names_from =</span> Groupment, <span class="at">values_from =</span> NBResult) <span class="sc">%&gt;%</span></span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">ID_Extraction =</span> <span class="fu">strptime</span>(ID_Extraction, <span class="at">format=</span><span class="st">&quot;%Y%m%d%H%M%S&quot;</span>), </span>
-<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>                    <span class="at">Total =</span> Vide <span class="sc">+</span> Incorrecte <span class="sc">+</span> Envoyé) <span class="sc">%&gt;%</span></span>
-<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>           <span class="fu">rename</span>(<span class="st">&quot;Date&quot;</span> <span class="ot">=</span> ID_Extraction)</span></code></pre></div>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Groupment =</span> <span class="fu">case_when</span>(</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    Source <span class="sc">==</span> <span class="st">&#39;A&#39;</span> <span class="sc">&amp;</span> Status <span class="sc">==</span> <span class="st">&#39;failed&#39;</span> <span class="sc">&amp;</span> (Details <span class="sc">!=</span> <span class="st">&#39;Aucune adresse courriel&#39;</span> <span class="sc">|</span> <span class="fu">is.na</span>(Details)) <span class="sc">~</span> <span class="st">&quot;Incorrecte&quot;</span>,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    Source <span class="sc">==</span> <span class="st">&#39;A&#39;</span> <span class="sc">&amp;</span> Details <span class="sc">==</span> <span class="st">&#39;Aucune adresse courriel&#39;</span> <span class="sc">~</span> <span class="st">&quot;Vide&quot;</span>,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    Source <span class="sc">==</span> <span class="st">&#39;B&#39;</span> <span class="sc">&amp;</span> Status <span class="sc">==</span> <span class="st">&#39;sent&#39;</span> <span class="sc">~</span> <span class="st">&quot;Envoyé&quot;</span>,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    Source <span class="sc">==</span> <span class="st">&#39;C&#39;</span> <span class="sc">~</span> <span class="st">&quot;Replay&quot;</span>,</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Unknown&quot;</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Groupment <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Adresse incorrecte&quot;</span>, <span class="st">&quot;Sans adresse&quot;</span>, <span class="st">&quot;Envoyé&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID_Extraction, Groupment) <span class="sc">%&gt;%</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">NBResult =</span> <span class="fu">length</span>(ID_msg)) <span class="sc">%&gt;%</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(<span class="st">&quot;ID_Extraction&quot;</span>), <span class="at">names_from =</span> Groupment, <span class="at">values_from =</span> NBResult) <span class="sc">%&gt;%</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">ID_Extraction =</span> <span class="fu">strptime</span>(ID_Extraction, <span class="at">format=</span><span class="st">&quot;%Y%m%d%H%M%S&quot;</span>), </span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total =</span> Vide <span class="sc">+</span> Incorrecte <span class="sc">+</span> Envoyé</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">&quot;Date&quot;</span> <span class="ot">=</span> ID_Extraction)</span></code></pre></div>
 <h2 id="graphiques"><a name="graphiques"></a>Graphiques</h2>
 <h3 id="avec-la-librairie-ggplot2">Avec la librairie ggplot2</h3>
 <p>Histogramme horizontal avec palette de couleurs adaptée (données issues de <code>table()</code>)</p>
@@ -362,26 +349,24 @@ code span.wa { color: #bf0303; } /* Warning */
 <span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>customPalette <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Blues&quot;</span>))(nbcolors)</span>
 <span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>customPalette[customPalette <span class="sc">==</span> <span class="st">&quot;#F7FBFF&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;#498fd1&quot;</span> <span class="co">#Pour remplacer une couleur</span></span>
 <span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(FreqAnomaly,</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Var1, Freq), <span class="at">y =</span> Freq, <span class="at">fill =</span> Var1, <span class="at">label =</span> Freq)) <span class="sc">+</span> </span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>       <span class="fu">geom_text</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.0</span>), <span class="at">vjust =</span> <span class="sc">+</span><span class="fl">0.25</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>       <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>       <span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>       <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> customPalette) <span class="sc">+</span></span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>       <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>       <span class="fu">coord_flip</span>()</span></code></pre></div>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(FreqAnomaly, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Var1, Freq), <span class="at">y =</span> Freq, <span class="at">fill =</span> Var1, <span class="at">label =</span> Freq)) <span class="sc">+</span> </span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.0</span>), <span class="at">vjust =</span> <span class="sc">+</span><span class="fl">0.25</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> customPalette) <span class="sc">+</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code></pre></div>
 <p>Histogramme vertical avec palette de couleurs adaptée et labels inclinés (données issues de <code>table()</code>)</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(FreqAnomalyComb,</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Var1, <span class="sc">-</span>Freq), <span class="at">y =</span> Freq, <span class="at">fill =</span> Var1, <span class="at">label =</span> Freq)) <span class="sc">+</span> </span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">geom_text</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>       <span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> customPalette) <span class="sc">+</span> </span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>), <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(FreqAnomalyComb, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Var1, <span class="sc">-</span>Freq), <span class="at">y =</span> Freq, <span class="at">fill =</span> Var1, <span class="at">label =</span> Freq)) <span class="sc">+</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Titre&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale_fill_brewer(palette=&quot;Blues&quot;) + </span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> customPalette) <span class="sc">+</span> </span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>), <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
 <h3 id="avec-les-librairies-plotly-et-dplyr">Avec les librairies Plotly et Dplyr</h3>
 <p>Courbe simple avec Dplyr et Plotly</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>logs <span class="sc">%&gt;%</span></span>
@@ -416,12 +401,6 @@ code span.wa { color: #bf0303; } /* Warning */
 <li><a href="https://therinspark.com/intro.html">R et Spark</a></li>
 <li><a href="https://spark.rstudio.com/">Sparklyr</a></li>
 </ul>
-</article>
-</main>
-
-<footer id="footer">
-  © 2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Creative Commons BY-SA-NC 4.0</a>, l'ensemble des codes sources sont sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a>
-</footer>
-
+  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>

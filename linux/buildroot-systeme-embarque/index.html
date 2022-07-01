@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Système embarqué Linux avec Buildroot - C. Boyer</title>
+  <meta name="description" content="Création d'un système embarqué Linux avec Buildroot pour Raspberry Pi 2." />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="buildroot, embarqué, raspberry pi, linux" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
+  <style>
+    body { margin: 1em; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    ul { list-style: none; padding: 0;}
+    p code { font-size: 1.1em; }
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+  </style>
+</head>
+<body>
+  <h1>Système embarqué Linux avec Buildroot</h1>
+  <em>Publié le 2018-08-09, dernière mise à jour: 2018-11-04</em>
+<p>Une version plus récente de cet article est disponible <a href="../buildroot-raspberry/">ici</a>.</p>
+<p>Dans le cadre d'un projet de monitoring, j'ai été amené à concevoir une vingtaine de sondes thermiques pouvant être interrogées via Ethernet. Mes choix techniques se sont naturellement tournés vers une solution Raspberry Pi/Linux/capteur DS18B20. Pour le coté applicatif j'ai opté pour la simplicité et la rapidité avec le couple Python/Flask pour acheminer les données via HTTPS. L'applicatif aurait pu être développé en C avec des librairies comme <a href="https://www.gnu.org/software/libmicrohttpd/">Libmicrohttpd</a> ou encore <a href="https://kore.io/">Kore</a>.</p>
+<p>Le ciment permettant de lier l'ensemble est <a href="https://buildroot.org/">Buildroot</a> qui va nous permettre d'obtenir un système Linux sur mesure. Buildroot est un outil permettant de générer des systèmes Linux sur mesure en prenant en charge la compilation de la toolchain pour l'architecture cible (ARMv7), du noyau, du bootloader (que nous n'utiliserons pas) et de BusyBox pour l'environnement utilisateur. Tout cela avec nos paramètres définis pour chaque élément: modules dans le noyau, librairies standards (<a href="http://www.etalabs.net/compare_libcs.html">musl</a>, glibc, etc.), gestionnaire de services/périphériques (initd, systemd, udev), binaires à inclure dans BusyBoxy, etc. L'utilité de Buildroot se situe principalement dans sa capacité à gérer les dépendances pour la compilation, exactement comme Portage le fait dans Gentoo.</p>
+<p>Voici les grandes lignes pour produire un système fonctionnel.</p>
+<p>Commençons par récupérer Buildroot:</p>
+<pre class="console"><code>git clone https://github.com/buildroot/buildroot
+cd buildroot</code></pre>
+<p>Charger la configuration par défaut pour Raspberry Pi 2 (sera ajustée à nos besoins par la suite):</p>
+<pre class="console"><code>make raspberrypi2_defconfig</code></pre>
+<p>Paramétrer le système (basé sur <code>raspberrypi2_defconfig</code>), les applications à inclure et l'image en sortie. Si on utilise <code>U-Boot</code> comme bootloader, mettre la valeur <code>rpi</code> dans <code>Bootloaders &gt; Select U-Boot &gt; U-Boot board name</code></p>
+<pre class="console"><code>make menuconfig</code></pre>
+<p>Sauvegarder la configuration Buildroot si on veut la stocker quelque part en particulier:</p>
+<pre class="console"><code>make savedefconfig BR2_DEFCONFIG=./buildroot_config</code></pre>
+<p>Pour la charger dans Buildroot:</p>
+<pre class="console"><code>make defconfig BR2_DEFCONFIG=./buildroot_config</code></pre>
+<p>Copier la configuration du noyau (supprimée après un <code>make clean</code>):</p>
+<pre class="console"><code>mkdir -p output/build/linux-custom/
+cp kernel_config output/build/linux-custom/.config</code></pre>
+<p>Paramétrer le noyau:</p>
+<pre class="console"><code>make linux-menuconfig</code></pre>
+<p>On a tendance à vouloir retirer beaucoup de chose dans le noyau (supports de périphériques multimédia, radioamateur, joystick, etc.), il peut arriver de retirer quelque chose d'essentiel ou une dépendance ce qui se traduira par quelque chose de non fonctionnel. Cela a été mon cas avec le driver pour l'interface Ethernet <a href="https://cateee.net/lkddb/web-lkddb/USB_NET_SMSC95XX.html">SMSC95XX</a> dans <code>Devices Drivers &gt; Network Device Support &gt; USB Network Adapters &gt; SMSC LAN95XX based USB 2.0 10/100 ethernet devices</code> qui dépendait de <code>Multi-purpose USB Networking Framework</code>.</p>
+<p>Pour recompiler le noyau uniquement après un changement dans sa configuration:</p>
+<pre class="console"><code>make linux-build</code></pre>
+<p>Paramétrer Busybox:</p>
+<pre class="console"><code>make busybox-menuconfig</code></pre>
+<p>Paramétrer UBoot (si utilisé):</p>
+<pre class="console"><code>make uboot-menuconfig</code></pre>
+<p>Lancer la compilation:</p>
+<pre class="console"><code>make</code></pre>
+<p>Après un long moment de compilation (notamment pour la toolchain), l'image devrait être disponible dans <code>output/images/</code>. Au final je suis parvenu à une partition <code>/</code> de 30Mo, <code>/boot</code> de 10Mo et une utilisation de la RAM sur le Raspberry ne dépassant pas 16Mo. Il aurait été possible de descendre encore en retirant des éléments dans BusyBox.</p>
+<h2 id="tests-avec-qemu">Tests avec Qemu</h2>
+<p>L'image générée après compilation m'a posée problème avec Qemu pour faire mes tests: il semble y avoir un problème d'offset dans la table de partition bien que le Raspberry Pi arrive parfaitement à exécuter le système. J'ai donc généré moi même l'image depuis l'archive <code>rootfs.tar.gz</code> et <code>boot.vfat</code> produits par Buildroot avec le script suivant (utilise <code>bsdtar</code> et nécessite <code>sudo</code> pour l'exécution):</p>
+<pre class="console"><code>IMG_SIZE=&quot;60M&quot;
+IMG_DIR=&quot;/opt/buildroot/buildroot/output/images&quot;
+IMG_OUTPUT=&quot;rpi2.img&quot;
+
+echo -e &quot;\nCREATING IMAGE FILE&quot;
+rm -f &quot;$IMG_OUTPUT&quot;
+fallocate -l &quot;$IMG_SIZE&quot; &quot;$IMG_OUTPUT&quot;
+
+echo -e &quot;CREATING IMAGE FILESYSTEMS&quot;
+LOOP=$(losetup -f)
+losetup &quot;$LOOP&quot; &quot;$IMG_OUTPUT&quot;
+
+fdisk &quot;$LOOP&quot; &lt;&lt;EOF
+o
+n
+p
+1
+
++10M
+t
+c
+n
+p
+2
+
++50M
+n
+p
+3
+
+
+p
+w
+EOF
+
+losetup -d &quot;$LOOP&quot;
+losetup -P &quot;$LOOP&quot; &quot;$IMG_OUTPUT&quot;
+
+echo -e &quot;FORMAT IMAGE FILESYSTEMS&quot;
+sleep 3
+mkfs.vfat &quot;${LOOP}p1&quot;
+mkfs.ext4 &quot;${LOOP}p2&quot;
+
+echo -e &quot;MOUNTING IMAGE FILESYSTEMS&quot;
+mkdir -p mnt/boot_temp
+mount -t vfat -o loop &quot;${IMG_DIR}/boot.vfat&quot; &quot;mnt/boot_temp&quot;
+mkdir -p mnt/boot
+mount &quot;${LOOP}p1&quot; mnt/boot
+mkdir -p mnt/root
+mount &quot;${LOOP}p2&quot; mnt/root
+
+echo -e &quot;EXTRACTING ROOTFS TO IMAGE&quot;
+bsdtar -xpf &quot;$IMG_DIR/rootfs.tar.gz&quot; -C mnt/root
+echo -e &quot;EXTRACTING BOOTFS TO IMAGE&quot;
+cp mnt/boot_temp/* mnt/boot
+
+echo -e &quot;UNMOUNTING IMAGE FILESYSTEMS&quot;
+sync
+umount mnt/boot mnt/root mnt/boot_temp
+losetup -d &quot;$LOOP&quot;</code></pre>
+<p>Lancer l'image avec Qemu pour les tests</p>
+<pre class="console"><code>qemu-system-arm -M raspi2 -cpu arm1176 -m 1G -smp 4 \
+-append &quot;ro earlyprintk loglevel=8 console=ttyAMA0,115200 dwc_otg.lpm_enable=0 rootfstype=ext4 root=/dev/mmcblk0p2 rootwait&quot; \
+-dtb output/images/bcm2709-rpi-2-b.dtb -drive if=sd,driver=raw,file=rpi2.img \
+-kernel output/images/zImage -serial stdio</code></pre>
+<p>Pour envoyer votre image sur un support physique (carte SD dans notre cas):</p>
+<pre class="console"><code>dd bs=4M if=rpi2.img of=/dev/mmcblk0 status=progress
+sync</code></pre>
+<h2 id="modification-manuelle-de-limage">Modification manuelle de l'image</h2>
+<p>Il est nécessaire d'ajouter des fichiers <code>.dtb</code> dans la partition <code>/boot</code> afin de faire fonctionner certains composants comme le capteur DS18B20. Pour cela, monter la partition <code>/boot</code> du fichier <code>rpi2.img</code> avec <code>losetup</code> et <code>mount</code> comme dans le script précédent puis:</p>
+<pre class="console"><code>mkdir mnt/boot/overlays
+dtc -O dtb -o w1-gpio-overlay.dtb output/build/linux-custom/arch/arm/boot/dts/overlays/w1-gpio-overlay.dts
+cp w1-gpio-overlay.dtb mnt/boot/overlays
+echo &quot;dtoverlay=w1-gpio,pullup=1,gpiopin=4&quot; &gt;&gt; mnt/boot/config.txt</code></pre>
+<p>Pour faire correctement les choses, il faudrait utiliser un <em>post-script</em> ou encore un <em>overlay</em> dans Builroot pour insérer des fichiers dans l'image produite. C'est également de cette manière qu'il faut intégrer sa partie applicative.</p>
+<h2 id="les-bonnes-pratiques">Les bonnes pratiques</h2>
+<ul>
+<li>Ne pas utiliser le compte <code>root</code> pour l'applicatif, question de sécurité (implique d'utiliser un port réseau &gt; 1024).</li>
+<li>Configurer <code>/</code> en lecture seule pour la sécurité et surtout éviter les problème de corruption de la carte SD en cas de coupure électrique.</li>
+<li>Ne pas inclure de service d'accès à distance <code>OpenSSH</code>.</li>
+<li>Laisser éventuellement un accès physique via un TTY sur la sortie HDMI pour la configuration IP et investiguer en cas de problème.</li>
+<li>Ne pas configurer d'autologin sur TTY au boot pour maintenir l'authentification via login/mot de passe.</li>
+<li>Inclure les modules <code>iptables</code> dans le noyau et définir des règles de parfeu via <code>initd</code> afin de protéger l'applicatif si l'environnement réseau est jugé incertain.</li>
+<li>Lancer l'applicatif via un script <code>initd</code> composée d'une boucle pour le relancer automatiquement en cas de crash.</li>
+</ul>
+<h2 id="les-alternatives-à-buildroot">Les alternatives à Buildroot</h2>
+<p>Il existe d'autres outils pour construire un système embarqué Linux: <a href="https://www.yoctoproject.org/">Yocto</a> est très utilisé dans le domaine, des constructeurs comme Xilinx, Intel et TI fournissent des "layers" pour intégrer des composants matériels/logiciels à votre système.</p>
+<p>Citons le très intéressant <a href="https://nerves-project.org/">Nerves</a> qui utilise Buildroot afin de créer un système extrêmement optimisée/minimaliste pour exécuter une machine virtuelle BEAM et des applications Elixir.</p>
+<p>Notons également qu'il existe l'équivalent de Buildroot pour FreeBSD: <a href="https://github.com/freebsd/crochet">Crochet</a>.</p>
+<p>Pour finir le récent <a href="https://elbe-rfs.org/">ELBE</a>.</p>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
+<ul>
+<li><a href="https://medium.com/@boozlachu/buildroot-part-1-general-information-minimum-system-build-setup-via-menu-32fdb389eebc">Buildroot-part 1. General information, minimum system build, setup via menu</a></li>
+</ul>
+  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+</body>
+</html>
