@@ -51,9 +51,9 @@ ifneq ("$(OPENSSL_PATH)", "")
 	CFLAGS+=-I$(OPENSSL_PATH)/include
 	LDFLAGS+=-L$(OPENSSL_PATH)/lib -lssl
 endif
-````
+```
 
-Compiler et install Kore dans `/tmp/kore` avec la variable `prefix`:
+Compiler et installer Kore dans `/tmp/kore` avec la variable `prefix`:
 ```
 OPENSSL_PATH="/tmp/openssl" PREFIX="/tmp/kore" make
 PREFIX="/tmp/kore" make install
@@ -84,7 +84,7 @@ page(struct http_request *req)
 }
 ```
 
-Configurer le routage dans `conf/test.conf` pour utiliser TLS sur localhost:8888 et sans TLS sur localhost:8080
+Configurer le routage dans `conf/test.conf` pour utiliser TLS sur localhost:8888 et localhost:8080 sans TLS
 ```
 server tls {
 	bind 127.0.0.1 8888

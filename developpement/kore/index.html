@@ -114,7 +114,7 @@ cd kore-4.2.0</code></pre>
     CFLAGS+=-I$(OPENSSL_PATH)/include
     LDFLAGS+=-L$(OPENSSL_PATH)/lib -lssl
 endif</code></pre>
-<p>Compiler et install Kore dans <code>/tmp/kore</code> avec la variable <code>prefix</code>:</p>
+<p>Compiler et installer Kore dans <code>/tmp/kore</code> avec la variable <code>prefix</code>:</p>
 <pre><code>OPENSSL_PATH=&quot;/tmp/openssl&quot; PREFIX=&quot;/tmp/kore&quot; make
 PREFIX=&quot;/tmp/kore&quot; make install</code></pre>
 <h2 id="créer-une-application-test">Créer une application test</h2>
@@ -136,7 +136,7 @@ cd test</code></pre>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    http_response<span class="op">(</span>req<span class="op">,</span> <span class="dv">200</span><span class="op">,</span> msg<span class="op">,</span> strlen<span class="op">(</span>msg<span class="op">));</span></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>KORE_RESULT_OK<span class="op">);</span></span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Configurer le routage dans <code>conf/test.conf</code> pour utiliser TLS sur localhost:8888 et sans TLS sur localhost:8080</p>
+<p>Configurer le routage dans <code>conf/test.conf</code> pour utiliser TLS sur localhost:8888 et localhost:8080 sans TLS</p>
 <pre><code>server tls {
     bind 127.0.0.1 8888
 }
