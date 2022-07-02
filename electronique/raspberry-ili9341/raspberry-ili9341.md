@@ -40,7 +40,7 @@ Pour ne pas utiliser la fonction de mise ne veille en cas d'inactivité, `LED` p
 
 Pour compiler le programme (nécessite `git` et `cmake`):
 
-```Bash
+```Console
 git clone https://github.com/juj/fbcp-ili9341
 cd fbcp-ili9341
 mkdir build

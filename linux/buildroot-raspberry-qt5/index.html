@@ -97,8 +97,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <h2 id="utiliser-eglfs_brcm-comme-backend"><a name="eglfs_brcm"></a>Utiliser eglfs_brcm comme backend</h2>
 <p>Le backend <code>eglfs_brcm</code> repose sur les pilotes graphiques propriétaires Broadcom afin de fournir un support pour OpenGLES/EGL avec les fichiers <code>/usr/lib/libbrcmEGL.so</code> et <code>/usr/lib/libbrcmGLESv2.so</code>. Ceux-ci sont fournis par le package <code>Rpi-userland</code> et les "Firmware Driver" dans le noyau.</p>
 <h3 id="configuration-buildroot">Configuration Buildroot</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> raspberrypi3_defconfig</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> menuconfig</span></code></pre></div>
+<pre class="console"><code>make raspberrypi3_defconfig
+make menuconfig</code></pre>
 <pre class="text"><code>System configuration
 ├─ System hostname (BR2_TARGET_GENERIC_HOSTNAME=&quot;buildrootqt5&quot;)
 ├─ Root password (BR2_TARGET_GENERIC_ROOT_PASSWD=&quot;root&quot;)
@@ -138,7 +138,7 @@ Device Drivers
 └─ Graphics support
    └─ Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (DRM=n)</code></pre>
 <p>Sauvegarde de la configuration du noyau:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> output/build/linux-custom/.config linux.config</span></code></pre></div>
+<pre class="console"><code>cp output/build/linux-custom/.config linux.config</code></pre>
 <h3 id="overlay">Overlay</h3>
 <p>Pour inclure nos fichiers nous allons utiliser un overlay, tous les fichiers contenu dans <code>output/rootfs_overlay</code> (considéré par Buildroot comme référence à la racine) seront présents dans l'image finale.</p>
 <p><code>output/rootfs_overlay/usr/share/fonts/dejavu-sans-webfont.ttf</code>: Qt5 ne fournit plus de police de caractères, il faut au minimum une police TTF sur le système. Buildroot peut également inclure des polices avec:</p>
@@ -226,9 +226,9 @@ Device Drivers
 </blockquote>
 <h3 id="compilation">Compilation</h3>
 <p>Lancer la compilation et la création de l'image:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
+<pre class="console"><code>make</code></pre>
 <p>Pour vérifier les options de compilation du package <code>qt5base</code>, notamment les backends disponibles:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ./output/build/qt5base-5.15.2/config.summary</span></code></pre></div>
+<pre class="console"><code>cat ./output/build/qt5base-5.15.2/config.summary</code></pre>
 <pre class="text"><code>QPA backends:
   DirectFB ............................... no
   EGLFS .................................. yes
@@ -246,9 +246,9 @@ Device Drivers
   LinuxFB ................................ no
   VNC .................................... no</code></pre>
 <p>Copie de l'image générée vers la carte SD:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</span></code></pre></div>
+<pre class="console"><code>sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</code></pre>
 <p>Après démarrer le système sur le Raspberry, exécuter <code>test.sh</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> test.sh</span></code></pre></div>
+<pre class="console"><code>sh test.sh</code></pre>
 <h2 id="utiliser-eglfs_kms-comme-backend-au-lieu-de-eglfs_brcm"><a name="eglfs_kms"></a>Utiliser eglfs_kms comme backend au lieu de eglfs_brcm</h2>
 <p>Au lieu d'utiliser le pilote propriétaire Broadcom, nous allons utiliser le backend OpenGLES libre fourni avec Mesa3d ainsi que le pilote VC4.</p>
 <h3 id="configuration-buildroot-1">Configuration Buildroot</h3>
@@ -285,10 +285,10 @@ Target packages
 <p>L'utilisation de udev (eudev) est util pour la détection automatique des périphériques et charger les modules requis ce qui permettra de rendre disponible le GPU dans <code>/dev/dri/card0</code>. Il est possible de se passer de udev en chargeant les modules requis manuellement (cas exposé plus tard).</p>
 <p>Pas besoin d'inclure mesa3d → Gallium v3d driver.</p>
 <p>Sauvegarde de la configuration Buildroot:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildrootqt5_vc4.config</span></code></pre></div>
+<pre class="console"><code>make savedefconfig BR2_DEFCONFIG=./buildrootqt5_vc4.config</code></pre>
 <h3 id="configuration-du-noyau-linux-1">Configuration du noyau Linux</h3>
 <p>Pour la configuration du noyau, il faut inclure le pilote VC4:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> linux-menuconfig</span></code></pre></div>
+<pre class="console"><code>make linux-menuconfig</code></pre>
 <pre class="text"><code>Device Drivers
 └─ Graphics support
    ├─ Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (CONFIG_DRM=y)
@@ -297,7 +297,7 @@ Target packages
 <p>Pas besoin d'inclure <em>Device Drivers → Graphics support → Broadcom V3D 3.x and newer (CONFIG_DRM_V3D)</em></p>
 </blockquote>
 <p>Sauvegarde de la configuration du noyau:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> output/build/linux-custom/.config linux_vc4.config</span></code></pre></div>
+<pre class="console"><code>cp output/build/linux-custom/.config linux_vc4.config</code></pre>
 <h3 id="overlay-1">Overlay</h3>
 <p>Le contenu de l'overlay <code>output/rootfs_overlay</code> reste le même sauf pour le script <code>output/rootfs_overlay/root/test.sh</code> qui intègre une valeur différente pour <code>QT_QPA_EGLFS_INTEGRATION</code> et une nouvelle variable <code>QT_QPA_EGLFS_NO_LIBINPUT</code>:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
@@ -340,9 +340,9 @@ Target packages
 <p>Ne pas oublier de donner les droits d'exécution avec <code>chmod +x output/post-build-config.sh</code>.</p>
 <h3 id="compilation-1">Compilation</h3>
 <p>Lancer la compilation et la création de l'image:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
+<pre class="console"><code>make</code></pre>
 <p>Pour vérifier les options de compilation du package <code>qt5base</code>, notamment les backends disponibles:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ./output/build/qt5base-5.15.2/config.summary</span></code></pre></div>
+<pre class="console"><code>cat ./output/build/qt5base-5.15.2/config.summary</code></pre>
 <pre class="text"><code>QPA backends:
   DirectFB ............................... no
   EGLFS .................................. yes
@@ -360,9 +360,9 @@ Target packages
   LinuxFB ................................ no
   VNC .................................... no</code></pre>
 <p>Copie de l'image générée vers la carte SD:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</span></code></pre></div>
+<pre class="console"><code>sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</code></pre>
 <p>Après démarrer le système sur le Raspberry, exécuter <code>test.sh</code> pour lancer l'application QML:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> test.sh</span></code></pre></div>
+<pre class="console"><code>sh test.sh</code></pre>
 <h3 id="se-passer-de-udev-eudev">Se passer de udev (eudev)</h3>
 <p>Il est possible de ne pas inclure udev (dans Buildroot: <em>System configuration → /dev management</em>). Les modules chargés automatiquement par udev (liste récupérée avec <code>lsmod</code>):</p>
 <pre class="text"><code>Module                  Size  Used by    Tainted: G  

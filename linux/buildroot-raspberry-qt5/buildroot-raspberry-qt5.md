@@ -28,7 +28,7 @@ Le backend `eglfs_brcm` repose sur les pilotes graphiques propriétaires Broadco
 
 ### Configuration Buildroot
 
-```Bash
+```Console
 make raspberrypi3_defconfig
 make menuconfig
 ```
@@ -94,7 +94,7 @@ Device Drivers
 ```
 
 Sauvegarde de la configuration du noyau:
-```Bash
+```Console
 cp output/build/linux-custom/.config linux.config
 ```
 
@@ -200,12 +200,12 @@ Item {
 ### Compilation
 
 Lancer la compilation et la création de l'image:
-```Bash
+```Console
 make
 ```
 
 Pour vérifier les options de compilation du package `qt5base`, notamment les backends disponibles:
-```Bash
+```Console
 cat ./output/build/qt5base-5.15.2/config.summary
 ```
 
@@ -229,12 +229,12 @@ QPA backends:
 ```
 
 Copie de l'image générée vers la carte SD:
-```Bash
+```Console
 sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress
 ```
 
 Après démarrer le système sur le Raspberry, exécuter `test.sh`:
-```Bash
+```Console
 sh test.sh
 ```
 
@@ -296,7 +296,7 @@ Pas besoin d'inclure mesa3d → Gallium v3d driver.
 
 
 Sauvegarde de la configuration Buildroot:
-```Bash
+```Console
 make savedefconfig BR2_DEFCONFIG=./buildrootqt5_vc4.config
 ```
 
@@ -304,7 +304,7 @@ make savedefconfig BR2_DEFCONFIG=./buildrootqt5_vc4.config
 ### Configuration du noyau Linux
 
 Pour la configuration du noyau, il faut inclure le pilote VC4:
-```Bash
+```Console
 make linux-menuconfig
 ```
 
@@ -317,7 +317,7 @@ Device Drivers
 > Pas besoin d'inclure *Device Drivers → Graphics support → Broadcom V3D 3.x and newer (CONFIG_DRM_V3D)*
 
 Sauvegarde de la configuration du noyau:
-```Bash
+```Console
 cp output/build/linux-custom/.config linux_vc4.config
 ```
 
@@ -378,12 +378,12 @@ Ne pas oublier de donner les droits d'exécution avec `chmod +x output/post-buil
 ### Compilation
 
 Lancer la compilation et la création de l'image:
-```Bash
+```Console
 make
 ```
 
 Pour vérifier les options de compilation du package `qt5base`, notamment les backends disponibles:
-```Bash
+```Console
 cat ./output/build/qt5base-5.15.2/config.summary
 ```
 
@@ -408,12 +408,12 @@ QPA backends:
 
 
 Copie de l'image générée vers la carte SD:
-```Bash
+```Console
 sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress
 ```
 
 Après démarrer le système sur le Raspberry, exécuter `test.sh` pour lancer l'application QML:
-```Bash
+```Console
 sh test.sh
 ```
 
