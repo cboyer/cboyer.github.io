@@ -90,7 +90,7 @@ code span.wa { color: #bf0303; } /* Warning */</style>
   <h1>Exemple d'application Elixir</h1>
   <em>Publié le 2019-06-19, dernière mise à jour: 2019-11-14</em>
 <h2 id="création-dun-projet">Création d'un projet</h2>
-<p>Une application Elixir très simple en deux modules: un principal<code>ElixirApp.Application</code> chargé de superviser le second <code>ElixirApp.Worker</code> qui permet de manipuler (lire/écrire) une valeur en mémoire.</p>
+<p>Une application Elixir très simple en deux modules: un principal <code>ElixirApp.Application</code> chargé de superviser le second <code>ElixirApp.Worker</code> qui permet de manipuler (lire/écrire) une valeur en mémoire.</p>
 <p>Créer un projet avec un superviseur (<code>--sup</code>):</p>
 <pre class="console"><code>mix new --sup elixir_app</code></pre>
 <p>Le code de l'application se trouve alors dans <code>elixir_app/lib/elixir_app/application.ex</code></p>
@@ -194,8 +194,8 @@ Call: get
 1354</code></pre>
 <p>Pour l'exécuter de façon non interactive (depuis le dossier racine <code>elixir_app</code>):</p>
 <pre class="console"><code>mix run</code></pre>
-<h2 id="observer">Observer</h2>
-<p>Pour visualiser les toutes les caractéristiques de notre application (dans <code>iex</code>, en ayant au préalable installé le package <code>erlang-observer</code>):</p>
+<h2 id="observer-lutilisation-des-resources">Observer l'utilisation des resources</h2>
+<p>Pour visualiser les toutes les caractéristiques (mémoire, processeurs, etc.) de notre application (dans <code>iex</code>, en ayant au préalable installé le package <code>erlang-observer</code>):</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">:observer</span><span class="op">.</span>start</span></code></pre></div>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>

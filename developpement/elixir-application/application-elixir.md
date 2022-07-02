@@ -13,7 +13,7 @@ abstract: "Exemple d'application Elixir."
 
 ## Création d'un projet
 
-Une application Elixir très simple en deux modules: un principal`ElixirApp.Application` chargé de superviser le second `ElixirApp.Worker` qui permet de manipuler (lire/écrire) une valeur en mémoire.
+Une application Elixir très simple en deux modules: un principal `ElixirApp.Application` chargé de superviser le second `ElixirApp.Worker` qui permet de manipuler (lire/écrire) une valeur en mémoire.
 
 Créer un projet avec un superviseur (`--sup`):
 
@@ -160,9 +160,9 @@ mix run
 
 
 
-## Observer
+## Observer l'utilisation des resources
 
-Pour visualiser les toutes les caractéristiques de notre application (dans `iex`, en ayant au préalable installé le package `erlang-observer`):
+Pour visualiser les toutes les caractéristiques (mémoire, processeurs, etc.) de notre application (dans `iex`, en ayant au préalable installé le package `erlang-observer`):
 
 ```elixir
 :observer.start
