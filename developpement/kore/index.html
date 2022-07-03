@@ -106,9 +106,9 @@ make install</code></pre>
 <pre><code>/tmp/openssl/bin/openssl version
 OpenSSL 1.1.1p  21 Jun 2022 (Library: OpenSSL 1.1.1o  FIPS 3 May 2022)</code></pre>
 <h2 id="compilation-de-kore">Compilation de Kore</h2>
-<pre><code>wget https://kore.io/releases/kore-4.2.0.tar.gz
-tar zxvf kore-4.2.0.tar.gz
-cd kore-4.2.0</code></pre>
+<pre><code>wget https://kore.io/releases/kore-4.2.2.tar.gz
+tar zxvf kore-4.2.2.tar.gz
+cd kore-4.2.2</code></pre>
 <p>La compilation du binaire <code>kodev</code> ne tient pas compte de la variable <code>OPENSSL_PATH</code> contrairement au Makefile principal. Ceci aura pour effet d'utiliser le chemin par défaut et utiliser OpenSSL en version 3. Pour corriger le problème il suffit d'ajouter le bloc suivant dans <code>kodev/Makefile</code>:</p>
 <pre><code>ifneq (&quot;$(OPENSSL_PATH)&quot;, &quot;&quot;)
     CFLAGS+=-I$(OPENSSL_PATH)/include
@@ -133,9 +133,10 @@ cd test</code></pre>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span> msg <span class="op">=</span> <span class="st">&quot;hello world&quot;</span><span class="op">;</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    http_response<span class="op">(</span>req<span class="op">,</span> <span class="dv">200</span><span class="op">,</span> msg<span class="op">,</span> strlen<span class="op">(</span>msg<span class="op">));</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>KORE_RESULT_OK<span class="op">);</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    http_response_header<span class="op">(</span>req<span class="op">,</span> <span class="st">&quot;content-type&quot;</span><span class="op">,</span> <span class="st">&quot;text/html&quot;</span><span class="op">);</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    http_response<span class="op">(</span>req<span class="op">,</span> <span class="dv">200</span><span class="op">,</span> msg<span class="op">,</span> strlen<span class="op">(</span>msg<span class="op">));</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>KORE_RESULT_OK<span class="op">);</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Configurer le routage dans <code>conf/test.conf</code> pour utiliser TLS sur localhost:8888 et localhost:8080 sans TLS</p>
 <pre><code>server tls {
     bind 127.0.0.1 8888

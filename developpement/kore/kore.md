@@ -39,9 +39,9 @@ OpenSSL 1.1.1p  21 Jun 2022 (Library: OpenSSL 1.1.1o  FIPS 3 May 2022)
 
 ## Compilation de Kore
 ```
-wget https://kore.io/releases/kore-4.2.0.tar.gz
-tar zxvf kore-4.2.0.tar.gz
-cd kore-4.2.0
+wget https://kore.io/releases/kore-4.2.2.tar.gz
+tar zxvf kore-4.2.2.tar.gz
+cd kore-4.2.2
 ```
 
 La compilation du binaire `kodev` ne tient pas compte de la variable `OPENSSL_PATH` contrairement au Makefile principal. Ceci aura pour effet d'utiliser le chemin par défaut et utiliser OpenSSL en version 3.
@@ -79,6 +79,7 @@ page(struct http_request *req)
 {
 	char * msg = "hello world";
 
+	http_response_header(req, "content-type", "text/html");
 	http_response(req, 200, msg, strlen(msg));
 	return (KORE_RESULT_OK);
 }
