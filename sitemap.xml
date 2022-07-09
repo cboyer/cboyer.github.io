@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://cboyer.github.io</loc>
-        <lastmod>2022-07-08T20:09:15-04:00</lastmod>
+        <lastmod>2022-07-08T20:21:45-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/linux</loc>
-        <lastmod>2022-07-08T20:09:15-04:00</lastmod>
+        <lastmod>2022-07-08T20:21:45-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/developpement</loc>
-        <lastmod>2022-07-08T20:09:15-04:00</lastmod>
+        <lastmod>2022-07-08T20:21:45-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/electronique</loc>
-        <lastmod>2022-07-08T20:09:15-04:00</lastmod>
+        <lastmod>2022-07-08T20:21:45-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -32,7 +32,7 @@
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://cboyer.github.io/developpement/r-correspondance-approximative/</loc>
+        <loc>https://cboyer.github.io/developpement/r-correspondances-approximatives/</loc>
         <lastmod>2022-02-03T17:38:04-05:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>

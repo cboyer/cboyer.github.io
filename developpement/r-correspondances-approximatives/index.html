@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>Correspondance approximative (fuzzy matching) avec R - C. Boyer</title>
+  <title>Correspondances approximatives (fuzzy matching) avec R - C. Boyer</title>
   <meta name="description" content="Déterminer des correspondances approximatives entre plusieurs chaînes de caractères avec R." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="R, fuzzy matching, recherche approximative, levenshtein, stringdistmatrix, adist" />
@@ -87,7 +87,7 @@ code span.vs { color: #bf0303; } /* VerbatimString */
 code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
-  <h1>Correspondance approximative (fuzzy matching) avec R</h1>
+  <h1>Correspondances approximatives (fuzzy matching) avec R</h1>
   <em>Publié le 2022-02-03</em>
 <p>On considère deux ensembles de données <code>x</code> et <code>y</code> pour lesquels nous cherchons à établir des correspondances selon une de leur colonne tout en tolérant une certaine approximation.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">13</span>, <span class="at">name =</span> <span class="fu">c</span>(<span class="st">&quot;jouet&quot;</span>, <span class="st">&quot;arbre&quot;</span>, <span class="st">&quot;fruit&quot;</span>, <span class="st">&quot;baton&quot;</span>))</span>

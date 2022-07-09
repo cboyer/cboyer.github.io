@@ -1,5 +1,5 @@
 ---
-title: "Correspondance approximative (fuzzy matching) avec R"
+title: "Correspondances approximatives (fuzzy matching) avec R"
 date: "2022-02-03T17:38:04-05:00"
 updated: "2022-02-03T17:38:04-05:00"
 author: "C. Boyer"
