@@ -7,7 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [Linux, Cluster, Pacemake, Corosync, PCS, Redhat]
-abstract: "Cluster Linux avec Pacemaker/Corosync/PCS"
+abstract: "Cluster Linux avec Pacemaker/Corosync/PCS."
 ---
 
 Installer les packages

@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [Buildroot, Qt5, QML, Raspberry, Linux, EGL, OpenGLES, eglfs, eglfs_brcm, eglfs_kms]
-abstract: |
-  Développement d'une interface graphique Qt5/QML sur Raspberry Pi 3 avec Buildroot.
+abstract: "Développement d'une interface graphique Qt5/QML sur Raspberry Pi 3 avec Buildroot."
 ---
 
 L'article a été rédigé en utilisant un Raspberry Pi 3 avec Buildroot 2021.05-514-g74adec4f3a qui contient Qt5 5.15.2 et un noyau 5.10.

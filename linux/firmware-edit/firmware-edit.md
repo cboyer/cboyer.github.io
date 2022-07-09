@@ -7,7 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [binwalk, minipro, firmware, edition]
-abstract: "Modification de firmware"
+abstract: "Modification de firmware."
 ---
 
 Cet article est un résumé de celui publié par Oleg Kutkov (lien en bas de page).

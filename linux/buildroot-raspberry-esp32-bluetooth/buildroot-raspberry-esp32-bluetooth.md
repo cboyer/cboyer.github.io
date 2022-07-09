@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [Raspberry, Buildroot, ESP32, bluetooth, rfcomm, BluetoothSerial]
-abstract: |
-  Liaison bluetooth entre ESP32 et Raspberry Pi 3.
+abstract: "Liaison bluetooth entre ESP32 et Raspberry Pi 3."
 ---
 
 L'article a été rédigé en utilisant un Raspberry Pi 3 avec Buildroot 2021.05-514-g74adec4f3a.

@@ -7,7 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [Elixir,TCP,GenServer,iex]
-abstract: "Serveur TCP avec Elixir et GenServer"
+abstract: "Serveur TCP avec Elixir et GenServer."
 ---
 
 

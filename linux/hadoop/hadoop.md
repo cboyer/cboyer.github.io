@@ -7,7 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [Hadoop, Linux, Java]
-abstract: "Tests avec Hadoop"
+abstract: "Tests avec Hadoop."
 ---
 
 

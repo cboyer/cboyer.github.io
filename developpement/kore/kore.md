@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
 keywords: [Kore, C, serveur web, embarqué]
-abstract: |
-  Serveur web embarqué avec Kore.
+abstract: "Serveur web embarqué avec Kore."
 ---
 
 Kore est un framework web en C intègrant son propre serveur web. Selon la configuration, il est même possible d'obtenir un seul binaire.
@@ -123,4 +122,4 @@ curl http://localhost:8080
 
 ## Liens complémentaires
 - [https://wiki.openssl.org/index.php/Compilation_and_Installation](https://wiki.openssl.org/index.php/Compilation_and_Installation)
-- [https://docs.kore.io/4.2.0/applications/koreconf.html](https://docs.kore.io/4.2.0/applications/koreconf.html)
+- [https://docs.kore.io/4.2.2/applications/koreconf.html](https://docs.kore.io/4.2.0/applications/koreconf.html)

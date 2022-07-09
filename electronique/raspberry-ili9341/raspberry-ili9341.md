@@ -7,8 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Électronique"
 keywords: [ILI9341, Raspberry, fbcp-ili9341, spi]
-abstract: |
-  Utiliser un écran à base de contrôleur ILI9341 avec un Raspberry Pi pour dupliquer la sortie HDMI.
+abstract: "Utiliser un écran à base de contrôleur ILI9341 avec un Raspberry Pi pour dupliquer la sortie HDMI."
 ---
 
 fbcp-ili9341 permet de cloner la sortie HDMI sur un écran doté d'un contrôleur ILI9341 (bus SPI). 

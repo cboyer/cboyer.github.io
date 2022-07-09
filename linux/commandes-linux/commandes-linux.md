@@ -7,7 +7,7 @@ license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Linux"
 keywords: [Linux, commandes, Bash]
-abstract: "Quelques commandes utiles sous Linux"
+abstract: "Quelques commandes utiles sous Linux."
 ---
 
 
