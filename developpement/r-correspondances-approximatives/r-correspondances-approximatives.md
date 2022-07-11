@@ -41,7 +41,7 @@ Pour calculer cette distance nous utiliserons la fonction `stringdistmatrix` de 
 
 ```R
 tolower(x$name)                         # Passage en minuscule
-iconv(x$name, to="ASCII//TRANSLIT")     # Rretrait des accents
+iconv(x$name, to="ASCII//TRANSLIT")     # Retrait des accents
 trimws(x$name)                          # Retrait des espaces en début/fin de chaîne
 gsub("[[:punct:]]+", "", x$name)        # Retrait des signes de ponctuation
 gsub("\\s+", " ", x$name)               # Remplacement des espaces multiples
