@@ -101,7 +101,17 @@ config :test_bd, TestBd.Repo,
 
 Phoenix permet d'initialiser la base de données ainsi que tous les éléments nécessaires (controleurs, templates, vues, modèles) pour interragir avec des données (actions CRUD).
 
-![Schéma de la base de données](./schema.svg)
+```
+  ┌────────────┐      ┌──────────┐
+  │   users    │      │ profiles │
+  │------------│      │----------│
+  │     id     │ ┌────┼───►id    │
+  │    name    │ │    │  profile │
+  │ profile_id─┼─┘    │          │
+  │            │      │          │
+  └────────────┘      └──────────┘
+
+```
 
 ### Générer le schéma et les ressources:
 Utiliser des contextes pour regrouper les fonctions générées selon une fonctionnalité de l'application (autentification, etc.) au lieu d'avoir un seul fichier très dense.
