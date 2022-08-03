@@ -1,7 +1,7 @@
 ---
 title: "R: les incontournables"
 date: "2019-05-25T10:09:13-04:00"
-updated: "2022-02-18T17:30:29-05:00"
+updated: "2022-08-02T17:30:29-05:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -17,6 +17,7 @@ abstract: "Opérations incontournables avec le langage R."
 - [Opérations sur les données](#data)
 - [Pipelines Dplyr](#dplyr)
 - [Graphiques](#graphiques)
+- [Sparklyr](#sparklyr)
 
 
 ## <a name="optionsexec"></a>Options d'exécution
@@ -465,7 +466,43 @@ logs %>%
 ```
 
 
+## <a name="sparklyr"></a>Sparklyr
 
+Agrégation par concaténation
+```R
+contact_flat_tbl <- contact_tbl %>%
+  sdf_distinct() %>%
+  mutate(contact = paste(NOM, PRENOM, sep = ':')) %>%
+  select(ID, contact) %>%
+  group_by(ID) %>%
+  summarise(contacts = paste(collect_list(contact), sep = '|'), .groups = "drop")
+```
+
+Séparer les éléments séparés par une virgule dans une chaîne de caractères en nouvelles colonnes (ici 4)
+```R
+ids_tbl %>%
+  mutate(text = split(IDs, ",")) %>%
+  sdf_separate_column("text", paste0("colonne", 0:3))
+```
+
+Tester la présence d'une valeur dans au moins une colonne (équivaut à `any()`) et conserver le résultat (booléen) dans une nouvelle colonne `erreur`
+```R
+logs_tbl %>%
+  hof_exists(pred = ~ !is.na(.x), expr = array(error_system, error_app, error_kernel), dest_col = erreur)
+```
+
+Tester la présence d'une valeur dans toutes les colonnes (équivaut à `all()`) et conserver le résultat (booléen) dans une nouvelle colonne `erreur`
+```R
+logs_tbl %>%
+  hof_forall(pred = ~ !is.na(.x), expr = array(error_system, error_app, error_kernel), dest_col = erreur)
+```
+
+Écrire le contenu d'une Dataset dans un fichier Parquet avec compression zstd
+```R
+logs_tbl %>%
+  sdf_coalesce(1) %>%
+  spark_write_parquet('dossier', mode = 'overwrite', options = list(parquet.compression = 'zstd'))
+```
 
 ## Liens complémentaires
 
