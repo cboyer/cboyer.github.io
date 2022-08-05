@@ -478,23 +478,29 @@ contact_flat_tbl <- contact_tbl %>%
   summarise(contacts = paste(collect_list(contact), sep = '|'), .groups = "drop")
 ```
 
-Séparer les éléments séparés par une virgule dans une chaîne de caractères en nouvelles colonnes (ici 4)
+Ramener les éléments séparés par une virgule (chaîne de caractères) dans une colonne dédiée (ici 4)
 ```R
 ids_tbl %>%
   mutate(text = split(IDs, ",")) %>%
   sdf_separate_column("text", paste0("colonne", 0:3))
 ```
 
-Tester la présence d'une valeur dans au moins une colonne (équivaut à `any()`) et conserver le résultat (booléen) dans une nouvelle colonne `erreur`
+Ramener chaque élément séparé par une virgule (chaîne de caractères) dans une colonne (équivalent à `unlist()`)
 ```R
-logs_tbl %>%
-  hof_exists(pred = ~ !is.na(.x), expr = array(error_system, error_app, error_kernel), dest_col = erreur)
+ids_tbl %>%
+  mutate(ID = explode(split(IDs, ",")))
 ```
 
-Tester la présence d'une valeur dans toutes les colonnes (équivaut à `all()`) et conserver le résultat (booléen) dans une nouvelle colonne `erreur`
+Tester la présence d'une valeur dans au moins une colonne (équivalent à `any()`) et conserver le résultat (booléen) dans une nouvelle colonne `erreur`
 ```R
 logs_tbl %>%
-  hof_forall(pred = ~ !is.na(.x), expr = array(error_system, error_app, error_kernel), dest_col = erreur)
+  hof_exists(pred = ~ !is.na(.x), expr = array(error_system, error_kernel), dest_col = erreur)
+```
+
+Tester la présence d'une valeur dans toutes les colonnes (équivalent à `all()`) et conserver le résultat (booléen) dans une nouvelle colonne `erreur`
+```R
+logs_tbl %>%
+  hof_forall(pred = ~ !is.na(.x), expr = array(error_system, error_kernel), dest_col = erreur)
 ```
 
 Écrire le contenu d'une Dataset dans un fichier Parquet avec compression zstd
