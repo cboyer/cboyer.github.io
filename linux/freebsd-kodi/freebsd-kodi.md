@@ -190,7 +190,7 @@ rehash
 portmaster -L
 ```
 
-L'outil `portmaster` permet l'installation de ports à la place de `make install clean`.
+L'outil `portmaster` permet l'installation de ports à la place de `make install clean BATCH=YES`.
 Quelques paramètres utiles pour l'utilisation de `portmaster`:
 
 - `-P` permet d'utiliser les paquets précompilés pour les dépendances

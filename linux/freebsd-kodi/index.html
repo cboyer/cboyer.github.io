@@ -194,7 +194,7 @@ cd /usr/ports/ports-mgmt/portmaster
 make install clean
 rehash
 portmaster -L</code></pre>
-<p>L'outil <code>portmaster</code> permet l'installation de ports à la place de <code>make install clean</code>. Quelques paramètres utiles pour l'utilisation de <code>portmaster</code>:</p>
+<p>L'outil <code>portmaster</code> permet l'installation de ports à la place de <code>make install clean BATCH=YES</code>. Quelques paramètres utiles pour l'utilisation de <code>portmaster</code>:</p>
 <ul>
 <li><code>-P</code> permet d'utiliser les paquets précompilés pour les dépendances</li>
 <li><code>-G</code> accepter la configuration par défaut (pas d'interaction)</li>

@@ -71,11 +71,9 @@ cd test
 #include <kore/kore.h>
 #include <kore/http.h>
 
-int		page(struct http_request *);
+int	page(struct http_request *);
 
-int
-page(struct http_request *req)
-{
+int page(struct http_request *req) {
 	char * msg = "hello world";
 
 	http_response_header(req, "content-type", "text/html");
