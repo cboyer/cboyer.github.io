@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Création de jails FreeBSD - C. Boyer</title>
+  <meta name="description" content="Créer une jail sous FreeBSD." />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="FreeBSD, jails" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
+  <style>
+    body { margin: 1em; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    ul { list-style: none; padding: 0;}
+    p code { font-size: 1.1em; }
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+  </style>
+</head>
+<body>
+  <h1>Création de jails FreeBSD</h1>
+  <em>Publié le 2023-02-01</em>
+<p>Avec un dataset ZFS (permet de bénéficier des fonctionnalités comme les snapshots)</p>
+<pre class="console"><code>zfs create -o mountpoint=/jails zroot/jails
+zfs create zroot/jails/testjail</code></pre>
+<p>Sans ZFS</p>
+<pre class="console"><code>mkdir -p /jails/testjail</code></pre>
+<p>Installation des fichiers de base par menu interractif</p>
+<pre class="console"><code>bsdinstall jail /jails/testjail</code></pre>
+<p>Sans le menu interractif</p>
+<pre class="console"><code>fetch https://download.freebsd.org/ftp/releases/amd64/13.1-RELEASE/base.txz
+tar -zxvf base.txz -C /jails/testjail
+rm base.txz
+freebsd-update -b /jails/testjail fetch install</code></pre>
+<p>Configuration de la jail</p>
+<pre class="console"><code>echo &quot;nameserver 192.168.1.1&quot; &gt; /jails/testjail/etc/resolv.conf
+cp /usr/share/zoneinfo/Canada/Eastern /jails/testjail/etc/localtime</code></pre>
+<p>vi /jails/testjail/etc/rc.conf</p>
+<pre><code>host_hostname=&quot;testjail&quot;
+ifconfig_ng0_testjail=&quot;inet 192.168.1.30 netmask 255.255.255.0&quot;
+defaultrouter=&quot;192.168.1.1&quot;
+cron_flags=&quot;$cron_flags -J 15&quot;
+sendmail_enable=&quot;NONE&quot;
+sendmail_submit_enable=&quot;NO&quot;
+sendmail_outbound_enable=&quot;NO&quot;
+sendmail_msp_queue_enable=&quot;NO&quot;
+syslogd_flags=&quot;-c -ss&quot;
+ipv6_activate_all_interfaces=&quot;NO&quot;
+sshd_enable=&quot;YES&quot;</code></pre>
+<p>vi /etc/jail.conf</p>
+<pre><code># Configuration par défaut pour toutes les jails
+path = &quot;/jails/$name&quot;;
+host.hostname = &quot;$name.local.lkz&quot;;
+exec.clean;
+exec.start = &quot;/bin/sh /etc/rc&quot;;
+exec.stop = &quot;/bin/sh /etc/rc.shutdown&quot;;
+exec.consolelog = &quot;/var/log/jail_$name.log&quot;;
+mount.devfs;
+allow.raw_sockets;
+allow.nomount;
+
+# Réseau utilisant la même IP que l&#39;hôte
+ip4 = inherit;
+ip6 = disable;
+
+# Réseau avec une IP dédiée
+#interface = &quot;vtnet0&quot;;
+#ip4.addr = 10.0.0.17;
+
+# Réseau avec un bridge
+#vnet; 
+#vnet.interface = &quot;ng0_$name&quot;;
+#exec.prestart += &quot;jng bridge $name vtnet0&quot;;
+#exec.poststop += &quot;jng shutdown $name&quot;;
+
+# Configuration spécifique pour testjail
+testjail {
+  mount.fstab = &quot;&quot;;
+}</code></pre>
+<p>Création de la jail</p>
+<pre class="console"><code>jail -c testjail
+jls
+JID  IP Address      Hostname                      Path
+  1                  testjail.local.lkz            /jails/testjail</code></pre>
+<p>Lancer un shell dans la jail</p>
+<pre class="console"><code>jexec testjail /bin/sh</code></pre>
+<p>Activer le service jail au démarrage</p>
+<pre class="console"><code>sysrc jail_enable=YES
+service jail start</code></pre>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
+<ul>
+<li><a href="https://clinta.github.io/freebsd-jails-the-hard-way">https://clinta.github.io/freebsd-jails-the-hard-way</a></li>
+<li><a href="https://www.cyberciti.biz/faq/how-to-configure-a-freebsd-jail-with-vnet-and-zfs">https://www.cyberciti.biz/faq/how-to-configure-a-freebsd-jail-with-vnet-and-zfs</a></li>
+</ul>
+  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+</body>
+</html>
