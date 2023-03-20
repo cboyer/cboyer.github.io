@@ -5,7 +5,7 @@
   <title>Création de jails FreeBSD - C. Boyer</title>
   <meta name="description" content="Créer une jail sous FreeBSD." />
   <meta name="author" content="C. Boyer" />
-  <meta name="keywords" content="FreeBSD, jails" />
+  <meta name="keywords" content="FreeBSD, jails, bastille, bastillebsd" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
@@ -22,7 +22,14 @@
 </head>
 <body>
   <h1>Création de jails FreeBSD</h1>
-  <em>Publié le 2023-02-01</em>
+  <em>Publié le 2023-02-01, dernière mise à jour: 2023-03-19</em>
+<h2 id="jails-avec-les-outils-de-base-du-système">Jails avec les outils de base du système</h2>
+<p>Mettre à jour FreeBSD</p>
+<pre class="console`"><code>freebsd-update fetch install
+reboot
+freebsd-update install
+freebsd-version
+pkg update</code></pre>
 <p>Avec un dataset ZFS (permet de bénéficier des fonctionnalités comme les snapshots)</p>
 <pre class="console"><code>zfs create -o mountpoint=/jails zroot/jails
 zfs create zroot/jails/testjail</code></pre>
@@ -90,10 +97,110 @@ JID  IP Address      Hostname                      Path
 <p>Activer le service jail au démarrage</p>
 <pre class="console"><code>sysrc jail_enable=YES
 service jail start</code></pre>
+<h2 id="jails-avec-bastille">Jails avec Bastille</h2>
+<p>Installer Bastille</p>
+<pre class="console"><code>pkg install bastille</code></pre>
+<p>Créer le dataset zroot/bastille (utilisé dans la configuration Bastille via <code>bastille_zfs_prefix</code>)</p>
+<pre><code>zfs create -o mountpoint=/usr/local/bastille zroot/bastille</code></pre>
+<p>Pour démarrer automatiquement les Jails Bastille ajouter dans <code>/etc/rc.conf</code></p>
+<pre class="console"><code>sysrc bastille_enable=YES</code></pre>
+<p>Configuration de Bastille</p>
+<pre class="console"><code>mkdir -p /usr/local/etc/bastille/
+vi /usr/local/etc/bastille/bastille.conf</code></pre>
+<pre class="text"><code># Chemin par défaut
+bastille_prefix=/usr/local/bastille
+bastille_backupsdir=${bastille_prefix}/backups
+bastille_cachedir=${bastille_prefix}/cache
+bastille_jailsdir=${bastille_prefix}/jails
+bastille_logsdir=${bastille_prefix}/logs
+bastille_releasesdir=${bastille_prefix}/releases
+bastille_templatesdir=${bastille_prefix}/templates
+
+# bastille scripts directory (assumed by bastille pkg)
+bastille_sharedir=/usr/local/share/bastille
+
+# Archive pour les bootstraps (base, lib32, ports, src, test)
+bastille_bootstrap_archives=&quot;base&quot;
+
+# Fuseau horaire, par défaut &quot;Etc/UTC&quot;
+bastille_tzdata=&quot;America/Montreal&quot;
+
+# default jail resolv.conf
+bastille_resolv_conf=&quot;/etc/resolv.conf&quot;
+
+# bootstrap urls
+bastille_url_freebsd=&quot;http://ftp.freebsd.org/pub/FreeBSD/releases/&quot;
+bastille_url_hardenedbsd=&quot;https://installer.hardenedbsd.org/pub/HardenedBSD/releases/&quot;
+
+# ZFS options
+bastille_zfs_enable=&quot;YES&quot;                                             # default: &quot;&quot;
+bastille_zfs_zpool=&quot;zroot&quot;                                            # default: &quot;&quot;
+bastille_zfs_prefix=&quot;bastille&quot;                                        # default: &quot;${bastille_zfs_zpool}/bastille&quot;
+bastille_zfs_options=&quot;-o compress=lz4 -o atime=off&quot;
+
+# Export/Import options
+bastille_compress_xz_options=&quot;-0 -v&quot;
+bastille_decompress_xz_options=&quot;-c -d -v&quot;
+
+# Networking
+bastille_network_loopback=&quot;bastille0&quot;
+bastille_network_shared=&quot;&quot;
+bastille_network_gateway=&quot;&quot;</code></pre>
+<p>Cloner l'interface lo pour l'utiliser comme interface dédiée (bastille0) à la jail</p>
+<pre class="console"><code>sysrc cloned_interfaces+=lo1
+sysrc ifconfig_lo1_name=&quot;bastille0&quot;
+service netif cloneup</code></pre>
+<p>Configurer le parfeu dans <code>/etc/pf.conf</code> pour autoriser le traffic entrant sur 22/tcp pour bastille0 et bloquer le reste</p>
+<pre class="console"><code>ext_if=&quot;vtnet0&quot;
+
+set block-policy return
+scrub in on $ext_if all fragment reassemble
+set skip on lo
+
+table &lt;jail&gt; persist
+nat on $ext_if from &lt;jail&gt; to any -&gt; ($ext_if:0)
+rdr-anchor &quot;rdr/*&quot;
+
+block in all
+pass out quick keep state
+antispoof for $ext_if inet
+pass in inet proto tcp from any to any port ssh flags S/SA keep state</code></pre>
+<p>Active et démarrer pf</p>
+<pre class="console"><code>sysrc pf_enable=YES
+service pf start</code></pre>
+<p>Récupérer l'image de base FreeBSD et créer la jail <code>bastille_test</code></p>
+<pre class="console"><code>bastille bootstrap 13.1-RELEASE update
+bastille create bastille_test 13.1-RELEASE 192.168.122.55
+
+bastille list
+JID             IP Address      Hostname                      Path
+bastille_test   192.168.122.55  bastille_test                 /usr/local/bastille/jails/bastille_test/root</code></pre>
+<p>Activer SSH</p>
+<pre class="console"><code>bastille sysrc bastille_test sshd_enable=YES
+bastille service bastille_test sshd start</code></pre>
+<p>Rendre SSH accessible depuis le réseau externe sur le port 222 en utilisant l'adresse IP de l'hôte</p>
+<pre class="console"><code>bastille rdr bastille_test tcp 222 22
+bastille rdr bastille_test list
+# Retournera: 
+# rdr pass on vtnet0 inet proto tcp from any to any port = 222 -&gt; 192.168.122.55 port 22</code></pre>
+<p>Rentrer dans la jail</p>
+<pre class="console"><code>bastille console bastille_test</code></pre>
+<p>Créer le template <code>htop</code></p>
+<pre class="console"><code>mkdir -p /usr/local/bastille/templates/cboyer/htop
+vi /usr/local/bastille/templates/cboyer/htop/Bastillefile</code></pre>
+<pre class="text"><code>SYSRC sshd_enable=YES
+SERVICE sshd start
+PKG htop</code></pre>
+<p>Appliquer le template <code>htop</code> à <code>bastille_test</code> (pour appliquer le template à toutes les jails: utiliser <code>ALL</code> au lieu de <code>bastille_test</code>)</p>
+<pre class="console"><code>bastille template bastille_test cboyer/htop</code></pre>
+<p>Exécuter <code>htop</code> depuis l'hôte</p>
+<pre class="console"><code>bastille htop bastille_test</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a href="https://clinta.github.io/freebsd-jails-the-hard-way">https://clinta.github.io/freebsd-jails-the-hard-way</a></li>
 <li><a href="https://www.cyberciti.biz/faq/how-to-configure-a-freebsd-jail-with-vnet-and-zfs">https://www.cyberciti.biz/faq/how-to-configure-a-freebsd-jail-with-vnet-and-zfs</a></li>
+<li><a href="https://bastille.readthedocs.io/en/latest/chapters/usage.html">https://bastille.readthedocs.io/en/latest/chapters/usage.html</a></li>
+<li><a href="https://bastille.readthedocs.io/en/latest/chapters/template.html">https://bastille.readthedocs.io/en/latest/chapters/template.html</a></li>
 </ul>
   <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
