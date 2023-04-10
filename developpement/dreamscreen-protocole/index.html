@@ -18,6 +18,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
+    pre { background-color: whitesmoke; overflow: scroll; }
+    .sourceCode { overflow: scroll !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -90,7 +92,7 @@ code span.wa { color: #bf0303; } /* Warning */</style>
   <h1>Implémentation du protocole Dreamscreen en C</h1>
   <em>Publié le 2018-05-29, dernière mise à jour: 2019-01-10</em>
 <p>Le <a href="https://www.dreamscreentv.com">Dreamscreen</a> est un équipement multimédia du type "ambilight". Cet équipement utilise une application Android/iPhone pour être configuré et contrôlé (par Wifi) mais ne dispose pas de télécommande.</p>
-<p>Un simple programme en C pour Linux (disponible sur <a href="https://github.com/cboyer/dreamscreen-daemon">Github</a>) permet contrôler un dreamscreen depuis un <a href="../../electronique/recepteur-infrarouge-usb-atmega32u4/index.html">système de télécommande</a> maison, utilisable avec Kodi. Ce programme est compatible avec n'importe quel autre périphérique de type clavier. Techniquement il s'agit d'une implémentation en C du protocole dreamscreen qui envoie des messages UDP en fonction d'évènements clavier. Ce programme peut facilement être intégré dans des systèmes comme <a href="https://libreelec.tv">LibreELEC</a> ou encore <a href="https://openelec.tv">OpenELEC</a>.</p>
+<p>Un simple programme en C pour Linux (disponible sur <a href="https://github.com/cboyer/dreamscreen-tools">Github</a>) permet contrôler un dreamscreen depuis un <a href="../../electronique/recepteur-infrarouge-usb-atmega32u4/index.html">système de télécommande</a> maison, utilisable avec Kodi. Ce programme est compatible avec n'importe quel autre périphérique de type clavier. Techniquement il s'agit d'une implémentation en C du protocole dreamscreen qui envoie des messages UDP en fonction d'évènements clavier. Ce programme peut facilement être intégré dans des systèmes comme <a href="https://libreelec.tv">LibreELEC</a> ou encore <a href="https://openelec.tv">OpenELEC</a>.</p>
 <h2 id="structure-du-message">Structure du message</h2>
 <p>Dreamscreen utilise le port 8888 en UDP sur son interface WiFi pour envoyer et recevoir des messages binaires.</p>
 <p>Structure du message:</p>
@@ -172,6 +174,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <li><a href="https://planet.neeo.com/media/80x1kj/download/dreamscreen-v2-wifi-udp-protocol.pdf">Documentation du protocole dreamscreen</a></li>
 <li><a href="https://github.com/cboyer/dreamscreen-daemon">https://github.com/cboyer/dreamscreen-daemon</a></li>
 </ul>
-  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  <br />
+  <hr />
+  <em>©2015-2023 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>

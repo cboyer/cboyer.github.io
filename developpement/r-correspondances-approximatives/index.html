@@ -18,6 +18,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
+    pre { background-color: whitesmoke; overflow: scroll; }
+    .sourceCode { overflow: scroll !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -156,6 +158,8 @@ V  [4,]    5    6    3</code></pre>
 2   11 arbre    2 arbuste        3
 4   13 baton    3  bateau        3</code></pre>
 <p>On utilise ici les colonnes de <code>coord_correspondances</code> pour récupérer des lignes respectivement depuis <code>x</code> et <code>y</code>. La colonne <code>distance</code> (distance de Levenshtein) indique également l'exactitude de la correspondance: plus elle est petite plus la correspondance est certaine (0 indiquant une égalité stricte). Notons que R signale la duplication d'une ligne (3 et 3.1) car il y a plusieurs correspondances pour l'id 12 avec la même distance.</p>
-  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  <br />
+  <hr />
+  <em>©2015-2023 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>

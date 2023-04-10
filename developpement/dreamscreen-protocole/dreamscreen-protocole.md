@@ -12,7 +12,7 @@ abstract: "Implémentation en C du protocole utilisé pour commander un équipem
 
 Le [Dreamscreen](https://www.dreamscreentv.com) est un équipement multimédia du type "ambilight". Cet équipement utilise une application Android/iPhone pour être configuré et contrôlé (par Wifi) mais ne dispose pas de télécommande.
 
-Un simple programme en C pour Linux (disponible sur [Github](https://github.com/cboyer/dreamscreen-daemon)) permet contrôler un dreamscreen depuis un [système de télécommande](../../electronique/recepteur-infrarouge-usb-atmega32u4/index.html) maison, utilisable avec Kodi. Ce programme est compatible avec n'importe quel autre périphérique de type clavier.
+Un simple programme en C pour Linux (disponible sur [Github](https://github.com/cboyer/dreamscreen-tools)) permet contrôler un dreamscreen depuis un [système de télécommande](../../electronique/recepteur-infrarouge-usb-atmega32u4/index.html) maison, utilisable avec Kodi. Ce programme est compatible avec n'importe quel autre périphérique de type clavier.
 Techniquement il s'agit d'une implémentation en C du protocole dreamscreen qui envoie des messages UDP en fonction d'évènements clavier.
 Ce programme peut facilement être intégré dans des systèmes comme [LibreELEC](https://libreelec.tv) ou encore [OpenELEC](https://openelec.tv).
 

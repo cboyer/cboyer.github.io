@@ -18,6 +18,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
+    pre { background-color: whitesmoke; overflow: scroll; }
+    .sourceCode { overflow: scroll !important; }
   </style>
 </head>
 <body>
@@ -169,6 +171,8 @@ find /var/www/drupal/ -type f -print0 | xargs -0 egrep -i &quot;*meta*&quot;</co
 <pre class="console"><code>read -s pass; echo $pass | md5sum | base64 | cut -c -16</code></pre>
 <p>Limite l'utilisation du CPU pour un processus</p>
 <pre class="console"><code>cpulimit -p pid -l 50</code></pre>
-  <em>©2015-2022 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  <br />
+  <hr />
+  <em>©2015-2023 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>
