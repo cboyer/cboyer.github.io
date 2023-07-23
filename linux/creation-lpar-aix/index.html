@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Création manuelle d'un LPAR AIX - C. Boyer</title>
-  <meta name="description" content="Monter manuellement un LPAR AIX 7.1 depuis le VIOS." />
+  <meta name="description" content="Monter manuellement un LPAR AIX 7.1
+depuis le VIOS." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="IBM, AIX, LPAR, HMC, VIOS, création, manuelle" />
   <meta name="robots" content="index,follow">
@@ -18,14 +19,15 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
 </head>
 <body>
   <h1>Création manuelle d'un LPAR AIX</h1>
   <em>Publié le 2015-07-09, dernière mise à jour: 2018-11-17</em>
-<p>Quelques notes pour le montage d'un LPAR AIX 7.1 depuis le VIOS sans utiliser d'HMC.</p>
+<p>Quelques notes pour le montage d'un LPAR AIX 7.1 depuis le VIOS sans
+utiliser d'HMC.</p>
 <p>Accepter la license du VIOS:</p>
 <pre class="console"><code>license -accept</code></pre>
 <p>Passer en root:</p>
@@ -90,7 +92,8 @@ lspv hdisk1</code></pre>
 <pre class="console"><code>lsmap -all -net</code></pre>
 <p>Trouver le port_vlan_id pour le slot de l'interface réseau:</p>
 <pre class="console"><code>lshwres --level lpar -r virtualio --rsubtype eth</code></pre>
-<p>Créer le LPAR (<code>virtual_eth_adapters</code> = <em>slot_num/ieee_virtual_eth/port_vlan_id/addl_vlan_ids/is_trunk/trunk_priority</em>):</p>
+<p>Créer le LPAR (<code>virtual_eth_adapters</code> =
+<em>slot_num/ieee_virtual_eth/port_vlan_id/addl_vlan_ids/is_trunk/trunk_priority</em>):</p>
 <pre class="console"><code>mksyscfg -r lpar -i &#39;name=aixlab02,profile_name=aixlab02,lpar_env=aixlinux,min_mem=8192,desired_mem=16384,
 max_mem=32768,proc_mode=shared,min_procs=1,desired_procs=2,max_procs=4,min_proc_units=1,desired_proc_units=2,
 max_proc_units=4,sharing_mode=uncap,uncap_weight=128,boot_mode=norm,auto_start=1,
@@ -105,7 +108,8 @@ max_proc_units=4,sharing_mode=uncap,uncap_weight=128,boot_mode=norm,auto_start=1
 <pre class="console"><code>chsyscfg -r prof -i &quot;name=Profile_Name,lpar_name=LPAR_Name,min_proc_units=0.2,desired_proc_units=0.5,max_proc_units=2.0&quot;</code></pre>
 <p>Changer le min/desired/maximum virtual processor:</p>
 <pre class="console"><code>chsyscfg -r prof -i &quot;name=Profile_Name,lpar_name=LPAR_Name,min_procs=1,desired_procs=2,max_procs=6&quot;</code></pre>
-<p>Changer le capped/uncapped (sharing_mode=cap|uncap;uncap_weight=[0;128]):</p>
+<p>Changer le capped/uncapped
+(sharing_mode=cap|uncap;uncap_weight=[0;128]):</p>
 <pre class="console"><code>chsyscfg -r prof -i &quot;name=Profile_Name,lpar_name=LPAR_Name,sharing_mode=uncap,uncap_weight=128&quot;</code></pre>
 <p>Lister les LPAR:</p>
 <pre class="console"><code>lssyscfg -r lpar</code></pre>

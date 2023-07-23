@@ -163,3 +163,4 @@ unbound-control stats_noreset
  - [https://wiki.archlinux.org/index.php/unbound](https://wiki.archlinux.org/index.php/unbound)
  - [https://www.unbound.net/documentation/unbound-control.html](https://www.unbound.net/documentation/unbound-control.html)
  - [https://github.com/StevenBlasck/hosts](https://github.com/StevenBlasck/hosts)
+ - [Pi-hole blocking lists](https://gist.github.com/VirtuBox/869af93f506f6c9c392afa074f7ee9d4)

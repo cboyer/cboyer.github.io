@@ -2,8 +2,10 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>FPGA et afficheur 7 segments: compteur à afficheur unique - C. Boyer</title>
-  <meta name="description" content="Implémentation en Verilog d'un compteur sur un afficheur 7 segments." />
+  <title>FPGA et afficheur 7 segments: compteur à afficheur unique - C.
+Boyer</title>
+  <meta name="description" content="Implémentation en Verilog d'un
+compteur sur un afficheur 7 segments." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="fpga, afficheur, led, verilog" />
   <meta name="robots" content="index,follow">
@@ -18,8 +20,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,18 +93,31 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>FPGA et afficheur 7 segments: compteur à afficheur unique</h1>
   <em>Publié le 2018-04-25, dernière mise à jour: 2018-11-01</em>
-<p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>, partie 2, <a href="../fpga-afficheur-7-segments-compteurs-multiples/">partie 3</a></p>
-<p>Nous avons vu dans <a href="../fpga-afficheur-7-segments-introduction/">la partie 1</a> comment afficher un chiffre sur l'afficheur le plus à droite. L'objectif de cette seconde partie est d'implémenter un compteur pour afficher les chiffres de 0 à 9. Avant de continuer, rappelons quelques éléments importants de la partie précédente:</p>
+<p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>,
+partie 2, <a
+href="../fpga-afficheur-7-segments-compteurs-multiples/">partie
+3</a></p>
+<p>Nous avons vu dans <a
+href="../fpga-afficheur-7-segments-introduction/">la partie 1</a>
+comment afficher un chiffre sur l'afficheur le plus à droite. L'objectif
+de cette seconde partie est d'implémenter un compteur pour afficher les
+chiffres de 0 à 9. Avant de continuer, rappelons quelques éléments
+importants de la partie précédente:</p>
 <p>La nomenclature des segments:</p>
 <ul>
 <li>le premier caractère représente l'anode (pôle positif)</li>
 <li>le deuxième caractère représente la cathode (pôle négatif)</li>
 </ul>
 <figure>
-<img src="../fpga-afficheur-7-segments-introduction/7segments_schema_labels.png" alt="Schéma annoté" /><figcaption aria-hidden="true">Schéma annoté</figcaption>
+<img
+src="../fpga-afficheur-7-segments-introduction/7segments_schema_labels.png"
+alt="Schéma annoté" />
+<figcaption aria-hidden="true">Schéma annoté</figcaption>
 </figure>
-<p>Les correspondances sorties-registres-segments (forme explicite de la ligne <code>assign DISPLAY_1 = display_1_leds</code>):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> DISPLAY_1<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> display_1_leds<span class="op">[</span><span class="dv">0</span><span class="op">];</span> <span class="co">//E (anode commune)</span></span>
+<p>Les correspondances sorties-registres-segments (forme explicite de la
+ligne <code>assign DISPLAY_1 = display_1_leds</code>):</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> DISPLAY_1<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> display_1_leds<span class="op">[</span><span class="dv">0</span><span class="op">];</span> <span class="co">//E (anode commune)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> DISPLAY_1<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> display_1_leds<span class="op">[</span><span class="dv">1</span><span class="op">];</span> <span class="co">//1</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> DISPLAY_1<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> display_1_leds<span class="op">[</span><span class="dv">2</span><span class="op">];</span> <span class="co">//C</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> DISPLAY_1<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> display_1_leds<span class="op">[</span><span class="dv">3</span><span class="op">];</span> <span class="co">//3</span></span>
@@ -111,10 +126,28 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> DISPLAY_1<span class="op">[</span><span class="dv">6</span><span class="op">]</span> <span class="op">=</span> display_1_leds<span class="op">[</span><span class="dv">6</span><span class="op">];</span> <span class="co">//6</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> DISPLAY_1<span class="op">[</span><span class="dv">7</span><span class="op">]</span> <span class="op">=</span> display_1_leds<span class="op">[</span><span class="dv">7</span><span class="op">];</span> <span class="co">//7</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> DISPLAY_1<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> display_1_leds<span class="op">[</span><span class="dv">8</span><span class="op">];</span> <span class="co">//D</span></span></code></pre></div>
-<p>Attardons nous sur le signal issu de l’horloge. L’ensemble d’un circuit logique implémenté sur un FPGA peut être "asservi" par un signal de référence: l’horloge. Techniquement il s’agit d’un signal carré (le plus souvent de 50 MHz) qui va entrainer l'exécution des instruction dans le bloc <code>always</code> dépendamment de son état (posedge dans notre cas).</p>
-<p>Dans notre circuit, c’est ce signal qui permet d’allumer les segments. En réalité, chaque segment s’allume et s’éteint à raison de 50 MHz ce qui est bien trop rapide pour l’œil humain qui voit les segment allumé en permanence (phénomène de persistance rétinienne).</p>
-<p>Utilisons ce signal afin de compter des intervalles de temps suffisamment conséquents pour en afficher la valeur à une fréquence perceptible par l’œil. Pour cela, nous allons utiliser un registre <code>counter</code> de 26 bits pour incrémenter un second registre <code>display_1_value</code> de 4 bits qui contiendra une valeur comprise entre 0 et 9. Le FPGA va incrémenter ce registre à raison de 50 millions de fois par seconde (50 MHz), nous prendrons donc une valeur suffisamment grande (les 25 premiers bits à 1 par exemple) pour que le FPGA ne soit pas trop rapide pour incrémenter notre compteur dont la valeur sera affichée.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* module */</span></span>
+<p>Attardons nous sur le signal issu de l’horloge. L’ensemble d’un
+circuit logique implémenté sur un FPGA peut être "asservi" par un signal
+de référence: l’horloge. Techniquement il s’agit d’un signal carré (le
+plus souvent de 50 MHz) qui va entrainer l'exécution des instruction
+dans le bloc <code>always</code> dépendamment de son état (posedge dans
+notre cas).</p>
+<p>Dans notre circuit, c’est ce signal qui permet d’allumer les
+segments. En réalité, chaque segment s’allume et s’éteint à raison de 50
+MHz ce qui est bien trop rapide pour l’œil humain qui voit les segment
+allumé en permanence (phénomène de persistance rétinienne).</p>
+<p>Utilisons ce signal afin de compter des intervalles de temps
+suffisamment conséquents pour en afficher la valeur à une fréquence
+perceptible par l’œil. Pour cela, nous allons utiliser un registre
+<code>counter</code> de 26 bits pour incrémenter un second registre
+<code>display_1_value</code> de 4 bits qui contiendra une valeur
+comprise entre 0 et 9. Le FPGA va incrémenter ce registre à raison de 50
+millions de fois par seconde (50 MHz), nous prendrons donc une valeur
+suffisamment grande (les 25 premiers bits à 1 par exemple) pour que le
+FPGA ne soit pas trop rapide pour incrémenter notre compteur dont la
+valeur sera affichée.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* module */</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> SevenSegment <span class="op">(</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> CLOCK_50<span class="op">,</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> <span class="op">[</span><span class="dv">8</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> DISPLAY_1</span>
@@ -162,16 +195,38 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
 <span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div>
-<p>Pour ne rien afficher, il suffit que <code>display_1_leds[0]</code> qui est l'anode commune (broche E sur le schéma) soit à 0. <code>display_1_leds[5]</code> est toujours à 0 car il s'agit de la cathode du point (segment E5) qui n'est pas utilisé.</p>
-<p>Pour diminuer la fréquence d'incrémentation, il suffit de passer d'une comparaison des 25 premiers bits de <code>counter</code> à l'ensemble des 26 bits. Le FPGA mettra plus de temps à arriver à 26 bits à 1 que 25. Pour cela, il est nécessaire de changer la ligne:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span><span class="op">(</span>counter<span class="op">[</span><span class="dv">24</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">==</span> <span class="bn">25&#39;b1</span><span class="op">)</span> <span class="kw">begin</span></span></code></pre></div>
+<p>Pour ne rien afficher, il suffit que <code>display_1_leds[0]</code>
+qui est l'anode commune (broche E sur le schéma) soit à 0.
+<code>display_1_leds[5]</code> est toujours à 0 car il s'agit de la
+cathode du point (segment E5) qui n'est pas utilisé.</p>
+<p>Pour diminuer la fréquence d'incrémentation, il suffit de passer
+d'une comparaison des 25 premiers bits de <code>counter</code> à
+l'ensemble des 26 bits. Le FPGA mettra plus de temps à arriver à 26 bits
+à 1 que 25. Pour cela, il est nécessaire de changer la ligne:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span><span class="op">(</span>counter<span class="op">[</span><span class="dv">24</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">==</span> <span class="bn">25&#39;b1</span><span class="op">)</span> <span class="kw">begin</span></span></code></pre></div>
 <p>Pour:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span><span class="op">(</span>counter<span class="op">[</span><span class="dv">25</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">==</span> <span class="bn">26&#39;b1</span><span class="op">)</span> <span class="kw">begin</span></span></code></pre></div>
-<p>Et pour l'augmenter, nous pouvons réduire la comparaison à 24 bits ou moins:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span><span class="op">(</span>counter<span class="op">[</span><span class="dv">23</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">==</span> <span class="bn">24&#39;b1</span><span class="op">)</span> <span class="kw">begin</span></span></code></pre></div>
-<p>Il est très important de prendre un intervalle de 0 à N bits et non un seul bit en particulier (à l'exception du bit de poids faible) car la condition s'avèrera vraie aussi longtemps qu'incrémenter les bits précédents ne change pas le bit comparé. Ceci aura pour effet d'incrémenter <code>display_1_value</code> à 50 MHz et d'afficher le chiffre correspondant beaucoup trop rapidement (notre oeil percevra le chiffre 8 à cause de la persistance rétinienne).</p>
-<p>Dans <a href="../fpga-afficheur-7-segments-compteurs-multiples/">la partie 3</a>, nous verrons comment utiliser un afficheur supplémentaire afin d’introduire les dizaines dans notre compteur et d’afficher des valeurs de 0 à 99.</p>
-<p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>, partie 2, <a href="../fpga-afficheur-7-segments-compteurs-multiples/">partie 3</a></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span><span class="op">(</span>counter<span class="op">[</span><span class="dv">25</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">==</span> <span class="bn">26&#39;b1</span><span class="op">)</span> <span class="kw">begin</span></span></code></pre></div>
+<p>Et pour l'augmenter, nous pouvons réduire la comparaison à 24 bits ou
+moins:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span><span class="op">(</span>counter<span class="op">[</span><span class="dv">23</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">==</span> <span class="bn">24&#39;b1</span><span class="op">)</span> <span class="kw">begin</span></span></code></pre></div>
+<p>Il est très important de prendre un intervalle de 0 à N bits et non
+un seul bit en particulier (à l'exception du bit de poids faible) car la
+condition s'avèrera vraie aussi longtemps qu'incrémenter les bits
+précédents ne change pas le bit comparé. Ceci aura pour effet
+d'incrémenter <code>display_1_value</code> à 50 MHz et d'afficher le
+chiffre correspondant beaucoup trop rapidement (notre oeil percevra le
+chiffre 8 à cause de la persistance rétinienne).</p>
+<p>Dans <a href="../fpga-afficheur-7-segments-compteurs-multiples/">la
+partie 3</a>, nous verrons comment utiliser un afficheur supplémentaire
+afin d’introduire les dizaines dans notre compteur et d’afficher des
+valeurs de 0 à 99.</p>
+<p><a href="../fpga-afficheur-7-segments-introduction/">Partie 1</a>,
+partie 2, <a
+href="../fpga-afficheur-7-segments-compteurs-multiples/">partie
+3</a></p>
   <br />
   <hr />
   <em>©2015-2023 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>

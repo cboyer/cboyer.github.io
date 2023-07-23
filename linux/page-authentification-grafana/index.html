@@ -2,8 +2,10 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>Page d'authentification personnalisée pour Grafana avec NGINX - C. Boyer</title>
-  <meta name="description" content="Utilisation de NGINX en reverse proxy pour rediriger vers une page d'authentification personnalisée." />
+  <title>Page d'authentification personnalisée pour Grafana avec NGINX - C.
+Boyer</title>
+  <meta name="description" content="Utilisation de NGINX en reverse
+proxy pour rediriger vers une page d'authentification personnalisée." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="authentification, grafana, nginx, linux" />
   <meta name="robots" content="index,follow">
@@ -18,8 +20,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,12 +93,26 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Page d'authentification personnalisée pour Grafana avec NGINX</h1>
   <em>Publié le 2018-05-06, dernière mise à jour: 2018-11-01</em>
-<p>Voici un moyen relativement simple d'avoir une page d'authentification personnalisée pour Grafana sans altérer l'application ce qui va nous permettre de pouvoir la mettre à jour sans problème. L'idée est d'utiliser NGINX comme reverse proxy pour intercepter les requêtes en direction de la page d'authentification de Grafana. NGINX renverra alors une page d'authentification HTML écrite par nos soins. Cette page contiendra un formulaire login/mot de passe dont l'envoie cible la page légitime de Grafana. Ainsi c'est le mécanisme d'authentification de Grafana qui est utilisé (LDAP ou interne). Selon le retours de la page légitime, notre page personnalisée redirigera ou non vers Grafana. En résumé nous utilisons le concept de "man in the middle".</p>
-<p>Commençons par installer NGINX avec le gestionnaire adapté à la distribution en question (apt, yum, dnf).</p>
+<p>Voici un moyen relativement simple d'avoir une page
+d'authentification personnalisée pour Grafana sans altérer l'application
+ce qui va nous permettre de pouvoir la mettre à jour sans problème.
+L'idée est d'utiliser NGINX comme reverse proxy pour intercepter les
+requêtes en direction de la page d'authentification de Grafana. NGINX
+renverra alors une page d'authentification HTML écrite par nos soins.
+Cette page contiendra un formulaire login/mot de passe dont l'envoie
+cible la page légitime de Grafana. Ainsi c'est le mécanisme
+d'authentification de Grafana qui est utilisé (LDAP ou interne). Selon
+le retours de la page légitime, notre page personnalisée redirigera ou
+non vers Grafana. En résumé nous utilisons le concept de "man in the
+middle".</p>
+<p>Commençons par installer NGINX avec le gestionnaire adapté à la
+distribution en question (apt, yum, dnf).</p>
 <pre class="console"><code>apt-get install nginx
 yum install nginx
 dnf install nginx</code></pre>
-<p>Passons à la partie configuration <code>/etc/nginx/nginx.conf</code>. Nous utiliserons uniquement HTTPS ici (la procédure pour générer le certificat ne sera pas abordée).</p>
+<p>Passons à la partie configuration <code>/etc/nginx/nginx.conf</code>.
+Nous utiliserons uniquement HTTPS ici (la procédure pour générer le
+certificat ne sera pas abordée).</p>
 <pre class="console"><code>
 # For more information on configuration, see:
 #   * Official English Documentation: http://nginx.org/en/docs/
@@ -162,8 +178,14 @@ http {
 
 }
 </code></pre>
-<p>Jusque là, rien de particulier. Pour la suite nous considérerons Grafana installé sur la même machine et écoutant sur 127.0.0.1:3000 pour que seul NGINX puisse y avoir accès. Également Grafana doit être configuré avec la directive <code>root_url=/grafana</code> dans <code>/etc/grafana/grafana.ini</code> car nous hébergerons la page d'authentification à la racine dans NGINX.</p>
-<p>Ajoutons un fichier de configuration pour Grafana dans <code>/etc/nginx/default.d/grafana.conf</code> :</p>
+<p>Jusque là, rien de particulier. Pour la suite nous considérerons
+Grafana installé sur la même machine et écoutant sur 127.0.0.1:3000 pour
+que seul NGINX puisse y avoir accès. Également Grafana doit être
+configuré avec la directive <code>root_url=/grafana</code> dans
+<code>/etc/grafana/grafana.ini</code> car nous hébergerons la page
+d'authentification à la racine dans NGINX.</p>
+<p>Ajoutons un fichier de configuration pour Grafana dans
+<code>/etc/nginx/default.d/grafana.conf</code> :</p>
 <pre class="console"><code>location /grafana/ {
         proxy_pass http://127.0.0.1:3000/;
 }
@@ -187,8 +209,11 @@ location /status/public/img/grafana_icon.svg {
 location /status/public/img/fav32.png {
         proxy_pass https://127.0.0.1/favicon.ico;
 }</code></pre>
-<p>Maintenant ajoutons la page d'authentification personnalisée <code>login.html</code> dans <code>/usr/share/nginx/html/</code>. Voici une version minimaliste à étoffer selon vos besoins :</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
+<p>Maintenant ajoutons la page d'authentification personnalisée
+<code>login.html</code> dans <code>/usr/share/nginx/html/</code>. Voici
+une version minimaliste à étoffer selon vos besoins :</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;head&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;title&gt;</span>Grafana Authentification<span class="kw">&lt;/title&gt;</span></span>
@@ -233,17 +258,29 @@ location /status/public/img/fav32.png {
 <span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/script&gt;</span></span>
 <span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
-<p>Si vous souhaitez personnaliser cette page en ajoutant des images, feuillet de style CSS ou autre, il faut placer les fichiers dans <code>/usr/share/nginx/html/</code> et utiliser des URL dans le code.</p>
+<p>Si vous souhaitez personnaliser cette page en ajoutant des images,
+feuillet de style CSS ou autre, il faut placer les fichiers dans
+<code>/usr/share/nginx/html/</code> et utiliser des URL dans le
+code.</p>
 <p>Redémarrons NGINX:</p>
 <pre class="console"><code>systemctl restart nginx</code></pre>
-<p>Ouvrez votre navigateur et accédez au serveur en HTTPS pour tester: https://monserveur.local/grafana</p>
+<p>Ouvrez votre navigateur et accédez au serveur en HTTPS pour tester:
+https://monserveur.local/grafana</p>
 <h2 id="limites-de-la-solution">Limites de la solution</h2>
-<p>NGINX se fie à l'URI pour fournir les pages demandée: la chaîne de caractères du bloc location. Si cette même chaîne de caractère est utilisée dans un lien par l'application nous aurons une erreur 404 en provenance de Grafana.</p>
-<p>J'ai également pu observer l'affichage d'une erreur 404 de Grafana pendant une fraction de seconde après l'authentification sans en trouver l'origine.</p>
+<p>NGINX se fie à l'URI pour fournir les pages demandée: la chaîne de
+caractères du bloc location. Si cette même chaîne de caractère est
+utilisée dans un lien par l'application nous aurons une erreur 404 en
+provenance de Grafana.</p>
+<p>J'ai également pu observer l'affichage d'une erreur 404 de Grafana
+pendant une fraction de seconde après l'authentification sans en trouver
+l'origine.</p>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="http://docs.grafana.org/installation/behind_proxy">Grafana derrière un proxy</a></li>
-<li><a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location">NGINX en reverse proxy</a></li>
+<li><a href="http://docs.grafana.org/installation/behind_proxy">Grafana
+derrière un proxy</a></li>
+<li><a
+href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location">NGINX
+en reverse proxy</a></li>
 </ul>
   <br />
   <hr />

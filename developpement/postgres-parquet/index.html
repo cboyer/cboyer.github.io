@@ -2,8 +2,10 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>Chargement de fichiers Parquet vers PostgreSQL avec Python - C. Boyer</title>
-  <meta name="description" content="Chargement de fichiers Parquet vers PostgreSQL avec Python." />
+  <title>Chargement de fichiers Parquet vers PostgreSQL avec Python - C.
+Boyer</title>
+  <meta name="description" content="Chargement de fichiers Parquet vers
+PostgreSQL avec Python." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="PostgreSQL, Parquet, Python, Postgres, Psycopg, SQLAlchemy, copy" />
   <meta name="robots" content="index,follow">
@@ -18,8 +20,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,11 +93,23 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Chargement de fichiers Parquet vers PostgreSQL avec Python</h1>
   <em>Publié le 2022-07-11</em>
-<p>Le format libre Parquet présente certaines caractéristiques intéressantes pour le stockage de données optimisé (notamment avec la compression ZSTD et le chiffrement). Beaucoup de langages et de solutions comme Spark prennent en charge ces fichiers mais pas toutes. Pour rendre les données qu'ils contiennent disponibles à d'autres plateforme, il peut être necéssaire de charger ces données dans un SGBD standard qui sera intérrogé via SQL.</p>
-<p>Nous utiliserons ici Python et PostgreSQL avec les librairies Psycopg (Psycopg2 via SQLAlchemy) et pyArrow. La technique consiste à utiliser le fonction <code>COPY</code> de PostgreSQL qui utilise le format CSV.</p>
+<p>Le format libre Parquet présente certaines caractéristiques
+intéressantes pour le stockage de données optimisé (notamment avec la
+compression ZSTD et le chiffrement). Beaucoup de langages et de
+solutions comme Spark prennent en charge ces fichiers mais pas toutes.
+Pour rendre les données qu'ils contiennent disponibles à d'autres
+plateforme, il peut être necéssaire de charger ces données dans un SGBD
+standard qui sera intérrogé via SQL.</p>
+<p>Nous utiliserons ici Python et PostgreSQL avec les librairies Psycopg
+(Psycopg2 via SQLAlchemy) et pyArrow. La technique consiste à utiliser
+le fonction <code>COPY</code> de PostgreSQL qui utilise le format
+CSV.</p>
 <h2 id="avec-psycopg2-via-sqlalchemy">Avec Psycopg2 via SQLAlchemy</h2>
-<p>SQLAlchemy ne support que Psycopg dans sa version 2 pour le moment. La table de destination "importparquet" doit être créée au préalable avec les mêmes colonnes que le fichier Parquet.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlalchemy, pyarrow.parquet, pyarrow.csv, io</span>
+<p>SQLAlchemy ne support que Psycopg dans sa version 2 pour le moment.
+La table de destination "importparquet" doit être créée au préalable
+avec les mêmes colonnes que le fichier Parquet.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlalchemy, pyarrow.parquet, pyarrow.csv, io</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Connection à PostgreSQL</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> sqlalchemy.create_engine(<span class="st">&quot;postgresql://login:mot2passe@serveur:5432/Base&quot;</span>)</span>
@@ -118,7 +132,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>connection.close()</span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>engine.dispose()</span></code></pre></div>
 <h2 id="avec-psycopg3">Avec Psycopg3</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> psycopg, pyarrow.parquet, pyarrow.csv, io</span>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> psycopg, pyarrow.parquet, pyarrow.csv, io</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>connection <span class="op">=</span> psycopg.<span class="ex">connect</span>(host<span class="op">=</span><span class="st">&#39;serveur&#39;</span>, port<span class="op">=</span><span class="st">&#39;5432&#39;</span>, dbname<span class="op">=</span><span class="st">&#39;base&#39;</span>, user<span class="op">=</span><span class="st">&#39;postgres&#39;</span>, password<span class="op">=</span><span class="st">&#39;postgres&#39;</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -133,14 +148,22 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>connection.commit()</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>connection.close()</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>buf.close()</span></code></pre></div>
-<h2 id="modifier-les-données-depuis-le-tampon">Modifier les données depuis le tampon</h2>
-<p>Le caractère nul <code>\0</code> qui peut être stocké dans un fichier Parquet ne peut l'être dans PostgreSQL. Une ligne vide contenant uniquement le caractère <code>\n</code> provoquera une erreur lors de la copie. Pour filtrer ces caractères, il suffit de copier le contenu de <code>buf</code> vers un nouveau tampon <code>buf_clean</code> qui sera utilisé avec <code>COPY</code>. Cette technique n'est pas nécessairement optimale car elle duplique les données en mémoire.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>buf_clean <span class="op">=</span> io.BytesIO()</span>
+<h2 id="modifier-les-données-depuis-le-tampon">Modifier les données
+depuis le tampon</h2>
+<p>Le caractère nul <code>\0</code> qui peut être stocké dans un fichier
+Parquet ne peut l'être dans PostgreSQL. Une ligne vide contenant
+uniquement le caractère <code>\n</code> provoquera une erreur lors de la
+copie. Pour filtrer ces caractères, il suffit de copier le contenu de
+<code>buf</code> vers un nouveau tampon <code>buf_clean</code> qui sera
+utilisé avec <code>COPY</code>. Cette technique n'est pas nécessairement
+optimale car elle duplique les données en mémoire.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>buf_clean <span class="op">=</span> io.BytesIO()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>buf_clean.seek(<span class="dv">0</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> buf:</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> b<span class="st">&#39;</span><span class="ch">\0</span><span class="st">&#39;</span> <span class="kw">in</span> line:</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        buf_clean.write(line.replace(b<span class="st">&#39;</span><span class="ch">\0</span><span class="st">&#39;</span>, b<span class="st">&#39;&#39;</span>))</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> line <span class="op">!=</span> b<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>:</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">b&#39;</span><span class="ch">\0</span><span class="st">&#39;</span> <span class="kw">in</span> line:</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        buf_clean.write(line.replace(<span class="st">b&#39;</span><span class="ch">\0</span><span class="st">&#39;</span>, <span class="st">b&#39;&#39;</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> line <span class="op">!=</span> <span class="st">b&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>:</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        buf_clean.write(line)</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>buf.close()</span>

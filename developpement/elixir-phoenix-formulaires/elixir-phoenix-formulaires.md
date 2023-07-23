@@ -524,3 +524,4 @@ query = from u in User,
 - [https://www.alanvardy.com/post/associations-phoenix](https://www.alanvardy.com/post/associations-phoenix)
 - [https://www.sitepoint.com/understanding-elixirs-ecto-querying-dsl-the-basics/](https://www.sitepoint.com/understanding-elixirs-ecto-querying-dsl-the-basics/)
 - [https://blog.appsignal.com/2020/11/10/understanding-associations-in-elixir-ecto.html](https://blog.appsignal.com/2020/11/10/understanding-associations-in-elixir-ecto.html)
+- [https://dev.to/arrowsmith/activerecord-vs-ecto-querying-the-database-4o9g](https://dev.to/arrowsmith/activerecord-vs-ecto-querying-the-database-4o9g)

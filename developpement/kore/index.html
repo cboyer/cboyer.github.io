@@ -18,8 +18,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,12 +91,18 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Serveur web embarqué avec Kore</h1>
   <em>Publié le 2022-07-02</em>
-<p>Kore est un framework web en C intègrant son propre serveur web. Selon la configuration, il est même possible d'obtenir un seul binaire.</p>
+<p>Kore est un framework web en C intègrant son propre serveur web.
+Selon la configuration, il est même possible d'obtenir un seul
+binaire.</p>
 <h2 id="installation-dopenssl-1.1.1">Installation d'OpenSSL 1.1.1</h2>
-<p>Comme indiqué dans la documentation Kore n'est pas encore compatible avec OpenSSL version 3. Pour vérifier la version installé sur le système:</p>
+<p>Comme indiqué dans la documentation Kore n'est pas encore compatible
+avec OpenSSL version 3. Pour vérifier la version installé sur le
+système:</p>
 <pre><code>openssl version
 OpenSSL 3.0.3 3 May 2022 (Library: OpenSSL 3.0.3 3 May 2022)</code></pre>
-<p>Compiler OpenSSL en version 1 et l'installer en marge de la version 3 dans <code>/tmp/openssl</code> (avec la variable <code>prefix</code>)</p>
+<p>Compiler OpenSSL en version 1 et l'installer en marge de la version 3
+dans <code>/tmp/openssl</code> (avec la variable
+<code>prefix</code>)</p>
 <pre><code>wget https://ftp.openssl.org/source/openssl-1.1.1p.tar.gz
 tar zxvf openssl-1.1.1p.tar.gz
 cd openssl-1.1.1p
@@ -111,20 +117,28 @@ OpenSSL 1.1.1p  21 Jun 2022 (Library: OpenSSL 1.1.1o  FIPS 3 May 2022)</code></p
 <pre><code>wget https://kore.io/releases/kore-4.2.2.tar.gz
 tar zxvf kore-4.2.2.tar.gz
 cd kore-4.2.2</code></pre>
-<p>La compilation du binaire <code>kodev</code> ne tient pas compte de la variable <code>OPENSSL_PATH</code> contrairement au Makefile principal. Ceci aura pour effet d'utiliser le chemin par défaut et utiliser OpenSSL en version 3. Pour corriger le problème il suffit d'ajouter le bloc suivant dans <code>kodev/Makefile</code>:</p>
+<p>La compilation du binaire <code>kodev</code> ne tient pas compte de
+la variable <code>OPENSSL_PATH</code> contrairement au Makefile
+principal. Ceci aura pour effet d'utiliser le chemin par défaut et
+utiliser OpenSSL en version 3. Pour corriger le problème il suffit
+d'ajouter le bloc suivant dans <code>kodev/Makefile</code>:</p>
 <pre><code>ifneq (&quot;$(OPENSSL_PATH)&quot;, &quot;&quot;)
     CFLAGS+=-I$(OPENSSL_PATH)/include
     LDFLAGS+=-L$(OPENSSL_PATH)/lib -lssl
 endif</code></pre>
-<p>Compiler et installer Kore dans <code>/tmp/kore</code> avec la variable <code>prefix</code>:</p>
+<p>Compiler et installer Kore dans <code>/tmp/kore</code> avec la
+variable <code>prefix</code>:</p>
 <pre><code>OPENSSL_PATH=&quot;/tmp/openssl&quot; PREFIX=&quot;/tmp/kore&quot; make
 PREFIX=&quot;/tmp/kore&quot; make install</code></pre>
 <h2 id="créer-une-application-test">Créer une application test</h2>
-<p>Pour utiliser les binaires fournis par Kore, ajouter <code>/tmp/kore/bin</code> dans <code>$PATH</code> avant de créer un nouveau projet <code>test</code></p>
+<p>Pour utiliser les binaires fournis par Kore, ajouter
+<code>/tmp/kore/bin</code> dans <code>$PATH</code> avant de créer un
+nouveau projet <code>test</code></p>
 <pre><code>export PATH=&quot;/tmp/kore/bin:$PATH&quot;
 kodev create test
 cd test</code></pre>
-<p>Éditer le fichier <code>src/test.c</code> pour retourner un message dans la réponse HTTP</p>
+<p>Éditer le fichier <code>src/test.c</code> pour retourner un message
+dans la réponse HTTP</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;kore/kore.h&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;kore/http.h&gt;</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -137,7 +151,8 @@ cd test</code></pre>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    http_response<span class="op">(</span>req<span class="op">,</span> <span class="dv">200</span><span class="op">,</span> msg<span class="op">,</span> strlen<span class="op">(</span>msg<span class="op">));</span></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>KORE_RESULT_OK<span class="op">);</span></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Configurer le routage dans <code>conf/test.conf</code> pour utiliser TLS sur localhost:8888 et localhost:8080 sans TLS</p>
+<p>Configurer le routage dans <code>conf/test.conf</code> pour utiliser
+TLS sur localhost:8888 et localhost:8080 sans TLS</p>
 <pre><code>server tls {
     bind 127.0.0.1 8888
 }
@@ -162,15 +177,18 @@ domain * {
         handler page
     }
 }</code></pre>
-<p>Compiler et démarrer l'application avec <code>kodev</code> puis tester avec <code>curl</code>:</p>
+<p>Compiler et démarrer l'application avec <code>kodev</code> puis
+tester avec <code>curl</code>:</p>
 <pre><code>kodev run
 
 curl https://localhost:8888 -k
 curl http://localhost:8080</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://wiki.openssl.org/index.php/Compilation_and_Installation">https://wiki.openssl.org/index.php/Compilation_and_Installation</a></li>
-<li><a href="https://docs.kore.io/4.2.0/applications/koreconf.html">https://docs.kore.io/4.2.2/applications/koreconf.html</a></li>
+<li><a
+href="https://wiki.openssl.org/index.php/Compilation_and_Installation">https://wiki.openssl.org/index.php/Compilation_and_Installation</a></li>
+<li><a
+href="https://docs.kore.io/4.2.0/applications/koreconf.html">https://docs.kore.io/4.2.2/applications/koreconf.html</a></li>
 </ul>
   <br />
   <hr />

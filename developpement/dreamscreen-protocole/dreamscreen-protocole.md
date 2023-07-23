@@ -60,4 +60,4 @@ Entrée HDMI|0x03|0x20|0x00: Entrée 1; 0x01: Entrée 2; 0x02: Entrée 3|1
 ## Liens complémentaires
 
  - [Documentation du protocole dreamscreen](https://planet.neeo.com/media/80x1kj/download/dreamscreen-v2-wifi-udp-protocol.pdf)
- - [https://github.com/cboyer/dreamscreen-daemon](https://github.com/cboyer/dreamscreen-daemon)
+ - [https://github.com/cboyer/dreamscreen-tools](https://github.com/cboyer/dreamscreen-tools)

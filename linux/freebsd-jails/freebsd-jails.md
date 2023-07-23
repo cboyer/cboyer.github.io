@@ -12,14 +12,6 @@ abstract: "Créer une jail sous FreeBSD."
 
 
 ## Jails avec les outils de base du système
-Mettre à jour FreeBSD
-```console`
-freebsd-update fetch install
-reboot
-freebsd-update install
-freebsd-version
-pkg update
-```
 
 Avec un dataset ZFS (permet de bénéficier des fonctionnalités comme les snapshots)
 ```console
@@ -110,6 +102,13 @@ JID  IP Address      Hostname                      Path
 Lancer un shell dans la jail
 ```console
 jexec testjail /bin/sh
+```
+
+Installer des paquets depuis l'hôte
+```
+pkg -j testjail install -y nginx
+sysrc -j testjail "nginx_enable"=YES
+service -j testjail nginx start
 ```
 
 Activer le service jail au démarrage
@@ -273,3 +272,6 @@ bastille htop bastille_test
  - [https://www.cyberciti.biz/faq/how-to-configure-a-freebsd-jail-with-vnet-and-zfs](https://www.cyberciti.biz/faq/how-to-configure-a-freebsd-jail-with-vnet-and-zfs)
  - [https://bastille.readthedocs.io/en/latest/chapters/usage.html](https://bastille.readthedocs.io/en/latest/chapters/usage.html)
  - [https://bastille.readthedocs.io/en/latest/chapters/template.html](https://bastille.readthedocs.io/en/latest/chapters/template.html)
+ - [https://github.com/DtxdF/AppJail](https://github.com/DtxdF/AppJail)
+ - [https://vermaden.wordpress.com/2023/06/28/freebsd-jails-containers/](https://vermaden.wordpress.com/2023/06/28/freebsd-jails-containers/)
+ 

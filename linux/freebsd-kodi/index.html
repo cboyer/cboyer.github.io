@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Installation de Kodi sous FreeBSD 13 - C. Boyer</title>
-  <meta name="description" content="Installation de Kodi sous FreeBSD 13." />
+  <meta name="description" content="Installation de Kodi sous FreeBSD
+13." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="FreeBSD, Kodi" />
   <meta name="robots" content="index,follow">
@@ -18,8 +19,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -90,20 +91,39 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
   <h1>Installation de Kodi sous FreeBSD 13</h1>
-  <em>Publié le 2021-11-12, dernière mise à jour: 2021-11-22</em>
-<p>Certains paramètres présentés sont spécifiques à la configuration matérielle d'un système avec Intel Braswell.</p>
-<h2 id="installation-de-kodi-depuis-les-paquets">Installation de Kodi depuis les paquets</h2>
-<h3 id="installation-des-paquets-avec-pkg">Installation des paquets avec pkg</h3>
-<pre class="console"><code>pkg install kodi kodi-addon-pvr.iptvsimple libbluray libcec dav1d lcms2 libass libcrossguid \
-    curl ffmpeg libfmt fstrcmp lzo2 spdlog sqlite3 taglib waylandpp libGLU xorg-server xinit \
-    xorg-drivers drm-kmod xf86-video-intel libva-intel-driver libvdpau-va-gl xterm py38-sqlite3</code></pre>
+  <em>Publié le 2021-11-12, dernière mise à jour: 2023-06-30</em>
+<p>Certains paramètres présentés sont spécifiques à la configuration
+matérielle d'un système avec Intel Braswell: les pilotes et
+configurations peuvent différer sur d'autres systèmes.</p>
+<h2 id="installation-de-kodi-depuis-les-paquets">Installation de Kodi
+depuis les paquets</h2>
+<h3 id="installation-des-paquets-avec-pkg">Installation des paquets avec
+pkg</h3>
+<p>Configurer le dépôts PKG à latest au lieu de quarterly avec le
+fichier <code>/usr/local/etc/pkg/repos/FreeBSD.conf</code>:</p>
+<pre><code>FreeBSD: {
+url: &quot;pkg+http://pkg.FreeBSD.org/${ABI}/latest&quot;,
+mirror_type: &quot;srv&quot;,
+signature_type: &quot;fingerprints&quot;,
+fingerprints: &quot;/usr/share/keys/pkg&quot;,
+enabled: yes
+}</code></pre>
+<p>Mise à jour du système et vérifier la présence de vulnérabilité:</p>
+<pre class="console"><code>freebsd-update fetch install &amp;&amp; pkg update &amp;&amp; pkg upgrade &amp;&amp; pkg audit</code></pre>
+<pre class="console"><code>pkg install kodi kodi-addon-pvr.iptvsimple kodi-addon-inputstream.adaptive \
+    xorg-server xinit xorg-drivers drm-kmod xf86-video-intel libva-intel-driver \
+    py39-sqlite3 libvdpau-va-gl</code></pre>
+<p>Les paquets <code>kodi-addon-inputstream.adaptive</code> et
+<code>py39-sqlite3</code> sont nécessaires à l'extension YouTube
+permettant de visionner les bandes-annonces.</p>
 <p>Charger le module KMS au boot via <code>/etc/rc.conf</code></p>
 <pre class="console"><code>sysrc kld_list+=i915kms</code></pre>
 <h3 id="configuration-de-xorg">Configuration de Xorg</h3>
 <p>Générer automatiquement une configuration élémentaire</p>
 <pre class="console"><code>Xorg -configure
 mv xorg.conf.new /etc/X11/xorg.conf</code></pre>
-<p>Configuration avancée de Xorg, dans <code>/usr/local/etc/X11/xorg.conf.d/monitor.conf</code></p>
+<p>Configuration avancée de Xorg, dans
+<code>/usr/local/etc/X11/xorg.conf.d/monitor.conf</code></p>
 <pre class="text"><code>Section &quot;Monitor&quot;
     Identifier   &quot;Monitor0&quot;
     VendorName   &quot;Monitor Vendor&quot;
@@ -113,76 +133,125 @@ mv xorg.conf.new /etc/X11/xorg.conf</code></pre>
     #Option &quot;PreferredMode&quot; &quot;3840x2160@30.0&quot;
     Option &quot;PreferredMode&quot; &quot;1920x1080@60.0&quot;
 EndSection</code></pre>
-<p>Pour activer l'accélération matérielle, dans <code>/usr/local/etc/X11/xorg.conf.d/card.conf</code></p>
+<p>Pour activer l'accélération matérielle, dans
+<code>/usr/local/etc/X11/xorg.conf.d/card.conf</code></p>
 <pre class="text"><code>Section &quot;Device&quot;
     Identifier &quot;Card0&quot;
     Driver &quot;modesetting&quot;
-    Option &quot;DPMS&quot;
+    Option &quot;DPMS&quot; &quot;false&quot;
     Option &quot;DRI&quot; &quot;3&quot;
     Option &quot;AccelMethod&quot; &quot;glamor&quot;
 EndSection</code></pre>
-<p>Création du compte utilisateur kodi</p>
-<pre class="console"><code>pw user add -n kodi -c &#39;Kodi Media Player&#39; -d /home/kodi -G video -m -s /bin/csh</code></pre>
+<h3 id="création-du-compte-utilisateur-kodi">Création du compte
+utilisateur kodi</h3>
+<pre class="console"><code>pw user add -n kodi -c &#39;Kodi Media Player&#39; -d /home/kodi -G video -m -s /usr/sbin/nologin</code></pre>
 <blockquote>
-<p>Si l'utilisateur kodi peut être crée à l'installation de FreeBSD puis modifié avec <code>pw group mod wheel -m kodi</code> par exemple. Pour changer de shell <code>chsh -s /usr/local/bin/bash kodi</code>.</p>
+<p>L'utilisateur kodi peut être créé à l'installation de FreeBSD puis
+modifié avec <code>pw group mod wheel -m kodi</code> par la suite. Pour
+changer de shell et rendre le compte utilisable:
+<code>chsh -s /usr/local/bin/bash kodi</code>.</p>
 </blockquote>
 <p>Tester l'exécution de Kodi:</p>
-<pre class="console"><code>su -m kodi -c &#39;setenv HOME /home/kodi &amp;&amp; /usr/local/bin/xinit /usr/local/bin/kodi-standalone -- -nocursor :0 -nolisten tcp&#39;</code></pre>
-<h3 id="autologin-et-lancement-automatique-de-kodi">Autologin et lancement automatique de Kodi</h3>
-<p>Dans <code>/etc/gettytab</code></p>
+<pre class="console"><code>su -m kodi -c &#39;HOME=/home/kodi /usr/local/bin/xinit /usr/local/bin/kodi --standalone -- -nocursor :0 -nolisten tcp&#39;</code></pre>
+<h3 id="démarrage-automatique-de-kodi-via-rc.d-recommandé">Démarrage
+automatique de Kodi via rc.d (recommandé)</h3>
+<p>Créer le fichier <code>/usr/local/etc/X11/Xwrapper.config</code> avec
+la directive suivante pour autoriser le lancement de X sur les terminaux
+virtuels</p>
+<pre><code>allowed_users=anybody</code></pre>
+<p>Créer le script <code>/usr/local/etc/rc.d/kodi</code> avec les droits
+d'exécution</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># PROVIDE: kodi</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># REQUIRE: FILESYSTEMS DAEMON NETWORKING LOGIN</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># KEYWORD: nojail shutdown</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span> /etc/rc.subr</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="va">name</span><span class="op">=</span>kodi</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="va">rcvar</span><span class="op">=</span>kodi_enable</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="va">kodi_user</span><span class="op">=</span>root</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="va">kodi_chdir</span><span class="op">=</span><span class="st">&quot;/home/kodi&quot;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="va">kodi_env</span><span class="op">=</span><span class="st">&quot;PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin HOME=/home/kodi LIBVA_DRIVER_NAME=i965 LIBVA_DRIVERS_PATH=/usr/local/lib/dri&quot;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="va">pidfile</span><span class="op">=</span><span class="st">&quot;/var/run/</span><span class="va">${name}</span><span class="st">.pid&quot;</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="va">stop_precmd</span><span class="op">=</span><span class="st">&quot;</span><span class="va">${name}</span><span class="st">_stop_precmd&quot;</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="va">command</span><span class="op">=</span><span class="st">&quot;/usr/sbin/daemon&quot;</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="va">command_args</span><span class="op">=</span><span class="st">&quot;-u kodi -P </span><span class="va">${pidfile}</span><span class="st"> -r -f /usr/local/bin/xinit /usr/local/bin/kodi --standalone -- :0 -nocursor -quiet -nolisten tcp&quot;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="ex">load_rc_config</span> <span class="va">$name</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="bu">:</span> <span class="va">${kodi_enable</span><span class="op">:=</span>no<span class="va">}</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="bu">:</span> <span class="va">${kodi_msg</span><span class="op">=</span><span class="st">&quot;Not started.&quot;</span><span class="va">}</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="fu">kodi_stop_precmd()</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="va">kodi_pid</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span><span class="ex">/usr/bin/pgrep</span> kodi.bin<span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/bin/kill</span> <span class="at">-TERM</span> <span class="va">${kodi_pid}</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/bin/pwait</span> <span class="va">${kodi_pid}</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="ex">run_rc_command</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span></span></code></pre></div>
+<blockquote>
+<p>L'exécution de la chaîne Xinit &gt; Xorg &gt; Kodi est supervisée par
+<code>daemon</code> qui redémarrera l'ensemble en cas d'arrêt. C'est le
+PID de <code>daemon</code> qui est contrôlé par rc.d et non directement
+celui de Kodi. La fonction <code>kodi_stop_precmd</code> permet
+d'attendre la fermeture de Kodi et d'éviter la corruption de la base de
+données SQLite possiblement causée par un arrêt direct de Xinit, Xorg ou
+daemon. Le redémarrage de Kodi ne sera effectué qu'après 1 seconde
+d'attente par <code>daemon</code>, ce qui laisse largement le temps à
+rc.d d'envoyer le signal TERM à daemon qui n'aura pas le temps de
+redémarré Kodi.</p>
+</blockquote>
+<p>Activation via rc.d:</p>
+<pre class="console"><code>sysrc kodi_enable=YES</code></pre>
+<p>Le service kodi peut alors être géré avec la commande
+<code>service</code>:</p>
+<pre class="console"><code>service kodi start</code></pre>
+<h3 id="démarrage-automatique-de-kodi-via-crontab">Démarrage automatique
+de Kodi via crontab</h3>
+<p>Créer le fichier <code>/usr/local/etc/X11/Xwrapper.config</code> avec
+la directive suivante pour autoriser le lancement de X sur les terminaux
+virtuels</p>
+<pre><code>allowed_users=anybody</code></pre>
+<p>Ajouter dans la crontab de l'utilisateur kodi la ligne suivante avec
+<code>crontab -e</code></p>
+<pre class="text"><code>@reboot HOME=/home/kodi LIBVA_DRIVER_NAME=i965 LIBVA_DRIVERS_PATH=/usr/local/lib/dri /usr/local/bin/xinit /usr/local/bin/kodi --standalone -- -nocursor :0 -nolisten tcp &gt; /dev/null 2&gt;&amp;1</code></pre>
+<blockquote>
+<p>Il est possible d'utiliser un script pour relancer Kodi avec une
+boucle afin de le redémarrer en cas d'arrêt brusque.</p>
+</blockquote>
+<h3 id="démarrage-automatique-de-kodi-via-autologin">Démarrage
+automatique de Kodi via autologin</h3>
+<p>Ajouter dans <code>/etc/gettytab</code></p>
 <pre class="text"><code># autologin kodi
 A|Al|Autologin console:\
   :ht:np:sp#115200:al=kodi</code></pre>
-<p>Dans <code>/etc/ttys</code></p>
+<p>Remplacer la ligne <code>ttyv1</code> dans <code>/etc/ttys</code></p>
 <pre class="text"><code>#ttyv1  &quot;/usr/libexec/getty Pc&quot;         xterm   onifexists secure
 ttyv1   &quot;/usr/libexec/getty Al&quot;         xterm   onifexists secure</code></pre>
 <p>Ajouter dans <code>/home/kodi/.cshrc</code></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">setenv</span> LIBVA_DRIVER_NAME i965</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">setenv</span> LIBVA_DRIVERS_PATH /usr/local/lib/dri</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> XPID = <span class="kw">`</span><span class="ex">/usr/bin/pgrep</span> xinit<span class="kw">`</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">(</span> <span class="kw">{</span> <span class="bu">[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$XPID</span><span class="st">&quot;</span> <span class="bu">]</span> <span class="kw">}</span> <span class="kw">)</span> <span class="cf">then</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;X is already running&quot;</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/usr/local/bin/xinit</span> /usr/local/bin/kodi-standalone <span class="at">--</span> <span class="at">-nocursor</span> :0 <span class="at">-nolisten</span> tcp</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">logout</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="ex">endif</span></span></code></pre></div>
-<h3 id="configuration-du-chargeur-damorçage">Configuration du chargeur d'amorçage</h3>
-<p>Ajouter dans <code>/boot/loader.conf</code>.</p>
-<pre class="text"><code>autoboot_delay=&quot;-1&quot;
-hw.vga.textmode=0
-kern.vt.fb.default_mode=&quot;800x600&quot;</code></pre>
-<h3 id="support-des-partitions-ext4">Support des partitions EXT4</h3>
-<pre class="console"><code>pkg install fusefs-lkl
-kldload fusefs
-sysrc kld_list+=fusefs</code></pre>
-<p>Pour tester</p>
-<pre class="console"><code>mount -t fuse -o rw,mountprog=/usr/local/bin/lklfuse,type=ext4,allow_other /dev/ada1s1 /data</code></pre>
-<p>Ajouter dans <code>/etc/fstab</code> pour que la partition soit montée au démarrage</p>
-<pre class="text"><code>/dev/ada1s1     /data       fuse        rw,mountprog=/usr/local/bin/lklfuse,type=ext4,allow_other,late 0 0</code></pre>
-<blockquote>
-<p>Pour les volumes NTFS il faut installer le paquet <code>fusefs-ntfs</code>.</p>
-</blockquote>
-<h3 id="installation-de-samba4">Installation de Samba4</h3>
-<p>pkg install samba413</p>
-<p>La configuration dans <code>/usr/local/etc/smb4.conf</code></p>
-<pre class="text"><code>[global]
-    workgroup = WORKGROUP
-    realm = WORKGROUP
-    netbios name = kodi
-
-[data]
-    path = /data
-    public = no
-    writable = yes
-    printable = no
-    guest ok = no
-    valid users = smbuser</code></pre>
-<pre class="console"><code>sysrc samba_server_enable=&quot;YES&quot;
-service samba_server start</code></pre>
-<h2 id="compilation-et-installation-de-kodi-avec-les-portssources-uniquement">Compilation et installation de Kodi avec les ports/sources uniquement</h2>
-<h3 id="récupèration-des-ports-et-installation-des-outils">Récupèration des ports et installation des outils</h3>
-<p>Définition de certaines options par défaut lors de la compilation des ports dans <code>/etc/make.conf</code></p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">setenv</span> LIBVA_DRIVER_NAME i965</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">setenv</span> LIBVA_DRIVERS_PATH /usr/local/lib/dri</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> XPID = <span class="kw">`</span><span class="ex">/usr/bin/pgrep</span> xinit<span class="kw">`</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">(</span> <span class="kw">{</span> <span class="bu">[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$XPID</span><span class="st">&quot;</span> <span class="bu">]</span> <span class="kw">}</span> <span class="kw">)</span> <span class="cf">then</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;X is already running&quot;</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/usr/local/bin/xinit</span> /usr/local/bin/kodi-standalone <span class="at">--</span> <span class="at">-nocursor</span> :0 <span class="at">-nolisten</span> tcp</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">logout</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="ex">endif</span></span></code></pre></div>
+<h2
+id="compilation-et-installation-de-kodi-avec-les-portssources-uniquement">Compilation
+et installation de Kodi avec les ports/sources uniquement</h2>
+<h3 id="récupèration-des-ports-et-installation-des-outils">Récupèration
+des ports et installation des outils</h3>
+<p>Définition de certaines options par défaut lors de la compilation des
+ports dans <code>/etc/make.conf</code></p>
 <pre class="text"><code>DEFAULT_VERSIONS= python=3.9 python3=3.9
 OPTIONS_UNSET= X11 GUI CUPS DOCS EXAMPLES DOXYGEN PERL LUA
 WITHOUT= X11 GUI CUPS DOCS EXAMPLES DOXYGEN PERL LUA
@@ -196,11 +265,16 @@ cd /usr/ports/ports-mgmt/portmaster
 make install clean
 rehash
 portmaster -L</code></pre>
-<p>L'outil <code>portmaster</code> permet l'installation de ports à la place de <code>make install clean BATCH=YES</code>. Quelques paramètres utiles pour l'utilisation de <code>portmaster</code>:</p>
+<p>L'outil <code>portmaster</code> permet l'installation de ports à la
+place de <code>make install clean BATCH=YES</code>. Quelques paramètres
+utiles pour l'utilisation de <code>portmaster</code>:</p>
 <ul>
-<li><code>-P</code> permet d'utiliser les paquets précompilés pour les dépendances</li>
-<li><code>-G</code> accepter la configuration par défaut (pas d'interaction)</li>
-<li><code>-B</code> ne conserve pas de backup de l'ancien package après mise à jour (pas d'interaction)</li>
+<li><code>-P</code> permet d'utiliser les paquets précompilés pour les
+dépendances</li>
+<li><code>-G</code> accepter la configuration par défaut (pas
+d'interaction)</li>
+<li><code>-B</code> ne conserve pas de backup de l'ancien package après
+mise à jour (pas d'interaction)</li>
 <li><code>-d</code> nettoie les distfiles</li>
 </ul>
 <p>Les commandes complémentaires pour la gestion des ports:</p>
@@ -218,7 +292,8 @@ find -s . -type d -name &#39;work&#39; -exec make rmconfig &#39;{}&#39; \; -exec
 <p>Installation de <code>git</code> et <code>cmake</code></p>
 <pre class="console"><code>portmaster devel/git@tiny devel/cmake</code></pre>
 <h3 id="installation-des-ports">Installation des ports</h3>
-<p>Installer les sources du noyau pour la version/architecture courante (nécessaire pour compiler certains pilotes par la suite)</p>
+<p>Installer les sources du noyau pour la version/architecture courante
+(nécessaire pour compiler certains pilotes par la suite)</p>
 <pre class="console"><code>cd /tmp
 fetch ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/13.0-RELEASE/src.txz
 tar -C / -zxvf src.txz
@@ -227,26 +302,32 @@ rm /tmp/src.txz</code></pre>
 <pre class="console"><code>portmaster -Bd graphics/drm-kmod
 sysrc kld_list+=i915kms
 kldload i915kms</code></pre>
-<p>Installer le pilote i965 (non contenu dans mesa-dri) et VAAPI pour le décodage matériel</p>
+<p>Installer le pilote i965 (non contenu dans mesa-dri) et VAAPI pour le
+décodage matériel</p>
 <pre class="console"><code>cd graphics/mesa-devel
 make config
 portmaster -Bd graphics/mesa-devel
 portmaster -Bd multimedia/libva-intel-driver</code></pre>
-<p>Configuration et compilation de Kodi (options GBM/OpenGLES pour se passer du serveur X)</p>
+<p>Configuration et compilation de Kodi (options GBM/OpenGLES pour se
+passer du serveur X)</p>
 <pre class="console"><code>cd /usr/ports/multimedia/kodi
 make config
 portmaster -Bd --update-if-newer multimedia/kodi
 mkdir /usr/local/lib/kodi/addons</code></pre>
-<h3 id="compilation-des-addons-kodi-depuis-les-sources">Compilation des addons Kodi depuis les sources</h3>
+<h3 id="compilation-des-addons-kodi-depuis-les-sources">Compilation des
+addons Kodi depuis les sources</h3>
 <h4 id="ipvr-simple-client">IPVR Simple Client</h4>
-<p>La version de Kodi issue des ports appartient à la branche Matrix (version 19), IPVR Simple Client doit être issu de la même branche pour assurer sa compatibilité.</p>
+<p>La version de Kodi issue des ports appartient à la branche Matrix
+(version 19), IPVR Simple Client doit être issu de la même branche pour
+assurer sa compatibilité.</p>
 <pre class="console"><code>cd /tmp
 git clone --branch 19.3-Matrix https://github.com/xbmc/xbmc.git
 git clone --depth 1 --branch 19.0.2-Matrix https://github.com/kodi-pvr/pvr.iptvsimple
 cd pvr.iptvsimple &amp;&amp; mkdir build &amp;&amp; cd build
 cmake -DADDONS_TO_BUILD=pvr.iptvsimple -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug \
       -DCMAKE_INSTALL_PREFIX=../../xbmc/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons</code></pre>
-<p>Ajouter <code>-fPIC</code> dans les directives de <code>CMakeCache.txt</code></p>
+<p>Ajouter <code>-fPIC</code> dans les directives de
+<code>CMakeCache.txt</code></p>
 <pre class="text"><code>CMAKE_CXX_FLAGS:STRING=-fPIC
 CMAKE_C_FLAGS:STRING=-fPIC</code></pre>
 <p>Lancer la compilation et copier les fichiers</p>
@@ -296,7 +377,10 @@ git clone --depth 1 --branch Matrix https://github.com/xbmc/inputstream.rtmp
 cd inputstream.rtmp &amp;&amp; mkdir build &amp;&amp; cd build
 cmake -DADDONS_TO_BUILD=inputstream.rtmp -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug \
       -DCMAKE_INSTALL_PREFIX=../../xbmc/kodi-build/addons -DPACKAGE_ZIP=1 ../../xbmc/cmake/addons</code></pre>
-<p>Ajouter <code>set(OPENSSL_TARGET BSD-x86_64)</code> dans <code>../depends/common/openssl/CMakeLists.txt</code> avant la suite de fonctions <code>list</code>. Ajouter <code>-fPIC</code> dans les directives de <code>CMakeCache.txt</code></p>
+<p>Ajouter <code>set(OPENSSL_TARGET BSD-x86_64)</code> dans
+<code>../depends/common/openssl/CMakeLists.txt</code> avant la suite de
+fonctions <code>list</code>. Ajouter <code>-fPIC</code> dans les
+directives de <code>CMakeCache.txt</code></p>
 <pre class="text"><code>CMAKE_CXX_FLAGS:STRING=-fPIC
 CMAKE_C_FLAGS:STRING=-fPIC</code></pre>
 <p>Lancer la compilation et copier les fichiers</p>
@@ -308,12 +392,16 @@ cp ../../xbmc/kodi-build/addons/inputstream.rtmp/inputstream.rtmp.so* /usr/local
 cp ../../xbmc/kodi-build/addons/inputstream.rtmp/addon.xml /usr/local/share/kodi/addons/inputstream.rtmp
 cp ../../xbmc/kodi-build/addons/inputstream.rtmp/icon.png /usr/local/share/kodi/addons/inputstream.rtmp
 cp -r ../../xbmc/kodi-build/addons/inputstream.rtmp/resources/ /usr/local/share/kodi/addons/inputstream.rtmp/resources</code></pre>
-<h3 id="lectures-complémentaires">Lectures complémentaires</h3>
+<h2 id="lectures-complémentaires">Lectures complémentaires</h2>
 <ul>
-<li><a href="https://docs.freebsd.org/en/books/handbook/ports/">https://docs.freebsd.org/en/books/handbook/ports/</a></li>
-<li><a href="https://amissing.link/freebsd-entertainment-center.html">https://amissing.link/freebsd-entertainment-center.html</a></li>
-<li><a href="https://forums.freebsd.org/threads/trouble-calling-startx-in-start-up-script.22304/#post-125992">https://forums.freebsd.org/threads/trouble-calling-startx-in-start-up-script.22304/#post-125992</a></li>
-<li><a href="https://forums.freebsd.org/threads/mounting-a-logical-ext4-partition-in-freebsd.72286/">https://forums.freebsd.org/threads/mounting-a-logical-ext4-partition-in-freebsd.72286/</a></li>
+<li><a
+href="https://docs.freebsd.org/en/books/handbook/ports/">https://docs.freebsd.org/en/books/handbook/ports/</a></li>
+<li><a
+href="https://amissing.link/freebsd-entertainment-center.html">https://amissing.link/freebsd-entertainment-center.html</a></li>
+<li><a
+href="https://forums.freebsd.org/threads/trouble-calling-startx-in-start-up-script.22304/#post-125992">https://forums.freebsd.org/threads/trouble-calling-startx-in-start-up-script.22304/#post-125992</a></li>
+<li><a
+href="https://forums.freebsd.org/threads/mounting-a-logical-ext4-partition-in-freebsd.72286/">https://forums.freebsd.org/threads/mounting-a-logical-ext4-partition-in-freebsd.72286/</a></li>
 </ul>
   <br />
   <hr />

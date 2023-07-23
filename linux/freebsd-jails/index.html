@@ -18,21 +18,17 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
 </head>
 <body>
   <h1>Création de jails FreeBSD</h1>
   <em>Publié le 2023-02-01, dernière mise à jour: 2023-03-19</em>
-<h2 id="jails-avec-les-outils-de-base-du-système">Jails avec les outils de base du système</h2>
-<p>Mettre à jour FreeBSD</p>
-<pre class="console`"><code>freebsd-update fetch install
-reboot
-freebsd-update install
-freebsd-version
-pkg update</code></pre>
-<p>Avec un dataset ZFS (permet de bénéficier des fonctionnalités comme les snapshots)</p>
+<h2 id="jails-avec-les-outils-de-base-du-système">Jails avec les outils
+de base du système</h2>
+<p>Avec un dataset ZFS (permet de bénéficier des fonctionnalités comme
+les snapshots)</p>
 <pre class="console"><code>zfs create -o mountpoint=/jails zroot/jails
 zfs create zroot/jails/testjail</code></pre>
 <p>Sans ZFS</p>
@@ -96,15 +92,21 @@ JID  IP Address      Hostname                      Path
   1                  testjail.local.lkz            /jails/testjail</code></pre>
 <p>Lancer un shell dans la jail</p>
 <pre class="console"><code>jexec testjail /bin/sh</code></pre>
+<p>Installer des paquets depuis l'hôte</p>
+<pre><code>pkg -j testjail install -y nginx
+sysrc -j testjail &quot;nginx_enable&quot;=YES
+service -j testjail nginx start</code></pre>
 <p>Activer le service jail au démarrage</p>
 <pre class="console"><code>sysrc jail_enable=YES
 service jail start</code></pre>
 <h2 id="jails-avec-bastille">Jails avec Bastille</h2>
 <p>Installer Bastille</p>
 <pre class="console"><code>pkg install bastille</code></pre>
-<p>Créer le dataset zroot/bastille (utilisé dans la configuration Bastille via <code>bastille_zfs_prefix</code>)</p>
+<p>Créer le dataset zroot/bastille (utilisé dans la configuration
+Bastille via <code>bastille_zfs_prefix</code>)</p>
 <pre><code>zfs create -o mountpoint=/usr/local/bastille zroot/bastille</code></pre>
-<p>Pour démarrer automatiquement les Jails Bastille ajouter dans <code>/etc/rc.conf</code></p>
+<p>Pour démarrer automatiquement les Jails Bastille ajouter dans
+<code>/etc/rc.conf</code></p>
 <pre class="console"><code>sysrc bastille_enable=YES</code></pre>
 <p>Configuration de Bastille</p>
 <pre class="console"><code>mkdir -p /usr/local/etc/bastille/
@@ -148,11 +150,13 @@ bastille_decompress_xz_options=&quot;-c -d -v&quot;
 bastille_network_loopback=&quot;bastille0&quot;
 bastille_network_shared=&quot;&quot;
 bastille_network_gateway=&quot;&quot;</code></pre>
-<p>Cloner l'interface lo pour l'utiliser comme interface dédiée (bastille0) à la jail</p>
+<p>Cloner l'interface lo pour l'utiliser comme interface dédiée
+(bastille0) à la jail</p>
 <pre class="console"><code>sysrc cloned_interfaces+=lo1
 sysrc ifconfig_lo1_name=&quot;bastille0&quot;
 service netif cloneup</code></pre>
-<p>Configurer le parfeu dans <code>/etc/pf.conf</code> pour autoriser le traffic entrant sur 22/tcp pour bastille0 et bloquer le reste</p>
+<p>Configurer le parfeu dans <code>/etc/pf.conf</code> pour autoriser le
+traffic entrant sur 22/tcp pour bastille0 et bloquer le reste</p>
 <pre class="console"><code>ext_if=&quot;vtnet0&quot;
 
 set block-policy return
@@ -170,7 +174,8 @@ pass in inet proto tcp from any to any port ssh flags S/SA keep state</code></pr
 <p>Active et démarrer pf</p>
 <pre class="console"><code>sysrc pf_enable=YES
 service pf start</code></pre>
-<p>Récupérer l'image de base FreeBSD et créer la jail <code>bastille_test</code></p>
+<p>Récupérer l'image de base FreeBSD et créer la jail
+<code>bastille_test</code></p>
 <pre class="console"><code>bastille bootstrap 13.1-RELEASE update
 bastille create bastille_test 13.1-RELEASE 192.168.122.55
 
@@ -180,7 +185,8 @@ bastille_test   192.168.122.55  bastille_test                 /usr/local/bastill
 <p>Activer SSH</p>
 <pre class="console"><code>bastille sysrc bastille_test sshd_enable=YES
 bastille service bastille_test sshd start</code></pre>
-<p>Rendre SSH accessible depuis le réseau externe sur le port 222 en utilisant l'adresse IP de l'hôte</p>
+<p>Rendre SSH accessible depuis le réseau externe sur le port 222 en
+utilisant l'adresse IP de l'hôte</p>
 <pre class="console"><code>bastille rdr bastille_test tcp 222 22
 bastille rdr bastille_test list
 # Retournera: 
@@ -193,16 +199,26 @@ vi /usr/local/bastille/templates/cboyer/htop/Bastillefile</code></pre>
 <pre class="text"><code>SYSRC sshd_enable=YES
 SERVICE sshd start
 PKG htop</code></pre>
-<p>Appliquer le template <code>htop</code> à <code>bastille_test</code> (pour appliquer le template à toutes les jails: utiliser <code>ALL</code> au lieu de <code>bastille_test</code>)</p>
+<p>Appliquer le template <code>htop</code> à <code>bastille_test</code>
+(pour appliquer le template à toutes les jails: utiliser
+<code>ALL</code> au lieu de <code>bastille_test</code>)</p>
 <pre class="console"><code>bastille template bastille_test cboyer/htop</code></pre>
 <p>Exécuter <code>htop</code> depuis l'hôte</p>
 <pre class="console"><code>bastille htop bastille_test</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://clinta.github.io/freebsd-jails-the-hard-way">https://clinta.github.io/freebsd-jails-the-hard-way</a></li>
-<li><a href="https://www.cyberciti.biz/faq/how-to-configure-a-freebsd-jail-with-vnet-and-zfs">https://www.cyberciti.biz/faq/how-to-configure-a-freebsd-jail-with-vnet-and-zfs</a></li>
-<li><a href="https://bastille.readthedocs.io/en/latest/chapters/usage.html">https://bastille.readthedocs.io/en/latest/chapters/usage.html</a></li>
-<li><a href="https://bastille.readthedocs.io/en/latest/chapters/template.html">https://bastille.readthedocs.io/en/latest/chapters/template.html</a></li>
+<li><a
+href="https://clinta.github.io/freebsd-jails-the-hard-way">https://clinta.github.io/freebsd-jails-the-hard-way</a></li>
+<li><a
+href="https://www.cyberciti.biz/faq/how-to-configure-a-freebsd-jail-with-vnet-and-zfs">https://www.cyberciti.biz/faq/how-to-configure-a-freebsd-jail-with-vnet-and-zfs</a></li>
+<li><a
+href="https://bastille.readthedocs.io/en/latest/chapters/usage.html">https://bastille.readthedocs.io/en/latest/chapters/usage.html</a></li>
+<li><a
+href="https://bastille.readthedocs.io/en/latest/chapters/template.html">https://bastille.readthedocs.io/en/latest/chapters/template.html</a></li>
+<li><a
+href="https://github.com/DtxdF/AppJail">https://github.com/DtxdF/AppJail</a></li>
+<li><a
+href="https://vermaden.wordpress.com/2023/06/28/freebsd-jails-containers/">https://vermaden.wordpress.com/2023/06/28/freebsd-jails-containers/</a></li>
 </ul>
   <br />
   <hr />

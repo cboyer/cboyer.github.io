@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <title>Écran à contrôleur ILI9341 et Raspberry Pi - C. Boyer</title>
-  <meta name="description" content="Utiliser un écran à base de contrôleur ILI9341 avec un Raspberry Pi pour dupliquer la sortie HDMI." />
+  <meta name="description" content="Utiliser un écran à base de
+contrôleur ILI9341 avec un Raspberry Pi pour dupliquer la sortie
+HDMI." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="ILI9341, Raspberry, fbcp-ili9341, spi" />
   <meta name="robots" content="index,follow">
@@ -18,19 +20,26 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
 </head>
 <body>
   <h1>Écran à contrôleur ILI9341 et Raspberry Pi</h1>
   <em>Publié le 2021-07-21</em>
-<p>fbcp-ili9341 permet de cloner la sortie HDMI sur un écran doté d'un contrôleur ILI9341 (bus SPI). Il prend en charge le redimensionnement automatique vers 320x240 pixel au coût d'une consommation CPU accrue. Pour ne pas utiliser cette fonctionnalité et limiter l'utilisation du CPU il faut définir la résolution HDMI à 320x240 en modifiant le fichier <code>config.txt</code>:</p>
+<p>fbcp-ili9341 permet de cloner la sortie HDMI sur un écran doté d'un
+contrôleur ILI9341 (bus SPI). Il prend en charge le redimensionnement
+automatique vers 320x240 pixel au coût d'une consommation CPU accrue.
+Pour ne pas utiliser cette fonctionnalité et limiter l'utilisation du
+CPU il faut définir la résolution HDMI à 320x240 en modifiant le fichier
+<code>config.txt</code>:</p>
 <pre class="text"><code>hdmi_group=2
 hdmi_mode=87
 hdmi_cvt=320 240 60 1 0 0 0
 hdmi_force_hotplug=1</code></pre>
-<p>Concernant l'interconnexion Raspberry/ILI9341, fbcp-ili9341 utilise par défaut les GPIO SPI_0 (non configurables). Seuls DC et Reset sont paramétrables, MISO (GPIO 9) n'est pas utilisé.</p>
+<p>Concernant l'interconnexion Raspberry/ILI9341, fbcp-ili9341 utilise
+par défaut les GPIO SPI_0 (non configurables). Seuls DC et Reset sont
+paramétrables, MISO (GPIO 9) n'est pas utilisé.</p>
 <table>
 <thead>
 <tr class="header">
@@ -82,8 +91,11 @@ hdmi_force_hotplug=1</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Pour ne pas utiliser la fonction de mise ne veille en cas d'inactivité, <code>LED</code> peut être connectée à <code>VCC</code> (3.3V).</p>
-<p>Pour compiler le programme (nécessite <code>git</code> et <code>cmake</code>):</p>
+<p>Pour ne pas utiliser la fonction de mise ne veille en cas
+d'inactivité, <code>LED</code> peut être connectée à <code>VCC</code>
+(3.3V).</p>
+<p>Pour compiler le programme (nécessite <code>git</code> et
+<code>cmake</code>):</p>
 <pre class="console"><code>git clone https://github.com/juj/fbcp-ili9341
 cd fbcp-ili9341
 mkdir build
@@ -97,7 +109,12 @@ cmake -DILI9341=ON -DGPIO_TFT_DATA_CONTROL=22 -DGPIO_TFT_RESET_PIN=27 -DGPIO_TFT
 
 #Exécution, nécessite les droits root
 sudo ./fbcp-ili9341</code></pre>
-<p>L'option <code>-DBACKLIGHT_CONTROL=ON</code> ne peut être retirée sans quoi l'écran reste inactif. Pour retirer la mise en veille après un délais, il faut commenter la ligne <code>#define BACKLIGHT_CONTROL_FROM_KEYBOARD</code> dans le fichier <code>config.h</code> ou bien connecter <code>LED</code> à <code>VCC</code> (3.3V).</p>
+<p>L'option <code>-DBACKLIGHT_CONTROL=ON</code> ne peut être retirée
+sans quoi l'écran reste inactif. Pour retirer la mise en veille après un
+délais, il faut commenter la ligne
+<code>#define BACKLIGHT_CONTROL_FROM_KEYBOARD</code> dans le fichier
+<code>config.h</code> ou bien connecter <code>LED</code> à
+<code>VCC</code> (3.3V).</p>
 <p>Le binaire produit utilise les librairies suivantes:</p>
 <pre class="text"><code>linux-vdso.so.1 (0x7eff9000)
 /usr/lib/arm-linux-gnueabihf/libarmmem-${PLATFORM}.so =&gt; /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so (0x76ee0000)
@@ -115,7 +132,8 @@ libdl.so.2 =&gt; /lib/arm-linux-gnueabihf/libdl.so.2 (0x76af0000)
 librt.so.1 =&gt; /lib/arm-linux-gnueabihf/librt.so.1 (0x76ad9000)</code></pre>
 <h2 id="sources">Sources</h2>
 <ul>
-<li><a href="https://github.com/juj/fbcp-ili9341">https://github.com/juj/fbcp-ili9341</a></li>
+<li><a
+href="https://github.com/juj/fbcp-ili9341">https://github.com/juj/fbcp-ili9341</a></li>
 </ul>
   <br />
   <hr />

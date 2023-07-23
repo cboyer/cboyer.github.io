@@ -2,10 +2,13 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>Implémentation du protocole Zabbix dans Mirth Connect - C. Boyer</title>
-  <meta name="description" content="Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener." />
+  <title>Implémentation du protocole Zabbix dans Mirth Connect - C.
+Boyer</title>
+  <meta name="description" content="Implémenter l'agent Zabbix dans
+Mirth via un canal de type TCP Listener." />
   <meta name="author" content="C. Boyer" />
-  <meta name="keywords" content="zabbix, mirth, mirth connect, monitoring" />
+  <meta name="keywords" content="zabbix, mirth, mirth
+connect, monitoring" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
@@ -18,8 +21,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,27 +94,65 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Implémentation du protocole Zabbix dans Mirth Connect</h1>
   <em>Publié le 2018-12-08, dernière mise à jour: 2020-06-13</em>
-<p>L'objectif est d'implémenter un agent <a href="https://www.zabbix.com/">Zabbix</a> dans <a href="https://www.nextgen.com/products-and-services/NextGen-Connect-Integration-Engine-Downloads">Mirth Connect</a> comme n'importe quel autre échange de données afin de monitorer l'activité de ce dernier (erreurs, statuts, volumes de transactions, etc.). L'intégralité du code source de ce projet est disponible sur Github (licence GPLv3): <a href="https://github.com/cboyer/mirth-zabbix">https://github.com/cboyer/mirth-zabbix</a>.</p>
-<p>Le monitoring avec Zabbix repose sur un serveur chargé de collecter les données auprès des équipements notamment via un agent (Zabbix peut également utiliser d'autres standards comme SNMP). Cette stratégie de "polling" implique dans un premier temps une connexion à l'agent pour l'interroger concernant la valeur d'une métrique (clé) que ce dernier lui retournera.</p>
+<p>L'objectif est d'implémenter un agent <a
+href="https://www.zabbix.com/">Zabbix</a> dans <a
+href="https://www.nextgen.com/products-and-services/NextGen-Connect-Integration-Engine-Downloads">Mirth
+Connect</a> comme n'importe quel autre échange de données afin de
+monitorer l'activité de ce dernier (erreurs, statuts, volumes de
+transactions, etc.). L'intégralité du code source de ce projet est
+disponible sur Github (licence GPLv3): <a
+href="https://github.com/cboyer/mirth-zabbix">https://github.com/cboyer/mirth-zabbix</a>.</p>
+<p>Le monitoring avec Zabbix repose sur un serveur chargé de collecter
+les données auprès des équipements notamment via un agent (Zabbix peut
+également utiliser d'autres standards comme SNMP). Cette stratégie de
+"polling" implique dans un premier temps une connexion à l'agent pour
+l'interroger concernant la valeur d'une métrique (clé) que ce dernier
+lui retournera.</p>
 <h2 id="le-protocole-zabbix">Le protocole Zabbix</h2>
-<p>Zabbix utilise un protocole relativement simple: il repose sur des échanges de données texte sur TCP. Étant une technologie libre et open source nous disposons du code source de l'agent Zabbix ainsi qu'une excellente documentation pour en comprendre le fonctionnement (cf. sources en bas de page).`</p>
+<p>Zabbix utilise un protocole relativement simple: il repose sur des
+échanges de données texte sur TCP. Étant une technologie libre et open
+source nous disposons du code source de l'agent Zabbix ainsi qu'une
+excellente documentation pour en comprendre le fonctionnement (cf.
+sources en bas de page).`</p>
 <p>Requête du serveur vers l'agent (Zabbix version 3):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>[clé                 <span class="op">,</span> fin de message]</span>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>[clé                 <span class="op">,</span> fin de message]</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>[chaîne de caractères<span class="op">,</span> <span class="bn">0x0A</span>          ]</span></code></pre></div>
 <p>Requête du serveur vers l'agent (Zabbix version 4):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>[protocole<span class="op">,</span> flag<span class="op">,</span> longueur des données             <span class="op">,</span> réservé                 <span class="op">,</span> <span class="fu">clé</span> (données)       ]</span>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>[protocole<span class="op">,</span> flag<span class="op">,</span> longueur des données             <span class="op">,</span> réservé                 <span class="op">,</span> <span class="fu">clé</span> (données)       ]</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>[<span class="st">&quot;ZBXD&quot;</span>   <span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> entier sur <span class="dv">4</span> octets little endian<span class="op">,</span> [<span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>]<span class="op">,</span> chaîne de caractères]</span></code></pre></div>
 <p>Réponse de l'agent vers le serveur (version 3 et 4):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>[protocole<span class="op">,</span> flag<span class="op">,</span> longueur des données             <span class="op">,</span> réservé                 <span class="op">,</span> <span class="fu">réponse</span> (données)   ]</span>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>[protocole<span class="op">,</span> flag<span class="op">,</span> longueur des données             <span class="op">,</span> réservé                 <span class="op">,</span> <span class="fu">réponse</span> (données)   ]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>[<span class="st">&quot;ZBXD&quot;</span>   <span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> entier sur <span class="dv">4</span> octets little endian<span class="op">,</span> [<span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>]<span class="op">,</span> chaîne de caractères]</span></code></pre></div>
-<p>L'entête est une chaîne de caractères fixe: <code>"ZBXD"</code>. Elle est composée de la chaîne <code>ZBXD</code> et de l'octet <code>0x01</code>. La longueur des données est un entier non signé sur 4 octets en little-endian qui représente la longueur de la chaîne contenant les données. Zabbix est limité à une quantité maximale de 134217728 octets. Les données envoyées sont en texte clair (Zabbix peut crypter ses échanges, cas que nous ne traiterons pas ici).</p>
+<p>L'entête est une chaîne de caractères fixe: <code>"ZBXD"</code>. Elle
+est composée de la chaîne <code>ZBXD</code> et de l'octet
+<code>0x01</code>. La longueur des données est un entier non signé sur 4
+octets en little-endian qui représente la longueur de la chaîne
+contenant les données. Zabbix est limité à une quantité maximale de
+134217728 octets. Les données envoyées sont en texte clair (Zabbix peut
+crypter ses échanges, cas que nous ne traiterons pas ici).</p>
 <h2 id="mirth-connect">Mirth Connect</h2>
-<p>Pour imiter le fonctionnement de l'agent Zabbix avec un canal Mirth un connecteur source de type TCP Listener est nécessaire afin d'accepter les connexions en provenance du serveur Zabbix. Ce connecteur doit utiliser la même connexion TCP pour être interroger (recevoir la clé) et envoyer la donnée correspondante à la métrique demandée. Il doit également fonctionner en mode binaire car nous avons besoin de travailler avec des octets sans qu'ils soient altérés par les standards d'encodage (UTF-8, etc.) liés aux chaînes de caractères. La configuration d'un TCP listener se fait avec l'interface Mirth, sans code:</p>
+<p>Pour imiter le fonctionnement de l'agent Zabbix avec un canal Mirth
+un connecteur source de type TCP Listener est nécessaire afin d'accepter
+les connexions en provenance du serveur Zabbix. Ce connecteur doit
+utiliser la même connexion TCP pour être interroger (recevoir la clé) et
+envoyer la donnée correspondante à la métrique demandée. Il doit
+également fonctionner en mode binaire car nous avons besoin de
+travailler avec des octets sans qu'ils soient altérés par les standards
+d'encodage (UTF-8, etc.) liés aux chaînes de caractères. La
+configuration d'un TCP listener se fait avec l'interface Mirth, sans
+code:</p>
 <figure>
-<img src="mirth_source.png" alt="Configuration du connecteur source" /><figcaption aria-hidden="true">Configuration du connecteur source</figcaption>
+<img src="mirth_source.png" alt="Configuration du connecteur source" />
+<figcaption aria-hidden="true">Configuration du connecteur
+source</figcaption>
 </figure>
-<p>Pour être compatible avec les version 3 et 4 de Zabbix, il faut être en mesure de les dicerner:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="kw">new</span> java<span class="op">.</span><span class="at">lang</span><span class="op">.</span><span class="fu">String</span>(FileUtil<span class="op">.</span><span class="fu">decode</span>(msg))<span class="op">;</span></span>
+<p>Pour être compatible avec les version 3 et 4 de Zabbix, il faut être
+en mesure de les dicerner:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="kw">new</span> java<span class="op">.</span><span class="at">lang</span><span class="op">.</span><span class="fu">String</span>(FileUtil<span class="op">.</span><span class="fu">decode</span>(msg))<span class="op">;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">//Zabbix 4.X</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (msg<span class="op">.</span><span class="fu">substring</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">5</span>) <span class="op">==</span> <span class="st">&quot;ZBXD</span><span class="sc">\x01</span><span class="st">&quot;</span> <span class="op">&amp;&amp;</span> msg<span class="op">.</span><span class="fu">length</span>() <span class="op">&gt;</span> <span class="dv">13</span>) {</span>
@@ -137,8 +178,17 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">//Si ce n&#39;est pas un message Zabbix</span></span>
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> msg <span class="op">=</span> <span class="st">&#39;UnknownProtocol&#39;</span><span class="op">;</span></span></code></pre></div>
-<p>Une fois le connecteur source mis en place, nous allons faire appel à un <a href="https://github.com/cboyer/mirth-zabbix/blob/master/src/destination_transformer.js">transformer</a> afin de récupérer les données demandées par le serveur et les transmettre au connecteur de destination. C'est ici que sont centralisées les fonctionnalités de l'agent Zabbix, plus précisément les clés supportées. Concrètement il s'agit un simple <code>switch</code> pour exécuter du code en fonction de la métrique demandée par le serveur:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> (item_requested) {</span>
+<p>Une fois le connecteur source mis en place, nous allons faire appel à
+un <a
+href="https://github.com/cboyer/mirth-zabbix/blob/master/src/destination_transformer.js">transformer</a>
+afin de récupérer les données demandées par le serveur et les
+transmettre au connecteur de destination. C'est ici que sont
+centralisées les fonctionnalités de l'agent Zabbix, plus précisément les
+clés supportées. Concrètement il s'agit un simple <code>switch</code>
+pour exécuter du code en fonction de la métrique demandée par le
+serveur:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> (item_requested) {</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">&#39;agent.ping&#39;</span><span class="op">:</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        msg <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
@@ -156,8 +206,14 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span><span class="op">:</span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        msg <span class="op">=</span> <span class="st">&quot;ZBX_NOTSUPPORTED</span><span class="sc">\x00</span><span class="st">Key not implemented in Mirthix: &quot;</span> <span class="op">+</span> item_requested<span class="op">;</span></span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>Pour le <a href="https://github.com/cboyer/mirth-zabbix/blob/master/src/destination.js">connecteur de destination</a> (chargé d'envoyer les données au serveur Zabbix), nous devrons implémenter le protocole Zabbix avec le header, la longueur des données sur 8 octets en little-endian et les données. Voici le code du connecteur de destination:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">//Chaque composante du message</span></span>
+<p>Pour le <a
+href="https://github.com/cboyer/mirth-zabbix/blob/master/src/destination.js">connecteur
+de destination</a> (chargé d'envoyer les données au serveur Zabbix),
+nous devrons implémenter le protocole Zabbix avec le header, la longueur
+des données sur 8 octets en little-endian et les données. Voici le code
+du connecteur de destination:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">//Chaque composante du message</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> protocol <span class="op">=</span> <span class="st">&quot;ZBXD&quot;</span><span class="op">;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> flag <span class="op">=</span> <span class="st">&quot;</span><span class="sc">\x01</span><span class="st">&quot;</span><span class="op">;</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> reserved <span class="op">=</span> <span class="st">&quot;</span><span class="sc">\x00\x00\x00\x00</span><span class="st">&quot;</span><span class="op">;</span></span>
@@ -184,11 +240,17 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>zabbix_message_bytes<span class="op">.</span><span class="fu">put</span>(data_bytes)<span class="op">;</span></span>
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> Packages<span class="op">.</span><span class="at">org</span><span class="op">.</span><span class="at">apache</span><span class="op">.</span><span class="at">commons</span><span class="op">.</span><span class="at">codec</span><span class="op">.</span><span class="at">binary</span><span class="op">.</span><span class="at">Base64</span><span class="op">.</span><span class="fu">encodeBase64String</span>(zabbix_message_bytes<span class="op">.</span><span class="fu">array</span>())<span class="op">;</span></span></code></pre></div>
-<p>Notons qu'il est nécessaire d'encoder le message en base 64 pour fonctionner en mode binaire dans Mirth. Coté Zabbix toute la configuration s'effectue via un <a href="https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml">template</a> pour la définition des items/clés à monitorer.</p>
+<p>Notons qu'il est nécessaire d'encoder le message en base 64 pour
+fonctionner en mode binaire dans Mirth. Coté Zabbix toute la
+configuration s'effectue via un <a
+href="https://github.com/cboyer/mirth-zabbix/blob/master/Zabbix/Zabbix_template.xml">template</a>
+pour la définition des items/clés à monitorer.</p>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive">https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive</a></li>
-<li><a href="https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen">https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen</a></li>
+<li><a
+href="https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive">https://www.zabbix.com/documentation/3.4/manual/appendix/items/activepassive</a></li>
+<li><a
+href="https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen">https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen</a></li>
 </ul>
   <br />
   <hr />

@@ -18,8 +18,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -111,7 +111,8 @@ hadoop fs -mkdir /output</code></pre>
 <p>Envoyer les données sur le DFS</p>
 <pre class="console"><code>hadoop fs -put file01 /input</code></pre>
 <p>Example de WordCount.java</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">io</span><span class="op">.</span><span class="im">IOException</span><span class="op">;</span></span>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">io</span><span class="op">.</span><span class="im">IOException</span><span class="op">;</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">util</span><span class="op">.</span><span class="im">StringTokenizer</span><span class="op">;</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">apache</span><span class="op">.</span><span class="im">hadoop</span><span class="op">.</span><span class="im">conf</span><span class="op">.</span><span class="im">Configuration</span><span class="op">;</span></span>
@@ -181,11 +182,14 @@ jar cf wc.jar WordCount*.class</code></pre>
 <pre class="console"><code>hadoop job -list</code></pre>
 <p>Récupérer le résultat</p>
 <pre class="console"><code>hadoop fs -get /output output</code></pre>
-<h1 id="liens-complémentaires">Liens complémentaires</h1>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://anchalkataria.wordpress.com/2016/05/01/installing-hadoop-in-fully-distributed-mode/">https://anchalkataria.wordpress.com/2016/05/01/installing-hadoop-in-fully-distributed-mode/</a></li>
-<li><a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html</a></li>
-<li><a href="https://www.tutorialspoint.com/hadoop/hadoop_multi_node_cluster.htm">https://www.tutorialspoint.com/hadoop/hadoop_multi_node_cluster.htm</a></li>
+<li><a
+href="https://anchalkataria.wordpress.com/2016/05/01/installing-hadoop-in-fully-distributed-mode/">https://anchalkataria.wordpress.com/2016/05/01/installing-hadoop-in-fully-distributed-mode/</a></li>
+<li><a
+href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html</a></li>
+<li><a
+href="https://www.tutorialspoint.com/hadoop/hadoop_multi_node_cluster.htm">https://www.tutorialspoint.com/hadoop/hadoop_multi_node_cluster.htm</a></li>
 </ul>
   <br />
   <hr />

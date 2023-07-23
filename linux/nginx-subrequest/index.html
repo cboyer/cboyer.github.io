@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <title>NGINX: sous-requête d'authentification - C. Boyer</title>
-  <meta name="description" content="Autoriser l'accès à une ressource NGINX à l'aide d'une sous-requête d'authentification." />
+  <meta name="description" content="Autoriser l'accès à une ressource
+NGINX à l'aide d'une sous-requête d'authentification." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Nginx, subrequest, authentification, python" />
   <meta name="robots" content="index,follow">
@@ -18,8 +19,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,15 +92,35 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>NGINX: sous-requête d'authentification</h1>
   <em>Publié le 2021-02-17</em>
-<p>NGINX permet de restreindre l'accès à certaines ressources en effectuant une sous-requête d'authentification. Cette sous-requête doit retourner un code 200 pour autoriser l'accès, un code 403 pour l'interdire.</p>
-<p>Il est important de savoir que cette sous-requête ne peut contenir de données autres que des headers et sera uniquement de type GET. Les champs d'un formulaire dans le corp d'une requête POST seront ignorés. Seules les entêtes peuvent être transmises au backend par le biais d'une sous-requête. NGINX s'attend à recevoir un code HTTP (200 pour un succès, 403 pour un échec) et ne retournera aucune donnée issue de la sous-requêtes (ni corp, ni entêtes). Ce mécanisme permet d'implémenter des méthodes d'authentification personnalisées.</p>
-<p>Ici nous utiliserons Flask (Framework web très léger pour Python) comme backend d'authentification.</p>
+<p>NGINX permet de restreindre l'accès à certaines ressources en
+effectuant une sous-requête d'authentification. Cette sous-requête doit
+retourner un code 200 pour autoriser l'accès, un code 403 pour
+l'interdire.</p>
+<p>Il est important de savoir que cette sous-requête ne peut contenir de
+données autres que des headers et sera uniquement de type GET. Les
+champs d'un formulaire dans le corp d'une requête POST seront ignorés.
+Seules les entêtes peuvent être transmises au backend par le biais d'une
+sous-requête. NGINX s'attend à recevoir un code HTTP (200 pour un
+succès, 403 pour un échec) et ne retournera aucune donnée issue de la
+sous-requêtes (ni corp, ni entêtes). Ce mécanisme permet d'implémenter
+des méthodes d'authentification personnalisées.</p>
+<p>Ici nous utiliserons Flask (Framework web très léger pour Python)
+comme backend d'authentification.</p>
 <figure>
-<img src="nginx-subrequest.jpg" alt="Authentification avec une sous-requête" /><figcaption aria-hidden="true">Authentification avec une sous-requête</figcaption>
+<img src="nginx-subrequest.jpg"
+alt="Authentification avec une sous-requête" />
+<figcaption aria-hidden="true">Authentification avec une
+sous-requête</figcaption>
 </figure>
-<p>Chaque accès au contenu de <code>/</code> fera l'objet d'une sous-requête systématique où la validité du token (transmis via les headers) sera établie par le backend. Ainsi tout accès à <code>/</code> sans s'être auparavant authentifié via <code>/auth</code> (ou avec un faux token) retournera un code 403 par le backend puis par NGINX au client.</p>
+<p>Chaque accès au contenu de <code>/</code> fera l'objet d'une
+sous-requête systématique où la validité du token (transmis via les
+headers) sera établie par le backend. Ainsi tout accès à <code>/</code>
+sans s'être auparavant authentifié via <code>/auth</code> (ou avec un
+faux token) retournera un code 403 par le backend puis par NGINX au
+client.</p>
 <h2 id="login.html">login.html</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;head&gt;</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;title&gt;</span>Authentification<span class="kw">&lt;/title&gt;</span></span>
@@ -144,7 +165,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/script&gt;</span></span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
 <h2 id="configuration-nginx">Configuration NGINX</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">server {</span></span>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">server {</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">    listen       80;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">    server_name  test.reverse;</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    #access_log   logs/domain2.access.log  main;</span></span>
@@ -184,7 +206,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <pre class="console"><code>FLASK_APP=auth FLASK_DEBUG=0 flask run --host=127.0.0.1 -p 5000</code></pre>
 <p>Tester l'authentification sans passer par NGINX:</p>
 <pre class="console"><code>curl &quot;http://localhost/auth&quot; -H &quot;X-Login: user&quot; -H &quot;X-Password: user&quot;</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/python3</span></span>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/python3</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> flask <span class="im">import</span> Flask</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> flask <span class="im">import</span> request, jsonify</span>
@@ -244,7 +267,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> jsonify(result), <span class="dv">403</span>, {<span class="st">&#39;Content-Type&#39;</span>:<span class="st">&#39;application/json&#39;</span>, <span class="st">&#39;X-Token&#39;</span>:<span class="st">&#39;&#39;</span>}</span></code></pre></div>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/">https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/</a></li>
+<li><a
+href="https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/">https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/</a></li>
 </ul>
   <br />
   <hr />

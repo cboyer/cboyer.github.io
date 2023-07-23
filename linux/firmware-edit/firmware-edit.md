@@ -60,7 +60,7 @@ minipro -p "BG25Q40A@SOIC8" -w file_new.bin
 ```
 
 
-# Liens complémentaires
+## Liens complémentaires
  - [https://olegkutkov.me/2021/02/27/hacking-a-firmware-of-bluetooth-speaker-fm-radio/](https://olegkutkov.me/2021/02/27/hacking-a-firmware-of-bluetooth-speaker-fm-radio/)
  - [https://gitlab.com/DavidGriffith/minipro/](https://gitlab.com/DavidGriffith/minipro/)
  - [https://github.com/ReFirmLabs/binwalk](https://github.com/ReFirmLabs/binwalk)

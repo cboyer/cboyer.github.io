@@ -2,8 +2,10 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>Interface graphique avec Buildroot, Qt5 et Raspberry Pi 3 - C. Boyer</title>
-  <meta name="description" content="Développement d'une interface graphique Qt5/QML sur Raspberry Pi 3 avec Buildroot." />
+  <title>Interface graphique avec Buildroot, Qt5 et Raspberry Pi 3 - C.
+Boyer</title>
+  <meta name="description" content="Développement d'une interface
+graphique Qt5/QML sur Raspberry Pi 3 avec Buildroot." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Buildroot, Qt5, QML, Raspberry, Linux, EGL, OpenGLES, eglfs, eglfs_brcm, eglfs_kms" />
   <meta name="robots" content="index,follow">
@@ -18,8 +20,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,13 +93,26 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Interface graphique avec Buildroot, Qt5 et Raspberry Pi 3</h1>
   <em>Publié le 2021-07-22, dernière mise à jour: 2021-07-23</em>
-<p>L'article a été rédigé en utilisant un Raspberry Pi 3 avec Buildroot 2021.05-514-g74adec4f3a qui contient Qt5 5.15.2 et un noyau 5.10. Le Raspberry est connecté à un télévieur via HDMI. L'objectif est d'obtenir un système minimaliste Linux sans serveur X permettant d'exécuter une application graphique tout en bénéficiant de l'accélération matérielle.</p>
+<p>L'article a été rédigé en utilisant un Raspberry Pi 3 avec Buildroot
+2021.05-514-g74adec4f3a qui contient Qt5 5.15.2 et un noyau 5.10. Le
+Raspberry est connecté à un télévieur via HDMI. L'objectif est d'obtenir
+un système minimaliste Linux sans serveur X permettant d'exécuter une
+application graphique tout en bénéficiant de l'accélération
+matérielle.</p>
 <ul>
 <li><a href="#eglfs_brcm">Utiliser eglfs_brcm comme backend</a></li>
-<li><a href="#eglfs_kms">Utiliser eglfs_kms comme backend au lieu de eglfs_brcm</a></li>
+<li><a href="#eglfs_kms">Utiliser eglfs_kms comme backend au lieu de
+eglfs_brcm</a></li>
 </ul>
-<h2 id="utiliser-eglfs_brcm-comme-backend"><a name="eglfs_brcm"></a>Utiliser eglfs_brcm comme backend</h2>
-<p>Le backend <code>eglfs_brcm</code> repose sur les pilotes graphiques propriétaires Broadcom afin de fournir un support pour OpenGLES/EGL avec les fichiers <code>/usr/lib/libbrcmEGL.so</code> et <code>/usr/lib/libbrcmGLESv2.so</code>. Ceux-ci sont fournis par le package <code>Rpi-userland</code> et les "Firmware Driver" dans le noyau.</p>
+<h2
+id="utiliser-eglfs_brcm-comme-backend"><a name="eglfs_brcm"></a>Utiliser
+eglfs_brcm comme backend</h2>
+<p>Le backend <code>eglfs_brcm</code> repose sur les pilotes graphiques
+propriétaires Broadcom afin de fournir un support pour OpenGLES/EGL avec
+les fichiers <code>/usr/lib/libbrcmEGL.so</code> et
+<code>/usr/lib/libbrcmGLESv2.so</code>. Ceux-ci sont fournis par le
+package <code>Rpi-userland</code> et les "Firmware Driver" dans le
+noyau.</p>
 <h3 id="configuration-buildroot">Configuration Buildroot</h3>
 <pre class="console"><code>make raspberrypi3_defconfig
 make menuconfig</code></pre>
@@ -126,13 +141,29 @@ Target packages
 └─ Libraries
    └─ Graphics
       └─ libdrm (BR2_PACKAGE_LIBDRM=n)</code></pre>
-<p>Les librairies C <code>uClibc-ng</code> et <code>glibc</code> fonctionnent avec ces modules Qt5 (<code>musl</code> n'a pas été testée) cependant certains packages comme <code>qt5webengine</code> nécessitent <code>glibc</code>. D'autres packages comme <code>qt5quickcontrols2</code>, <code>qt5graphicaleffects</code> et <code>qt5wayland</code> peuvent être ajoutés selon les besoins applicatifs (ce qui n'est pas le cas pour notre application de test).</p>
-<p>Les options de compilation pour Qt peuvent être modifiées selon les besoins. Exemple: <em>-skip qtconnectivity -skip qtdoc -skip qtandroidextras -skip qtnetworkauth -skip qtpurchasing -skip qtgamepad -no-feature-vnc -no-feature-accessibility -no-feature udpsocket -no-feature-networkproxy -no-feature-socks5 -no-feature-networkdiskcache -no-feature-testlib -nomake tests</em>.</p>
+<p>Les librairies C <code>uClibc-ng</code> et <code>glibc</code>
+fonctionnent avec ces modules Qt5 (<code>musl</code> n'a pas été testée)
+cependant certains packages comme <code>qt5webengine</code> nécessitent
+<code>glibc</code>. D'autres packages comme
+<code>qt5quickcontrols2</code>, <code>qt5graphicaleffects</code> et
+<code>qt5wayland</code> peuvent être ajoutés selon les besoins
+applicatifs (ce qui n'est pas le cas pour notre application de
+test).</p>
+<p>Les options de compilation pour Qt peuvent être modifiées selon les
+besoins. Exemple: <em>-skip qtconnectivity -skip qtdoc -skip
+qtandroidextras -skip qtnetworkauth -skip qtpurchasing -skip qtgamepad
+-no-feature-vnc -no-feature-accessibility -no-feature udpsocket
+-no-feature-networkproxy -no-feature-socks5 -no-feature-networkdiskcache
+-no-feature-testlib -nomake tests</em>.</p>
 <p>Sauvegarde de la configuration Buildroot:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildrootqt5.config</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> savedefconfig BR2_DEFCONFIG=./buildrootqt5.config</span></code></pre></div>
 <h3 id="configuration-du-noyau-linux">Configuration du noyau Linux</h3>
-<p>Pour la configuration du noyau, aucun pilote graphique particulier (DRM, VC4) n'est nécessaire, il faut veiller à la présence des "Firmware Driver" (présents par défaut):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> linux-menuconfig</span></code></pre></div>
+<p>Pour la configuration du noyau, aucun pilote graphique particulier
+(DRM, VC4) n'est nécessaire, il faut veiller à la présence des "Firmware
+Driver" (présents par défaut):</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> linux-menuconfig</span></code></pre></div>
 <pre class="text"><code>Firmware Drivers
 └─ Raspberry Pi Firmware Driver (RASPBERRYPI_FIRMWARE=y)
 
@@ -142,13 +173,21 @@ Device Drivers
 <p>Sauvegarde de la configuration du noyau:</p>
 <pre class="console"><code>cp output/build/linux-custom/.config linux.config</code></pre>
 <h3 id="overlay">Overlay</h3>
-<p>Pour inclure nos fichiers nous allons utiliser un overlay, tous les fichiers contenu dans <code>output/rootfs_overlay</code> (considéré par Buildroot comme référence à la racine) seront présents dans l'image finale.</p>
-<p><code>output/rootfs_overlay/usr/share/fonts/dejavu-sans-webfont.ttf</code>: Qt5 ne fournit plus de police de caractères, il faut au minimum une police TTF sur le système. Buildroot peut également inclure des polices avec:</p>
+<p>Pour inclure nos fichiers nous allons utiliser un overlay, tous les
+fichiers contenu dans <code>output/rootfs_overlay</code> (considéré par
+Buildroot comme référence à la racine) seront présents dans l'image
+finale.</p>
+<p><code>output/rootfs_overlay/usr/share/fonts/dejavu-sans-webfont.ttf</code>:
+Qt5 ne fournit plus de police de caractères, il faut au minimum une
+police TTF sur le système. Buildroot peut également inclure des polices
+avec:</p>
 <pre class="text"><code>Target packages
 └─ Fonts, cursors, icons, sounds and themes
    └─ DejaVu fonts (BR2_PACKAGE_DEJAVU)</code></pre>
-<p><code>output/rootfs_overlay/root/test.sh</code>: script de lancement de l'application QML <code>box.qml</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<p><code>output/rootfs_overlay/root/test.sh</code>: script de lancement
+de l'application QML <code>box.qml</code>.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_PLATFORM</span><span class="op">=</span>eglfs</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_INTEGRATION</span><span class="op">=</span>eglfs_brcm</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_ALWAYS_SET_MODE</span><span class="op">=</span>1</span>
@@ -168,10 +207,17 @@ Device Drivers
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="ex">qmlscene</span> box.qml <span class="at">-platform</span> eglfs</span></code></pre></div>
 <blockquote>
-<p>Il n'est pas necéssaire d'utiliser <code>export LD_LIBRARY_PATH=/opt/vc/lib/:$LD_LIBRARY_PATH</code> car le package Rpi-userland place les librairies dans <code>/usr/lib</code> au lieu de <code>/opt/vc/lib</code>.</p>
+<p>Il n'est pas necéssaire d'utiliser
+<code>export LD_LIBRARY_PATH=/opt/vc/lib/:$LD_LIBRARY_PATH</code> car le
+package Rpi-userland place les librairies dans <code>/usr/lib</code> au
+lieu de <code>/opt/vc/lib</code>.</p>
 </blockquote>
-<p><code>output/rootfs_overlay/root/box.qml</code>: l'application QML de test qui sera exécutée avec <code>qmlscene</code>. Il s'agit d'une boîte rouge déplaçable avec les flềches du clavier et les cliques d'une souris.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode qml"><code class="sourceCode qml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span><span class="im"> QtQuick 2.0</span></span>
+<p><code>output/rootfs_overlay/root/box.qml</code>: l'application QML de
+test qui sera exécutée avec <code>qmlscene</code>. Il s'agit d'une boîte
+rouge déplaçable avec les flềches du clavier et les cliques d'une
+souris.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span><span class="im"> QtQuick 2.0</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ot">Item</span> {</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">width</span><span class="op">:</span> <span class="dv">800</span><span class="op">;</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">600</span></span>
@@ -224,12 +270,15 @@ Device Drivers
 <span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <blockquote>
-<p>Si la résolution est supérieur à 800x600 pixels, l'application utilisera l'ensemble de l'espace disponible sans tenir compte des dimmensions <code>width: 800; height: 600</code>.</p>
+<p>Si la résolution est supérieur à 800x600 pixels, l'application
+utilisera l'ensemble de l'espace disponible sans tenir compte des
+dimmensions <code>width: 800; height: 600</code>.</p>
 </blockquote>
 <h3 id="compilation">Compilation</h3>
 <p>Lancer la compilation et la création de l'image:</p>
 <pre class="console"><code>make</code></pre>
-<p>Pour vérifier les options de compilation du package <code>qt5base</code>, notamment les backends disponibles:</p>
+<p>Pour vérifier les options de compilation du package
+<code>qt5base</code>, notamment les backends disponibles:</p>
 <pre class="console"><code>cat ./output/build/qt5base-5.15.2/config.summary</code></pre>
 <pre class="text"><code>QPA backends:
   DirectFB ............................... no
@@ -249,12 +298,18 @@ Device Drivers
   VNC .................................... no</code></pre>
 <p>Copie de l'image générée vers la carte SD:</p>
 <pre class="console"><code>sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</code></pre>
-<p>Après démarrer le système sur le Raspberry, exécuter <code>test.sh</code>:</p>
+<p>Après démarrer le système sur le Raspberry, exécuter
+<code>test.sh</code>:</p>
 <pre class="console"><code>sh test.sh</code></pre>
-<h2 id="utiliser-eglfs_kms-comme-backend-au-lieu-de-eglfs_brcm"><a name="eglfs_kms"></a>Utiliser eglfs_kms comme backend au lieu de eglfs_brcm</h2>
-<p>Au lieu d'utiliser le pilote propriétaire Broadcom, nous allons utiliser le backend OpenGLES libre fourni avec Mesa3d ainsi que le pilote VC4.</p>
+<h2
+id="utiliser-eglfs_kms-comme-backend-au-lieu-de-eglfs_brcm"><a name="eglfs_kms"></a>Utiliser
+eglfs_kms comme backend au lieu de eglfs_brcm</h2>
+<p>Au lieu d'utiliser le pilote propriétaire Broadcom, nous allons
+utiliser le backend OpenGLES libre fourni avec Mesa3d ainsi que le
+pilote VC4.</p>
 <h3 id="configuration-buildroot-1">Configuration Buildroot</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> raspberrypi3_defconfig</span>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> raspberrypi3_defconfig</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> menuconfig</span></code></pre></div>
 <pre class="text"><code>System configuration
 ├─ System hostname (BR2_TARGET_GENERIC_HOSTNAME=&quot;buildrootqt5&quot;)
@@ -282,13 +337,24 @@ Target packages
       |  [=-skip qtconnectivity -skip qtnetwork -skip qtgamepad -no-feature-vnc -no-feature-accessibility -nomake tests])
       ├─ eglfs support (BR2_PACKAGE_QT5BASE_EGLFS=y)
       └─ Default graphical platform (BR2_PACKAGE_QT5BASE_DEFAULT_QPA=&quot;eglfs&quot;)</code></pre>
-<p>Les packages <em>mesa3d → OpenGL ES (BR2_PACKAGE_MESA3D_OPENGL_ES=y)</em> et <em>rpi-userland (BR2_PACKAGE_RPI_USERLAND=y)</em> ne peuvent cohabiter pour fournir un support OpenGLES.</p>
-<p>Nous utiliserons un script post-build <code>output/post-build-config.sh</code> en plus de celui par défaut <code>board/raspberrypi3/post-build.sh</code>. Ils doivent être séparés par un espace.</p>
-<p>L'utilisation de udev (eudev) est util pour la détection automatique des périphériques et charger les modules requis ce qui permettra de rendre disponible le GPU dans <code>/dev/dri/card0</code>. Il est possible de se passer de udev en chargeant les modules requis manuellement (cas exposé plus tard).</p>
+<p>Les packages <em>mesa3d → OpenGL ES
+(BR2_PACKAGE_MESA3D_OPENGL_ES=y)</em> et <em>rpi-userland
+(BR2_PACKAGE_RPI_USERLAND=y)</em> ne peuvent cohabiter pour fournir un
+support OpenGLES.</p>
+<p>Nous utiliserons un script post-build
+<code>output/post-build-config.sh</code> en plus de celui par défaut
+<code>board/raspberrypi3/post-build.sh</code>. Ils doivent être séparés
+par un espace.</p>
+<p>L'utilisation de udev (eudev) est util pour la détection automatique
+des périphériques et charger les modules requis ce qui permettra de
+rendre disponible le GPU dans <code>/dev/dri/card0</code>. Il est
+possible de se passer de udev en chargeant les modules requis
+manuellement (cas exposé plus tard).</p>
 <p>Pas besoin d'inclure mesa3d → Gallium v3d driver.</p>
 <p>Sauvegarde de la configuration Buildroot:</p>
 <pre class="console"><code>make savedefconfig BR2_DEFCONFIG=./buildrootqt5_vc4.config</code></pre>
-<h3 id="configuration-du-noyau-linux-1">Configuration du noyau Linux</h3>
+<h3 id="configuration-du-noyau-linux-1">Configuration du noyau
+Linux</h3>
 <p>Pour la configuration du noyau, il faut inclure le pilote VC4:</p>
 <pre class="console"><code>make linux-menuconfig</code></pre>
 <pre class="text"><code>Device Drivers
@@ -296,13 +362,19 @@ Target packages
    ├─ Direct Rendering Manager (XFree86 4.1.0 and higher DRI support) (CONFIG_DRM=y)
    └─ Broadcom VC4 Graphics (CONFIG_DRM_VC4=m)</code></pre>
 <blockquote>
-<p>Pas besoin d'inclure <em>Device Drivers → Graphics support → Broadcom V3D 3.x and newer (CONFIG_DRM_V3D)</em></p>
+<p>Pas besoin d'inclure <em>Device Drivers → Graphics support → Broadcom
+V3D 3.x and newer (CONFIG_DRM_V3D)</em></p>
 </blockquote>
 <p>Sauvegarde de la configuration du noyau:</p>
 <pre class="console"><code>cp output/build/linux-custom/.config linux_vc4.config</code></pre>
 <h3 id="overlay-1">Overlay</h3>
-<p>Le contenu de l'overlay <code>output/rootfs_overlay</code> reste le même sauf pour le script <code>output/rootfs_overlay/root/test.sh</code> qui intègre une valeur différente pour <code>QT_QPA_EGLFS_INTEGRATION</code> et une nouvelle variable <code>QT_QPA_EGLFS_NO_LIBINPUT</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<p>Le contenu de l'overlay <code>output/rootfs_overlay</code> reste le
+même sauf pour le script <code>output/rootfs_overlay/root/test.sh</code>
+qui intègre une valeur différente pour
+<code>QT_QPA_EGLFS_INTEGRATION</code> et une nouvelle variable
+<code>QT_QPA_EGLFS_NO_LIBINPUT</code>:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_PLATFORM</span><span class="op">=</span>eglfs</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_INTEGRATION</span><span class="op">=</span>eglfs_kms</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">QT_QPA_EGLFS_ALWAYS_SET_MODE</span><span class="op">=</span>1</span>
@@ -325,25 +397,35 @@ Target packages
 <span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="ex">qmlscene</span> box.qml <span class="at">-platform</span> eglfs</span></code></pre></div>
 <blockquote>
-<p>Avec l'ajout de udev, Qt5 utilise son composant evdev qui nécessite la désactivation de Libinput avec <code>QT_QPA_EGLFS_NO_LIBINPUT=1</code>.</p>
+<p>Avec l'ajout de udev, Qt5 utilise son composant evdev qui nécessite
+la désactivation de Libinput avec
+<code>QT_QPA_EGLFS_NO_LIBINPUT=1</code>.</p>
 </blockquote>
 <h3 id="script-post-build">Script post-build</h3>
-<p>Le chargement du pilote VC4 au démarrage nécessite l'ajout des directives <code>gpu_mem=128</code> et <code>dtoverlay=vc4-kms-v3d</code> dans le fichier <code>config.txt</code> de la partition de boot. Pour cela nous utiliserons un script post-build <code>post-build-config.sh</code> dans le dossier <code>output/</code> (déjà configuré dans Buildroot).</p>
+<p>Le chargement du pilote VC4 au démarrage nécessite l'ajout des
+directives <code>gpu_mem=128</code> et
+<code>dtoverlay=vc4-kms-v3d</code> dans le fichier
+<code>config.txt</code> de la partition de boot. Pour cela nous
+utiliserons un script post-build <code>post-build-config.sh</code> dans
+le dossier <code>output/</code> (déjà configuré dans Buildroot).</p>
 <p>post-build-config.sh:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-u</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ot">! </span><span class="fu">grep</span> <span class="at">-qE</span> <span class="st">&#39;^gpu_mem=128&#39;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span>  <span class="kw">&amp;&amp;</span> <span class="ex">!</span> grep <span class="at">-qE</span> <span class="st">&#39;^dtoverlay=vc4-kms-v3d&#39;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ot">! </span><span class="fu">grep</span> <span class="at">-qE</span> <span class="st">&#39;^gpu_mem=128&#39;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span>  <span class="kw">&amp;&amp;</span> <span class="ot">! </span><span class="fu">grep</span> <span class="at">-qE</span> <span class="st">&#39;^dtoverlay=vc4-kms-v3d&#39;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span><span class="kw">;</span> <span class="cf">then</span></span>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;Adding &#39;gpu_mem=128&#39; and &#39;dtoverlay=vc4-kms-v3d&#39; to config.txt (load VC4).&quot;</span></span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;gpu_mem=128&quot;</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span></span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;dtoverlay=vc4-kms-v3d&quot;</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">${BINARIES_DIR}</span><span class="st">/rpi-firmware/config.txt&quot;</span></span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div>
-<p>Ne pas oublier de donner les droits d'exécution avec <code>chmod +x output/post-build-config.sh</code>.</p>
+<p>Ne pas oublier de donner les droits d'exécution avec
+<code>chmod +x output/post-build-config.sh</code>.</p>
 <h3 id="compilation-1">Compilation</h3>
 <p>Lancer la compilation et la création de l'image:</p>
 <pre class="console"><code>make</code></pre>
-<p>Pour vérifier les options de compilation du package <code>qt5base</code>, notamment les backends disponibles:</p>
+<p>Pour vérifier les options de compilation du package
+<code>qt5base</code>, notamment les backends disponibles:</p>
 <pre class="console"><code>cat ./output/build/qt5base-5.15.2/config.summary</code></pre>
 <pre class="text"><code>QPA backends:
   DirectFB ............................... no
@@ -363,10 +445,13 @@ Target packages
   VNC .................................... no</code></pre>
 <p>Copie de l'image générée vers la carte SD:</p>
 <pre class="console"><code>sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</code></pre>
-<p>Après démarrer le système sur le Raspberry, exécuter <code>test.sh</code> pour lancer l'application QML:</p>
+<p>Après démarrer le système sur le Raspberry, exécuter
+<code>test.sh</code> pour lancer l'application QML:</p>
 <pre class="console"><code>sh test.sh</code></pre>
 <h3 id="se-passer-de-udev-eudev">Se passer de udev (eudev)</h3>
-<p>Il est possible de ne pas inclure udev (dans Buildroot: <em>System configuration → /dev management</em>). Les modules chargés automatiquement par udev (liste récupérée avec <code>lsmod</code>):</p>
+<p>Il est possible de ne pas inclure udev (dans Buildroot: <em>System
+configuration → /dev management</em>). Les modules chargés
+automatiquement par udev (liste récupérée avec <code>lsmod</code>):</p>
 <pre class="text"><code>Module                  Size  Used by    Tainted: G  
 snd_soc_hdmi_codec     20480  1 
 brcmfmac              327680  0 
@@ -387,8 +472,11 @@ vc_sm_cma              32768  0
 uio_pdrv_genirq        16384  0 
 uio                    20480  1 uio_pdrv_genirq
 fixed                  16384  0 </code></pre>
-<p>Pour se passer de udev et obtenir <code>/dev/dri/card0</code>, certains modules doivent être chargés (via un script ou manuellement) avec <code>modprobe</code>:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<p>Pour se passer de udev et obtenir <code>/dev/dri/card0</code>,
+certains modules doivent être chargés (via un script ou manuellement)
+avec <code>modprobe</code>:</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">modprobe</span> snd_soc_hdmi_codec</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="ex">modprobe</span> i2c_bcm2835</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="ex">modprobe</span> vc4</span>
@@ -413,11 +501,16 @@ fixed                  16384  0 </code></pre>
 [   41.026489] [vc_sm_connected_init]: installed successfully</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://buildroot.org/downloads/manual/manual.html">https://buildroot.org/downloads/manual/manual.html</a></li>
-<li><a href="https://doc.qt.io/qt-5/inputs-linux-device.html">https://doc.qt.io/qt-5/inputs-linux-device.html</a></li>
-<li><a href="https://doc.qt.io/archives/qt-5.6/embedded-linux.html">https://doc.qt.io/archives/qt-5.6/embedded-linux.html</a></li>
-<li><a href="https://doc.qt.io/qt-5/qtquickcontrols-index.html#versions">https://doc.qt.io/qt-5/qtquickcontrols-index.html#versions</a></li>
-<li><a href="https://doc.qt.io/qt-5/configure-options.html">https://doc.qt.io/qt-5/configure-options.html</a></li>
+<li><a
+href="https://buildroot.org/downloads/manual/manual.html">https://buildroot.org/downloads/manual/manual.html</a></li>
+<li><a
+href="https://doc.qt.io/qt-5/inputs-linux-device.html">https://doc.qt.io/qt-5/inputs-linux-device.html</a></li>
+<li><a
+href="https://doc.qt.io/archives/qt-5.6/embedded-linux.html">https://doc.qt.io/archives/qt-5.6/embedded-linux.html</a></li>
+<li><a
+href="https://doc.qt.io/qt-5/qtquickcontrols-index.html#versions">https://doc.qt.io/qt-5/qtquickcontrols-index.html#versions</a></li>
+<li><a
+href="https://doc.qt.io/qt-5/configure-options.html">https://doc.qt.io/qt-5/configure-options.html</a></li>
 </ul>
   <br />
   <hr />

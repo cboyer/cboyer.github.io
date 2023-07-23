@@ -151,6 +151,6 @@ pcs resource clear smtp_postfix SRV-TEST01A
 ```
 
 
-# Liens complémentaires
+## Liens complémentaires
  - [https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Configuring_the_Red_Hat_High_Availability_Add-On_with_Pacemaker/ch-pcscommand-HAAR.html](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Configuring_the_Red_Hat_High_Availability_Add-On_with_Pacemaker/ch-pcscommand-HAAR.html)
  - [http://linux-ha.org/doc/man-pages/re-ra-postfix.html](http://linux-ha.org/doc/man-pages/re-ra-postfix.html)

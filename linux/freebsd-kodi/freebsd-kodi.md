@@ -1,7 +1,7 @@
 ---
 title: "Installation de Kodi sous FreeBSD 13"
 date: "2021-11-12T18:20:14-05:00"
-updated: "2021-11-22T17:34:14-05:00"
+updated: "2023-06-30T12:52:14-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -11,7 +11,7 @@ abstract: "Installation de Kodi sous FreeBSD 13."
 ---
 
 
-Certains paramètres présentés sont spécifiques à la configuration matérielle d'un système avec Intel Braswell.
+Certains paramètres présentés sont spécifiques à la configuration matérielle d'un système avec Intel Braswell: les pilotes et configurations peuvent différer sur d'autres systèmes.
 
 
 ## Installation de Kodi depuis les paquets
@@ -19,11 +19,29 @@ Certains paramètres présentés sont spécifiques à la configuration matériel
 
 ### Installation des paquets avec pkg
 
-```Console
-pkg install kodi kodi-addon-pvr.iptvsimple libbluray libcec dav1d lcms2 libass libcrossguid \
-    curl ffmpeg libfmt fstrcmp lzo2 spdlog sqlite3 taglib waylandpp libGLU xorg-server xinit \
-    xorg-drivers drm-kmod xf86-video-intel libva-intel-driver libvdpau-va-gl xterm py38-sqlite3
+Configurer le dépôts PKG à latest au lieu de quarterly avec le fichier `/usr/local/etc/pkg/repos/FreeBSD.conf`:
 ```
+FreeBSD: {
+url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest",
+mirror_type: "srv",
+signature_type: "fingerprints",
+fingerprints: "/usr/share/keys/pkg",
+enabled: yes
+}
+```
+
+Mise à jour du système et vérifier la présence de vulnérabilité:
+```Console
+freebsd-update fetch install && pkg update && pkg upgrade && pkg audit
+```
+
+```Console
+pkg install kodi kodi-addon-pvr.iptvsimple kodi-addon-inputstream.adaptive \
+    xorg-server xinit xorg-drivers drm-kmod xf86-video-intel libva-intel-driver \
+    py39-sqlite3 libvdpau-va-gl
+```
+
+Les paquets `kodi-addon-inputstream.adaptive` et `py39-sqlite3` sont nécessaires à l'extension YouTube permettant de visionner les bandes-annonces.
 
 Charger le module KMS au boot via `/etc/rc.conf`
 ```Console
@@ -57,36 +75,109 @@ Pour activer l'accélération matérielle, dans `/usr/local/etc/X11/xorg.conf.d/
 Section "Device"
     Identifier "Card0"
     Driver "modesetting"
-    Option "DPMS"
+    Option "DPMS" "false"
     Option "DRI" "3"
     Option "AccelMethod" "glamor"
 EndSection
 ```
 
-Création du compte utilisateur kodi
+### Création du compte utilisateur kodi
 
 ```Console
-pw user add -n kodi -c 'Kodi Media Player' -d /home/kodi -G video -m -s /bin/csh
+pw user add -n kodi -c 'Kodi Media Player' -d /home/kodi -G video -m -s /usr/sbin/nologin
 ```
 
-> Si l'utilisateur kodi peut être crée à l'installation de FreeBSD puis modifié avec `pw group mod wheel -m kodi` par exemple.
-> Pour changer de shell `chsh -s /usr/local/bin/bash kodi`.
+> L'utilisateur kodi peut être créé à l'installation de FreeBSD puis modifié avec `pw group mod wheel -m kodi` par la suite.
+> Pour changer de shell et rendre le compte utilisable: `chsh -s /usr/local/bin/bash kodi`.
 
 Tester l'exécution de Kodi:
 ```Console
-su -m kodi -c 'setenv HOME /home/kodi && /usr/local/bin/xinit /usr/local/bin/kodi-standalone -- -nocursor :0 -nolisten tcp'
+su -m kodi -c 'HOME=/home/kodi /usr/local/bin/xinit /usr/local/bin/kodi --standalone -- -nocursor :0 -nolisten tcp'
 ```
 
-### Autologin et lancement automatique de Kodi
+### Démarrage automatique de Kodi via rc.d (recommandé)
 
-Dans `/etc/gettytab` 
+Créer le fichier `/usr/local/etc/X11/Xwrapper.config` avec la directive suivante pour autoriser le lancement de X sur les terminaux virtuels
+```
+allowed_users=anybody
+```
+
+Créer le script `/usr/local/etc/rc.d/kodi` avec les droits d'exécution
+```Bash
+#!/bin/sh
+
+# PROVIDE: kodi
+# REQUIRE: FILESYSTEMS DAEMON NETWORKING LOGIN
+# KEYWORD: nojail shutdown
+
+. /etc/rc.subr
+
+name=kodi
+rcvar=kodi_enable
+
+kodi_user=root
+kodi_chdir="/home/kodi"
+kodi_env="PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin HOME=/home/kodi LIBVA_DRIVER_NAME=i965 LIBVA_DRIVERS_PATH=/usr/local/lib/dri"
+pidfile="/var/run/${name}.pid"
+stop_precmd="${name}_stop_precmd"
+
+command="/usr/sbin/daemon"
+command_args="-u kodi -P ${pidfile} -r -f /usr/local/bin/xinit /usr/local/bin/kodi --standalone -- :0 -nocursor -quiet -nolisten tcp"
+
+load_rc_config $name
+: ${kodi_enable:=no}
+: ${kodi_msg="Not started."}
+
+kodi_stop_precmd()
+{
+    kodi_pid="$(/usr/bin/pgrep kodi.bin)"
+    /bin/kill -TERM ${kodi_pid} 2>/dev/null
+    /bin/pwait ${kodi_pid}
+}
+
+run_rc_command "$1"
+```
+
+> L'exécution de la chaîne Xinit > Xorg > Kodi est supervisée par `daemon` qui redémarrera l'ensemble en cas d'arrêt. C'est le PID de `daemon` qui est contrôlé par rc.d et non directement celui de Kodi. 
+> La fonction `kodi_stop_precmd` permet d'attendre la fermeture de Kodi et d'éviter la corruption de la base de données SQLite possiblement causée par un arrêt direct de Xinit, Xorg ou daemon.
+> Le redémarrage de Kodi ne sera effectué qu'après 1 seconde d'attente par `daemon`, ce qui laisse largement le temps à rc.d d'envoyer le signal TERM à daemon qui n'aura pas le temps de redémarré Kodi.
+
+Activation via rc.d:
+```Console
+sysrc kodi_enable=YES
+```
+
+Le service kodi peut alors être géré avec la commande `service`:
+```Console
+service kodi start
+```
+
+
+### Démarrage automatique de Kodi via crontab
+
+Créer le fichier `/usr/local/etc/X11/Xwrapper.config` avec la directive suivante pour autoriser le lancement de X sur les terminaux virtuels
+```
+allowed_users=anybody
+```
+
+Ajouter dans la crontab de l'utilisateur kodi la ligne suivante avec `crontab -e`
+```Text
+@reboot HOME=/home/kodi LIBVA_DRIVER_NAME=i965 LIBVA_DRIVERS_PATH=/usr/local/lib/dri /usr/local/bin/xinit /usr/local/bin/kodi --standalone -- -nocursor :0 -nolisten tcp > /dev/null 2>&1
+```
+
+> Il est possible d'utiliser un script pour relancer Kodi avec une boucle afin de le redémarrer en cas d'arrêt brusque.
+
+
+### Démarrage automatique de Kodi via autologin
+
+Ajouter dans `/etc/gettytab` 
 ```Text
 # autologin kodi
 A|Al|Autologin console:\
   :ht:np:sp#115200:al=kodi
 ```
 
-Dans `/etc/ttys`
+Remplacer la ligne `ttyv1` dans `/etc/ttys`
 ```Text
 #ttyv1  "/usr/libexec/getty Pc"         xterm   onifexists secure
 ttyv1   "/usr/libexec/getty Al"         xterm   onifexists secure
@@ -105,63 +196,6 @@ else
     logout
 endif
 ```
-
-### Configuration du chargeur d'amorçage
-
-Ajouter dans `/boot/loader.conf`.
-```Text
-autoboot_delay="-1"
-hw.vga.textmode=0
-kern.vt.fb.default_mode="800x600"
-```
-
-
-### Support des partitions EXT4
-
-```Console
-pkg install fusefs-lkl
-kldload fusefs
-sysrc kld_list+=fusefs
-```
-
-Pour tester
-```Console
-mount -t fuse -o rw,mountprog=/usr/local/bin/lklfuse,type=ext4,allow_other /dev/ada1s1 /data
-```
-
-Ajouter dans `/etc/fstab` pour que la partition soit montée au démarrage
-```Text
-/dev/ada1s1     /data       fuse        rw,mountprog=/usr/local/bin/lklfuse,type=ext4,allow_other,late 0 0
-```
-
-> Pour les volumes NTFS il faut installer le paquet `fusefs-ntfs`.
-
-
-### Installation de Samba4
-
-pkg install samba413
-
-La configuration dans `/usr/local/etc/smb4.conf`
-```Text
-[global]
-    workgroup = WORKGROUP
-    realm = WORKGROUP
-    netbios name = kodi
-
-[data]
-    path = /data
-    public = no
-    writable = yes
-    printable = no
-    guest ok = no
-    valid users = smbuser
-```
-
-```Console
-sysrc samba_server_enable="YES"
-service samba_server start
-```
-
 
 
 
@@ -355,7 +389,7 @@ cp -r ../../xbmc/kodi-build/addons/inputstream.rtmp/resources/ /usr/local/share/
 
 
 
-### Lectures complémentaires
+## Lectures complémentaires
 - [https://docs.freebsd.org/en/books/handbook/ports/](https://docs.freebsd.org/en/books/handbook/ports/)
 - [https://amissing.link/freebsd-entertainment-center.html](https://amissing.link/freebsd-entertainment-center.html)
 - [https://forums.freebsd.org/threads/trouble-calling-startx-in-start-up-script.22304/#post-125992](https://forums.freebsd.org/threads/trouble-calling-startx-in-start-up-script.22304/#post-125992)

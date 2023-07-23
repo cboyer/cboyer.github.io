@@ -3,9 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <title>Création d’un web service SOAP avec Mirth - C. Boyer</title>
-  <meta name="description" content="Création d’un web service SOAP avec Mirth." />
+  <meta name="description" content="Création d’un web service SOAP avec
+Mirth." />
   <meta name="author" content="C. Boyer" />
-  <meta name="keywords" content="Mirth, SOAP, web service, XML, java, JAXB, JAR, WSDL, XSD" />
+  <meta name="keywords" content="Mirth, SOAP, web
+service, XML, java, JAXB, JAR, WSDL, XSD" />
   <meta name="robots" content="index,follow">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
@@ -18,8 +20,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -92,17 +94,31 @@ code span.wa { color: #bf0303; } /* Warning */</style>
   <h1>Création d’un web service SOAP avec Mirth</h1>
   <em>Publié le 2019-08-02</em>
 <p>Cet article a été écrit en utilisant la version 3.2 de Mirth.</p>
-<h2 id="terminologie-des-web-services">Terminologie des web services:</h2>
+<h2 id="terminologie-des-web-services">Terminologie des web
+services:</h2>
 <ul>
-<li>XML: eXtensible Markup Language, utilisé par les Web Service pour organiser les données.</li>
-<li>SOAP: Simple Object Access Protocol, pour transférer les messages (requête comme réponse)</li>
-<li>WSDL: Web Services Description Language, Pour décrire la disponibilité des services (les méthodes, leurs paramètres et le type des paramètres).</li>
-<li>XSD: XML Schema Definition, décrit les données retournées et leur type.</li>
+<li>XML: eXtensible Markup Language, utilisé par les Web Service pour
+organiser les données.</li>
+<li>SOAP: Simple Object Access Protocol, pour transférer les messages
+(requête comme réponse)</li>
+<li>WSDL: Web Services Description Language, Pour décrire la
+disponibilité des services (les méthodes, leurs paramètres et le type
+des paramètres).</li>
+<li>XSD: XML Schema Definition, décrit les données retournées et leur
+type.</li>
 </ul>
-<h2 id="le-web-service-listener-de-mirth">Le Web Service Listener de Mirth</h2>
-<p>Mirth propose par défaut un connecteur Source pour implémenter facilement un web service SOAP. En revanche les possibilités de configuration sont très limitées car les méthodes, paramètres et type de données (WSDL/XSD) sont générés directement depuis la classe Java <a href="https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java">com.mirth.connect.connectors.ws.DefaultAcceptMessage</a>. Cette classe étends la classe interne <code>com.mirth.connect.connectors.ws.AcceptMessage</code>.</p>
+<h2 id="le-web-service-listener-de-mirth">Le Web Service Listener de
+Mirth</h2>
+<p>Mirth propose par défaut un connecteur Source pour implémenter
+facilement un web service SOAP. En revanche les possibilités de
+configuration sont très limitées car les méthodes, paramètres et type de
+données (WSDL/XSD) sont générés directement depuis la classe Java <a
+href="https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java">com.mirth.connect.connectors.ws.DefaultAcceptMessage</a>.
+Cette classe étends la classe interne
+<code>com.mirth.connect.connectors.ws.AcceptMessage</code>.</p>
 <p>Le XSD généré par Mirth:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">xs:schema</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> targetNamespace=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">xs:schema</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> targetNamespace=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:element</span><span class="ot"> name=</span><span class="st">&quot;acceptMessage&quot;</span><span class="ot"> type=</span><span class="st">&quot;tns:acceptMessage&quot;</span>/&gt;</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:element</span><span class="ot"> name=</span><span class="st">&quot;acceptMessageResponse&quot;</span><span class="ot"> type=</span><span class="st">&quot;tns:acceptMessageResponse&quot;</span>/&gt;</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:complexType</span><span class="ot"> name=</span><span class="st">&quot;acceptMessage&quot;</span>&gt;</span>
@@ -117,20 +133,28 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">xs:schema</span>&gt;</span></code></pre></div>
 <p>Le WSDL et XSD sont disponibles aux adresses suivantes:</p>
 <ul>
-<li><a href="http://localhost:8081/services/query?wsdl">http://localhost:8081/services/query?wsdl</a></li>
-<li><a href="http://localhost:8081/services/query?xsd=1">http://localhost:8081/services/query?xsd=1</a></li>
+<li><a
+href="http://localhost:8081/services/query?wsdl">http://localhost:8081/services/query?wsdl</a></li>
+<li><a
+href="http://localhost:8081/services/query?xsd=1">http://localhost:8081/services/query?xsd=1</a></li>
 </ul>
 <h3 id="scénario-écho">Scénario Écho</h3>
-<p>Démonstration de l'utilisation du connecteur source "Web Service Listener":</p>
+<p>Démonstration de l'utilisation du connecteur source "Web Service
+Listener":</p>
 <figure>
-<img src="source_wslistener_default.jpg" alt="Connecteur source" /><figcaption aria-hidden="true">Connecteur source</figcaption>
+<img src="source_wslistener_default.jpg" alt="Connecteur source" />
+<figcaption aria-hidden="true">Connecteur source</figcaption>
 </figure>
 <p>Le connecteur de destination retourne simplement ce qu'il reçoit:</p>
 <figure>
-<img src="destination_wslistener.jpg" alt="Connecteur de destination" /><figcaption aria-hidden="true">Connecteur de destination</figcaption>
+<img src="destination_wslistener.jpg" alt="Connecteur de destination" />
+<figcaption aria-hidden="true">Connecteur de destination</figcaption>
 </figure>
-<p>Pour tester le canal nous devons envoyer notre requête SOAP avec la méthode <code>AcceptMessage</code> et le paramètre <code>arg0</code> (fichier soap.xml):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
+<p>Pour tester le canal nous devons envoyer notre requête SOAP avec la
+méthode <code>AcceptMessage</code> et le paramètre <code>arg0</code>
+(fichier soap.xml):</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Header</span>/&gt;</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Body</span>&gt;</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ws:acceptMessage</span>&gt;</span>
@@ -141,7 +165,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <p>Pour l'envoi de la requête nous utiliserons curl:</p>
 <pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous retourne alors:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">SOAP-ENV:Header</span>&gt;&lt;/<span class="kw">SOAP-ENV:Header</span>&gt;</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">S:Body</span>&gt;</span>
@@ -152,13 +177,28 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">S:Envelope</span>&gt;</span></code></pre></div>
 <h3 id="problématiques">Problématiques</h3>
 <ul>
-<li>L'enveloppe XML/WSDL/XSD est imposée par <code>com.mirth.connect.connectors.ws.DefaultAcceptMessage</code> (par exemple <code>arg0</code>, <code>AcceptMessage</code> dans la requête SOAP).</li>
-<li>Une seule données peut être transmise via <code>arg0</code> à moins d’utiliser un séparateur comme CSV (utiliser du XML ne respecte pas le standard SOAP et devra être traité via preprocessor dans <code>&lt;![CDATA[]]&gt;</code> pour éviter les problèmes de caractères spécifiques à XML). Le même problème se pose pour la réponse SOAP (si on utilise du XML dans <code>return</code>, les caractères seront remplacés par des caractères HTML.</li>
+<li>L'enveloppe XML/WSDL/XSD est imposée par
+<code>com.mirth.connect.connectors.ws.DefaultAcceptMessage</code> (par
+exemple <code>arg0</code>, <code>AcceptMessage</code> dans la requête
+SOAP).</li>
+<li>Une seule données peut être transmise via <code>arg0</code> à moins
+d’utiliser un séparateur comme CSV (utiliser du XML ne respecte pas le
+standard SOAP et devra être traité via preprocessor dans
+<code>&lt;![CDATA[]]&gt;</code> pour éviter les problèmes de caractères
+spécifiques à XML). Le même problème se pose pour la réponse SOAP (si on
+utilise du XML dans <code>return</code>, les caractères seront remplacés
+par des caractères HTML.</li>
 </ul>
-<h2 id="créer-son-web-service-à-laide-dune-classe-java">Créer son web service à l'aide d'une classe Java</h2>
-<p>Pour utiliser notre propre WSDL et XSD, nous pouvons étendre nous même la classe <code>com.mirth.connect.connectors.ws.acceptMessage</code>. Pour cela nous aurons besoin du JDK pour compiler et générer l'archive JAR.</p>
-<p>Code source (<code>SDDCws.java</code>, le fichier doit avoir le même nom que la classe sinon le compilateur vous le fera savoir!):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
+<h2 id="créer-son-web-service-à-laide-dune-classe-java">Créer son web
+service à l'aide d'une classe Java</h2>
+<p>Pour utiliser notre propre WSDL et XSD, nous pouvons étendre nous
+même la classe
+<code>com.mirth.connect.connectors.ws.acceptMessage</code>. Pour cela
+nous aurons besoin du JDK pour compiler et générer l'archive JAR.</p>
+<p>Code source (<code>SDDCws.java</code>, le fichier doit avoir le même
+nom que la classe sinon le compilateur vous le fera savoir!):</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">javax</span><span class="op">.</span><span class="im">jws</span><span class="op">.</span><span class="im">WebMethod</span><span class="op">;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">javax</span><span class="op">.</span><span class="im">jws</span><span class="op">.</span><span class="im">WebParam</span><span class="op">;</span></span>
@@ -187,31 +227,59 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">null</span><span class="op">;</span></span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Il faut bien utiliser <code>package com.mirth.connect.connectors.ws;</code> pour étendre la classe <code>AcceptMessage</code> qui est dans <code>com.mirth.connect.connectors.ws</code> sans quoi le web service retournera l'erreur: "<em>Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</em>"</p>
-<p>Il est possible de définir le targetNamespace (par défaut sa valeur est <code>http://ws.connectors.connect.mirth.com/</code>), le serviceName et le portName en remplaçant l'annotation <code>@WebService</code> par:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">@WebService</span><span class="op">(</span>portName <span class="op">=</span> <span class="st">&quot;SDDCwsPort&quot;</span><span class="op">,</span> serviceName <span class="op">=</span> <span class="st">&quot;SDDCws&quot;</span><span class="op">,</span> targetNamespace <span class="op">=</span> <span class="st">&quot;https://monurl.qc.ca/monservice&quot;</span><span class="op">)</span></span></code></pre></div>
-<p>La requête SOAP devra mentionner le bon targetNamespace (<code>xmlns:ws="https://monurl.qc.ca/monservice"</code>) dans l'enveloppe sinon nous obtiendrons l'erreur: "<em>Méthode de répartition introuvable pour {http://ws.connectors.connect.mirth.com/}hello</em>"</p>
+<p>Il faut bien utiliser
+<code>package com.mirth.connect.connectors.ws;</code> pour étendre la
+classe <code>AcceptMessage</code> qui est dans
+<code>com.mirth.connect.connectors.ws</code> sans quoi le web service
+retournera l'erreur: "<em>Méthode de répartition introuvable pour
+{http://ws.connectors.connect.mirth.com/}hello</em>"</p>
+<p>Il est possible de définir le targetNamespace (par défaut sa valeur
+est <code>http://ws.connectors.connect.mirth.com/</code>), le
+serviceName et le portName en remplaçant l'annotation
+<code>@WebService</code> par:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">@WebService</span><span class="op">(</span>portName <span class="op">=</span> <span class="st">&quot;SDDCwsPort&quot;</span><span class="op">,</span> serviceName <span class="op">=</span> <span class="st">&quot;SDDCws&quot;</span><span class="op">,</span> targetNamespace <span class="op">=</span> <span class="st">&quot;https://monurl.qc.ca/monservice&quot;</span><span class="op">)</span></span></code></pre></div>
+<p>La requête SOAP devra mentionner le bon targetNamespace
+(<code>xmlns:ws="https://monurl.qc.ca/monservice"</code>) dans
+l'enveloppe sinon nous obtiendrons l'erreur: "<em>Méthode de répartition
+introuvable pour
+{http://ws.connectors.connect.mirth.com/}hello</em>"</p>
 <h3 id="compilation-de-la-classe">Compilation de la classe</h3>
 <pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java -cp  ^
 &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;</code></pre>
-<p><code>ws-server.jar</code> est obligatoire pour étendre <code>AcceptMessage</code> et <code>donkey-server.jar</code> nécessaire si on utilise <code>webServiceReceiver.processData</code>.</p>
+<p><code>ws-server.jar</code> est obligatoire pour étendre
+<code>AcceptMessage</code> et <code>donkey-server.jar</code> nécessaire
+si on utilise <code>webServiceReceiver.processData</code>.</p>
 <h3 id="création-de-larchive-jar">Création de l'archive JAR</h3>
-<p>il faut copier <code>SDDCws.class</code> dans <code>com/mirth/connect/connectors/ws</code>.</p>
+<p>il faut copier <code>SDDCws.class</code> dans
+<code>com/mirth/connect/connectors/ws</code>.</p>
 <pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\jar.exe&quot; cf SDDCws.jar com\mirth\connect\connectors\ws com</code></pre>
 <p>Nous obtenons alors <code>SDDCws.jar</code>.</p>
 <h3 id="installation">Installation</h3>
-<p>Copier <code>SDDCws.jar</code> dans <code>C:\Program Files\Mirth Connect\custom-lib</code>. Dans Mirth, aller dans Settings &gt; Resources &gt; Reload Resource <code>SDDCws.jar</code> doit apparaître dans la liste « Loaded Librairies » :</p>
+<p>Copier <code>SDDCws.jar</code> dans
+<code>C:\Program Files\Mirth Connect\custom-lib</code>. Dans Mirth,
+aller dans Settings &gt; Resources &gt; Reload Resource
+<code>SDDCws.jar</code> doit apparaître dans la liste « Loaded
+Librairies » :</p>
 <figure>
-<img src="resources.jpg" alt="SDDCws.jar apparaît dans la liste" /><figcaption aria-hidden="true">SDDCws.jar apparaît dans la liste</figcaption>
+<img src="resources.jpg" alt="SDDCws.jar apparaît dans la liste" />
+<figcaption aria-hidden="true">SDDCws.jar apparaît dans la
+liste</figcaption>
 </figure>
 <h3 id="paramétrer-le-canal">Paramétrer le canal</h3>
 <figure>
-<img src="source_wslistener_custom.jpg" alt="Connecteur source avec com.mirth.connect.connectors.ws.SDDCws" /><figcaption aria-hidden="true">Connecteur source avec com.mirth.connect.connectors.ws.SDDCws</figcaption>
+<img src="source_wslistener_custom.jpg"
+alt="Connecteur source avec com.mirth.connect.connectors.ws.SDDCws" />
+<figcaption aria-hidden="true">Connecteur source avec
+com.mirth.connect.connectors.ws.SDDCws</figcaption>
 </figure>
-<p>Après démarrage on peut vérifier le WSDL et XSD: - http://localhost:8081/services/query?wsdl - http://localhost:8081/services/query?xsd=1</p>
+<p>Après démarrage on peut vérifier le WSDL et XSD: -
+http://localhost:8081/services/query?wsdl -
+http://localhost:8081/services/query?xsd=1</p>
 <h3 id="test-du-canal">Test du canal</h3>
 <p>Le fichier soap.xml à envoyer avec curl:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> encoding=</span><span class="st">&quot;UTF-8&quot;</span><span class="fu">?&gt;</span></span>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> encoding=</span><span class="st">&quot;UTF-8&quot;</span><span class="fu">?&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Header</span>/&gt;</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Body</span>&gt;</span>
@@ -224,7 +292,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; ^
          --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous répond alors:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">SOAP-ENV:Header</span>&gt;&lt;/<span class="kw">SOAP-ENV:Header</span>&gt;</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">S:Body</span>&gt;</span>
@@ -233,10 +302,15 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">ns2:helloResponse</span>&gt;</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">S:Body</span>&gt;</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">S:Envelope</span>&gt;</span></code></pre></div>
-<h2 id="web-service-avancé-avec-plusieurs-paramètres-en-entréesortie">Web service avancé avec plusieurs paramètres en entrée/sortie</h2>
-<p>Pour accepter plusieurs paramètres fournis par la requête SOAP, nous allons définir plusieurs paramètres (patseq et name) dans notre classe:</p>
+<h2
+id="web-service-avancé-avec-plusieurs-paramètres-en-entréesortie">Web
+service avancé avec plusieurs paramètres en entrée/sortie</h2>
+<p>Pour accepter plusieurs paramètres fournis par la requête SOAP, nous
+allons définir plusieurs paramètres (patseq et name) dans notre
+classe:</p>
 <p>Fichier <code>SDDCws.java</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">javax</span><span class="op">.</span><span class="im">jws</span><span class="op">.</span><span class="im">WebMethod</span><span class="op">;</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">javax</span><span class="op">.</span><span class="im">jws</span><span class="op">.</span><span class="im">WebParam</span><span class="op">;</span></span>
@@ -294,11 +368,25 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> patient<span class="op">;</span></span>
 <span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Par défaut ces paramètres ne sont pas obligatoires, si une requête SOAP est envoyée sans certains de ces paramètres il seront ajoutés mais inialisés à <code>null</code> (Mirth les verra comme la chaîne <code>"null"</code>). Il est possible de les rendre obligatoire en utilisant <code>@XmlElement(required=true)</code> en plus de <code>@WebParam</code>.</p>
-<p>Ici nous parsons les données de <code>response</code> (données issues du connecteur de destination) pour obtenir un objet <code>patient</code> qui sera retourné via web service. Si des élément supplémentaires sont présents dans le XML à parser (non présents dans la classe <code>Patient</code>) ils seront simplement ignorés.</p>
-<p>En effet pour fournir en sortie plusieurs paramètres dans notre réponse SOAP, nous devrons faire appel aux binding Java XML (annotations JAXB) avec <code>javax.xml.bind.annotation</code> car retourner simplement un objet <code>Patient</code> ne fonctionnera pas (aucune donnée ne sera retournée).</p>
+<p>Par défaut ces paramètres ne sont pas obligatoires, si une requête
+SOAP est envoyée sans certains de ces paramètres il seront ajoutés mais
+inialisés à <code>null</code> (Mirth les verra comme la chaîne
+<code>"null"</code>). Il est possible de les rendre obligatoire en
+utilisant <code>@XmlElement(required=true)</code> en plus de
+<code>@WebParam</code>.</p>
+<p>Ici nous parsons les données de <code>response</code> (données issues
+du connecteur de destination) pour obtenir un objet <code>patient</code>
+qui sera retourné via web service. Si des élément supplémentaires sont
+présents dans le XML à parser (non présents dans la classe
+<code>Patient</code>) ils seront simplement ignorés.</p>
+<p>En effet pour fournir en sortie plusieurs paramètres dans notre
+réponse SOAP, nous devrons faire appel aux binding Java XML (annotations
+JAXB) avec <code>javax.xml.bind.annotation</code> car retourner
+simplement un objet <code>Patient</code> ne fonctionnera pas (aucune
+donnée ne sera retournée).</p>
 <p>Fichier <code>Patient.java</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">io</span><span class="op">.</span><span class="im">Serializable</span><span class="op">;</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">javax</span><span class="op">.</span><span class="im">xml</span><span class="op">.</span><span class="im">bind</span><span class="op">.</span><span class="im">annotation</span><span class="op">.</span><span class="im">XmlElement</span><span class="op">;</span></span>
@@ -363,8 +451,10 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>    ramqId <span class="op">=</span> newRamqId<span class="op">;</span></span>
 <span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h3 id="compilation-packaging-et-installation">Compilation, packaging et installation</h3>
-<p>Accélérons les choses avec un petit script pour obtenir l'archive JAR.</p>
+<h3 id="compilation-packaging-et-installation">Compilation, packaging et
+installation</h3>
+<p>Accélérons les choses avec un petit script pour obtenir l'archive
+JAR.</p>
 <pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java Patient.java ^
 -cp &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;
 
@@ -374,10 +464,14 @@ xcopy /Y .\Patient.class .\com\mirth\connect\connectors\ws\
 &quot;C:\Program Files\Java\jdk1.7.0_80\bin\jar.exe&quot; cf SDDCws.jar com\mirth\connect\connectors\ws com
 
 xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</code></pre>
-<p>Dans Mirth, aller dans Settings &gt; Resources &gt; Reload Resource. Également faire undeploy/deploy sur le canal.</p>
+<p>Dans Mirth, aller dans Settings &gt; Resources &gt; Reload Resource.
+Également faire undeploy/deploy sur le canal.</p>
 <h3 id="test-du-canal-1">Test du canal</h3>
-<p>Ajoutons un <code>transformer</code> simple sur le connecteur de destination pour s'assurer que l'ensemble canal + web service fonctionne:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>logger<span class="op">.</span><span class="fu">info</span>(<span class="st">&quot;IN: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span>
+<p>Ajoutons un <code>transformer</code> simple sur le connecteur de
+destination pour s'assurer que l'ensemble canal + web service
+fonctionne:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>logger<span class="op">.</span><span class="fu">info</span>(<span class="st">&quot;IN: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>msg[<span class="st">&#39;patseq&#39;</span>] <span class="op">=</span> <span class="st">&quot;54980498&quot;</span><span class="op">;</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>msg[<span class="st">&#39;name&#39;</span>] <span class="op">=</span> <span class="st">&quot;Bismuth&quot;</span><span class="op">;</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>msg[<span class="st">&#39;firstName&#39;</span>]  <span class="op">=</span> <span class="st">&quot;Paul&quot;</span><span class="op">;</span></span>
@@ -385,7 +479,8 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>msg[<span class="st">&#39;ramqId&#39;</span>] <span class="op">=</span> <span class="st">&quot;BISP1234567&quot;</span><span class="op">;</span></span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>logger<span class="op">.</span><span class="fu">info</span>(<span class="st">&quot;OUT: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span></code></pre></div>
 <p>La requête SOAP (fichier <code>soap.xml</code>):</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> encoding=</span><span class="st">&quot;UTF-8&quot;</span><span class="fu">?&gt;</span></span>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> encoding=</span><span class="st">&quot;UTF-8&quot;</span><span class="fu">?&gt;</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Header</span>/&gt;</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Body</span>&gt;</span>
@@ -402,7 +497,8 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; ^
          --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous retourne bien les données:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">SOAP-ENV:Header</span>&gt;&lt;/<span class="kw">SOAP-ENV:Header</span>&gt;</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">S:Body</span>&gt;</span>
@@ -417,10 +513,15 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">ns2:getPatientResponse</span>&gt;</span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">S:Body</span>&gt;</span>
 <span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">S:Envelope</span>&gt;</span></code></pre></div>
-<p>Entre temps les WSDL et le XSD sont générés conformément à la classe <code>SDDCws</code> et <code>Patient</code>.</p>
+<p>Entre temps les WSDL et le XSD sont générés conformément à la classe
+<code>SDDCws</code> et <code>Patient</code>.</p>
 <h3 id="retourner-une-liste-dobjet">Retourner une liste d'objet</h3>
-<p>Il est possible de retourner une liste d'objet <code>Patient</code>. Pour cela nous devons définir une nouvelle classe <code>PatientList</code> (dans le fichier <code>PatientList.java</code>) qui contiendra des objets <code>Patient</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
+<p>Il est possible de retourner une liste d'objet <code>Patient</code>.
+Pour cela nous devons définir une nouvelle classe
+<code>PatientList</code> (dans le fichier <code>PatientList.java</code>)
+qui contiendra des objets <code>Patient</code>:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">io</span><span class="op">.</span><span class="im">Serializable</span><span class="op">;</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">util</span><span class="op">.</span><span class="im">ArrayList</span><span class="op">;</span></span>
@@ -450,8 +551,12 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="fu">patientList</span><span class="op">.</span><span class="fu">add</span><span class="op">(</span>newPatient<span class="op">);</span></span>
 <span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>La classe <code>Patient</code> (fichier <code>Patient.java</code>) n'a besoin d'aucune modification. En revanche il faut ajuster la classe <code>SDDCws</code> (fichier <code>SDDCws.java</code>) pour parser une liste <code>PatientList</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
+<p>La classe <code>Patient</code> (fichier <code>Patient.java</code>)
+n'a besoin d'aucune modification. En revanche il faut ajuster la classe
+<code>SDDCws</code> (fichier <code>SDDCws.java</code>) pour parser une
+liste <code>PatientList</code>:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">mirth</span><span class="op">.</span><span class="im">connect</span><span class="op">.</span><span class="im">connectors</span><span class="op">.</span><span class="im">ws</span><span class="op">;</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">javax</span><span class="op">.</span><span class="im">jws</span><span class="op">.</span><span class="im">WebMethod</span><span class="op">;</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">javax</span><span class="op">.</span><span class="im">jws</span><span class="op">.</span><span class="im">WebParam</span><span class="op">;</span></span>
@@ -509,7 +614,8 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> patientList<span class="op">;</span></span>
 <span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h3 id="compilation-packaging-et-installation-1">Compilation, packaging et installation</h3>
+<h3 id="compilation-packaging-et-installation-1">Compilation, packaging
+et installation</h3>
 <p>Il faut ajouter le fichier <code>PatientList.java</code>.</p>
 <pre class="console"><code>&quot;C:\Program Files\Java\jdk1.7.0_80\bin\javac.exe&quot; SDDCws.java Patient.java PatientList.java ^
 -cp &quot;C:\Program Files\Mirth Connect\extensions\ws\ws-server.jar;C:\Program Files\Mirth Connect\server-lib\donkey\donkey-server.jar&quot;
@@ -521,10 +627,14 @@ xcopy /Y .\PatientList.class .\com\mirth\connect\connectors\ws\
 &quot;C:\Program Files\Java\jdk1.7.0_80\bin\jar.exe&quot; cf SDDCws.jar com\mirth\connect\connectors\ws com
 
 xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</code></pre>
-<p>Dans Mirth, aller dans Settings &gt; Resources &gt; Reload Resource Également faire undeploy/deploy sur le canal.</p>
+<p>Dans Mirth, aller dans Settings &gt; Resources &gt; Reload Resource
+Également faire undeploy/deploy sur le canal.</p>
 <h3 id="test-du-canal-2">Test du canal</h3>
-<p>Modifions le <code>transformer</code> sur le connecteur de destination pour retourner les données de deux objets <code>Patient</code> en XML:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>logger<span class="op">.</span><span class="fu">info</span>(<span class="st">&quot;IN: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span>
+<p>Modifions le <code>transformer</code> sur le connecteur de
+destination pour retourner les données de deux objets
+<code>Patient</code> en XML:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>logger<span class="op">.</span><span class="fu">info</span>(<span class="st">&quot;IN: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> tmp <span class="op">=</span> <span class="kw">new</span> <span class="fu">XML</span>(<span class="st">&#39;&lt;patientList&gt;&lt;/patientList&gt;&#39;</span>)<span class="op">;</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>tmp<span class="op">.</span><span class="fu">appendChild</span>(<span class="kw">new</span> <span class="fu">XML</span>(<span class="st">&#39;&lt;patient&gt;&lt;patseq&gt;54980498&lt;/patseq&gt;&lt;name&gt;Bismuth&lt;/name&gt;&lt;firstName&gt;Paul&lt;/firstName&gt;&lt;birthDate&gt;1961-04-21&lt;/birthDate&gt;&lt;ramqId&gt;BISP1234567&lt;/ramqId&gt;&lt;/patient&gt;&#39;</span>))<span class="op">;</span></span>
@@ -532,8 +642,11 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> tmp<span class="op">;</span></span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>logger<span class="op">.</span><span class="fu">info</span>(<span class="st">&quot;OUT: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span></code></pre></div>
-<p>En renvoyant la même requête que précédemment (les paramètres d'entrée n'ayant pas changé), le canal nous retourne les données suivantes:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
+<p>En renvoyant la même requête que précédemment (les paramètres
+d'entrée n'ayant pas changé), le canal nous retourne les données
+suivantes:</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">SOAP-ENV:Header</span>&gt;&lt;/<span class="kw">SOAP-ENV:Header</span>&gt;</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">S:Body</span>&gt;</span>
@@ -559,10 +672,14 @@ xcopy /Y .\SDDCws.jar &quot;C:\Program Files\Mirth Connect\custom-lib\&quot;</co
 <span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">S:Envelope</span>&gt;</span></code></pre></div>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1">http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1</a></li>
-<li><a href="https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java">https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java</a></li>
-<li><a href="https://howtodoinjava.com/jaxb/jaxb-annotations">https://howtodoinjava.com/jaxb/jaxb-annotations</a></li>
-<li><a href="https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/">https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/</a></li>
+<li><a
+href="http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1">http://www.mirthcorp.com/community/wiki/display/mirth/Creating+a+custom+Web+Service+in+Mirth+Connect+3.0.1</a></li>
+<li><a
+href="https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java">https://github.com/freemed/mirth/blob/master/server/src/com/mirth/connect/connectors/ws/DefaultAcceptMessage.java</a></li>
+<li><a
+href="https://howtodoinjava.com/jaxb/jaxb-annotations">https://howtodoinjava.com/jaxb/jaxb-annotations</a></li>
+<li><a
+href="https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/">https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/</a></li>
 </ul>
   <br />
   <hr />

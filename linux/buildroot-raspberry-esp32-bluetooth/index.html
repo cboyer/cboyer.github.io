@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Liaison bluetooth ESP32 - Raspberry Pi 3 - C. Boyer</title>
-  <meta name="description" content="Liaison bluetooth entre ESP32 et Raspberry Pi 3." />
+  <meta name="description" content="Liaison bluetooth entre ESP32 et
+Raspberry Pi 3." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Raspberry, Buildroot, ESP32, bluetooth, rfcomm, BluetoothSerial" />
   <meta name="robots" content="index,follow">
@@ -18,8 +19,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,9 +92,16 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Liaison bluetooth ESP32 - Raspberry Pi 3</h1>
   <em>Publié le 2021-07-27</em>
-<p>L'article a été rédigé en utilisant un Raspberry Pi 3 avec Buildroot 2021.05-514-g74adec4f3a. L'objectif est de transmettre des données via bluetooth classique d'un ESP32 vers un Raspberry Pi (unidirectionnel) avec le protocol RFCOMM. L'exemple présenté ici est facilement modifiable pour une liaison bidirectionnelle ainsi que l'implémentation d'une méthode d'authentification/chiffrement.</p>
+<p>L'article a été rédigé en utilisant un Raspberry Pi 3 avec Buildroot
+2021.05-514-g74adec4f3a. L'objectif est de transmettre des données via
+bluetooth classique d'un ESP32 vers un Raspberry Pi (unidirectionnel)
+avec le protocol RFCOMM. L'exemple présenté ici est facilement
+modifiable pour une liaison bidirectionnelle ainsi que l'implémentation
+d'une méthode d'authentification/chiffrement.</p>
 <h2 id="esp32">ESP32</h2>
-<p>L'ESP32 va relayer les données entrantes du port série vers bluetooth (rfcomm) grâce à la librairie <code>BluetoothSerial</code> qui est utilisable avec l'IDE Arduino et le SDK Espressif.</p>
+<p>L'ESP32 va relayer les données entrantes du port série vers bluetooth
+(rfcomm) grâce à la librairie <code>BluetoothSerial</code> qui est
+utilisable avec l'IDE Arduino et le SDK Espressif.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;BluetoothSerial.h&quot;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>BluetoothSerial SerialBT<span class="op">;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -107,7 +115,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        SerialBT<span class="op">.</span>write<span class="op">(</span>Serial<span class="op">.</span>read<span class="op">());</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h2 id="raspberry-pi-configuration-buildroot">Raspberry Pi: configuration Buildroot</h2>
+<h2 id="raspberry-pi-configuration-buildroot">Raspberry Pi:
+configuration Buildroot</h2>
 <pre class="console"><code>make raspberrypi3_defconfig
 make menuconfig</code></pre>
 <pre class="text"><code>System configuration
@@ -127,7 +136,9 @@ Target packages
 <p>Sauvegarde de la configuration Buildroot:</p>
 <pre class="console"><code>make savedefconfig BR2_DEFCONFIG=./buildroot_bt.config</code></pre>
 <h2 id="configuration-du-noyau-linux">Configuration du noyau Linux</h2>
-<p>Pour la configuration du noyau, aucun pilote graphique particulier (DRM, VC4) n'est nécessaire, il faut veiller à la présence des "Firmware Driver" (présents par défaut):</p>
+<p>Pour la configuration du noyau, aucun pilote graphique particulier
+(DRM, VC4) n'est nécessaire, il faut veiller à la présence des "Firmware
+Driver" (présents par défaut):</p>
 <pre class="console"><code>make linux-menuconfig</code></pre>
 <pre class="text"><code>Firmware Drivers
 └─ Raspberry Pi Firmware Driver (RASPBERRYPI_FIRMWARE=y)
@@ -141,15 +152,27 @@ Networking support
       ├─ HCI UART driver (CONFIG_BT_HCIUART=m)
       └─ Broadcom protocol support (CONFIG_BT_HCIUART_BCM=y)</code></pre>
 <blockquote>
-<p>Inutil d'inclure les protocoles BNEP qui sert à l'émulation Ethernet et HIDP pour le support des claviers/souris via bluetooth. Le module <code>rfcomm</code> doit être compilé en tant que module.</p>
+<p>Inutil d'inclure les protocoles BNEP qui sert à l'émulation Ethernet
+et HIDP pour le support des claviers/souris via bluetooth. Le module
+<code>rfcomm</code> doit être compilé en tant que module.</p>
 </blockquote>
 <p>Sauvegarde de la configuration du noyau:</p>
 <pre class="console"><code>cp output/build/linux-custom/.config linux_bt.config</code></pre>
 <h2 id="configuration-bluetooth">Configuration bluetooth</h2>
-<p>Pour inclure nos fichiers nous allons utiliser un overlay, tous les fichiers contenu dans <code>output/rootfs_overlay</code> (considéré par Buildroot comme référence à la racine) seront présents dans l'image finale.</p>
-<p>Le périphérique bluetooth du Raspberry est interfacé via UART. Pour un Pi Zero W et Pi 3, avec la présence de la ligne <code>dtoverlay=miniuart-bt</code> dans <code>boot/config.txt</code>, le périphérique bluetooth est accessible via <code>/dev/ttyS0</code> et non <code>/dev/ttyAMA0</code>.</p>
-<h3 id="configuration-avec-btattachbluetoothctl">Configuration avec btattach/bluetoothctl</h3>
-<p>Ajouter un script dans l'overlay <code>output/rootfs_overlay/root/bt.sh</code> pour activer le bluetooth:</p>
+<p>Pour inclure nos fichiers nous allons utiliser un overlay, tous les
+fichiers contenu dans <code>output/rootfs_overlay</code> (considéré par
+Buildroot comme référence à la racine) seront présents dans l'image
+finale.</p>
+<p>Le périphérique bluetooth du Raspberry est interfacé via UART. Pour
+un Pi Zero W et Pi 3, avec la présence de la ligne
+<code>dtoverlay=miniuart-bt</code> dans <code>boot/config.txt</code>, le
+périphérique bluetooth est accessible via <code>/dev/ttyS0</code> et non
+<code>/dev/ttyAMA0</code>.</p>
+<h3 id="configuration-avec-btattachbluetoothctl">Configuration avec
+btattach/bluetoothctl</h3>
+<p>Ajouter un script dans l'overlay
+<code>output/rootfs_overlay/root/bt.sh</code> pour activer le
+bluetooth:</p>
 <pre class="text"><code>#!/bin/sh
 
 # Attache le périphérique pour obtenir l&#39;interface hci0 (charge les modules nécessaires
@@ -164,9 +187,13 @@ Networking support
 # Obtient le port série /dev/rfcomm0 (pas besoin de &quot;pairer&quot; ni connecter)
 /sbin/modprobe rfcomm
 /usr/bin/rfcomm bind rfcomm0 11:22:33:44:55:66</code></pre>
-<p><code>btattach</code> doit être exécuté en arrière plan et induit un certain délais pour rendre l'interface disponible.</p>
-<h3 id="configuration-avec-hciattachhciconfig-outils-désuets">Configuration avec hciattach/hciconfig (outils désuets)</h3>
-<p>Le script <code>output/rootfs_overlay/root/bt.sh</code> pour activer le bluetooth avec les outils BlueZ désuets:</p>
+<p><code>btattach</code> doit être exécuté en arrière plan et induit un
+certain délais pour rendre l'interface disponible.</p>
+<h3
+id="configuration-avec-hciattachhciconfig-outils-désuets">Configuration
+avec hciattach/hciconfig (outils désuets)</h3>
+<p>Le script <code>output/rootfs_overlay/root/bt.sh</code> pour activer
+le bluetooth avec les outils BlueZ désuets:</p>
 <pre class="text"><code>#!/bin/sh
 
 # Attache le périphérique pour obtenir l&#39;interface hci0 (charge les modules nécessaires comme btbcm et hci_uart)
@@ -178,17 +205,30 @@ Networking support
 # Obtient le port série /dev/rfcomm0 (pas besoin de &quot;pairer&quot; ni connecter)
 /sbin/modprobe rfcomm
 /usr/bin/rfcomm bind rfcomm0 11:22:33:44:55:66</code></pre>
-<p>Bien que désuet, <code>hciattach</code> présente l'avantage de s'exécuter très rapidement et de rendre la main ce qui n'implique pas de <code>sleep</code> dans le script.</p>
-<p>Pour tester l'interface bluetooth: <code>l2ping 11:22:33:44:55:66</code>.</p>
+<p>Bien que désuet, <code>hciattach</code> présente l'avantage de
+s'exécuter très rapidement et de rendre la main ce qui n'implique pas de
+<code>sleep</code> dans le script.</p>
+<p>Pour tester l'interface bluetooth:
+<code>l2ping 11:22:33:44:55:66</code>.</p>
 <h3 id="compilation">Compilation</h3>
-<p>Lancer la compilation et la création de l'image: <code>make</code>.</p>
+<p>Lancer la compilation et la création de l'image:
+<code>make</code>.</p>
 <p>Copie de l'image générée vers la carte SD:</p>
 <pre class="console"><code>sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 status=progress</code></pre>
-<p>Après avoir démarré le système sur le Raspberry, exécuter <code>bt.sh</code>:</p>
+<p>Après avoir démarré le système sur le Raspberry, exécuter
+<code>bt.sh</code>:</p>
 <pre class="console"><code>sh bt.sh</code></pre>
-<p>Les données reçues sont disponibles via le port série <code>/dev/rfcomm0</code> (affichables avec <code>cat</code>).</p>
-<h2 id="se-passer-de-rfcomm-et-des-outils-désuets">Se passer de rfcomm et des outils désuets</h2>
-<p>Pour se passer des outils désuets <code>hci*</code> (dont l'outil <code>rfcomm</code>), il est possible d'écrire un programme C similaire qui va nous permettre de réceptionner les données. Le module <code>rfcomm</code> est toujours nécessaire coté noyau. Le programme affiche sur STDOUT les données dès leur réception sans réassembler le message (une chaîne de caractères peut être reçue en plusieurs fois).</p>
+<p>Les données reçues sont disponibles via le port série
+<code>/dev/rfcomm0</code> (affichables avec <code>cat</code>).</p>
+<h2 id="se-passer-de-rfcomm-et-des-outils-désuets">Se passer de rfcomm
+et des outils désuets</h2>
+<p>Pour se passer des outils désuets <code>hci*</code> (dont l'outil
+<code>rfcomm</code>), il est possible d'écrire un programme C similaire
+qui va nous permettre de réceptionner les données. Le module
+<code>rfcomm</code> est toujours nécessaire coté noyau. Le programme
+affiche sur STDOUT les données dès leur réception sans réassembler le
+message (une chaîne de caractères peut être reçue en plusieurs
+fois).</p>
 <p>Programme <code>clientrfcomm.c</code></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
@@ -210,16 +250,16 @@ Networking support
 <span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> sockaddr_rc addr <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">};</span></span>
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> sigaction act<span class="op">;</span></span>
 <span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> s<span class="op">,</span> status<span class="op">,</span> bytes_read<span class="op">;</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> dest<span class="op">[</span><span class="dv">18</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="ch">&#39;\0&#39;</span> <span class="op">};</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> buf<span class="op">[</span><span class="dv">1024</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="ch">&#39;\0&#39;</span> <span class="op">};</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> dest<span class="op">[</span><span class="dv">18</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span> <span class="op">};</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> buf<span class="op">[</span><span class="dv">1024</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span> <span class="op">};</span></span>
 <span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint8_t</span> channel <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>argc <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Usage: %s &lt;address&gt; &lt;channel&gt;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> argv<span class="op">[</span><span class="dv">0</span><span class="op">]);</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Usage: </span><span class="sc">%s</span><span class="st"> &lt;address&gt; &lt;channel&gt;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> argv<span class="op">[</span><span class="dv">0</span><span class="op">]);</span></span>
 <span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        exit<span class="op">(</span>EXIT_FAILURE<span class="op">);</span></span>
 <span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    snprintf<span class="op">(</span>dest<span class="op">,</span> <span class="kw">sizeof</span> dest<span class="op">,</span> <span class="st">&quot;%s&quot;</span><span class="op">,</span> argv<span class="op">[</span><span class="dv">1</span><span class="op">]);</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    snprintf<span class="op">(</span>dest<span class="op">,</span> <span class="kw">sizeof</span> dest<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%s</span><span class="st">&quot;</span><span class="op">,</span> argv<span class="op">[</span><span class="dv">1</span><span class="op">]);</span></span>
 <span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    channel <span class="op">=</span> atoi<span class="op">(</span>argv<span class="op">[</span><span class="dv">2</span><span class="op">]);</span></span>
 <span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>    act<span class="op">.</span>sa_handler <span class="op">=</span> exit_handle<span class="op">;</span></span>
@@ -243,12 +283,12 @@ Networking support
 <span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span><span class="op">(</span>keep_running<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>        bytes_read <span class="op">=</span> read<span class="op">(</span>s<span class="op">,</span> buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">);</span></span>
-<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>        buf<span class="op">[</span>bytes_read<span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;\0&#39;</span><span class="op">;</span></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>        buf<span class="op">[</span>bytes_read<span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">;</span></span>
 <span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>bytes_read <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;received: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> buf<span class="op">);</span></span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;received: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> buf<span class="op">);</span></span>
 <span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>            fflush<span class="op">(</span>stdout<span class="op">);</span></span>
-<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>            buf<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;\0&#39;</span><span class="op">;</span></span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>            buf<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">;</span></span>
 <span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a></span>
@@ -259,7 +299,9 @@ Networking support
 <pre class="console"><code>sudo dnf install bluez-libs-devel
 gcc -Wall -Werror -O2 clientrfcomm.c -lbluetooth
 client_rfcomm 11:22:33:44:55:66 1</code></pre>
-<p>Pour inclure ce programme dans l'image destinée au Raspberry sous forme de package, il faut construire un arbre externe avec la structure suivante (depuis la racine Buildroot):</p>
+<p>Pour inclure ce programme dans l'image destinée au Raspberry sous
+forme de package, il faut construire un arbre externe avec la structure
+suivante (depuis la racine Buildroot):</p>
 <pre class="text"><code>br-external/
 ├── Config.in                   Regroupe dynamiquement tous les descriptifs Kconfig des packages
 ├── external.desc               Nom de l&#39;arbre, conditionne la variable $BR2_EXTERNAL_***_PATH
@@ -278,14 +320,16 @@ desc: Bluetooth components for Raspberry Pi 3</code></pre>
 <pre class="text"><code>source &quot;$BR2_EXTERNAL_BTCOMPONENTS_PATH/package/clientrfcomm/Config.in&quot;</code></pre>
 <h4 id="br-externalexternal.mk">br-external/external.mk</h4>
 <pre class="text"><code>include $(sort $(wildcard $(BR2_EXTERNAL_BTCOMPONENTS_PATH)/package/*/*.mk))</code></pre>
-<h4 id="br-externalpackageclientrfcommconfig.in">br-external/package/clientrfcomm/Config.in</h4>
+<h4
+id="br-externalpackageclientrfcommconfig.in">br-external/package/clientrfcomm/Config.in</h4>
 <pre class="text"><code>config BR2_PACKAGE_CLIENTRFCOMM
     bool &quot;Client RFCOMM&quot;
     help
       Client bluetooth RFCOMM.
 
       https://cboyer.github.io/</code></pre>
-<h4 id="br-externalpackageclientrfcommexternal.mk">br-external/package/clientrfcomm/external.mk</h4>
+<h4
+id="br-externalpackageclientrfcommexternal.mk">br-external/package/clientrfcomm/external.mk</h4>
 <pre class="text"><code>################################################################################
 #
 # clientrfcomm
@@ -305,7 +349,8 @@ define CLIENTRFCOMM_INSTALL_TARGET_CMDS
 endef
 
 $(eval $(generic-package))</code></pre>
-<h4 id="br-externalpackageclientrfcommsrcmakefile">br-external/package/clientrfcomm/src/Makefile</h4>
+<h4
+id="br-externalpackageclientrfcommsrcmakefile">br-external/package/clientrfcomm/src/Makefile</h4>
 <pre class="text"><code>CC = gcc
 CFLAGS = -Wall -Werror -O2
 
@@ -316,13 +361,17 @@ clientrfcomm: clientrfcomm.c
 
 clean:
     rm clientrfcomm</code></pre>
-<p>Ne pas oublier le code source dans <em>br-external/package/clientrfcomm/src/clientrfcomm.c</em>.</p>
-<p>Pour inclure notre package "Client RFCOMM" (présent dans le menu "External options")</p>
+<p>Ne pas oublier le code source dans
+<em>br-external/package/clientrfcomm/src/clientrfcomm.c</em>.</p>
+<p>Pour inclure notre package "Client RFCOMM" (présent dans le menu
+"External options")</p>
 <pre class="console"><code>make BR2_EXTERNAL=./br-external menuconfig</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://buildroot.org/downloads/manual/manual.html">https://buildroot.org/downloads/manual/manual.html</a></li>
-<li><a href="https://people.csail.mit.edu/albert/bluez-intro/x502.html">https://people.csail.mit.edu/albert/bluez-intro/x502.html</a></li>
+<li><a
+href="https://buildroot.org/downloads/manual/manual.html">https://buildroot.org/downloads/manual/manual.html</a></li>
+<li><a
+href="https://people.csail.mit.edu/albert/bluez-intro/x502.html">https://people.csail.mit.edu/albert/bluez-intro/x502.html</a></li>
 </ul>
   <br />
   <hr />

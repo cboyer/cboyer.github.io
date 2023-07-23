@@ -455,7 +455,7 @@ end
 
 - [Installation de Phoenix](https://hexdocs.pm/phoenix/installation.html#phoenix)
 - [Transite d'une requête à travers Phoenix](https://hexdocs.pm/phoenix/request_lifecycle.html#content)
-- [Les controleurs](https://hexdocs.pm/phoenix/controllers.html#content)
+- [Les contrôleurs](https://hexdocs.pm/phoenix/controllers.html#content)
 - [LiveView](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html)
 - [LiveView et LiveComponents](http://blog.pthompson.org/liveview-livecomponents-introduction)
 - [Create a counter with Phoenix LiveView](https://dennisbeatty.com/how-to-create-a-counter-with-phoenix-live-view.html)

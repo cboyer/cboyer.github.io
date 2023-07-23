@@ -1,7 +1,7 @@
 ---
 title: "Récepteur infrarouge USB avec un ATmega32u4"
 date: "2018-04-20T18:45:18-04:00"
-updated: "2022-01-30T18:11:00-04:00"
+updated: "2023-06-30T19:55:00-04:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -29,11 +29,11 @@ Nous utiliserons un "CJMCU Beetle" pour ses dimensions particulièrement adapté
 
 ![Montage](cjmcu.jpg)
 
-Pour programmer l'ATmega32u4 nous utiliserons l'IDE Arduino configuré pour une carte Arduino Leonardo et les librairies IRremote (version 3.5), HID-Project:
+Pour programmer l'ATmega32u4 nous utiliserons l'IDE Arduino configuré pour une carte Arduino Leonardo et les librairies IRremote (version 3.5):
 
 ```c
 #include <IRremote.h>
-#include <HID-Project.h>
+#include <Keyboard.h>
 
 #define RECV_PIN 9
 
@@ -57,101 +57,100 @@ void loop() {
 
     switch(IrReceiver.decodedIRData.decodedRawData) {
 
-      case 0x33219B:
+      case 0x33219E:
         Keyboard.write(KEY_RETURN);
         break;
   
-      case 0x3D205B:
+      case 0x3D205E:
         Keyboard.write(KEY_UP_ARROW);
         break;
 
-      case 0x3B209B:
+      case 0x3B209E:
         Keyboard.write(KEY_RIGHT_ARROW);
         break;
-        
-      case 0x34217B:
+
+      case 0x34217E:
         Keyboard.write(KEY_DOWN_ARROW);
         break; 
 
-      case 0x3C207B:
+      case 0x3C207E:
         Keyboard.write(KEY_LEFT_ARROW);
         break; 
 
-      case 0x13259B:
+      case 0x13259E:
         Keyboard.write(KEY_ESC);
         break; 
 
-      case 0x1025FB:
+      case 0x1025FE:
         Keyboard.write('o');
         break;
 
-      case 0xF261B:
+      case 0xF261E:
         Keyboard.write('z');
         break;
 
-      case 0x926DB:
+      case 0x926DE:
         Keyboard.write(KEY_PAGE_UP);
         break;
 
-      case 0x826FB:
+      case 0x826FE:
         Keyboard.write(KEY_PAGE_DOWN);
         break;
 
-      case 0x6FF900:
-        //buf[2] = 128;
-        Keyboard.write(MEDIA_VOL_UP);
-        //Keyboard.write('+');
+      case 0x6FF90E:
+        Keyboard.write(KEY_KP_PLUS);
         break;
 
-      case 0x6BF940:
-        Keyboard.write(MEDIA_VOLUME_DOWN);
-        //Keyboard.write('-');
+      case 0x6BF94E:
+        Keyboard.write(KEY_KP_MINUS);
         break;
 
-      case 0xFFF000:
-        Keyboard.write(MEDIA_VOLUME_MUTE);
-        //Keyboard.write(KEY_F8);
+      case 0xFFF00E:
+        Keyboard.write(KEY_F8);
         break;
 
-      case 0x16253B:
-        Keyboard.write(MEDIA_REWIND);
-        //Keyboard.write('r');
+      case 0x16253E:
+        Keyboard.write('r');
         break;
 
-      case 0x17251B:
-        Keyboard.write(MEDIA_FAST_FORWARD);
-        //Keyboard.write('f');
+      case 0x17251E:
+        Keyboard.write('f');
         break;
 
-      case 0x3A20BB:
-        Keyboard.write(MEDIA_PAUSE);
-        //Keyboard.write(KEY_SPACE);
+      case 0x3A20BE:
+        Keyboard.write(' ');
         break;
 
-      case 0xC267B:
-        Keyboard.write(MEDIA_PLAY_PAUSE);
-        //Keyboard.write(KEY_SPACE);
+      case 0xC267E:
+        Keyboard.write('p');
         break;
 
-      case 0xB269B:
-        Keyboard.write(MEDIA_STOP);
-        //Keyboard.write('x');
+      case 0xB269E:
+        Keyboard.write('x');
         break;
 
-      case 0x37211B:
+      case 0x37211E:
         Keyboard.write('i');
         break;
 
-      case 0x3920DB:
+      case 0x3920DE:
         Keyboard.write('c');
         break;
 
-      case 0x5275B:
+      case 0x5275E:
         Keyboard.write(KEY_F11);
         break;
 
-      case 0xE263B:
+      case 0xE263E:
         Keyboard.write(KEY_DELETE);
+        break;
+
+      case 0xAA6BE:
+          Keyboard.press(KEY_LEFT_CTRL);
+          Keyboard.press(KEY_LEFT_ALT);
+          Keyboard.press('p');
+          delay(100);
+          Keyboard.releaseAll();
         break;
     }
 
@@ -170,12 +169,7 @@ void loop() {
 }
 ```
 
-Dans le cas où votre télécommande n'utiliserai pas les mêmes codes infrarouge, décommentez les lignes indiquées pour qu'ils soient affichés dans la console de l'IDE. Remplacez les codes correspondant à la touche clavier voulue (exemple: `MEDIA_STOP`).
-
-## Limites
-
-Les touches `MEDIA_*` fonctionnent uniquement sur un système Linux, Windows et FreeBSD ne les reconnaissent pas. Ceci n'est donc pas un problème pour les utilisateurs de [LibreELEC](https://libreelec.tv/)/[OpenELEC](https://www.openelec.tv/).
-
+Dans le cas où votre télécommande n'utiliserai pas les mêmes codes infrarouge, décommentez les lignes indiquées pour qu'ils soient affichés dans la console de l'IDE. Remplacez les codes correspondant à la touche clavier voulue.
 
 ## Liens complémentaires
 

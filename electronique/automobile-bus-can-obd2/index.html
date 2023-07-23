@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Automobile, bus CAN et norme OBD2 - C. Boyer</title>
-  <meta name="description" content="Dialoguer avec l'ordinateur de bord d'un véhicule automobile via OBD2." />
+  <meta name="description" content="Dialoguer avec l'ordinateur de bord
+d'un véhicule automobile via OBD2." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="automobile, can, bus, obd2, macchina, savvycan" />
   <meta name="robots" content="index,follow">
@@ -18,8 +19,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,15 +92,72 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Automobile, bus CAN et norme OBD2</h1>
   <em>Publié le 2018-11-01, dernière mise à jour: 2019-12-14</em>
-<p>Pour établir la communication avec l'ordinateur embarqué d'une automobile (appelé ECU pour Electronic Control Unit), rien de bien compliqué car la technologie mis en oeuvre ici (CAN pour Controller Area Network) date en partie des années 1980 et n'intègre pas les concepts issus des enjeux d'aujourd'hui (authentification, cryptage etc.). N'oublions pas que ces systèmes embarqués sont très limités en terme de capacité de traitement tout en étant soumis à des contraintes de temps dans lesquelles ils doivent être en mesure d'opérer.</p>
-<p>La couche physique (niveau 1 OSI), fonctionne selon une topologie de type bus: tous les noeuds connectés au bus reçoivent chaque message émis (broadcast) ce qui nécessite d'introduire la notion d'identification afin d'être en mesure d'identifier un noeud comme destinataire ou émetteur d'un message. L'identification des noeuds s'effectue par la couche liaison de donnée (niveau 2 OSI) qui est normalisée ISO avec deux variantes: l'une fonctionnant avec 11 bits et l'autre (dite "extended") sur 29 bits. On ne peut pas parler d'adressage formel car un noeud peut écouter sur un identifiant et répondre avec un autre (c'est le cas de l'ECU).</p>
-<p>La norme OBD2 (On-Board Diagnostics 2) intervient au niveau 7 OSI: elle standardise en partie l'identification et la codification des données qui transitent sur le bus. Légalement encadré, une partie du protocole est normalisé et documenté incluant bon nombre de <a href="https://en.wikipedia.org/wiki/OBD-II_PIDs#Service_01">métriques</a> et les <a href="https://github.com/mytrile/obd-trouble-codes">codes de diagnostique</a>. En revanche il demeure une partie inconnue qui est propre aux constructeurs qu'il va falloir découvrir avec un peu de rétro-ingénierie.</p>
+<p>Pour établir la communication avec l'ordinateur embarqué d'une
+automobile (appelé ECU pour Electronic Control Unit), rien de bien
+compliqué car la technologie mis en oeuvre ici (CAN pour Controller Area
+Network) date en partie des années 1980 et n'intègre pas les concepts
+issus des enjeux d'aujourd'hui (authentification, cryptage etc.).
+N'oublions pas que ces systèmes embarqués sont très limités en terme de
+capacité de traitement tout en étant soumis à des contraintes de temps
+dans lesquelles ils doivent être en mesure d'opérer.</p>
+<p>La couche physique (niveau 1 OSI), fonctionne selon une topologie de
+type bus: tous les noeuds connectés au bus reçoivent chaque message émis
+(broadcast) ce qui nécessite d'introduire la notion d'identification
+afin d'être en mesure d'identifier un noeud comme destinataire ou
+émetteur d'un message. L'identification des noeuds s'effectue par la
+couche liaison de donnée (niveau 2 OSI) qui est normalisée ISO avec deux
+variantes: l'une fonctionnant avec 11 bits et l'autre (dite "extended")
+sur 29 bits. On ne peut pas parler d'adressage formel car un noeud peut
+écouter sur un identifiant et répondre avec un autre (c'est le cas de
+l'ECU).</p>
+<p>La norme OBD2 (On-Board Diagnostics 2) intervient au niveau 7 OSI:
+elle standardise en partie l'identification et la codification des
+données qui transitent sur le bus. Légalement encadré, une partie du
+protocole est normalisé et documenté incluant bon nombre de <a
+href="https://en.wikipedia.org/wiki/OBD-II_PIDs#Service_01">métriques</a>
+et les <a href="https://github.com/mytrile/obd-trouble-codes">codes de
+diagnostique</a>. En revanche il demeure une partie inconnue qui est
+propre aux constructeurs qu'il va falloir découvrir avec un peu de
+rétro-ingénierie.</p>
 <h2 id="outillage">Outillage</h2>
-<p>Pour assurer l'interconnexion, nous utiliserons la carte <a href="https://www.macchina.cc/m2-introduction">Macchina M2</a>. Notons qu'il existe d'autres cartes comme la <a href="http://canable.io/">CANable</a> ou encore la <a href="https://www.carloop.io/">Carloop</a>. La Macchina M2 embarque tout le nécessaire pour assurer la connectivité avec CAN et d'autres standards (présence de transceivers pour LIN, K-Line etc.), elle est modulaire et possède un éco-système logiciel open source complet (documentation, librairies, firmware et utilitaire) ce qui nous permet de travailler facilement avec OBD2.</p>
-<p>En effet, le module de contrôle optionnel embarque un microcontrôleur Atmel SAM3X8E (que l'on retrouve sur l'Arduino Due) et nous permet d'utiliser l'<a href="http://docs.macchina.cc/m2/getting-started/arduino.html">IDE Arduino</a>. La seule différence avec l'Arduino Due est le brochage qui diffère mais comme celui-ci est <a href="https://docs.macchina.cc/m2/technical-references/pin-mapping.html">documenté</a>, il suffit de peu de modifications pour faire fonctionner des librairies Arduino ou des systèmes comme <a href="https://docs.zephyrproject.org/latest/boards/arm/arduino_due/doc/board.html">Zephyr</a> et <a href="https://github.com/RIOT-OS/RIOT/wiki/RIOT-Platforms">RIOT</a> (en revanche certains drivers peuvent manquer comme celui pour le mcp2515).</p>
-<p>Bien que de nombreux exemples en C/C++ soient disponibles pour interroger l'ECU, nous utiliserons le firmware <a href="https://github.com/collin80/M2RET">M2RET</a> et l'utilitaire <a href="http://www.savvycan.com/">SavvyCAN</a>. SavvyCAN permet de controler M2RET via la liaison série sur USB pour le paramétrage et l'envoie/réception de messages. SavvyCAN est un outil très complet proposant de nombreuses fonctionnalités d'analyse, de scan/sniff et encore de génération de message. Nous nous intéresserons ici à l'<a href="http://www.savvycan.com/docs/scriptingwindow.html">interface de scripting</a> pour envoyer et recevoir des données de l'ECU.</p>
+<p>Pour assurer l'interconnexion, nous utiliserons la carte <a
+href="https://www.macchina.cc/m2-introduction">Macchina M2</a>. Notons
+qu'il existe d'autres cartes comme la <a
+href="http://canable.io/">CANable</a> ou encore la <a
+href="https://www.carloop.io/">Carloop</a>. La Macchina M2 embarque tout
+le nécessaire pour assurer la connectivité avec CAN et d'autres
+standards (présence de transceivers pour LIN, K-Line etc.), elle est
+modulaire et possède un éco-système logiciel open source complet
+(documentation, librairies, firmware et utilitaire) ce qui nous permet
+de travailler facilement avec OBD2.</p>
+<p>En effet, le module de contrôle optionnel embarque un microcontrôleur
+Atmel SAM3X8E (que l'on retrouve sur l'Arduino Due) et nous permet
+d'utiliser l'<a
+href="http://docs.macchina.cc/m2/getting-started/arduino.html">IDE
+Arduino</a>. La seule différence avec l'Arduino Due est le brochage qui
+diffère mais comme celui-ci est <a
+href="https://docs.macchina.cc/m2/technical-references/pin-mapping.html">documenté</a>,
+il suffit de peu de modifications pour faire fonctionner des librairies
+Arduino ou des systèmes comme <a
+href="https://docs.zephyrproject.org/latest/boards/arm/arduino_due/doc/board.html">Zephyr</a>
+et <a
+href="https://github.com/RIOT-OS/RIOT/wiki/RIOT-Platforms">RIOT</a> (en
+revanche certains drivers peuvent manquer comme celui pour le
+mcp2515).</p>
+<p>Bien que de nombreux exemples en C/C++ soient disponibles pour
+interroger l'ECU, nous utiliserons le firmware <a
+href="https://github.com/collin80/M2RET">M2RET</a> et l'utilitaire <a
+href="http://www.savvycan.com/">SavvyCAN</a>. SavvyCAN permet de
+controler M2RET via la liaison série sur USB pour le paramétrage et
+l'envoie/réception de messages. SavvyCAN est un outil très complet
+proposant de nombreuses fonctionnalités d'analyse, de scan/sniff et
+encore de génération de message. Nous nous intéresserons ici à l'<a
+href="http://www.savvycan.com/docs/scriptingwindow.html">interface de
+scripting</a> pour envoyer et recevoir des données de l'ECU.</p>
 <h2 id="format-dun-message">Format d'un message</h2>
-<p>L'ECU devrait écouter sur <code>0x7E0</code> et répondre avec l'identifiant <code>0x7E8</code>. Exemple de message permettant d'interroger l'ECU concernant la température de l'huile du moteur:</p>
+<p>L'ECU devrait écouter sur <code>0x7E0</code> et répondre avec
+l'identifiant <code>0x7E8</code>. Exemple de message permettant
+d'interroger l'ECU concernant la température de l'huile du moteur:</p>
 <table style="width:100%;">
 <colgroup>
 <col style="width: 15%" />
@@ -130,8 +188,10 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">Destinataire sur 11 bits</td>
-<td style="text-align: center;">Longueur du message CAN en nombre d'octets (max. 8)</td>
-<td style="text-align: center;">Longueur du message OBD2/UDS en nombre d'octets (max. 8)</td>
+<td style="text-align: center;">Longueur du message CAN en nombre
+d'octets (max. 8)</td>
+<td style="text-align: center;">Longueur du message OBD2/UDS en nombre
+d'octets (max. 8)</td>
 <td style="text-align: center;">1 octet</td>
 <td style="text-align: center;">1 octet</td>
 <td style="text-align: center;">1 octet</td>
@@ -143,14 +203,27 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 </tbody>
 </table>
 <p>L'équivalent sous forme de code:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>[id   <span class="op">,</span> longueur<span class="op">,</span> [longueur<span class="op">,</span> service<span class="op">,</span> pid <span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage]]</span>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>[id   <span class="op">,</span> longueur<span class="op">,</span> [longueur<span class="op">,</span> service<span class="op">,</span> pid <span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage]]</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>[<span class="bn">0x7E0</span><span class="op">,</span> <span class="dv">8</span>       <span class="op">,</span> [<span class="dv">2</span>       <span class="op">,</span> <span class="bn">0x01</span>   <span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    ]]</span></code></pre></div>
-<p>En réponse l'ECU devrait émettre le message suivant (avec la clé de contact):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>[id   <span class="op">,</span> longueur<span class="op">,</span> [longueur<span class="op">,</span> service<span class="op">,</span> pid <span class="op">,</span> donnée<span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage]]</span>
+<p>En réponse l'ECU devrait émettre le message suivant (avec la clé de
+contact):</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>[id   <span class="op">,</span> longueur<span class="op">,</span> [longueur<span class="op">,</span> service<span class="op">,</span> pid <span class="op">,</span> donnée<span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage<span class="op">,</span> bourrage]]</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>[<span class="bn">0x7E8</span><span class="op">,</span> <span class="dv">8</span>       <span class="op">,</span> [<span class="dv">2</span>       <span class="op">,</span> <span class="bn">0x41</span>   <span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x32</span>  <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    <span class="op">,</span> <span class="bn">0x00</span>    ]]</span></code></pre></div>
-<p>Remarquons que le service est passé de <code>0x01</code> à <code>0x41</code> car l'ECU ajoute 40 à la valeur de service pour signifier un succès.</p>
-<p>Notons que la représentation hexadécimale utilisée ici pour les octets composant le message peut être remplacée pour utiliser directement des entiers. Nous utiliserons ici l'interface de scripting comme moyen d'interroger l'ECU bien que SavvyCAN possède déjà cette fonctionnalité via l'interface graphique en envoyant des messages dont le contenu est saisi sans code JavaScript. Voici un exemple de script SavvyCAN (JavaScript) pour récupérer la température de l'huile moteur et le régime moteur toutes les secondes:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> FROM_ECU <span class="op">=</span> <span class="bn">0x7E8</span><span class="op">;</span></span>
+<p>Remarquons que le service est passé de <code>0x01</code> à
+<code>0x41</code> car l'ECU ajoute 40 à la valeur de service pour
+signifier un succès.</p>
+<p>Notons que la représentation hexadécimale utilisée ici pour les
+octets composant le message peut être remplacée pour utiliser
+directement des entiers. Nous utiliserons ici l'interface de scripting
+comme moyen d'interroger l'ECU bien que SavvyCAN possède déjà cette
+fonctionnalité via l'interface graphique en envoyant des messages dont
+le contenu est saisi sans code JavaScript. Voici un exemple de script
+SavvyCAN (JavaScript) pour récupérer la température de l'huile moteur et
+le régime moteur toutes les secondes:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> FROM_ECU <span class="op">=</span> <span class="bn">0x7E8</span><span class="op">;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> TO_ECU <span class="op">=</span> <span class="bn">0x7E0</span><span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">//Pour afficher le contenu du message en hexadecimal</span></span>
@@ -197,11 +270,38 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  <span class="co">//Demande la température de l&#39;huile moteur (0x5C) sur le bus 0</span></span>
 <span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  can<span class="op">.</span><span class="fu">sendFrame</span>(<span class="dv">0</span><span class="op">,</span> TO_ECU<span class="op">,</span> <span class="dv">8</span><span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="bn">0x01</span><span class="op">,</span> <span class="bn">0x5C</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">,</span> <span class="bn">0x00</span>])<span class="op">;</span></span>
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>Notons que la fonction <code>can.sendFrame()</code> pour récupérer le régime moteur <code>0x0C</code> est exécutée à la réception de la température de l'huile moteur <code>0x5C</code> car l'exécuter dans <code>tick()</code> directement à la suite de l'autre <code>can.sendFrame()</code> ne nous permet pas d'obtenir une réponse de l'ECU, probablement car il faut un délais entre les deux.</p>
-<p>Le réel intérêt d'utiliser l'interface de scripting est de pouvoir interagir avec l'ECU à la manière des outils du constructeur: par exemple la reprogrammation de l'ECU passe par une méthode d'authentification challenge-response suivie l'envoie d'octets. D'autres exemples sont disponibles <a href="https://github.com/collin80/SavvyCAN/tree/master/examples">ici</a>.</p>
+<p>Notons que la fonction <code>can.sendFrame()</code> pour récupérer le
+régime moteur <code>0x0C</code> est exécutée à la réception de la
+température de l'huile moteur <code>0x5C</code> car l'exécuter dans
+<code>tick()</code> directement à la suite de l'autre
+<code>can.sendFrame()</code> ne nous permet pas d'obtenir une réponse de
+l'ECU, probablement car il faut un délais entre les deux.</p>
+<p>Le réel intérêt d'utiliser l'interface de scripting est de pouvoir
+interagir avec l'ECU à la manière des outils du constructeur: par
+exemple la reprogrammation de l'ECU passe par une méthode
+d'authentification challenge-response suivie l'envoie d'octets. D'autres
+exemples sont disponibles <a
+href="https://github.com/collin80/SavvyCAN/tree/master/examples">ici</a>.</p>
 <h2 id="données-du-bus-can">Données du bus CAN</h2>
-<p>Sur le bus beaucoup de messages sont envoyés à une fréquence élevée sans même que la clé de contact soit entrée:</p>
-<table>
+<p>Sur le bus beaucoup de messages sont envoyés à une fréquence élevée
+sans même que la clé de contact soit entrée:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: center;">Time Stamp</th>
@@ -447,10 +547,25 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 </tr>
 </tbody>
 </table>
-<p>Comme aucun ID n'est répertorié dans la norme OBD2, il est difficile d'identifier les données reçues. Il doit probablement en être de même pour les autres constructeurs/modèles. En utilisant la fonction Sniffer de SavvyCAN avec l'option "Notch" il est possible de mettre en surbrillance les octets dont la valeur change. Cette option va nous aider a identifier quels IDs/octets correspondent à quoi.</p>
-<p>En entrant la clé et en la ressortant, on remarque que le premier octet de l'ID 154 change de <code>0x10</code> à <code>0x00</code>. Pour le même ID (154), le 7ème octet décrit l'état de la porte conducteur avec la valeur <code>0xC1</code> pour l'état ouvert et <code>0xC0</code> pour fermé. Selon le même principe, l'ID 141 - octet 6 aura la valeur <code>0x3F</code> lorsque le levier de vitesse est sur le neutre sinon <code>0x3E</code> peu importe la vitesse.</p>
-<p>L'angle de direction (rotation du volant) est donné par les deux premiers octets des ID 002 et 0D0.</p>
-<p>Un octet spécifique pour un ID donné peut prendre plusieurs valeurs différentes en fonction de certains facteurs. Par exemple les phares et les essuies glace conditionne la valeur du 7ème octet de l'ID 152 qui peut prendre les valeurs suivantes:</p>
+<p>Comme aucun ID n'est répertorié dans la norme OBD2, il est difficile
+d'identifier les données reçues. Il doit probablement en être de même
+pour les autres constructeurs/modèles. En utilisant la fonction Sniffer
+de SavvyCAN avec l'option "Notch" il est possible de mettre en
+surbrillance les octets dont la valeur change. Cette option va nous
+aider a identifier quels IDs/octets correspondent à quoi.</p>
+<p>En entrant la clé et en la ressortant, on remarque que le premier
+octet de l'ID 154 change de <code>0x10</code> à <code>0x00</code>. Pour
+le même ID (154), le 7ème octet décrit l'état de la porte conducteur
+avec la valeur <code>0xC1</code> pour l'état ouvert et <code>0xC0</code>
+pour fermé. Selon le même principe, l'ID 141 - octet 6 aura la valeur
+<code>0x3F</code> lorsque le levier de vitesse est sur le neutre sinon
+<code>0x3E</code> peu importe la vitesse.</p>
+<p>L'angle de direction (rotation du volant) est donné par les deux
+premiers octets des ID 002 et 0D0.</p>
+<p>Un octet spécifique pour un ID donné peut prendre plusieurs valeurs
+différentes en fonction de certains facteurs. Par exemple les phares et
+les essuies glace conditionne la valeur du 7ème octet de l'ID 152 qui
+peut prendre les valeurs suivantes:</p>
 <table>
 <colgroup>
 <col style="width: 12%" />
@@ -488,7 +603,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <tr class="odd">
 <td style="text-align: center;">0x1C</td>
 <td style="text-align: center;">00011100</td>
-<td style="text-align: left;">{position ou croisement} + appel de phare</td>
+<td style="text-align: left;">{position ou croisement} + appel de
+phare</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">0x44</td>
@@ -498,18 +614,34 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <tr class="odd">
 <td style="text-align: center;">0x5C</td>
 <td style="text-align: center;">01011100</td>
-<td style="text-align: left;">{position ou croisement} + appel de phare + essuie-glaces déployés</td>
+<td style="text-align: left;">{position ou croisement} + appel de phare
++ essuie-glaces déployés</td>
 </tr>
 </tbody>
 </table>
-<p>La représentation hexadécimale ne nous montre pas comment sont codées les données, c'est la représentation binaire qui va nous montrer qu'un bit donné dans cet octet représente l'état d'un système spécifique (phares, etc.). Ici le 7ème bit (en partant de la droite) décrit l'état des essuie-glaces (1 pour déployés, 0 pour non déployés). On remarque un chevauchement des bits pour les phares de positions, de croisement et de route: ceci implique que lors d'un appel de phare (bits 4 et 5 à 1) on ne peut distinguer si ce sont les phares de position (bit 3 à 1) ou de croisement (bits 3 et 4) qui sont actifs car le bit 3 et 4 sera à 1 dans les deux cas.</p>
-<p>On peut observer le même principe avec les freins (frein à main et pédale de frein) dans le 7ème octet de l'ID 154.</p>
-<p>Vous l'aurez compris, l'état de chaque système de l'automobile est transmis en temps réel sur le bus.</p>
+<p>La représentation hexadécimale ne nous montre pas comment sont codées
+les données, c'est la représentation binaire qui va nous montrer qu'un
+bit donné dans cet octet représente l'état d'un système spécifique
+(phares, etc.). Ici le 7ème bit (en partant de la droite) décrit l'état
+des essuie-glaces (1 pour déployés, 0 pour non déployés). On remarque un
+chevauchement des bits pour les phares de positions, de croisement et de
+route: ceci implique que lors d'un appel de phare (bits 4 et 5 à 1) on
+ne peut distinguer si ce sont les phares de position (bit 3 à 1) ou de
+croisement (bits 3 et 4) qui sont actifs car le bit 3 et 4 sera à 1 dans
+les deux cas.</p>
+<p>On peut observer le même principe avec les freins (frein à main et
+pédale de frein) dans le 7ème octet de l'ID 154.</p>
+<p>Vous l'aurez compris, l'état de chaque système de l'automobile est
+transmis en temps réel sur le bus.</p>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://docs.macchina.cc/">Documentation Macchina M2</a></li>
-<li><a href="https://en.wikipedia.org/wiki/OBD-II_PIDs#Service_01">Identifiants OBD2 et formules de calcul</a></li>
-<li><a href="http://www.savvycan.com/docs/index.html">Documentation SavvyCAN</a></li>
+<li><a href="https://docs.macchina.cc/">Documentation Macchina
+M2</a></li>
+<li><a
+href="https://en.wikipedia.org/wiki/OBD-II_PIDs#Service_01">Identifiants
+OBD2 et formules de calcul</a></li>
+<li><a href="http://www.savvycan.com/docs/index.html">Documentation
+SavvyCAN</a></li>
 </ul>
   <br />
   <hr />

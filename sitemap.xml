@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://cboyer.github.io</loc>
-        <lastmod>2023-04-10T11:23:20-04:00</lastmod>
+        <lastmod>2023-07-23T13:33:02-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/linux</loc>
-        <lastmod>2023-04-10T11:23:20-04:00</lastmod>
+        <lastmod>2023-07-23T13:33:02-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/developpement</loc>
-        <lastmod>2023-04-10T11:23:20-04:00</lastmod>
+        <lastmod>2023-07-23T13:33:02-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://cboyer.github.io/electronique</loc>
-        <lastmod>2023-04-10T11:23:20-04:00</lastmod>
+        <lastmod>2023-07-23T13:33:02-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -51,7 +51,7 @@
     </url>
     <url>
         <loc>https://cboyer.github.io/linux/freebsd-kodi/</loc>
-        <lastmod>2021-11-22T17:34:14-05:00</lastmod>
+        <lastmod>2023-06-30T12:52:14-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -237,7 +237,7 @@
     </url>
     <url>
         <loc>https://cboyer.github.io/electronique/recepteur-infrarouge-usb-atmega32u4/</loc>
-        <lastmod>2022-01-30T18:11:00-04:00</lastmod>
+        <lastmod>2023-06-30T19:55:00-04:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>

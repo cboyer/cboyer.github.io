@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Commandes Linux en vrac - C. Boyer</title>
-  <meta name="description" content="Quelques commandes utiles sous Linux." />
+  <meta name="description" content="Quelques commandes utiles sous
+Linux." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Linux, commandes, Bash" />
   <meta name="robots" content="index,follow">
@@ -18,8 +19,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
 </head>
 <body>
@@ -37,7 +38,8 @@ CTRL+A+D</code></pre>
 <pre class="console"><code>screen -r Telechargement</code></pre>
 <p>Afficher les chaînes de caractère d'un fichier binaire</p>
 <pre class="console"><code>strings file.bin</code></pre>
-<p>Récupérer des fichiers depuis une image disque (contenus dans un autre fichier)</p>
+<p>Récupérer des fichiers depuis une image disque (contenus dans un
+autre fichier)</p>
 <pre class="console"><code>binwalk file.bin -e --dd=&quot;.*&quot; --raw=&quot;ID3&quot;
 foremost -dv -i file.img
 scalpel file.img -o output
@@ -58,7 +60,8 @@ dstat -c -y -l --proc-count --top-cpu</code></pre>
 <pre class="console"><code>echo &quot;Mon texte&quot; | lolcat</code></pre>
 <p>Restauration TSM</p>
 <pre class="console"><code>dsmc restore -pick -inactive &quot;/data/mon_fichier.gz&quot; /home/dossier_restauration/</code></pre>
-<p>Lister les différences entre deux arborescences (local ou distant)</p>
+<p>Lister les différences entre deux arborescences (local ou
+distant)</p>
 <pre class="console"><code>rsync -av --dry-run /source serveur:/dest</code></pre>
 <p>Ajouter des librairies .so</p>
 <pre class="console"><code>ldconfig -p | grep &quot;libicuuc.so.32&quot;
@@ -70,7 +73,8 @@ ldconfig</code></pre>
 <pre class="console"><code>watch -n 1 cat /proc/net/wireless</code></pre>
 <p>Afficher la date du dernier accés/modification</p>
 <pre class="console"><code>stat -c &quot;last access: %x last modification:%y&quot; mon_fichier</code></pre>
-<p>Ajouter un utilisateur existant à un groupe supplémentaire existant</p>
+<p>Ajouter un utilisateur existant à un groupe supplémentaire
+existant</p>
 <pre class="console"><code>usermod -a -G groupe utilisateur</code></pre>
 <p>Serveur web d'urgence avec Netcat</p>
 <pre class="console"><code>while true; do nc -l -p 8080 &lt; index.html; done
@@ -87,7 +91,8 @@ siege -b -t60S  http://example.com</code></pre>
 <pre class="console"><code>date --date &#39;03/23/2012&#39; +%j</code></pre>
 <p>Calculer le quantiéme du jour dans l'année (aujourd'hui)</p>
 <pre class="console"><code>date &quot;+%j&quot;</code></pre>
-<p>Affecter un dossier /home/toto é l'utilisateur toto (doit exister dans /etc/passwd)</p>
+<p>Affecter un dossier /home/toto é l'utilisateur toto (doit exister
+dans /etc/passwd)</p>
 <pre class="console"><code>usermod -d /home/toto toto</code></pre>
 <p>Afficher l'id du groupe toto</p>
 <pre class="console"><code>id -g toto</code></pre>
@@ -105,7 +110,7 @@ dstat -nN eth0</code></pre>
 <pre class="console"><code>rpm -ql nom_paquet</code></pre>
 <p>Trouver les liens symboliques</p>
 <pre class="console"><code>find /home/ -type l</code></pre>
-<p>Opération sur un critére de fichiers</p>
+<p>Opération sur des critères de fichiers</p>
 <pre class="console"><code>find /home/exploit/ * -type f -exec du -h {} \;
 find /data/entrepot/USER/ -name *.sas7bdat -not -user admpap -type f -mtime +100 -exec gzip -f {} \;</code></pre>
 <p>TreeSize Linux</p>
@@ -118,7 +123,8 @@ find /data/entrepot/USER/ -name *.sas7bdat -not -user admpap -type f -mtime +100
 <pre class="console"><code>lsof -ni
 lsof -ni tcp:22
 lsof -ni &#39;udp@192.168.66.66:123&#39;</code></pre>
-<p>Recherche les occurences de "meta" dans tous les fichiers php de /var/www/drupal</p>
+<p>Recherche les occurences de "meta" dans tous les fichiers php de
+/var/www/drupal</p>
 <pre class="console"><code>find /var/www/drupal/ -name &quot;*.php&quot; -exec grep -H meta {} \;
 find /var/www/drupal/ -type f -print0 | xargs -0 egrep -i &quot;*meta*&quot;</code></pre>
 <p>Recherche récursive d'un motif et retourne le fichier</p>
@@ -135,13 +141,15 @@ find /var/www/drupal/ -type f -print0 | xargs -0 egrep -i &quot;*meta*&quot;</co
 <pre class="console"><code>mkdir -p MyRepo/{i386,noarch,i686,SRPMS}</code></pre>
 <p>Compresser un fichier en fichier .gz</p>
 <pre class="console"><code>gzip fichier</code></pre>
-<p>Compresser fichier en fichier .gz avec écrasement et conserve la copie originale</p>
+<p>Compresser fichier en fichier .gz avec écrasement et conserve la
+copie originale</p>
 <pre class="console"><code>gzip  -cf  fichier</code></pre>
 <p>Décompresser fichier.gz</p>
 <pre class="console"><code>gzip -d fichier.gz</code></pre>
 <p>Lien symbolique</p>
 <pre class="console"><code>ln -s fichier_a_lier lien_symbolique</code></pre>
-<p>Rassembler plusieurs fichiers en une seule archive sans compression</p>
+<p>Rassembler plusieurs fichiers en une seule archive sans
+compression</p>
 <pre class="console"><code>tar cvf  fichier.tar fichiers</code></pre>
 <p>Liste le contenu d'un fichier tar</p>
 <pre class="console"><code>tar tvf  fichier.tar</code></pre>

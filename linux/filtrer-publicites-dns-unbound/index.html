@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Filtrer les publicités avec Unbound - C. Boyer</title>
-  <meta name="description" content="Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires." />
+  <meta name="description" content="Utiliser un serveur DNS Unbound pour
+filtrer les noms de domaine de régies publicitaires." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="dns, publicité, unbound, linux" />
   <meta name="robots" content="index,follow">
@@ -18,8 +19,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,14 +92,32 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Filtrer les publicités avec Unbound</h1>
   <em>Publié le 2018-05-04, dernière mise à jour: 2022-02-03</em>
-<p>Les publicités sont devenues depuis quelques années une véritable plaie sur Internet. Rares sont les sites et autres blogues qui en sont exempts, l'appât du gain ouvrant grand les portes à la monétisation. Ce qui est d'autant plus dérangeant c'est qu'elles ne se limitent plus à afficher (de manière intempestive ou non) un produit quelconque: les régies publicitaires ciblent des annonces en fonctions des données accessibles depuis votre navigateur (cookies, user-agent, recoupement avec d'autres données, etc.).</p>
-<p>Il existe des moyens de contrer ce fléau avec des plugins s'installant dans votre navigateur comme AdBlock, uBlock Origin ou encore Disconnect. Une autre alternative est possible: filtrer la source de ces annonces avec un serveur de noms (DNS) local. Une suite d'outils pour Raspberry Pi reposant sur ce concept à même vu le jour: <a href="https://pi-hole.net">Pi-Hole</a>. Ainsi, vous accélérez votre navigation en ne téléchargeant plus les données associées aux publicités.</p>
-<p>Nous allons voir comment monter son propre serveur DNS local avec Unbound pour filtrer les indésirables. Commençons par installer le package Unbound dépendamment de votre distribution (en root):</p>
+<p>Les publicités sont devenues depuis quelques années une véritable
+plaie sur Internet. Rares sont les sites et autres blogues qui en sont
+exempts, l'appât du gain ouvrant grand les portes à la monétisation. Ce
+qui est d'autant plus dérangeant c'est qu'elles ne se limitent plus à
+afficher (de manière intempestive ou non) un produit quelconque: les
+régies publicitaires ciblent des annonces en fonctions des données
+accessibles depuis votre navigateur (cookies, user-agent, recoupement
+avec d'autres données, etc.).</p>
+<p>Il existe des moyens de contrer ce fléau avec des plugins
+s'installant dans votre navigateur comme AdBlock, uBlock Origin ou
+encore Disconnect. Une autre alternative est possible: filtrer la source
+de ces annonces avec un serveur de noms (DNS) local. Une suite d'outils
+pour Raspberry Pi reposant sur ce concept à même vu le jour: <a
+href="https://pi-hole.net">Pi-Hole</a>. Ainsi, vous accélérez votre
+navigation en ne téléchargeant plus les données associées aux
+publicités.</p>
+<p>Nous allons voir comment monter son propre serveur DNS local avec
+Unbound pour filtrer les indésirables. Commençons par installer le
+package Unbound dépendamment de votre distribution (en root):</p>
 <pre class="console"><code>dnf install unbound
 apt-get install unbound
 yum install unbound</code></pre>
-<p>La configuration d'Unbound <code>/etc/unbound/unbound.conf</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">server</span><span class="kw">:</span></span>
+<p>La configuration d'Unbound
+<code>/etc/unbound/unbound.conf</code>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">server</span><span class="kw">:</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">username</span><span class="kw">:</span><span class="at"> unbound</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">directory</span><span class="kw">:</span><span class="at"> /etc/unbound</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">chroot</span><span class="kw">:</span><span class="at"> /etc/unbound</span></span>
@@ -165,11 +184,20 @@ yum install unbound</code></pre>
 <span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span><span class="kw">:</span><span class="at"> /var/unbound/conf.d/*.conf </span></span></code></pre></div>
 <blockquote>
-<p>Sous FreeBSD il faut définir <code>do-daemonize: yes</code> pour ne pas bloquer le démarrage du système. Installer également <code>security/ca_root_nss</code> pour <code>/usr/local/share/certs/ca-root-nss.crt</code> (dont <code>/etc/ssl/cert.pem</code> est un lien symbolique).</p>
+<p>Sous FreeBSD il faut définir <code>do-daemonize: yes</code> pour ne
+pas bloquer le démarrage du système. Installer également
+<code>security/ca_root_nss</code> pour
+<code>/usr/local/share/certs/ca-root-nss.crt</code> (dont
+<code>/etc/ssl/cert.pem</code> est un lien symbolique).</p>
 </blockquote>
-<p>Vous trouverez la description de tous ces paramètres dans la documentation officielle d'Unbound: <a href="https://www.unbound.net/documentation/unbound.conf.html">https://www.unbound.net/documentation/unbound.conf.html</a></p>
-<p>Pour résumer, Unbound fait office de cache DNS en résolvant les requêtes avec le DNS LibreDNS (connexion sécurisée par TLS). Les DNS de Google/Cloudflare sont vraiment à éviter pour des raisons évidentes.</p>
-<p>Le fichier <code>/etc/unbound/local.d/lan.conf</code> contiendra nos entrées locales, par exemple:</p>
+<p>Vous trouverez la description de tous ces paramètres dans la
+documentation officielle d'Unbound: <a
+href="https://www.unbound.net/documentation/unbound.conf.html">https://www.unbound.net/documentation/unbound.conf.html</a></p>
+<p>Pour résumer, Unbound fait office de cache DNS en résolvant les
+requêtes avec le DNS LibreDNS (connexion sécurisée par TLS). Les DNS de
+Google/Cloudflare sont vraiment à éviter pour des raisons évidentes.</p>
+<p>Le fichier <code>/etc/unbound/local.d/lan.conf</code> contiendra nos
+entrées locales, par exemple:</p>
 <pre class="console"><code>local-zone: &quot;mondomaine.local.&quot; transparent
 local-data: &quot;host1.mondomaine.local IN A 192.168.10.114&quot;
 
@@ -178,30 +206,54 @@ local-data: &quot;serveur A 192.168.10.104&quot;
 
 local-zone: &quot;patate&quot; redirect
 local-data: &quot;patate A 192.168.10.12&quot;</code></pre>
-<p>Le fichier <code>/etc/unbound/local.d/blacklist.conf</code> contiendra les domaines à bloquer. Pour cela, je vous propose les listes de Steven Black qui sont tenues à jour fréquemment et disponibles sur son dépôt Github: <a href="https://github.com/StevenBlack/hosts">https://github.com/StevenBlack/hosts</a>. Le problème est que le formatage de cette liste est adapté pour un fichier hosts et non pour Unbound. Remédions à la situation avec un simple script Bash:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<p>Le fichier <code>/etc/unbound/local.d/blacklist.conf</code>
+contiendra les domaines à bloquer. Pour cela, je vous propose les listes
+de Steven Black qui sont tenues à jour fréquemment et disponibles sur
+son dépôt Github: <a
+href="https://github.com/StevenBlack/hosts">https://github.com/StevenBlack/hosts</a>.
+Le problème est que le formatage de cette liste est adapté pour un
+fichier hosts et non pour Unbound. Remédions à la situation avec un
+simple script Bash:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;^0.0.0.0&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{ print &quot;local-zone: \&quot;&quot; $2 &quot;\&quot; redirect\nlocal-data: \&quot;&quot; $2 &quot; A 127.0.0.1\&quot;&quot;  }&#39;</span> <span class="op">&gt;</span> /etc/unbound/local.d/blacklist.conf</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">unbound-control</span> reload</span></code></pre></div>
-<p>Adaptez l'URL selon votre choix parmi les différentes listes disponibles. Ce script peut parfaitement être ajouté dans la crontab pour une synchronisation régulière: pour cela ajoutez un redémarrage du service en dernière ligne.</p>
+<p>Adaptez l'URL selon votre choix parmi les différentes listes
+disponibles. Ce script peut parfaitement être ajouté dans la crontab
+pour une synchronisation régulière: pour cela ajoutez un redémarrage du
+service en dernière ligne.</p>
 <p>Pour redémarrer Unbound:</p>
 <pre class="console"><code>systemctl restart unbound</code></pre>
 <blockquote>
-<p>Sur certains système Linux, un service écoute déjà sur le port 53: <code>systemd-resolved</code>, pour le désactiver/arrêter: <code>systemctl disable systemd-resolved &amp;&amp; systemctl stop systemd-resolved</code>.</p>
+<p>Sur certains système Linux, un service écoute déjà sur le port 53:
+<code>systemd-resolved</code>, pour le désactiver/arrêter:
+<code>systemctl disable systemd-resolved &amp;&amp; systemctl stop systemd-resolved</code>.</p>
 </blockquote>
-<p>Pour envoyer depuis un client des requêtes DNS afin de tester la configuration:</p>
+<p>Pour envoyer depuis un client des requêtes DNS afin de tester la
+configuration:</p>
 <pre class="console"><code>dig @192.168.45.123 patate +short</code></pre>
-<p>Il ne reste plus qu'à faire pointer vos clients vers le serveur DNS en ajoutant l'adresse IP dans la configuration de vos machines et/ou dans votre DHCP (routeur).</p>
+<p>Il ne reste plus qu'à faire pointer vos clients vers le serveur DNS
+en ajoutant l'adresse IP dans la configuration de vos machines et/ou
+dans votre DHCP (routeur).</p>
 <pre class="console"><code>#Pour CentOS/Fedora
 nmcli con mod enp1s0 ipv4.dns &quot;192.168.45.123 192.168.45.122&quot;</code></pre>
-<p>Les statistiques Unbound peuvent être consultés sur le serveur avec:</p>
+<p>Les statistiques Unbound peuvent être consultés sur le serveur
+avec:</p>
 <pre class="console"><code>unbound-control stats_noreset</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://etherarp.net/build-an-adblocking-dns-server/index.html">https://etherarp.net/build-an-adblocking-dns-server/index.html</a></li>
-<li><a href="https://wiki.archlinux.org/index.php/unbound">https://wiki.archlinux.org/index.php/unbound</a></li>
-<li><a href="https://www.unbound.net/documentation/unbound-control.html">https://www.unbound.net/documentation/unbound-control.html</a></li>
-<li><a href="https://github.com/StevenBlasck/hosts">https://github.com/StevenBlasck/hosts</a></li>
+<li><a
+href="https://etherarp.net/build-an-adblocking-dns-server/index.html">https://etherarp.net/build-an-adblocking-dns-server/index.html</a></li>
+<li><a
+href="https://wiki.archlinux.org/index.php/unbound">https://wiki.archlinux.org/index.php/unbound</a></li>
+<li><a
+href="https://www.unbound.net/documentation/unbound-control.html">https://www.unbound.net/documentation/unbound-control.html</a></li>
+<li><a
+href="https://github.com/StevenBlasck/hosts">https://github.com/StevenBlasck/hosts</a></li>
+<li><a
+href="https://gist.github.com/VirtuBox/869af93f506f6c9c392afa074f7ee9d4">Pi-hole
+blocking lists</a></li>
 </ul>
   <br />
   <hr />

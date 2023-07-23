@@ -143,7 +143,7 @@ Récupérer le résultat
 hadoop fs -get /output output
 ```
 
-# Liens complémentaires
+## Liens complémentaires
  - [https://anchalkataria.wordpress.com/2016/05/01/installing-hadoop-in-fully-distributed-mode/](https://anchalkataria.wordpress.com/2016/05/01/installing-hadoop-in-fully-distributed-mode/)
  - [https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html](https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html)
  - [https://www.tutorialspoint.com/hadoop/hadoop_multi_node_cluster.htm](https://www.tutorialspoint.com/hadoop/hadoop_multi_node_cluster.htm)

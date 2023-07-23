@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Implémentation du protocole Dreamscreen en C - C. Boyer</title>
-  <meta name="description" content="Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen." />
+  <meta name="description" content="Implémentation en C du protocole
+utilisé pour commander un équipement Dreamscreen." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="dreamscreen, linux, kodi" />
   <meta name="robots" content="index,follow">
@@ -18,8 +19,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,21 +92,49 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Implémentation du protocole Dreamscreen en C</h1>
   <em>Publié le 2018-05-29, dernière mise à jour: 2019-01-10</em>
-<p>Le <a href="https://www.dreamscreentv.com">Dreamscreen</a> est un équipement multimédia du type "ambilight". Cet équipement utilise une application Android/iPhone pour être configuré et contrôlé (par Wifi) mais ne dispose pas de télécommande.</p>
-<p>Un simple programme en C pour Linux (disponible sur <a href="https://github.com/cboyer/dreamscreen-tools">Github</a>) permet contrôler un dreamscreen depuis un <a href="../../electronique/recepteur-infrarouge-usb-atmega32u4/index.html">système de télécommande</a> maison, utilisable avec Kodi. Ce programme est compatible avec n'importe quel autre périphérique de type clavier. Techniquement il s'agit d'une implémentation en C du protocole dreamscreen qui envoie des messages UDP en fonction d'évènements clavier. Ce programme peut facilement être intégré dans des systèmes comme <a href="https://libreelec.tv">LibreELEC</a> ou encore <a href="https://openelec.tv">OpenELEC</a>.</p>
+<p>Le <a href="https://www.dreamscreentv.com">Dreamscreen</a> est un
+équipement multimédia du type "ambilight". Cet équipement utilise une
+application Android/iPhone pour être configuré et contrôlé (par Wifi)
+mais ne dispose pas de télécommande.</p>
+<p>Un simple programme en C pour Linux (disponible sur <a
+href="https://github.com/cboyer/dreamscreen-tools">Github</a>) permet
+contrôler un dreamscreen depuis un <a
+href="../../electronique/recepteur-infrarouge-usb-atmega32u4/index.html">système
+de télécommande</a> maison, utilisable avec Kodi. Ce programme est
+compatible avec n'importe quel autre périphérique de type clavier.
+Techniquement il s'agit d'une implémentation en C du protocole
+dreamscreen qui envoie des messages UDP en fonction d'évènements
+clavier. Ce programme peut facilement être intégré dans des systèmes
+comme <a href="https://libreelec.tv">LibreELEC</a> ou encore <a
+href="https://openelec.tv">OpenELEC</a>.</p>
 <h2 id="structure-du-message">Structure du message</h2>
-<p>Dreamscreen utilise le port 8888 en UDP sur son interface WiFi pour envoyer et recevoir des messages binaires.</p>
+<p>Dreamscreen utilise le port 8888 en UDP sur son interface WiFi pour
+envoyer et recevoir des messages binaires.</p>
 <p>Structure du message:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>[début<span class="op">,</span> longueur du paquet<span class="op">,</span> adresse de groupe<span class="op">,</span> flag<span class="op">,</span> commande principale<span class="op">,</span> commande secondaire<span class="op">,</span> <span class="fu">payload</span> (<span class="dv">1</span> à <span class="dv">3</span> octets)<span class="op">,</span> CRC8]</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>[<span class="bn">0xFC</span> <span class="op">,</span> 0x<span class="op">??</span>              <span class="op">,</span> 0x<span class="op">??</span>             <span class="op">,</span> <span class="bn">0x11</span><span class="op">,</span> <span class="bn">0x03</span>               <span class="op">,</span> 0x<span class="op">??</span>               <span class="op">,</span> [0x<span class="op">??,</span> 0x<span class="op">??,</span> 0x<span class="op">??</span>]    <span class="op">,</span> 0x<span class="op">??</span>]</span></code></pre></div>
-<p><strong>Début:</strong> Permet la synchronisation lors de la réception d’un paquet. Contient toujours <code>0xFC</code></p>
-<p><strong>Longueur du paquet:</strong> Nombre d’octet contenu entre l’Adresse de groupe et le CRC inclus. Normalement <code>0x06</code> (payload d’un seul octet) sauf pour la définition d’une couleur ambiante <code>0x08</code> (payload de 3 octets).</p>
-<p><strong>Adresse de groupe:</strong> Adresse identifiant le groupe auquel l’équipement est associé. <code>0x00</code> pour aucun groupe, <code>0x01</code> pour le groupe 1, <code>0x02</code> pour le groupe 2 etc. Dans le cas où l’adresse de groupe est incorrect, le message sera ignoré.</p>
-<p><strong>Flag:</strong> Défini le contexte pour d’interprétation du message. Utiliser <code>0x11</code> pour commander le dreamscreen.</p>
-<p><strong>Commande principale:</strong> Défini la commande, utiliser <code>0x03</code> pour commander le Dreamscreen.</p>
-<p><strong>Commande secondaire:</strong> Identifie l’élément à paramétrer (cf. tableau plus bas).</p>
-<p><strong>Payload:</strong> Valeur à affecter au paramètre (cf. tableau plus bas).</p>
-<p><strong>CRC8:</strong> CRC sur 8 bits pour valider l’intégrité du message. S’il est incorrect, le message sera ignoré.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>[début<span class="op">,</span> longueur du paquet<span class="op">,</span> adresse de groupe<span class="op">,</span> flag<span class="op">,</span> commande principale<span class="op">,</span> commande secondaire<span class="op">,</span> <span class="fu">payload</span> (<span class="dv">1</span> à <span class="dv">3</span> octets)<span class="op">,</span> CRC8]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>[<span class="bn">0xFC</span> <span class="op">,</span> <span class="dv">0</span><span class="er">x</span><span class="op">??</span>              <span class="op">,</span> <span class="dv">0</span><span class="er">x</span><span class="op">??</span>             <span class="op">,</span> <span class="bn">0x11</span><span class="op">,</span> <span class="bn">0x03</span>               <span class="op">,</span> <span class="dv">0</span><span class="er">x</span><span class="op">??</span>               <span class="op">,</span> [<span class="dv">0</span><span class="er">x</span><span class="op">??,</span> <span class="dv">0</span><span class="er">x</span><span class="op">??,</span> <span class="dv">0</span><span class="er">x</span><span class="op">??</span>]    <span class="op">,</span> <span class="dv">0</span><span class="er">x</span><span class="op">??</span>]</span></code></pre></div>
+<p><strong>Début:</strong> Permet la synchronisation lors de la
+réception d’un paquet. Contient toujours <code>0xFC</code></p>
+<p><strong>Longueur du paquet:</strong> Nombre d’octet contenu entre
+l’Adresse de groupe et le CRC inclus. Normalement <code>0x06</code>
+(payload d’un seul octet) sauf pour la définition d’une couleur ambiante
+<code>0x08</code> (payload de 3 octets).</p>
+<p><strong>Adresse de groupe:</strong> Adresse identifiant le groupe
+auquel l’équipement est associé. <code>0x00</code> pour aucun groupe,
+<code>0x01</code> pour le groupe 1, <code>0x02</code> pour le groupe 2
+etc. Dans le cas où l’adresse de groupe est incorrect, le message sera
+ignoré.</p>
+<p><strong>Flag:</strong> Défini le contexte pour d’interprétation du
+message. Utiliser <code>0x11</code> pour commander le dreamscreen.</p>
+<p><strong>Commande principale:</strong> Défini la commande, utiliser
+<code>0x03</code> pour commander le Dreamscreen.</p>
+<p><strong>Commande secondaire:</strong> Identifie l’élément à
+paramétrer (cf. tableau plus bas).</p>
+<p><strong>Payload:</strong> Valeur à affecter au paramètre (cf. tableau
+plus bas).</p>
+<p><strong>CRC8:</strong> CRC sur 8 bits pour valider l’intégrité du
+message. S’il est incorrect, le message sera ignoré.</p>
 <h2 id="commandes-et-paramètres">Commandes et paramètres</h2>
 <table>
 <colgroup>
@@ -129,7 +158,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <td style="text-align: left;">Mode</td>
 <td style="text-align: center;">0x03</td>
 <td style="text-align: center;">0x01</td>
-<td style="text-align: left;">0x00: Éteindre; 0x01: Vidéo; 0x02: Musique; 0x03: Ambiance</td>
+<td style="text-align: left;">0x00: Éteindre; 0x01: Vidéo; 0x02:
+Musique; 0x03: Ambiance</td>
 <td style="text-align: center;">1</td>
 </tr>
 <tr class="even">
@@ -157,22 +187,28 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <td style="text-align: left;">Préréglage d’ambiance lumineuse</td>
 <td style="text-align: center;">0x03</td>
 <td style="text-align: center;">0x0D</td>
-<td style="text-align: left;">0x00: Couleur aléatoire; 0x01: Fireside; 0x02: Twinkle; 0x03: Océan; 0x04: Arc-en-ciel; 0x05: 4 Juillet; 0x06: Vacances; 0x07: Pop; 0x08: Forêt enchantée</td>
+<td style="text-align: left;">0x00: Couleur aléatoire; 0x01: Fireside;
+0x02: Twinkle; 0x03: Océan; 0x04: Arc-en-ciel; 0x05: 4 Juillet; 0x06:
+Vacances; 0x07: Pop; 0x08: Forêt enchantée</td>
 <td style="text-align: center;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Entrée HDMI</td>
 <td style="text-align: center;">0x03</td>
 <td style="text-align: center;">0x20</td>
-<td style="text-align: left;">0x00: Entrée 1; 0x01: Entrée 2; 0x02: Entrée 3</td>
+<td style="text-align: left;">0x00: Entrée 1; 0x01: Entrée 2; 0x02:
+Entrée 3</td>
 <td style="text-align: center;">1</td>
 </tr>
 </tbody>
 </table>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://planet.neeo.com/media/80x1kj/download/dreamscreen-v2-wifi-udp-protocol.pdf">Documentation du protocole dreamscreen</a></li>
-<li><a href="https://github.com/cboyer/dreamscreen-daemon">https://github.com/cboyer/dreamscreen-daemon</a></li>
+<li><a
+href="https://planet.neeo.com/media/80x1kj/download/dreamscreen-v2-wifi-udp-protocol.pdf">Documentation
+du protocole dreamscreen</a></li>
+<li><a
+href="https://github.com/cboyer/dreamscreen-tools">https://github.com/cboyer/dreamscreen-tools</a></li>
 </ul>
   <br />
   <hr />

@@ -18,8 +18,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,7 +91,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Les outils Elixir</h1>
   <em>Publié le 2019-11-16</em>
-<p>Elixir fournit un ensemble d'outils simplifiant la gestion des dépendances et la publication de l'application (releases).</p>
+<p>Elixir fournit un ensemble d'outils simplifiant la gestion des
+dépendances et la publication de l'application (releases).</p>
 <h2 id="mix">Mix</h2>
 <p>Mix est l'outil de gestion pour les applications Elixir.</p>
 <table>
@@ -112,11 +113,13 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 </tr>
 <tr class="even">
 <td>mix new --sup <code>myapp</code></td>
-<td>Créer une nouvelle application <code>myapp</code> avec superviseur</td>
+<td>Créer une nouvelle application <code>myapp</code> avec
+superviseur</td>
 </tr>
 <tr class="odd">
 <td>mix deps.get</td>
-<td>Télécharger les dépendances listées dans mix.exs depuis les dépôts Hex</td>
+<td>Télécharger les dépendances listées dans mix.exs depuis les dépôts
+Hex</td>
 </tr>
 <tr class="even">
 <td>mix deps.update</td>
@@ -132,15 +135,18 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 </tr>
 <tr class="odd">
 <td>mix deps.compile <code>input_event</code></td>
-<td>Compiler une dépendance particulière (ici <code>input_event</code>)</td>
+<td>Compiler une dépendance particulière (ici
+<code>input_event</code>)</td>
 </tr>
 <tr class="even">
 <td>mix compile</td>
-<td>Compile l'application (les dépendances doivent être téléchargées avec <code>mix deps.get</code></td>
+<td>Compile l'application (les dépendances doivent être téléchargées
+avec <code>mix deps.get</code></td>
 </tr>
 <tr class="odd">
 <td>MIX_ENV=prod mix release</td>
-<td>Générer une release (disponible à partir de la version 1.9 d'Elixir)</td>
+<td>Générer une release (disponible à partir de la version 1.9
+d'Elixir)</td>
 </tr>
 <tr class="even">
 <td>mix run</td>
@@ -157,7 +163,8 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 </tbody>
 </table>
 <h2 id="gestion-des-releases">Gestion des releases</h2>
-<p>Les releases sont générées dans <code>_build/prod</code> ou <code>_build/dev</code> dépendamment de la variable MIX_ENV.</p>
+<p>Les releases sont générées dans <code>_build/prod</code> ou
+<code>_build/dev</code> dépendamment de la variable MIX_ENV.</p>
 <table>
 <colgroup>
 <col style="width: 44%" />
@@ -176,7 +183,9 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 </tr>
 <tr class="even">
 <td>MIX_ENV=prod mix release <code>name</code> --overwrite --force</td>
-<td>Créer une release de production avec les paramètres défini dans <code>mix.exs</code> pour <code>name</code> en écrasant l'existante et en forçant la recompilation</td>
+<td>Créer une release de production avec les paramètres défini dans
+<code>mix.exs</code> pour <code>name</code> en écrasant l'existante et
+en forçant la recompilation</td>
 </tr>
 <tr class="odd">
 <td>_build/prod/rel/my_app/bin/my_app start_iex</td>
@@ -184,11 +193,13 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 </tr>
 <tr class="even">
 <td>bin/RELEASE_NAME eval <code>"IO.puts(:hello)"</code></td>
-<td>Exécuter un module/fonction de la release sur une nouvelle instance de l'application</td>
+<td>Exécuter un module/fonction de la release sur une nouvelle instance
+de l'application</td>
 </tr>
 <tr class="odd">
 <td>bin/RELEASE_NAME rpc <code>"IO.puts(:hello)"</code></td>
-<td>Exécuter un module/fonction de la release sur une instance en fonction de l'applications</td>
+<td>Exécuter un module/fonction de la release sur une instance en
+fonction de l'applications</td>
 </tr>
 <tr class="even">
 <td>bin/my_app remote</td>
@@ -205,56 +216,68 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 </tbody>
 </table>
 <h2 id="le-fichier-mix.exs">Le fichier mix.exs</h2>
-<p>Le fichier <code>mix.exs</code> contient la configuration de l'application, des dépendances et des releases.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">defmodule</span> <span class="cn">Serial</span><span class="op">.</span><span class="cn">MixProject</span> <span class="kw">do</span></span>
+<p>Le fichier <code>mix.exs</code> contient la configuration de
+l'application, des dépendances et des releases.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">defmodule</span> <span class="cn">Serial</span><span class="op">.</span><span class="cn">MixProject</span> <span class="kw">do</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="im">use</span> <span class="cn">Mix</span><span class="op">.</span><span class="cn">Project</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> project <span class="kw">do</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      <span class="va">app:</span> <span class="va">:serial</span>,</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="va">version:</span> <span class="st">&quot;1.0.0&quot;</span>,</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      <span class="va">elixir:</span> <span class="st">&quot;~&gt; 1.9&quot;</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="va">start_permanent:</span> <span class="cn">Mix</span><span class="op">.</span>env() <span class="op">==</span> <span class="va">:prod</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="va">deps:</span> deps(),</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="va">releases:</span> [</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="va">start_permanent:</span> <span class="cn">Mix</span><span class="op">.</span>env<span class="fu">()</span> <span class="op">==</span> <span class="va">:prod</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="va">deps:</span> deps<span class="fu">()</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="va">releases:</span> <span class="ot">[</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Configuration de la release &quot;serial_prod&quot;</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">serial_prod:</span> [</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>          <span class="va">include_executables_for:</span> [<span class="va">:unix</span>],</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>          <span class="va">applications:</span> [<span class="va">runtime_tools:</span> <span class="va">:permanent</span>]</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        ]</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      ]</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">serial_prod:</span> <span class="ot">[</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>          <span class="va">include_executables_for:</span> <span class="ot">[</span><span class="va">:unix</span><span class="ot">]</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>          <span class="va">applications:</span> <span class="ot">[</span><span class="va">runtime_tools:</span> <span class="va">:permanent</span><span class="ot">]</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">end</span></span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Configuration de l&#39;application (plus d&#39;options avec &quot;mix help compile.app&quot;).</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> application <span class="kw">do</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    [</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>      <span class="va">extra_applications:</span> [<span class="va">:logger</span>],</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>      <span class="va">mod:</span> {<span class="cn">Serial</span><span class="op">.</span><span class="cn">Application</span>, []}</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>      <span class="va">extra_applications:</span> <span class="ot">[</span><span class="va">:logger</span><span class="ot">]</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>      <span class="va">mod:</span> <span class="fu">{</span><span class="cn">Serial</span><span class="op">.</span><span class="cn">Application</span>, <span class="ot">[]</span><span class="fu">}</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="kw">end</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Dépendances (plus d&#39;option avec &quot;mix help deps&quot;).</span></span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="kw">defp</span> deps <span class="kw">do</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    [</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>      {<span class="va">:circuits_uart</span>, <span class="st">&quot;~&gt; 1.3&quot;</span>}</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span><span class="va">:circuits_uart</span>, <span class="st">&quot;~&gt; 1.3&quot;</span><span class="fu">}</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="kw">end</span></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <h2 id="observer">Observer</h2>
-<p>Pour visualiser les toutes les caractéristiques de notre application (dans <code>iex</code>, en ayant au préalable installé le package <code>erlang-observer</code>):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">:observer</span><span class="op">.</span>start</span></code></pre></div>
-<h2 id="compilation-manuelle-de-fichiers-source-sans-mix">Compilation manuelle de fichiers source sans Mix</h2>
-<p>Pour le compiler manuellement et obtenir un binaire (bytecode pour la machine virtuelle BEAM):</p>
+<p>Pour visualiser les toutes les caractéristiques de notre application
+(dans <code>iex</code>, en ayant au préalable installé le package
+<code>erlang-observer</code>):</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">:observer</span><span class="op">.</span>start</span></code></pre></div>
+<h2 id="compilation-manuelle-de-fichiers-source-sans-mix">Compilation
+manuelle de fichiers source sans Mix</h2>
+<p>Pour le compiler manuellement et obtenir un binaire (bytecode pour la
+machine virtuelle BEAM):</p>
 <pre class="console"><code>elixirc elixir_app/lib/elixir_app/application.ex
 elixirc elixir_app/lib/elixir_app/worker.ex</code></pre>
-<p>On obtient alors les fichiers <code>Elixir.ElixirApp.Application.beam</code> et <code>Elixir.ElixirApp.Worker.beam</code></p>
-<p>Pour l'exécuter depuis le shell (en se plaçant dans le même dossier que <code>Elixir.ElixirApp.Application.beam</code>):</p>
+<p>On obtient alors les fichiers
+<code>Elixir.ElixirApp.Application.beam</code> et
+<code>Elixir.ElixirApp.Worker.beam</code></p>
+<p>Pour l'exécuter depuis le shell (en se plaçant dans le même dossier
+que <code>Elixir.ElixirApp.Application.beam</code>):</p>
 <pre class="console"><code>elixir -e &quot;ElixirApp.Application.start(:ok, [])&quot;</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://hexdocs.pm/mix/Mix.Tasks.Release.html">Gestion des Releases</a></li>
-<li><a href="https://hexdocs.pm/iex/IEx.Helpers.html">Les helpers IEx</a></li>
+<li><a href="https://hexdocs.pm/mix/Mix.Tasks.Release.html">Gestion des
+Releases</a></li>
+<li><a href="https://hexdocs.pm/iex/IEx.Helpers.html">Les helpers
+IEx</a></li>
 </ul>
   <br />
   <hr />

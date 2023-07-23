@@ -2,8 +2,10 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>Cluster Linux avec Pacemaker, Corosync et PCS - C. Boyer</title>
-  <meta name="description" content="Cluster Linux avec Pacemaker/Corosync/PCS." />
+  <title>Cluster Linux avec Pacemaker, Corosync et PCS - C.
+Boyer</title>
+  <meta name="description" content="Cluster Linux avec
+Pacemaker/Corosync/PCS." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="Linux, Cluster, Pacemake, Corosync, PCS, Redhat" />
   <meta name="robots" content="index,follow">
@@ -18,8 +20,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
 </head>
 <body>
@@ -30,13 +32,16 @@
 <p>Démarrage de pcsd</p>
 <pre class="console"><code>systemctl enable pcsd.service
 systemctl start pcsd.service</code></pre>
-<p>Changer le mot de passe de l'utilisateur <code>hacluster</code> créé par pcsd</p>
+<p>Changer le mot de passe de l'utilisateur <code>hacluster</code> créé
+par pcsd</p>
 <pre class="console"><code>passwd hacluster</code></pre>
-<p>Authantification de pcsd sur les noeuds (ip ou noms si résolution)</p>
+<p>Authantification de pcsd sur les noeuds (ip ou noms si
+résolution)</p>
 <pre class="console"><code>pcs cluster auth SRV-TEST01A SRV-TEST01B</code></pre>
 <p>Création du cluster</p>
 <pre class="console"><code>pcs cluster setup --name DMZSVC01 SRV-TEST01A SRV-TEST01B</code></pre>
-<p>Démarrer tous les services (corosync et pacemaker) sur tous les noeuds</p>
+<p>Démarrer tous les services (corosync et pacemaker) sur tous les
+noeuds</p>
 <pre class="console"><code>pcs cluster start --all</code></pre>
 <p>Activer les services au démarrage</p>
 <pre class="console"><code>systemctl enable corosync.service
@@ -46,7 +51,8 @@ systemctl enable pacemaker.service</code></pre>
 pcs status
 pcs status nodes
 pcs status corosync</code></pre>
-<p>Désactiver le STONITH et le quorum (quorum inutile car juste 2 noeuds)</p>
+<p>Désactiver le STONITH et le quorum (quorum inutile car juste 2
+noeuds)</p>
 <pre class="console"><code>pcs property set stonith-enabled=false
 pcs property set no-quorum-policy=ignore</code></pre>
 <p>Lster les paramètres disponibles pour un type de ressource</p>
@@ -59,17 +65,20 @@ pcs property set no-quorum-policy=ignore</code></pre>
 <pre class="console"><code>pcs resource update virtual_ip ip=142.101.210.23</code></pre>
 <p>Vérifier les ressources</p>
 <pre class="console"><code>pcs status resources</code></pre>
-<p>Ajouter une contrainte (ip virtuelle de préférence sur SRV-TEST01A score de 50)</p>
+<p>Ajouter une contrainte (ip virtuelle de préférence sur SRV-TEST01A
+score de 50)</p>
 <pre class="console"><code>pcs constraint location virtual_ip prefers SRV-TEST01A=50</code></pre>
 <p>Vérifier les contraintes</p>
 <pre class="console"><code>pcs constraint</code></pre>
-<p>Créer la ressource <code>postfix</code> après avoir configurer les chemins vers GlusterFS et SSMTP comme MTA par défaut</p>
+<p>Créer la ressource <code>postfix</code> après avoir configurer les
+chemins vers GlusterFS et SSMTP comme MTA par défaut</p>
 <pre class="console"><code>pcs resource create smtp_postfix ocf:heartbeat:postfix binary=&quot;/usr/sbin/postfix&quot; config_dir=&quot;/mnt/gluster/postfix/conf&quot; op monitor interval=&quot;60s&quot; timeout=&quot;20s&quot;</code></pre>
 <p>Créer les contraintes pour postfix ou un resource group</p>
 <pre class="console"><code>pcs constraint location smtp_postfix prefers SRV-TEST01A=50
 pcs constraint colocation add smtp_postfix virtual_ip INFINITY
 pcs constraint order start virtual_ip then start smtp_postfix kind=Mandatory symmetrical=true</code></pre>
-<p>Les contraintes précédentes sont équivalentes à créer un groupe (l'ordre des resources est important)</p>
+<p>Les contraintes précédentes sont équivalentes à créer un groupe
+(l'ordre des resources est important)</p>
 <pre class="console"><code>pcs resource group add mail_group virtual_ip smtp_postfix</code></pre>
 <p>Créer un monitoring mail pour chaque evenement sur le cluster</p>
 <pre class="console"><code>pcs resource create cluster_monitoring ClusterMon user=root update=30 extra_options=&quot;-E /mnt/gluster/monitoring.pl&quot; op monitor interval=&quot;120s&quot; --clone</code></pre>
@@ -87,10 +96,12 @@ pcs resource enable smtp_postfix</code></pre>
 <pre class="console"><code>pcs resource move smtp_postfix SRV-TEST01A</code></pre>
 <p>La déplacer sur le noeud d'origine (défini par constraint</p>
 <pre class="console"><code>pcs resource clear smtp_postfix SRV-TEST01A</code></pre>
-<h1 id="liens-complémentaires">Liens complémentaires</h1>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Configuring_the_Red_Hat_High_Availability_Add-On_with_Pacemaker/ch-pcscommand-HAAR.html">https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Configuring_the_Red_Hat_High_Availability_Add-On_with_Pacemaker/ch-pcscommand-HAAR.html</a></li>
-<li><a href="http://linux-ha.org/doc/man-pages/re-ra-postfix.html">http://linux-ha.org/doc/man-pages/re-ra-postfix.html</a></li>
+<li><a
+href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Configuring_the_Red_Hat_High_Availability_Add-On_with_Pacemaker/ch-pcscommand-HAAR.html">https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Configuring_the_Red_Hat_High_Availability_Add-On_with_Pacemaker/ch-pcscommand-HAAR.html</a></li>
+<li><a
+href="http://linux-ha.org/doc/man-pages/re-ra-postfix.html">http://linux-ha.org/doc/man-pages/re-ra-postfix.html</a></li>
 </ul>
   <br />
   <hr />

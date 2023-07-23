@@ -190,7 +190,7 @@ Trouver les liens symboliques
 find /home/ -type l
 ```
 
-Opération sur un critére de fichiers
+Opération sur des critères de fichiers
 ```console
 find /home/exploit/ * -type f -exec du -h {} \;
 find /data/entrepot/USER/ -name *.sas7bdat -not -user admpap -type f -mtime +100 -exec gzip -f {} \;

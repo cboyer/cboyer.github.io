@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Analyse du trafic WiFi avec Airodump-ng et R - C. Boyer</title>
-  <meta name="description" content="Analyse du trafic WiFi avec Airodump-ng et R." />
+  <meta name="description" content="Analyse du trafic WiFi avec
+Airodump-ng et R." />
   <meta name="author" content="C. Boyer" />
   <meta name="keywords" content="R, analyse, réseau, airmon-ng" />
   <meta name="robots" content="index,follow">
@@ -18,8 +19,8 @@
     p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: scroll; }
-    .sourceCode { overflow: scroll !important; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -91,21 +92,39 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 <body>
   <h1>Analyse du trafic WiFi avec Airodump-ng et R</h1>
   <em>Publié le 2019-03-04</em>
-<p>Cet article présente un exemple d'utilisation de R avec les données issues d'<a href="https://www.aircrack-ng.org/doku.php?id=airodump-ng">Airodump-ng</a>. Pour cela, nous procéderons en plusieurs étapes:</p>
+<p>Cet article présente un exemple d'utilisation de R avec les données
+issues d'<a
+href="https://www.aircrack-ng.org/doku.php?id=airodump-ng">Airodump-ng</a>.
+Pour cela, nous procéderons en plusieurs étapes:</p>
 <ul>
 <li>Collecte des données</li>
 <li>Traitement des données en vue de les rendre exploitables</li>
 <li>Analyse et présentation des données</li>
 </ul>
-<p>Le script complet est disponible en bas de page, dans les sources.</p>
+<p>Le script complet est disponible en bas de page, dans les
+sources.</p>
 <h2 id="collecte-des-données">Collecte des données</h2>
-<p>Airodump-ng nous permet d'obtenir des statistiques sur le trafic réseau WiFi: il agrège les données par point d'accès et client WiFi de façon cumulative. Ces données sont au format CSV. Pour commencer la collecte des données (nécessite les droits root):</p>
+<p>Airodump-ng nous permet d'obtenir des statistiques sur le trafic
+réseau WiFi: il agrège les données par point d'accès et client WiFi de
+façon cumulative. Ces données sont au format CSV. Pour commencer la
+collecte des données (nécessite les droits root):</p>
 <pre class="console"><code>airmon-ng start wlp3s0
 airodump-ng --band abg -w output.csv --output-format csv wlp3s0mon</code></pre>
-<p>Ici <code>wlp3s0</code> correspond au nom de l'interface WiFi utilisée pour l'écoute (mode monitor) et sera accessible via une nouvelle interface <code>wlp3s0mon</code>.</p>
+<p>Ici <code>wlp3s0</code> correspond au nom de l'interface WiFi
+utilisée pour l'écoute (mode monitor) et sera accessible via une
+nouvelle interface <code>wlp3s0mon</code>.</p>
 <h2 id="traitement-des-données">Traitement des données</h2>
-<p>Le fichier CSV produit comporte un problème de structure: il inclut deux ensembles de données distincts présentant les données relatives aux points d'accès et celle des clients. Chacun de ces ensembles possède un nombre de colonnes différents ce qui va poser problème à R pour parser ce fichier.</p>
-<p>Autre problème, la colonne "Probe" des données des clients contient des valeurs multiples qui sont séparées par le même caractère (la virgule) servant à distinguer les différentes colonnes. Ceci créé un fichier à nombre de colonnes variables ce qui pose problème avec l'utilisation de la fonction <code>read.csv</code> de R nous obligeant alors à parser nous même le fichier.</p>
+<p>Le fichier CSV produit comporte un problème de structure: il inclut
+deux ensembles de données distincts présentant les données relatives aux
+points d'accès et celle des clients. Chacun de ces ensembles possède un
+nombre de colonnes différents ce qui va poser problème à R pour parser
+ce fichier.</p>
+<p>Autre problème, la colonne "Probe" des données des clients contient
+des valeurs multiples qui sont séparées par le même caractère (la
+virgule) servant à distinguer les différentes colonnes. Ceci créé un
+fichier à nombre de colonnes variables ce qui pose problème avec
+l'utilisation de la fonction <code>read.csv</code> de R nous obligeant
+alors à parser nous même le fichier.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Lecture du fichier</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>airodump <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">&#39;airmonng_data.csv&#39;</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -117,7 +136,12 @@ airodump-ng --band abg -w output.csv --output-format csv wlp3s0mon</code></pre>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>airodump <span class="ot">&lt;-</span> <span class="fu">by</span>(airodump, i, paste, <span class="at">collapse=</span><span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>aps <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">text=</span>airodump[<span class="dv">1</span>], <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>stations <span class="ot">&lt;-</span> airodump[<span class="dv">2</span>]</span></code></pre></div>
-<p>L'utilisation de <code>stringsAsFactors=FALSE</code> nous permet d'avoir des colonnes contenant simplement les données sans utiliser de facteurs/levels. Concernant les données clients (<code>stations</code>) nous devons appliquer un traitement supplémentaire pour avoir une structure CSV conforme et parser les données afin obtenir un dataframe exploitable:</p>
+<p>L'utilisation de <code>stringsAsFactors=FALSE</code> nous permet
+d'avoir des colonnes contenant simplement les données sans utiliser de
+facteurs/levels. Concernant les données clients (<code>stations</code>)
+nous devons appliquer un traitement supplémentaire pour avoir une
+structure CSV conforme et parser les données afin obtenir un dataframe
+exploitable:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Sépare les données par lignes</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>stations <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(stations, <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>, <span class="at">fixed=</span><span class="cn">FALSE</span>)<span class="sc">$</span><span class="st">`</span><span class="at">2</span><span class="st">`</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -138,15 +162,33 @@ airodump-ng --band abg -w output.csv --output-format csv wlp3s0mon</code></pre>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(stations) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;MacAddress&#39;</span>, <span class="st">&#39;FirstTimeSeen&#39;</span>, <span class="st">&#39;LastTimeSeen&#39;</span>, <span class="st">&#39;Power&#39;</span>, <span class="st">&#39;Packets&#39;</span>, <span class="st">&#39;BSSID&#39;</span>)</span></code></pre></div>
 <p>Pour exclure les client n'étant connecté à aucun point d'accès:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>stations <span class="ot">&lt;-</span> <span class="fu">subset</span>(stations, <span class="sc">!</span>(BSSID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;(not associated)&#39;</span>) ))</span></code></pre></div>
-<p>Nous allons travailler à partir du dataframe <code>stations</code> qui contient les données des clients. Pour commencer, nous allons "résoudre" l'adresse MAC du point d'accès en nom de réseau auquel sont connectés les clients à partir de la colonne BSSID (comme un jointure en SQL):</p>
+<p>Nous allons travailler à partir du dataframe <code>stations</code>
+qui contient les données des clients. Pour commencer, nous allons
+"résoudre" l'adresse MAC du point d'accès en nom de réseau auquel sont
+connectés les clients à partir de la colonne BSSID (comme un jointure en
+SQL):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>stations<span class="sc">$</span>Network <span class="ot">&lt;-</span> aps<span class="sc">$</span>ESSID[<span class="fu">match</span>(stations<span class="sc">$</span>BSSID, aps<span class="sc">$</span>BSSID)]</span></code></pre></div>
-<p>Notons que la totalité des colonnes du dataframe <code>aps</code> aurait pu être ajoutée avec la fonction <code>merge()</code>.</p>
-<p>Certains points d'accès ne diffusent pas le nom de leur réseau (d'où les <code>NA</code> dans la colonne <code>stations$Network</code>), utilisons leur adresse MAC pour combler ce manque:</p>
+<p>Notons que la totalité des colonnes du dataframe <code>aps</code>
+aurait pu être ajoutée avec la fonction <code>merge()</code>.</p>
+<p>Certains points d'accès ne diffusent pas le nom de leur réseau (d'où
+les <code>NA</code> dans la colonne <code>stations$Network</code>),
+utilisons leur adresse MAC pour combler ce manque:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>stations<span class="sc">$</span>Network <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(stations<span class="sc">$</span>Network <span class="sc">==</span> <span class="st">&quot;&quot;</span>, stations<span class="sc">$</span>BSSID, stations<span class="sc">$</span>Network)</span></code></pre></div>
-<p>Notons que la fonction <code>ifelse()</code> ne fonctionne pas sur facteurs, c'est pourquoi nous utilisons <code>stringsAsFactors=FALSE</code>. Autrement il aurait fallu utiliser <code>as.character()</code> pour chaque paramètre de <code>ifelse()</code>. Au lieu d'utiliser <code>ifelse()</code> nous aurions pu utiliser un vecteur logique afin d'effectuer la même opération:</p>
+<p>Notons que la fonction <code>ifelse()</code> ne fonctionne pas sur
+facteurs, c'est pourquoi nous utilisons
+<code>stringsAsFactors=FALSE</code>. Autrement il aurait fallu utiliser
+<code>as.character()</code> pour chaque paramètre de
+<code>ifelse()</code>. Au lieu d'utiliser <code>ifelse()</code> nous
+aurions pu utiliser un vecteur logique afin d'effectuer la même
+opération:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>hidden <span class="ot">&lt;-</span> stations<span class="sc">$</span>Network <span class="sc">==</span> <span class="st">&quot;&quot;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>stations<span class="sc">$</span>Network[hidden] <span class="ot">&lt;-</span> stations<span class="sc">$</span>BSSID[hidden]</span></code></pre></div>
-<p>Complétons nos données en identifiant les constructeurs depuis les adresses MAC avec les listes disponibles sur le site de l' <a href="https://standards.ieee.org/content/ieee-standards/en/products-services/regauth/index.html">IEEE</a>. R permet de lire cette liste localement ou directement depuis le site de l'IEEE (moins rapide) en fournissant l'URL comme paramètre à <code>read.csv()</code>.</p>
+<p>Complétons nos données en identifiant les constructeurs depuis les
+adresses MAC avec les listes disponibles sur le site de l' <a
+href="https://standards.ieee.org/content/ieee-standards/en/products-services/regauth/index.html">IEEE</a>.
+R permet de lire cette liste localement ou directement depuis le site de
+l'IEEE (moins rapide) en fournissant l'URL comme paramètre à
+<code>read.csv()</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Chargement de la liste des constructeurs</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>manufacturers <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&#39;oui.csv&#39;</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -158,8 +200,11 @@ airodump-ng --band abg -w output.csv --output-format csv wlp3s0mon</code></pre>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Trie les lignes du dataframe par ordre alphabétique des noms de réseau</span></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>stations <span class="ot">&lt;-</span> stations[<span class="fu">order</span>(stations<span class="sc">$</span>Network),]</span></code></pre></div>
-<h2 id="analyse-et-présentation-des-données">Analyse et présentation des données</h2>
-<p>Nous sommes maintenant en mesure d'analyser nos données. Commençons par comptabiliser le nombre de client connecté à chaque point d'accès:</p>
+<h2 id="analyse-et-présentation-des-données">Analyse et présentation des
+données</h2>
+<p>Nous sommes maintenant en mesure d'analyser nos données. Commençons
+par comptabiliser le nombre de client connecté à chaque point
+d'accès:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>connected <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>( <span class="fu">table</span>(stations<span class="sc">$</span>Network) )</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>connected[<span class="fu">order</span>(<span class="sc">-</span>connected<span class="sc">$</span>Freq),]</span></code></pre></div>
 <p>Ce qui nous donne:</p>
@@ -171,7 +216,10 @@ TELUS2455         1
 TELUS5176-2.4G    1
 TELUS9471         1
 TELUS9714         1</code></pre>
-<p>Nous pouvons représenter la quantité de données échangées entre chaque clients/points d'accès avec un <a href="https://fr.wikipedia.org/wiki/Diagramme_de_Sankey">diagramme de Sankey</a> à l'aide de la librairie <code>networkD3</code>:</p>
+<p>Nous pouvons représenter la quantité de données échangées entre
+chaque clients/points d'accès avec un <a
+href="https://fr.wikipedia.org/wiki/Diagramme_de_Sankey">diagramme de
+Sankey</a> à l'aide de la librairie <code>networkD3</code>:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>links <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">source=</span>stations<span class="sc">$</span>MacAddress, <span class="at">target=</span>stations<span class="sc">$</span>Network, <span class="at">value=</span><span class="fu">as.integer</span>(stations<span class="sc">$</span>Packets))</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">name=</span><span class="fu">unique</span>( <span class="fu">c</span>(<span class="fu">as.character</span>(links<span class="sc">$</span>source), <span class="fu">as.character</span>(links<span class="sc">$</span>target) ) ) )</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>links<span class="sc">$</span>IDsource <span class="ot">&lt;-</span> <span class="fu">match</span>(links<span class="sc">$</span>source, nodes<span class="sc">$</span>name)<span class="sc">-</span><span class="dv">1</span></span>
@@ -184,17 +232,26 @@ TELUS9714         1</code></pre>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">units =</span> <span class="st">&#39;Packets&#39;</span>,</span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">sinksRight=</span><span class="cn">FALSE</span>,</span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">fontSize =</span> <span class="dv">15</span>, <span class="at">nodeWidth =</span> <span class="dv">20</span>)</span></code></pre></div>
-<p>Le diagramme qui en résulte est interactif avec RStudio (le survol indique la quantité de paquets), en voici la capture d'écran:</p>
+<p>Le diagramme qui en résulte est interactif avec RStudio (le survol
+indique la quantité de paquets), en voici la capture d'écran:</p>
 <figure>
-<img src="sankey.png" alt="Diagramme Sankey" /><figcaption aria-hidden="true">Diagramme Sankey</figcaption>
+<img src="sankey.png" alt="Diagramme Sankey" />
+<figcaption aria-hidden="true">Diagramme Sankey</figcaption>
 </figure>
-<p>D'autre types de diagrammes (graphe/réseau) sont utilisables afin de mieux présenter la topologie d'un réseau. Ce type d'analyse peut rapidement produire des diagrammes très complexes en fonction de la quantités de noeuds présents dans le réseau.</p>
+<p>D'autre types de diagrammes (graphe/réseau) sont utilisables afin de
+mieux présenter la topologie d'un réseau. Ce type d'analyse peut
+rapidement produire des diagrammes très complexes en fonction de la
+quantités de noeuds présents dans le réseau.</p>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
-<li><a href="https://bost.ocks.org/mike/sankey/">https://bost.ocks.org/mike/sankey/</a></li>
-<li><a href="https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/">https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/</a></li>
-<li><a href="https://www.jessesadler.com/post/network-analysis-with-r/">https://www.jessesadler.com/post/network-analysis-with-r/</a></li>
-<li><a href="https://briatte.github.io/ggnet/">https://briatte.github.io/ggnet/</a></li>
+<li><a
+href="https://bost.ocks.org/mike/sankey/">https://bost.ocks.org/mike/sankey/</a></li>
+<li><a
+href="https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/">https://www.r-graph-gallery.com/321-introduction-to-interactive-sankey-diagram-2/</a></li>
+<li><a
+href="https://www.jessesadler.com/post/network-analysis-with-r/">https://www.jessesadler.com/post/network-analysis-with-r/</a></li>
+<li><a
+href="https://briatte.github.io/ggnet/">https://briatte.github.io/ggnet/</a></li>
 </ul>
   <br />
   <hr />
