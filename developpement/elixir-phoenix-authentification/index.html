@@ -285,10 +285,10 @@ class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb19-1"><a h
 <p>Créer un template <code>hello</code> dans
 <code>lib/app_test_web/templates/hello/hello.html.eex</code>.</p>
 <div class="sourceCode" id="cb20"><pre
-class="sourceCode html"><code class="sourceCode html"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">style</span><span class="ot">=</span><span class="st">&quot;text-align: center;&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    Hello! <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
+class="sourceCode html"><code class="sourceCode html"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span> <span class="er">style</span><span class="ot">=</span><span class="st">&quot;text-align: center;&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    Hello! <span class="dt">&lt;</span><span class="kw">br</span> <span class="dt">/&gt;</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="er">&lt;</span>%= button(&quot;Se déconnecter&quot;, to: &quot;/logout&quot;, method: :get, class: &quot;btn&quot;) %&gt;</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre></div>
 <h2 id="page-dauthentification">Page d'authentification</h2>
 <p>Ajouter les trois routes vers le contrôleur
 <code>AuthenticationController</code> dans le routeur
@@ -380,13 +380,13 @@ class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb23-1"><a h
 <p>Créer un template <code>login</code> dans
 <code>lib/app_test_web/templates/authentication/login.html.eex</code>:</p>
 <div class="sourceCode" id="cb24"><pre
-class="sourceCode html"><code class="sourceCode html"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">style</span><span class="ot">=</span><span class="st">&quot;text-align: center;&quot;</span><span class="kw">&gt;</span></span>
+class="sourceCode html"><code class="sourceCode html"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span> <span class="er">style</span><span class="ot">=</span><span class="st">&quot;text-align: center;&quot;</span><span class="dt">&gt;</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span>%= form_for @conn, Routes.authentication_path(@conn, :index), [method: :post, name: :auth], fn f -&gt; %&gt;</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="er">&lt;</span>%= text_input f, :username, class: &quot;form-control&quot;, placeholder: &quot;Login&quot;, required: true, style: &quot;width: 300px; text-align:center;&quot; %&gt; <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="er">&lt;</span>%= password_input f, :password, class: &quot;form-control&quot;, placeholder: &quot;Mot de passe&quot;, required: true, style: &quot;width: 300px; text-align:center;&quot; %&gt; <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="er">&lt;</span>%= text_input f, :username, class: &quot;form-control&quot;, placeholder: &quot;Login&quot;, required: true, style: &quot;width: 300px; text-align:center;&quot; %&gt; <span class="dt">&lt;</span><span class="kw">br</span> <span class="dt">/&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="er">&lt;</span>%= password_input f, :password, class: &quot;form-control&quot;, placeholder: &quot;Mot de passe&quot;, required: true, style: &quot;width: 300px; text-align:center;&quot; %&gt; <span class="dt">&lt;</span><span class="kw">br</span> <span class="dt">/&gt;</span></span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="er">&lt;</span>%= submit &quot;Se connecter&quot; %&gt;</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span>% end %&gt;</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre></div>
 <h2 id="standardiser-lauthentification-avec-une-plug">Standardiser
 l'authentification avec une Plug</h2>
 <p>La solution précédente implique de vérifier la présence de
@@ -466,6 +466,6 @@ d'autorisations avec Plug</a></li>
 </ul>
   <br />
   <hr />
-  <em>©2015-2023 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>

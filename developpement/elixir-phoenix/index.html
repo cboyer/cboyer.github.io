@@ -245,10 +245,10 @@ class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb7-1"><a hr
 <p>Puis le template
 <code>lib/test_phoenix_web/templates/test/test.html.eex</code>:</p>
 <div class="sourceCode" id="cb8"><pre
-class="sourceCode html"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;section</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;phx-hero&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h1&gt;</span><span class="er">&lt;</span>%= gettext &quot;Bienvenu sur %{name}!&quot;, name: &quot;Phoenix&quot; %&gt;<span class="kw">&lt;/h1&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>Page de test<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/section&gt;</span></span></code></pre></div>
+class="sourceCode html"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">section</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;phx-hero&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">h1</span><span class="dt">&gt;</span><span class="er">&lt;</span>%= gettext &quot;Bienvenu sur %{name}!&quot;, name: &quot;Phoenix&quot; %&gt;<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Page de test<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">section</span><span class="dt">&gt;</span></span></code></pre></div>
 <p>À noter que le template est inséré dans le layout
 <code>lib/test_phoenix_web/templates/layout/app.html.eex</code> grâce à
 la ligne <code>&lt;%= @inner_content %&gt;</code>.</p>
@@ -336,10 +336,10 @@ class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb10-1"><a h
 <p>Créer le template
 <code>lib/test_phoenix_web/templates/test/show.html.eex</code>:</p>
 <div class="sourceCode" id="cb11"><pre
-class="sourceCode html"><code class="sourceCode html"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;section</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;phx-hero&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h2&gt;</span>Bienvenu sur <span class="er">&lt;</span>%= @message %&gt;!<span class="kw">&lt;/h2&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span><span class="er">&lt;</span>%= gettext &quot;Bienvenu sur %{message}!&quot;, message: @message %&gt;<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/section&gt;</span></span></code></pre></div>
+class="sourceCode html"><code class="sourceCode html"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">section</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;phx-hero&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span>Bienvenu sur <span class="er">&lt;</span>%= @message %&gt;!<span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span><span class="er">&lt;</span>%= gettext &quot;Bienvenu sur %{message}!&quot;, message: @message %&gt;<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">section</span><span class="dt">&gt;</span></span></code></pre></div>
 <p>Après avoir accédé à l'URL
 <code>http://localhost:4000/test/bonjour</code>on peut voir le paramètre
 affiché. Dans la console IEx on peut observer les détails suivants:</p>
@@ -411,12 +411,12 @@ class="sourceCode elixir"><code class="sourceCode elixir"><span id="cb16-1"><a h
 <p>Créer un template dans
 <code>live_test/lib/live_test_web/templates/counter/index.html.leex</code>:</p>
 <div class="sourceCode" id="cb17"><pre
-class="sourceCode html"><code class="sourceCode html"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h1</span> <span class="er">phx-click</span><span class="ot">=</span><span class="st">&quot;reset&quot;</span><span class="kw">&gt;</span>The count is: <span class="er">&lt;</span>%= @val %&gt;<span class="kw">&lt;/h1&gt;</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;button</span> <span class="er">phx-click</span><span class="ot">=</span><span class="st">&quot;dec&quot;</span><span class="kw">&gt;</span>-<span class="kw">&lt;/button&gt;</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;button</span> <span class="er">phx-click</span><span class="ot">=</span><span class="st">&quot;inc&quot;</span><span class="kw">&gt;</span>+<span class="kw">&lt;/button&gt;</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;button</span> <span class="er">phx-click</span><span class="ot">=</span><span class="st">&quot;reset&quot;</span><span class="kw">&gt;</span>Reset<span class="kw">&lt;/button&gt;</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+class="sourceCode html"><code class="sourceCode html"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">h1</span> <span class="er">phx-click</span><span class="ot">=</span><span class="st">&quot;reset&quot;</span><span class="dt">&gt;</span>The count is: <span class="er">&lt;</span>%= @val %&gt;<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">button</span> <span class="er">phx-click</span><span class="ot">=</span><span class="st">&quot;dec&quot;</span><span class="dt">&gt;</span>-<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">button</span> <span class="er">phx-click</span><span class="ot">=</span><span class="st">&quot;inc&quot;</span><span class="dt">&gt;</span>+<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">button</span> <span class="er">phx-click</span><span class="ot">=</span><span class="st">&quot;reset&quot;</span><span class="dt">&gt;</span>Reset<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre></div>
 <p>Créer une vue dans
 <code>live_test/lib/live_test_web/views/counter_view.ex</code>:</p>
 <div class="sourceCode" id="cb18"><pre
@@ -530,6 +530,6 @@ PubSub</a></li>
 </ul>
   <br />
   <hr />
-  <em>©2015-2023 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>

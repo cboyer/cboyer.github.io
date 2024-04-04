@@ -246,21 +246,21 @@ class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb15-1">
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">################################################################################</span></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="dt">HELLO_VERSION </span><span class="ch">=</span><span class="st"> 1.0</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="dt">HELLO_SITE </span><span class="ch">=</span><span class="st"> </span><span class="ch">$(</span><span class="dt">BR2_EXTERNAL_MONDEPOT_PATH</span><span class="ch">)</span><span class="st">/package/hello/src</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="dt">HELLO_SITE_METHOD </span><span class="ch">=</span><span class="st"> local</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="dt">HELLO_VERSION</span> <span class="ch">=</span><span class="st"> 1.0</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="dt">HELLO_SITE</span> <span class="ch">=</span><span class="st"> </span><span class="ch">$(</span><span class="dt">BR2_EXTERNAL_MONDEPOT_PATH</span><span class="ch">)</span><span class="st">/package/hello/src</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="dt">HELLO_SITE_METHOD</span> <span class="ch">=</span><span class="st"> local</span></span>
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="kw">define</span> HELLO_BUILD_CMDS</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">MAKE</span><span class="ch">)</span> <span class="dt">CC</span><span class="ch">=</span><span class="st">&quot;</span><span class="ch">$(</span><span class="dt">TARGET_CC</span><span class="ch">)</span><span class="st">&quot; LD=&quot;</span><span class="ch">$(</span><span class="dt">TARGET_LD</span><span class="ch">)</span><span class="st">&quot; -C </span><span class="ch">$(</span><span class="dt">@D</span><span class="ch">)</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="kw">define</span> <span class="dt">HELLO_BUILD_CMDS</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="ch">$(</span><span class="dt">MAKE</span><span class="ch">)</span><span class="st"> CC=&quot;</span><span class="ch">$(</span><span class="dt">TARGET_CC</span><span class="ch">)</span><span class="st">&quot; LD=&quot;</span><span class="ch">$(</span><span class="dt">TARGET_LD</span><span class="ch">)</span><span class="st">&quot; -C </span><span class="ch">$(</span><span class="dt">@D</span><span class="ch">)</span></span>
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="kw">endef</span></span>
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="kw">define</span> HELLO_INSTALL_TARGET_CMDS</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">INSTALL</span><span class="ch">)</span> -D -m 0755 <span class="ch">$(</span><span class="dt">@D</span><span class="ch">)</span>/hello <span class="ch">$(</span><span class="dt">TARGET_DIR</span><span class="ch">)</span>/usr/bin</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="kw">define</span> <span class="dt">HELLO_INSTALL_TARGET_CMDS</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="ch">$(</span><span class="dt">INSTALL</span><span class="ch">)</span><span class="st"> -D -m 0755 </span><span class="ch">$(</span><span class="dt">@D</span><span class="ch">)</span><span class="st">/hello </span><span class="ch">$(</span><span class="dt">TARGET_DIR</span><span class="ch">)</span><span class="st">/usr/bin</span></span>
 <span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="kw">endef</span></span>
 <span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="kw">define</span> HELLO_INSTALL_INIT_SYSV</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">INSTALL</span><span class="ch">)</span> -D -m 0755 <span class="ch">$(</span><span class="dt">HELLO_PKGDIR</span><span class="ch">)</span>/S99hello \</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">TARGET_DIR</span><span class="ch">)</span>/etc/init.d/S99hello</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="kw">define</span> <span class="dt">HELLO_INSTALL_INIT_SYSV</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="ch">$(</span><span class="dt">INSTALL</span><span class="ch">)</span><span class="st"> -D -m 0755 </span><span class="ch">$(</span><span class="dt">HELLO_PKGDIR</span><span class="ch">)</span><span class="st">/S99hello </span><span class="ch">\</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="ch">$(</span><span class="dt">TARGET_DIR</span><span class="ch">)</span><span class="st">/etc/init.d/S99hello</span></span>
 <span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="kw">endef</span></span>
 <span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="ch">$(</span><span class="kw">eval</span><span class="st"> </span><span class="ch">$(</span><span class="dt">generic-package</span><span class="ch">))</span></span></code></pre></div>
@@ -275,15 +275,15 @@ br-external/package/hello/src/hello.c</h4>
 <h4 id="fichier-br-externalpackagehellosrcmakefile">Fichier
 br-external/package/hello/src/Makefile</h4>
 <div class="sourceCode" id="cb17"><pre
-class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">CC </span><span class="ch">=</span><span class="st"> gcc</span></span>
+class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">CC</span> <span class="ch">=</span><span class="st"> gcc</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ot">.PHONY:</span><span class="dt"> clean</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="dv">hello:</span><span class="dt"> hello.c</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">CC</span><span class="ch">)</span> -o <span class="st">&#39;</span><span class="ch">$@</span><span class="st">&#39;</span> <span class="st">&#39;</span><span class="ch">$&lt;</span><span class="st">&#39;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">$(</span><span class="dt">CC</span><span class="ch">)</span> -o <span class="st">&#39;</span><span class="ch">$@</span><span class="st">&#39;</span> <span class="st">&#39;</span><span class="ch">$&lt;</span><span class="st">&#39;</span></span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="dv">clean:</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    rm hello</span></code></pre></div>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>rm hello</span></code></pre></div>
 <h4 id="fichier-br-externalpackagehellos99hello">Fichier
 br-external/package/hello/S99hello</h4>
 <div class="sourceCode" id="cb18"><pre
@@ -468,6 +468,6 @@ d'arbre externe pour EBAZ4205</a></li>
 </ul>
   <br />
   <hr />
-  <em>©2015-2023 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
 </body>
 </html>
