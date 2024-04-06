@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Partage Samba sur RedHat 9 avec authentification Active Directory - C.
+Boyer</title>
+  <meta name="description" content="Partage de fichier Samba avec
+authentification Active Directory sous RedHat 9" />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="samba, redhat, winbind, sssd, active
+directory" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
+  <style>
+    body { margin: 1em; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    ul { list-style: none; padding: 0;}
+    p code { font-size: 1.1em; }
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
+  </style>
+</head>
+<body>
+  <h1>Partage Samba sur RedHat 9 avec authentification Active
+Directory</h1>
+  <em>Publié le 2024-04-06</em>
+<p>Avec RedHat 9.3 la version de Samba utilisée est la 4.17.X. Or à
+partir de la version 4.8 de Samba, l'utilisation de Winbind (winbindd)
+est obligatoire car le démon Samba (smbd) délègue l'authentification de
+ses partages à Winbind: <a
+href="https://www.suse.com/fr-fr/support/kb/doc/?id=000020593">Source</a>.</p>
+<p>L'absence de configuration adéquate de Winbind causera la présence
+des erreurs suivantes dans les journaux de Samba:</p>
+<pre><code>auth3_generate_session_info_pac: winbindd not running - but required as domain member: NT_STATUS_NO_LOGON_SERVERS</code></pre>
+<p>Deux possibilités s'offrent à nous:</p>
+<ul>
+<li>Combiner l'utilisation de SSSD et Winbind (recommandé)</li>
+<li>Utiliser exclusivement Winbind</li>
+</ul>
+<h2 id="combiner-lutilisation-de-sssd-et-winbind">Combiner l'utilisation
+de SSSD et Winbind</h2>
+<p>Cette procédure permet d’associer une machine Linux à Active
+Directory et partager des dossiers/fichiers via Samba en gérant les
+accès avec Active Directory.</p>
+<p>Installer les paquets suivants:</p>
+<ul>
+<li>samba-common-tools</li>
+<li>realmd</li>
+<li>oddjob</li>
+<li>oddjob-mkhomedir</li>
+<li>samba-winbind-clients</li>
+<li>samba-winbind</li>
+<li>samba-winbind-krb5-locator</li>
+<li>samba</li>
+</ul>
+<p>Joindre la machine au domaine avec SSSD</p>
+<pre><code>echo Mot_de_passe | realm join -v --client-software=sssd -U Admin_du_domaine MONDOMAINE.COM</code></pre>
+<p>Modifier la configuration de SSSD via
+<code>/etc/sssd/sssd.conf</code> dans le bloc
+<code>[domain/mondomaine.com]</code></p>
+<pre><code># Modifier les valeurs suivantes
+enumerate = False
+cache_credentials = False
+
+# Ajouter les directives suivantes
+auth_provider = ad
+chpass_provider = ad
+ldap_schema = ad
+ad_gpo_access_control = disabled</code></pre>
+<p>La directive <code>ad_gpo_access_control = disabled</code> permet
+d'ignorer les GPO car elles peuvent empêcher les utilisateurs du domaine
+de se connecter en SSH (cause des erreurs de lecture de SSSD dans l'AD).
+Si elle est omise on observera les erreurs suivantes dans
+<code>/var/log/secure</code>:</p>
+<pre><code>pam_sss(sshd:auth): authentication success; logname= uid=0 euid=0 tty=ssh ruser= rhost=10.2.196.73 user=utilisateur@mondomaine.com
+pam_sss(sshd:account): Access denied for user utilisateur@mondomaine.com: 4 (System error)
+Failed password for utilisateur@mondomaine.com from 10.2.196.73 port 40246 ssh2
+Access denied for user utilisateur@mondomaine.com by PAM account configuration [preauth]</code></pre>
+<p>Redémarrer SSSD</p>
+<pre><code>systemctl restart sssd</code></pre>
+<p>Vérifier l'association au domaine</p>
+<pre><code>realm list
+mondomaine.com
+  type: kerberos
+  realm-name: MONDOMAINE.COM
+  domain-name: mondomaine.com
+  configured: kerberos-member
+  server-software: active-directory
+  client-software: sssd
+  required-package: oddjob
+  required-package: oddjob-mkhomedir
+  required-package: sssd
+  required-package: adcli
+  required-package: samba-common-tools
+  login-formats: %U@mondomaine.com
+  login-policy: allow-realm-logins
+
+getent passwd MONDOMAINE.COM\\Admin_du_domaine
+MONDOMAINE\\Admin_du_domaine:*:22005:20513:Monsieur Admin:/home/MONDOMAINE/Admin_du_domaine:/bin/bash</code></pre>
+<p>Configurer Samba via <code>/etc/samba/smb.conf</code></p>
+<pre><code>[global]
+    workgroup = MONDOMAINE
+    realm = mondomaine.com
+    security = ads
+    server string =
+    kerberos method = secrets and keytab
+    log file = /var/log/samba/samba.log
+    max log size = 200
+    idmap config * : backend = tdb
+    idmap config * : range = 10000-19999
+    idmap config MONDOMAINE : backend = nss
+    idmap config MONDOMAINE : range = 20000-29999
+    machine password timeout = 0
+    load printers = no
+    store dos attributes = Yes
+    vfs objects = acl_xattr
+
+[test]
+    comment = Partage test
+    path = /test
+    read only = No
+    valid users = &quot;@MONDOMAINE\utilisateurs du domaine&quot;,&quot;@MONDOMAINE\admins du domaine&quot;
+    admin users = &quot;@MONDOMAINE\admins du domaine&quot;</code></pre>
+<blockquote>
+<p>La directive <code>idmap config MONDOMAINE : backend = nss</code>
+permet à Winbind d'utiliser SSSD comme backend au lieu du contrôleur de
+domaine. La directive <code>machine password timeout = 0</code> empêche
+la mise à jour du mot de passe du compte machine AD pour laisser SSSD
+s'en occuper et éviter les conflits.</p>
+</blockquote>
+<p>Joindre de nouveau la machine au domaine avec Winbind pour créer le
+fichier secrets.tdb utilisé par Samba</p>
+<pre><code>net ads join -U MONDOMAINE\\Admin_du_domaine%Mot_de_passe</code></pre>
+<p>Activer Winbind et Samba au démarrage puis les redémarrer</p>
+<pre><code>systemctl enable winbind smb
+systemctl restart winbind smb</code></pre>
+<p>Vérifier le fonctionnement de Winbind au travers d'SSSD</p>
+<pre><code>wbinfo --ping-dc
+checking the NETLOGON for domain[MONDOMAINE] dc connection to &quot;winad01.mondomaine.com&quot; succeeded
+
+wbinfo -u
+MONDOMAINE\invité
+MONDOMAINE\administrateur
+MONDOMAINE\test01
+...</code></pre>
+<p>Créer le dossier partagé test</p>
+<pre><code>mkdir /test
+echo &quot;Bonjour!&quot; &gt; /test/test.txt
+chcon -t samba_share_t /test
+chmod -R 770 /test
+chgrp -R &quot;MONDOMAINE\utilisateurs du domaine&quot; /test</code></pre>
+<p>Tester l'accès au partage avec un utilisateur membre du groupe
+<code>MONDOMAINE\utilisateurs du domaine</code></p>
+<pre><code>smbclient -L //`hostname`/test --user=Admin_du_domaine%Mot_de_passe
+Sharename       Type      Comment
+---------       ----      -------
+test            Disk      Partage test
+IPC$            IPC       IPC Service ()
+SMB1 disabled -- no workgroup available
+
+smbclient //`hostname`/test -c &#39;ls&#39; --user=Admin_du_domaine%Mot_de_passe
+.                                   D        0  Wed Mar 20 14:23:57 2024
+..                                  D        0  Wed Mar 20 14:23:57 2024
+test.txt                            N       20  Wed Mar 20 14:23:57 2024
+
+21915184 blocks of size 1024. 19730188 blocks available</code></pre>
+<p>Répéter le même test avec un utilisateur qui n'est pas membre du
+groupe <code>MONDOMAINE\utilisateurs du domaine</code> pour s'assurer de
+l'application des directives de sécurité. Ce test doit retourner
+l'erreur <code>NT_STATUS_LOGON_FAILURE</code>.</p>
+<h2 id="utiliser-exclusivement-winbind">Utiliser exclusivement
+Winbind</h2>
+<p>Cette procédure permet d’associer une machine Linux à Active
+Directory avec Winbind en se passant de SSSD et partager des
+dossiers/fichiers via Samba en gérant les accès avec Active
+Directory.</p>
+<p>Installer les paquets suivants:</p>
+<ul>
+<li>samba-common-tools</li>
+<li>realmd</li>
+<li>oddjob</li>
+<li>oddjob-mkhomedir</li>
+<li>samba-winbind-clients</li>
+<li>samba-winbind</li>
+<li>samba-winbind-krb5-locator</li>
+<li>samba</li>
+<li>krb5-workstation</li>
+</ul>
+<p>Configurer Samba via <code>/etc/samba/smb.conf</code></p>
+<pre><code>[global]
+    workgroup = MONDOMAINE
+    realm = mondomaine.com
+    security = ads
+    server string =
+    kerberos method = secrets and keytab
+    log file = /var/log/samba/samba.log
+    max log size = 200
+    idmap config * : backend = tdb
+    idmap config * : range = 10000-19999
+    idmap config MONDOMAINE : backend = rid
+    idmap config MONDOMAINE : range = 20000-29999
+    template shell = /bin/bash
+    template homedir  = /home/%U@%D
+    load printers = no
+    store dos attributes = Yes
+    vfs objects = acl_xattr
+
+[test]
+    comment = Partage test
+    path = /test
+    read only = No
+    valid users = &quot;@MONDOMAINE\utilisateurs du domaine&quot;,&quot;@MONDOMAINE\admins du domaine&quot;
+    admin users = &quot;@MONDOMAINE\admins du domaine&quot;</code></pre>
+<blockquote>
+<p>La directive <code>template shell = /bin/bash</code> est très
+importante car elle spécifie le shell à utiliser lors d'une connexion
+SSH. Sa valeur par défaut <code>/bin/false</code> (observable avec la
+commande <code>getent passwd MONDOMAINE.COM\\Utilisateur</code>) empêche
+toute connexion SSH en affichant
+<code>debug1: client_input_channel_req: channel 0 rtype exit-status reply 0</code>
+dans le debug SSH. La directive
+<code>template homedir  = /home/%U@%D</code> permet dans le cas d'une
+connexion SSH d'affecter un dossier home à l'utilisateur. Par défaut
+Samba affecte le dossier /home/domaine/utilisateur</p>
+</blockquote>
+<p>Joindre la machine au domaine</p>
+<pre><code>net ads join -U MONDOMAINE\\Admin_du_domaine%Mot_de_passe</code></pre>
+<p>Configurer l'utilisation du profil Winbind</p>
+<pre><code>authselect select winbind --force</code></pre>
+<blockquote>
+<p>Cette commande permet de modifier une série de fichier comme
+/etc/nsswitch.conf où les directives <code>group</code> et
+<code>passwd</code> se voient ajouter la valeur <code>winbind</code>
+dans notre cas.</p>
+</blockquote>
+<p>Configurer Kerberos via <code>/etc/krb5.conf</code></p>
+<pre><code>includedir /etc/krb5.conf.d/
+
+[logging]
+    default = FILE:/var/log/krb5libs.log
+    kdc = FILE:/var/log/krb5kdc.log
+    admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+    dns_lookup_realm = false
+    ticket_lifetime = 24h
+    renew_lifetime = 7d
+    forwardable = true
+    rdns = false
+    pkinit_anchors = FILE:/etc/pki/tls/certs/ca-bundle.crt
+    spake_preauth_groups = edwards25519
+    dns_canonicalize_hostname = fallback
+    qualify_shortname = &quot;&quot;
+    default_realm = mondomaine.com
+    default_ccache_name = KEYRING:persistent:%{uid}
+
+[realms]
+    mondomaine.com = {
+        kdc = WINAD01.mondomaine.com
+    }
+
+[domain_realm]
+    mondomaine.com = MONDOMAINE.COM</code></pre>
+<blockquote>
+<p>Il est important de respecter la casse comme présenté ci-dessus pour
+le nom de domaine.</p>
+</blockquote>
+<p>Tester Kerberos</p>
+<pre><code>kinit Admin_du_domaine@MONDOMAINE.COM
+Ticket cache: KCM:0
+    Default principal: Admin_du_domaine@MONDOMAINE.COM
+
+klist
+Valid starting       Expires              Service principal
+2024-03-20 14:23:42  2024-03-21 00:23:42  krbtgt/MONDOMAINE.COM@MONDOMAINE.COM
+renew until 2024-03-27 14:23:42</code></pre>
+<p>Activer Winbind et Samba au démarrage</p>
+<pre><code>systemctl enable winbind smb
+systemctl restart winbind smb</code></pre>
+<p>Tester l'association au domaine</p>
+<pre><code>wbinfo --ping-dc
+checking the NETLOGON for domain[MONDOMAINE] dc connection to &quot;WINAD01.mondomaine.com&quot; succeeded
+
+getent passwd MONDOMAINE.COM\\Admin_du_domaine
+MONDOMAINE\\Admin_du_domaine:*:22005:20513:Monsieur Admin:/home/MONDOMAINE/Admin_du_domaine:/bin/bash</code></pre>
+<p>Configurer la création automatique du home si absent à la première
+connexion SSH en ajoutant la ligne en première position dans la section
+"session" de <code>/etc/pam.d/sshd</code></p>
+<pre><code>session    required     pam_mkhomedir.so skel=/etc/skel/ umask=0022</code></pre>
+<blockquote>
+<p>Sans cette ligne le dossier home de l'utilisateur n'est pas créé lors
+de sa première connexion.</p>
+</blockquote>
+<p>Créer le dossier partagé test</p>
+<pre><code>mkdir /test
+echo &quot;Bonjour!&quot; &gt; /test/test.txt
+chcon -t samba_share_t /test
+chmod -R 770 /test
+chgrp -R &quot;MONDOMAINE\utilisateurs du domaine&quot; /test</code></pre>
+<p>Tester l'accès au partage avec un utilisateur membre du groupe
+<code>MONDOMAINE\utilisateurs du domaine</code></p>
+<pre><code>smbclient -L //`hostname`/test --user=Admin_du_domaine%Mot_de_passe
+Sharename       Type      Comment
+---------       ----      -------
+test            Disk      Partage test
+IPC$            IPC       IPC Service ()
+SMB1 disabled -- no workgroup available
+
+smbclient //`hostname`/test -c &#39;ls&#39; --user=Admin_du_domaine%Mot_de_passe
+.                                   D        0  Wed Mar 20 14:23:57 2024
+..                                  D        0  Wed Mar 20 14:23:57 2024
+test.txt                            N       20  Wed Mar 20 14:23:57 2024
+
+21915184 blocks of size 1024. 19730188 blocks available</code></pre>
+<p>Répéter le même test avec un utilisateur qui n'est pas membre du
+groupe <code>MONDOMAINE\utilisateurs du domaine</code> pour s'assurer de
+l'application des directives de sécurité. Ce test doit retourner
+l'erreur <code>NT_STATUS_LOGON_FAILURE</code>.</p>
+<p>Documentation complémentaire:</p>
+<ul>
+<li><a
+href="https://wiki.samba.org/index.php/Setting_up_Samba_as_a_Domain_Member#Configuring_Samba">https://wiki.samba.org/index.php/Setting_up_Samba_as_a_Domain_Member#Configuring_Samba</a></li>
+<li><a
+href="https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html">https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html</a></li>
+<li><a
+href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/configuring_authentication_and_authorization_in_rhel/index">https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/configuring_authentication_and_authorization_in_rhel/index</a></li>
+</ul>
+  <br />
+  <hr />
+  <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+</body>
+</html>
