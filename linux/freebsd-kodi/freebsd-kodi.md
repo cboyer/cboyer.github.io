@@ -22,17 +22,17 @@ Certains paramètres présentés sont spécifiques à la configuration matériel
 Configurer le dépôts PKG à latest au lieu de quarterly avec le fichier `/usr/local/etc/pkg/repos/FreeBSD.conf`:
 ```
 FreeBSD: {
-url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest",
-mirror_type: "srv",
-signature_type: "fingerprints",
-fingerprints: "/usr/share/keys/pkg",
-enabled: yes
+    url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest",
+    mirror_type: "srv",
+    signature_type: "fingerprints",
+    fingerprints: "/usr/share/keys/pkg",
+    enabled: yes
 }
 ```
 
 Mise à jour du système et vérifier la présence de vulnérabilité:
 ```Console
-freebsd-update fetch install && pkg update && pkg upgrade && pkg audit
+freebsd-update fetch install && pkg update && pkg upgrade && pkg audit -F
 ```
 
 ```Console

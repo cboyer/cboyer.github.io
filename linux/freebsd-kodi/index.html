@@ -102,14 +102,14 @@ pkg</h3>
 <p>Configurer le dépôts PKG à latest au lieu de quarterly avec le
 fichier <code>/usr/local/etc/pkg/repos/FreeBSD.conf</code>:</p>
 <pre><code>FreeBSD: {
-url: &quot;pkg+http://pkg.FreeBSD.org/${ABI}/latest&quot;,
-mirror_type: &quot;srv&quot;,
-signature_type: &quot;fingerprints&quot;,
-fingerprints: &quot;/usr/share/keys/pkg&quot;,
-enabled: yes
+    url: &quot;pkg+http://pkg.FreeBSD.org/${ABI}/latest&quot;,
+    mirror_type: &quot;srv&quot;,
+    signature_type: &quot;fingerprints&quot;,
+    fingerprints: &quot;/usr/share/keys/pkg&quot;,
+    enabled: yes
 }</code></pre>
 <p>Mise à jour du système et vérifier la présence de vulnérabilité:</p>
-<pre class="console"><code>freebsd-update fetch install &amp;&amp; pkg update &amp;&amp; pkg upgrade &amp;&amp; pkg audit</code></pre>
+<pre class="console"><code>freebsd-update fetch install &amp;&amp; pkg update &amp;&amp; pkg upgrade &amp;&amp; pkg audit -F</code></pre>
 <pre class="console"><code>pkg install kodi kodi-addon-pvr.iptvsimple kodi-addon-inputstream.adaptive \
     xorg-server xinit xorg-drivers drm-kmod xf86-video-intel libva-intel-driver \
     py39-sqlite3 libvdpau-va-gl</code></pre>
