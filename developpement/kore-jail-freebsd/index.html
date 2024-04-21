@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Application web Kore et jail FreeBSD - C. Boyer</title>
+  <meta name="description" content="Application web Kore et jail
+FreeBSD." />
+  <meta name="author" content="C. Boyer" />
+  <meta name="keywords" content="Kore, FreeBSD, jail, C, serveur web" />
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
+  <style>
+    body { margin: 1em; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    ul { list-style: none; padding: 0;}
+    p code { font-size: 1.1em; }
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+    pre { background-color: whitesmoke; overflow: auto; }
+    .sourceCode { overflow: auto !important; }
+  </style>
+</head>
+<body>
+  <h1>Application web Kore et jail FreeBSD</h1>
+  <em>Publié le 2024-04-21</em>
+<p>Kore est un framework web en C intègrant son propre serveur web qui
+permet d'obtenir un seul binaire. Il peut être utilisé dans une jail
+"allégée" sous FreeBSD 14. Notons qu'il est possible de compiler Kore
+avec OpenSSL 3.</p>
+<h2 id="préparation-de-lenvironnement">Préparation de
+l'environnement</h2>
+<p>Dans /etc/pkg/FreeBSD.conf configurer le dépôt latest pour bénéficier
+des dernières version:</p>
+<pre><code>FreeBSD: {
+  url: &quot;pkg+http://pkg.FreeBSD.org/${ABI}/latest&quot;,
+  mirror_type: &quot;srv&quot;,
+  signature_type: &quot;fingerprints&quot;,
+  fingerprints: &quot;/usr/share/keys/pkg&quot;,
+  enabled: yes
+}</code></pre>
+<p>Application des mises à jour:</p>
+<pre><code>freebsd-update fetch install &amp;&amp; pkg update &amp;&amp; pkg upgrade &amp;&amp; pkg audit -F</code></pre>
+<p>Installation des outils nécessaires pour compiler Kore et clonage du
+dépôt officiel:</p>
+<pre><code>pkg install git-tiny gmake openssl
+git clone https://git.kore.io/kore.git
+cd kore</code></pre>
+<p>Retirer l'option <code>-std=gnu99</code> des CFLAGS du
+<code>Makefile</code> et <code>kodev/Makefile</code> pour permettre la
+compilation avec Clang. Lancer la compilation de Kore avec:</p>
+<pre><code>gmake</code></pre>
+<h2 id="création-du-projet-kore">Création du projet Kore</h2>
+<p>Créer le projet "test" via kodev:</p>
+<pre><code>./kodev/kodev create test</code></pre>
+<p>Modifier le programme <code>test/src/test.c</code> pour retourner la
+chaîne "hello world":</p>
+<pre><code>#include &lt;kore/kore.h&gt;
+#include &lt;kore/http.h&gt;
+
+int page(struct http_request *);
+
+int page(struct http_request *req) {
+    char * msg = &quot;hello world&quot;;
+
+    http_response_header(req, &quot;content-type&quot;, &quot;text/html&quot;);
+    http_response(req, 200, msg, strlen(msg));
+    return (KORE_RESULT_OK);
+}</code></pre>
+<p>Préparer la configuration du projet dans
+<code>test/conf/test.conf</code>:</p>
+<pre><code>server tls {
+    bind 0.0.0.0 8888
+}
+server notls {
+    bind 0.0.0.0 8080
+    tls no
+}
+
+tls_dhparam     /app/ffdhe4096.pem
+rand_file       random.data
+pidfile         /var/run/kore.pid
+http_server_version kore
+
+domain * {
+    attach      notls
+    accesslog   /var/log/kore_access.log
+    route / {
+        handler page
+    }
+}
+domain * {
+    attach      tls
+    accesslog   /var/log/kore_access_tls.log
+    # Ne pas spécifier cert/ car keymgr sera chrooté
+    certfile    server.pem
+    certkey     key.pem
+    route / {
+        handler page
+    }
+}
+
+privsep worker {
+        runas           kore
+        root            /app/htdocs
+}
+
+privsep keymgr {
+        runas           kore
+        root            /app/cert
+}</code></pre>
+<p>Modifier les paramètres de compilation du projet en changeant les
+valeurs <code>single_binary</code> et <code>kore_source</code> dans
+<code>test/conf/build.conf</code></p>
+<pre><code># test build config
+# You can switch flavors using: kodev flavor [newflavor]
+
+# Set to yes if you wish to produce a single binary instead
+# of a dynamic library. If you set this to yes you must also
+# set kore_source together with kore_flavor.
+single_binary=yes
+kore_source=/root/kore/
+#kore_flavor=
+
+# The flags below are shared between flavors
+cflags=-Wall -Wmissing-declarations -Wshadow
+cflags=-Wstrict-prototypes -Wmissing-prototypes
+cflags=-Wpointer-arith -Wcast-qual -Wsign-compare
+
+cxxflags=-Wall -Wmissing-declarations -Wshadow
+cxxflags=-Wpointer-arith -Wcast-qual -Wsign-compare
+
+# Mime types for assets served via the builtin asset_serve_*
+#mime_add=txt:text/plain; charset=utf-8
+#mime_add=png:image/png
+#mime_add=html:text/html; charset=utf-8
+
+dev {
+        # These flags are added to the shared ones when
+        # you build the &quot;dev&quot; flavor.
+        cflags=-g
+        cxxflags=-g
+}
+
+#prod {
+#       You can specify additional flags here which are only
+#       included if you build with the &quot;prod&quot; flavor.
+#}</code></pre>
+<p>Compiler le projet pour obtenir le binaire <code>test</code>:</p>
+<pre><code>cd test
+../kodev/kodev build</code></pre>
+<h2 id="configuration-de-la-jail">Configuration de la jail</h2>
+<p>Créer l'arborescence:</p>
+<pre><code>mkdir -p /usr/local/jail/www/{app,dev,lib,libexec,var,tmp,etc}
+mkdir -p /usr/local/jail/www/var/{log,run}
+mkdir -p /usr/local/jail/www/usr/lib
+mkdir -p /usr/local/jail/www/app/htdocs</code></pre>
+<p>Copier les librairies nécessaires du système pour permettre
+l'exécution de Kore:</p>
+<pre><code>cp /libexec/ld-elf.so.1 /usr/local/jail/www/libexec/
+cp /lib/{libc.so.7,libgcc_s.so.1,libm.so.5,libthr.so.3,libcrypto.so.30} /usr/local/jail/www/lib/
+cp /usr/lib/libssl.so.30 /usr/local/jail/www/usr/lib
+cp /lib/libutil.so.9 /usr/local/jail/www/lib/ # Pour daemon</code></pre>
+<p>Copier les fichiers du projet:</p>
+<pre><code>cp /usr/sbin/daemon /usr/local/jail/www/app
+cp test /usr/local/jail/www/app/
+cp ../misc/ffdhe4096.pem /usr/local/jail/www/app/
+cp -r cert /usr/local/jail/www/app/
+openssl rand 1024 &gt; /usr/local/jail/www/app/htdocs/random.data
+openssl rand 1024 &gt; /usr/local/jail/www/app/cert/random.data
+chown -R 1001:1001 /usr/local/jail/www/app/{cert,htdocs}</code></pre>
+<p>Le fichier <code>random.data</code> doit être présent dans chaque
+dossier htdocs et cert à cause du chroot appliqué aux processus keymgr
+et worker. Il faut également attribuer les droits de lecture/écriture
+sur ces mêmes dossiers et leurs contenus pour l'utilisateur 1001,
+autrement cela causera l'erreur: failed to unlink random.data:
+Permission denied.</p>
+<p>Arborescence obtenue:</p>
+<pre><code>/usr/local/jail/www/
+├── app
+│   ├── cert
+│   │   ├── key.pem
+│   │   ├── random.data
+│   │   └── server.pem
+│   ├── daemon
+│   ├── ffdhe4096.pem
+│   ├── htdocs
+│   │   └── random.data
+│   └── test
+├── dev
+├── etc
+├── ld-elf.so.1
+├── lib
+│   ├── libc.so.7
+│   ├── libcrypto.so.30
+│   ├── libgcc_s.so.1
+│   ├── libm.so.5
+│   ├── libthr.so.3
+│   └── libutil.so.9
+├── libexec
+│   └── ld-elf.so.1
+├── tmp
+├── usr
+│   └── lib
+│       └── libssl.so.30
+└── var
+    ├── log
+    └── run</code></pre>
+<p>Configuration de la jail www dans <code>/etc/jail.conf</code>:</p>
+<pre><code>www {
+  host.hostname = &quot;www&quot;;
+  ip4 = inherit;
+  #ip4.addr = &quot;vtnet0|192.168.122.100/24&quot;;
+  path = &quot;/usr/local/jail/www&quot;;
+  sysvshm = &quot;new&quot;;
+  exec.start = &quot;/app/daemon -r \
+                -P /var/run/daemon.pid
+                -o /var/log/kore.log \
+                /app/test&quot;;
+  exec.stop = &quot;&quot;;
+}</code></pre>
+<p>Nous utilisons <code>daemon</code> pour permettre un redémarrage
+automatique de Kore et récupérer stdout/stderr dans un fichier dédié.
+Kore utilisant la fonction <code>shmget()</code> à l'initialisation des
+workers, il est nécessaire d'utiliser <code>sysvshm = "new"</code>. Ce
+paramètre est à préférer à <code>allow.sysvipc = 1</code> afin de donner
+à la jail un namespace dédié et réduire les risques de sécurité.</p>
+<p>Kore utilise la fonction <code>getpwuid()</code> qui nécessite la
+présence du fichier <code>passwd</code> dans la jail, pour le
+générer:</p>
+<pre><code>echo &quot;root::0:0::0:0:Charlie &amp;:/root:/bin/sh&quot; &gt; passwd
+echo &quot;kore::1001:1001::0:0:kore:/app:/bin/sh&quot; &gt;&gt; passwd
+pwd_mkdb -d /usr/local/jail/www/etc/ -p passwd</code></pre>
+<p>Démarrer la jail:</p>
+<pre><code>sysrc jail_enable=YES
+service jail start www</code></pre>
+<p>Le journal devrait contenir les informations de démarrage:</p>
+<pre><code>cat /usr/local/jail/www/var/log/kore.log
+
+2024-04-21 00:12:54.674 UTC proc=[parent] log=[tls serving https on 0.0.0.0:8888]
+2024-04-21 00:12:54.674 UTC proc=[parent] log=[notls serving http on 0.0.0.0:8080]
+2024-04-21 00:12:54.674 UTC proc=[parent] log=[test master-6fbb6d18 starting, built=2024-04-20]
+2024-04-21 00:12:54.674 UTC proc=[parent] log=[memory pool protections: disabled]
+2024-04-21 00:12:54.674 UTC proc=[parent] log=[built-ins: ]
+2024-04-21 00:12:54.674 UTC proc=[parent] log=[TLS backend OpenSSL 3.0.12 24 Oct 2023]
+2024-04-21 00:12:54.674 UTC proc=[parent] log=[starting worker processes]
+2024-04-21 00:12:54.995 UTC proc=[parent] log=[all worker processes started]
+2024-04-21 00:12:54.995 UTC proc=[parent] log=[accesslog vacuum is enabled]
+2024-04-21 00:12:54.995 UTC proc=[keymgr] log=[(re)loading certificates, keys and CRLs]
+2024-04-21 00:12:54.995 UTC proc=[keymgr] log=[loaded private key for &#39;*&#39;]
+2024-04-21 00:12:54.995 UTC proc=[keymgr] log=[started (#14033 chroot=/app/cert user=kore)]
+2024-04-21 00:12:54.995 UTC proc=[wrk 1] log=[started (#14031 chroot=/app/htdocs user=kore)]
+2024-04-21 00:12:54.997 UTC proc=[wrk 2] log=[started (#14032 chroot=/app/htdocs user=kore)]</code></pre>
+<p>Tester via curl (modifier l'adresse IP au besoin):</p>
+<pre><code>curl https://192.168.122.100:8888 -k
+curl http://192.168.122.100:8080</code></pre>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
+<ul>
+<li><a
+href="https://git.kore.io/kore/file/conf/kore.conf.example">https://git.kore.io/kore/file/conf/kore.conf.example</a></li>
+<li><a
+href="https://gist.github.com/hiway/2b526fc64748e8d6e9f36f289003f843">https://gist.github.com/hiway/2b526fc64748e8d6e9f36f289003f843</a></li>
+<li><a
+href="https://www.skyforge.at/posts/a-note-in-sysvipc-and-jails-on-freebsd">https://www.skyforge.at/posts/a-note-in-sysvipc-and-jails-on-freebsd</a></li>
+</ul>
+  <br />
+  <hr />
+  <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+</body>
+</html>
