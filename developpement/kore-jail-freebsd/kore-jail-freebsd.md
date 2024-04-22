@@ -10,7 +10,7 @@ keywords: [Kore, FreeBSD, jail, C,serveur web]
 abstract: "Application web Kore et jail FreeBSD."
 ---
 
-Kore est un framework web en C intègrant son propre serveur web qui permet d'obtenir un seul binaire. Il peut être utilisé dans une jail "allégée" sous FreeBSD 14.
+Kore est un framework web en C intégrant son propre serveur web qui permet d'obtenir un seul binaire. Il peut être utilisé dans une jail "allégée" sous FreeBSD 14.
 Notons qu'il est possible de compiler Kore avec OpenSSL 3.
 
 
@@ -57,7 +57,7 @@ Créer le projet "test" via kodev:
 
 
 Modifier le programme `test/src/test.c` pour retourner la chaîne "hello world":
-```
+```C
 #include <kore/kore.h>
 #include <kore/http.h>
 
@@ -193,7 +193,7 @@ openssl rand 1024 > /usr/local/jail/www/app/cert/random.data
 chown -R 1001:1001 /usr/local/jail/www/app/{cert,htdocs}
 ```
 
-Le fichier `random.data` doit être présent dans chaque dossier htdocs et cert à cause du chroot appliqué aux processus keymgr et worker. Il faut également attribuer les droits de lecture/écriture sur ces mêmes dossiers et leurs contenus pour l'utilisateur 1001, autrement cela causera l'erreur: failed to unlink random.data: Permission denied.
+Le fichier `random.data` doit être présent dans `htdocs` et `cert` à cause du chroot appliqué aux processus keymgr et worker. Il faut également attribuer les droits de lecture/écriture sur ces mêmes dossiers et leurs contenus pour l'utilisateur 1001, autrement cela causera l'erreur: failed to unlink random.data: Permission denied.
 
 Arborescence obtenue:
 ```

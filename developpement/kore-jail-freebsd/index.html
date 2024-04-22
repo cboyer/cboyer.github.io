@@ -11,22 +11,88 @@ FreeBSD." />
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS" />
   <style>
-    body { margin: 1em; }
+    body { margin: 1em; font-family: sans-serif; font-size: 1rem; }
     img { max-width: 100%; height: auto; }
     table { margin-top: 1em; font-size: 11px; }
-    @media (min-width: 42em) { body { margin: 1em auto; max-width: 45em; } }
+    @media (min-width: 45em) { body { margin: 1em auto; max-width: 50em; } }
     ul { list-style: none; padding: 0;}
-    p code { font-size: 1.1em; }
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: auto; }
+    pre { background-color: whitesmoke; overflow: auto; font-size: 0.875rem; }
+    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; }
     .sourceCode { overflow: auto !important; }
   </style>
+  <style>pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
   <h1>Application web Kore et jail FreeBSD</h1>
   <em>Publié le 2024-04-21</em>
-<p>Kore est un framework web en C intègrant son propre serveur web qui
+<p>Kore est un framework web en C intégrant son propre serveur web qui
 permet d'obtenir un seul binaire. Il peut être utilisé dans une jail
 "allégée" sous FreeBSD 14. Notons qu'il est possible de compiler Kore
 avec OpenSSL 3.</p>
@@ -57,18 +123,18 @@ compilation avec Clang. Lancer la compilation de Kore avec:</p>
 <pre><code>./kodev/kodev create test</code></pre>
 <p>Modifier le programme <code>test/src/test.c</code> pour retourner la
 chaîne "hello world":</p>
-<pre><code>#include &lt;kore/kore.h&gt;
-#include &lt;kore/http.h&gt;
-
-int page(struct http_request *);
-
-int page(struct http_request *req) {
-    char * msg = &quot;hello world&quot;;
-
-    http_response_header(req, &quot;content-type&quot;, &quot;text/html&quot;);
-    http_response(req, 200, msg, strlen(msg));
-    return (KORE_RESULT_OK);
-}</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;kore/kore.h&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;kore/http.h&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> page<span class="op">(</span><span class="kw">struct</span> http_request <span class="op">*);</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> page<span class="op">(</span><span class="kw">struct</span> http_request <span class="op">*</span>req<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span> msg <span class="op">=</span> <span class="st">&quot;hello world&quot;</span><span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    http_response_header<span class="op">(</span>req<span class="op">,</span> <span class="st">&quot;content-type&quot;</span><span class="op">,</span> <span class="st">&quot;text/html&quot;</span><span class="op">);</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    http_response<span class="op">(</span>req<span class="op">,</span> <span class="dv">200</span><span class="op">,</span> msg<span class="op">,</span> strlen<span class="op">(</span>msg<span class="op">));</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>KORE_RESULT_OK<span class="op">);</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Préparer la configuration du projet dans
 <code>test/conf/test.conf</code>:</p>
 <pre><code>server tls {
@@ -171,12 +237,12 @@ cp -r cert /usr/local/jail/www/app/
 openssl rand 1024 &gt; /usr/local/jail/www/app/htdocs/random.data
 openssl rand 1024 &gt; /usr/local/jail/www/app/cert/random.data
 chown -R 1001:1001 /usr/local/jail/www/app/{cert,htdocs}</code></pre>
-<p>Le fichier <code>random.data</code> doit être présent dans chaque
-dossier htdocs et cert à cause du chroot appliqué aux processus keymgr
-et worker. Il faut également attribuer les droits de lecture/écriture
-sur ces mêmes dossiers et leurs contenus pour l'utilisateur 1001,
-autrement cela causera l'erreur: failed to unlink random.data:
-Permission denied.</p>
+<p>Le fichier <code>random.data</code> doit être présent dans
+<code>htdocs</code> et <code>cert</code> à cause du chroot appliqué aux
+processus keymgr et worker. Il faut également attribuer les droits de
+lecture/écriture sur ces mêmes dossiers et leurs contenus pour
+l'utilisateur 1001, autrement cela causera l'erreur: failed to unlink
+random.data: Permission denied.</p>
 <p>Arborescence obtenue:</p>
 <pre><code>/usr/local/jail/www/
 ├── app
