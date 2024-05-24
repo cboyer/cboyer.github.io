@@ -221,7 +221,7 @@ lsof -ni 'udp@192.168.66.66:123'
 Recherche les occurences de "meta" dans tous les fichiers php de /var/www/drupal
 ```console
 find /var/www/drupal/ -name "*.php" -exec grep -H meta {} \;
-find /var/www/drupal/ -type f -print0 | xargs -0 egrep -i "*meta*"
+find /var/www/drupal/ -type f -print0 | xargs -0 grep -Ei "*meta*"
 ```
 
 Recherche récursive d'un motif et retourne le fichier
