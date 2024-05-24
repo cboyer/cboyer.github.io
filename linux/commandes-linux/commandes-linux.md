@@ -163,7 +163,7 @@ Afficher l'id de l'utilisateur toto
 id -u toto
 ```
 
-Monitoring nmon (resultat dans fichier <hostname>_date_time.nmon)
+Monitoring nmon (resultats dans le fichier `hostname_date_time.nmon`)
 ```console
 #capture toutes les 30 secondes 120 fois; excel généré avec nmon_analyzer
 nmon -fT -s 30 -c 120
