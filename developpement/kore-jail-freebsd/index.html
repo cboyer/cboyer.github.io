@@ -130,11 +130,11 @@ chaîne "hello world":</p>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> page<span class="op">(</span><span class="kw">struct</span> http_request <span class="op">*);</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> page<span class="op">(</span><span class="kw">struct</span> http_request <span class="op">*</span>req<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span> msg <span class="op">=</span> <span class="st">&quot;hello world&quot;</span><span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>msg <span class="op">=</span> <span class="st">&quot;hello world&quot;</span><span class="op">;</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    http_response_header<span class="op">(</span>req<span class="op">,</span> <span class="st">&quot;content-type&quot;</span><span class="op">,</span> <span class="st">&quot;text/html&quot;</span><span class="op">);</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    http_response<span class="op">(</span>req<span class="op">,</span> <span class="dv">200</span><span class="op">,</span> msg<span class="op">,</span> strlen<span class="op">(</span>msg<span class="op">));</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>KORE_RESULT_OK<span class="op">);</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> KORE_RESULT_OK<span class="op">;</span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Préparer la configuration du projet dans
 <code>test/conf/test.conf</code>:</p>
@@ -321,7 +321,7 @@ service jail start www</code></pre>
 2024-04-21 00:12:54.995 UTC proc=[wrk 1] log=[started (#14031 chroot=/app/htdocs user=kore)]
 2024-04-21 00:12:54.997 UTC proc=[wrk 2] log=[started (#14032 chroot=/app/htdocs user=kore)]</code></pre>
 <p>Tester via curl (modifier l'adresse IP au besoin):</p>
-<pre><code>curl https://192.168.122.100:8888 -k
+<pre><code>curl -k https://192.168.122.100:8888
 curl http://192.168.122.100:8080</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>

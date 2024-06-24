@@ -64,11 +64,11 @@ Modifier le programme `test/src/test.c` pour retourner la chaîne "hello world":
 int page(struct http_request *);
 
 int page(struct http_request *req) {
-    char * msg = "hello world";
+    char *msg = "hello world";
 
     http_response_header(req, "content-type", "text/html");
     http_response(req, 200, msg, strlen(msg));
-    return (KORE_RESULT_OK);
+    return KORE_RESULT_OK;
 }
 ```
 
@@ -286,7 +286,7 @@ cat /usr/local/jail/www/var/log/kore.log
 
 Tester via curl (modifier l'adresse IP au besoin):
 ```
-curl https://192.168.122.100:8888 -k
+curl -k https://192.168.122.100:8888
 curl http://192.168.122.100:8080
 ```
 
