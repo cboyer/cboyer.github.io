@@ -6,7 +6,7 @@ author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
-keywords: [Kore, FreeBSD, jail, C,serveur web]
+keywords: [Kore, FreeBSD, jail, C, serveur web]
 abstract: "Application web Kore et jail FreeBSD."
 ---
 

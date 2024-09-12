@@ -90,9 +90,9 @@ forward-zone:
         #forward-addr: 80.241.218.68@853#fdns1.dismail.de
         #forward-addr: 159.69.114.157@853#fdns2.dismail.de
         #forward-addr: 146.255.56.98@853#dot1.applied-privacy.net
-        forward-addr: 116.202.176.26@853#dot.libredns.gr
+        forward-addr: 116.202.176.26@853#noads.libredns.gr
 
-include: /var/unbound/conf.d/*.conf	
+include: /var/unbound/conf.d/*.conf
 ```
 
 > Sous FreeBSD il faut définir `do-daemonize: yes` pour ne pas bloquer le démarrage du système. Installer également `security/ca_root_nss` pour `/usr/local/share/certs/ca-root-nss.crt` (dont `/etc/ssl/cert.pem` est un lien symbolique).

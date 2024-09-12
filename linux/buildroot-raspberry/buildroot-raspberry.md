@@ -195,10 +195,10 @@ CC = gcc
 .PHONY: clean
 
 hello: hello.c
-	$(CC) -o '$@' '$<'
+    $(CC) -o '$@' '$<'
 
 clean:
-	rm hello
+    rm hello
 ```
 
 #### Fichier br-external/package/hello/S99hello

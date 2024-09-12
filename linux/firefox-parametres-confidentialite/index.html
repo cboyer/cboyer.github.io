@@ -14,15 +14,15 @@ config">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS">
   <style>
-    body { margin: 1em; font-family: sans-serif; font-size: 1rem; }
+    body { margin: 1em; font-family: Arial,sans-serif; line-height: 1.5; word-wrap: break-word; }
     img { max-width: 100%; height: auto; }
     table { margin-top: 1em; font-size: 11px; }
     @media (min-width: 45em) { body { margin: 1em auto; max-width: 50em; } }
     ul { list-style: none; padding: 0;}
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: auto; font-size: 0.875rem; }
-    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; }
+    pre { background-color: whitesmoke; overflow: auto; font-size: 0.825rem; }
+    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; line-height: initial; }
     p code { background: #f7f7f9; }
     .sourceCode { overflow: auto !important; }
   </style>
@@ -95,7 +95,7 @@ code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
   <h1>Confidentialité et paramètres avancés dans Firefox</h1>
-  <em>Publié le 2018-11-17, dernière mise à jour: 2021-01-15</em>
+  <em>Publié le 2018-11-17, dernière mise à jour: 2024-08-08</em>
 <p>Firefox possède de nombreux paramètres qui ne sont pas accessibles
 par les menus de l'interface graphique (Édition &gt; Préférences). Pour
 y accéder, tapez <code>about:config</code> dans la barre d'adresse (une
@@ -159,11 +159,39 @@ class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb11
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>browser<span class="op">.</span><span class="at">compactmode</span><span class="op">.</span><span class="at">show</span> <span class="op">=</span> <span class="kw">true</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>browser<span class="op">.</span><span class="at">uidensity</span> <span class="op">=</span> <span class="dv">1</span></span></code></pre></div>
+<h2 id="dns-chiffrés">DNS chiffrés</h2>
+<p>Dans Paramètres &gt; Vi privée et sécurité &gt; Activer le DNS via
+HTTPS</p>
+<p>Service DNS de <a href="https://libredns.gr/">LibreOPS</a> filtrant
+les publicités: https://doh.libredns.gr/noads</p>
+<p>Service DNS de la <a href="https://www.fdn.fr/actions/dns/">FDN</a>:
+https://ns0.fdn.fr/dns-query et https://ns1.fdn.fr/dns-query</p>
+<p>Service CIRA <a
+href="https://www.cira.ca/en/canadian-shield/">Canadian Shield</a>:
+https://private.canadianshield.cira.ca/dns-query</p>
+<h2 id="supprimer-les-popups-de-consentement-googleyoutube">Supprimer
+les popups de consentement Google/Youtube</h2>
+<p>Dans uBlock Origin (Tableau de bord &gt; Mes filtres) ajouter les
+lignes:</p>
+<pre><code>! Avant d&#39;accéder à la recherche Google
+www.google.com###lb
+www.google.com##:root:style(overflow-y: visible !important;)
+www.google.fr###cnsm
+www.google.fr###cnsw
+www.google.fr##.m114nf.aID8W
+||consent.google.com/$subdocument
+www.google.com##^script:has-text(CONSENT)
+www.google.fr##^script:has-text(CONSENT)
+
+! Connexion avec Google
+||accounts.google.com/gsi/iframe/$subdocument
+
+! Bandeau cookie Reddit
+www.reddit.com##.pointer-events-auto.border-tone-4.border-solid.border.shadow-md.duration-300.transition-opacity.pt-0.p-md.opacity-100.mx-0.my-md.rounded-sm.bg-ui-modalbackground.relative.block.z-\[2\].nd\:pb-2xl.nd\:visible</code></pre>
 <h2 id="liens-complémentaires">Liens complémentaires</h2>
 <ul>
 <li><a
 href="https://gist.github.com/0XDE57/fbd302cef7693e62c769">https://gist.github.com/0XDE57/fbd302cef7693e62c769</a></li>
-<li></li>
 </ul>
   <br>
   <hr>
