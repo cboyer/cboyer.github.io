@@ -25,8 +25,11 @@ Linux.">
   </style>
 </head>
 <body>
-  <h1>Commandes Linux en vrac</h1>
+  <header>
+    <h1>Commandes Linux en vrac</h1>
   <em>Publié le 2017-04-12, dernière mise à jour: 2021-02-16</em>
+  </header>
+  <article>
 <p>Tester son débit</p>
 <pre class="console"><code>iperf3 -R -c ping.online.net -p 5206 -P5
 wget http://test-debit.free.fr/10485760.rnd -O /dev/null</code></pre>
@@ -181,8 +184,11 @@ compression</p>
 <pre class="console"><code>read -s pass; echo $pass | md5sum | base64 | cut -c -16</code></pre>
 <p>Limite l'utilisation du CPU pour un processus</p>
 <pre class="console"><code>cpulimit -p pid -l 50</code></pre>
+  </article>
+  <footer>
   <br>
   <hr>
   <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  </footer>
 </body>
 </html>

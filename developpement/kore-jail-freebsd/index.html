@@ -91,8 +91,11 @@ code span.vs { color: #bf0303; } /* VerbatimString */
 code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
-  <h1>Application web Kore et jail FreeBSD</h1>
+  <header>
+    <h1>Application web Kore et jail FreeBSD</h1>
   <em>Publié le 2024-04-21</em>
+  </header>
+  <article>
 <p>Kore est un framework web en C intégrant son propre serveur web qui
 permet d'obtenir un seul binaire. Il peut être utilisé dans une jail
 "allégée" sous FreeBSD 14. Notons qu'il est possible de compiler Kore
@@ -282,10 +285,7 @@ random.data: Permission denied.</p>
   #ip4.addr = &quot;vtnet0|192.168.122.100/24&quot;;
   path = &quot;/usr/local/jail/www&quot;;
   sysvshm = &quot;new&quot;;
-  exec.start = &quot;/app/daemon -r \
-                -P /var/run/daemon.pid
-                -o /var/log/kore.log \
-                /app/test&quot;;
+  exec.start = &quot;/app/daemon -r -P /var/run/daemon.pid -o /var/log/kore.log /app/test&quot;;
   exec.stop = &quot;&quot;;
 }</code></pre>
 <p>Nous utilisons <code>daemon</code> pour permettre un redémarrage
@@ -332,8 +332,11 @@ href="https://gist.github.com/hiway/2b526fc64748e8d6e9f36f289003f843">https://gi
 <li><a
 href="https://www.skyforge.at/posts/a-note-in-sysvipc-and-jails-on-freebsd">https://www.skyforge.at/posts/a-note-in-sysvipc-and-jails-on-freebsd</a></li>
 </ul>
+  </article>
+  <footer>
   <br>
   <hr>
   <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  </footer>
 </body>
 </html>
