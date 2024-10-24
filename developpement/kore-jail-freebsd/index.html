@@ -11,15 +11,15 @@ FreeBSD.">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS">
   <style>
-    body { margin: 1em; font-family: sans-serif; font-size: 1rem; }
+    body { margin: 1em; font-family: Arial,sans-serif; line-height: 1.5; word-wrap: break-word; }
     img { max-width: 100%; height: auto; }
     table { margin-top: 1em; font-size: 11px; }
     @media (min-width: 45em) { body { margin: 1em auto; max-width: 50em; } }
     ul { list-style: none; padding: 0;}
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: auto; font-size: 0.875rem; }
-    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; }
+    pre { background-color: whitesmoke; overflow: auto; font-size: 0.825rem; }
+    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; line-height: initial; }
     p code { background: #f7f7f9; }
     .sourceCode { overflow: auto !important; }
   </style>
@@ -91,8 +91,11 @@ code span.vs { color: #bf0303; } /* VerbatimString */
 code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
-  <h1>Application web Kore et jail FreeBSD</h1>
-  <em>Publié le 2024-04-21</em>
+  <header>
+    <h1>Application web Kore et jail FreeBSD</h1>
+    <em>Publié le 2024-04-21</em>
+  </header>
+  <article>
 <p>Kore est un framework web en C intégrant son propre serveur web qui
 permet d'obtenir un seul binaire. Il peut être utilisé dans une jail
 "allégée" sous FreeBSD 14. Notons qu'il est possible de compiler Kore
@@ -282,10 +285,7 @@ random.data: Permission denied.</p>
   #ip4.addr = &quot;vtnet0|192.168.122.100/24&quot;;
   path = &quot;/usr/local/jail/www&quot;;
   sysvshm = &quot;new&quot;;
-  exec.start = &quot;/app/daemon -r \
-                -P /var/run/daemon.pid
-                -o /var/log/kore.log \
-                /app/test&quot;;
+  exec.start = &quot;/app/daemon -r -P /var/run/daemon.pid -o /var/log/kore.log /app/test&quot;;
   exec.stop = &quot;&quot;;
 }</code></pre>
 <p>Nous utilisons <code>daemon</code> pour permettre un redémarrage
@@ -332,8 +332,11 @@ href="https://gist.github.com/hiway/2b526fc64748e8d6e9f36f289003f843">https://gi
 <li><a
 href="https://www.skyforge.at/posts/a-note-in-sysvipc-and-jails-on-freebsd">https://www.skyforge.at/posts/a-note-in-sysvipc-and-jails-on-freebsd</a></li>
 </ul>
+  </article>
+  <footer>
   <br>
   <hr>
   <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  </footer>
 </body>
 </html>

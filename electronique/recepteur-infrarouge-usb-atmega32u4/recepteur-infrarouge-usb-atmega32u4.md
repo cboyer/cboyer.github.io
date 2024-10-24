@@ -29,7 +29,7 @@ Nous utiliserons un "CJMCU Beetle" pour ses dimensions particulièrement adapté
 
 ![Montage](cjmcu.jpg)
 
-Pour programmer l'ATmega32u4 nous utiliserons l'IDE Arduino configuré pour une carte Arduino Leonardo et les librairies IRremote (version 3.5):
+Pour programmer l'ATmega32u4 nous utiliserons l'IDE Arduino configuré pour une carte Arduino Leonardo et les librairies IRremote (version 4.4):
 
 ```c
 #include <IRremote.h>
@@ -43,7 +43,7 @@ unsigned int i = 0;
 
 void setup()
 {
-  //Uncomment to enable serial printing of IR codes
+  // Décommenter pour afficher le détail des codes reçus
   //Serial.begin(9600); 
   buf = 0xFFFFFFFF;
   Keyboard.begin();
@@ -52,8 +52,11 @@ void setup()
 
 void loop() {
   if (IrReceiver.decode()) {
-    //Uncomment to enable serial printing of IR codes
+    // Décommenter pour afficher le détail des codes reçus
+    //IrReceiver.printIRResultShort(&Serial);
+    //Serial.println(IrReceiver.decodedIRData.flags, HEX);
     //Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);
+    //Serial.println(IrReceiver.decodedIRData.command, HEX);
 
     switch(IrReceiver.decodedIRData.decodedRawData) {
 

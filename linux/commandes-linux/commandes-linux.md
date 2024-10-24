@@ -115,6 +115,11 @@ Ajouter un utilisateur existant à un groupe supplémentaire existant
 usermod -a -G groupe utilisateur
 ```
 
+Serveur web pour servir le fichier du dossier courant avec Python
+```console
+python3 -m http.server 9000
+```
+
 Serveur web d'urgence avec Netcat
 ```console
 while true; do nc -l -p 8080 < index.html; done

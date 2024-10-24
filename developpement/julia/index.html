@@ -11,15 +11,15 @@ Julia.">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS">
   <style>
-    body { margin: 1em; font-family: sans-serif; font-size: 1rem; }
+    body { margin: 1em; font-family: Arial,sans-serif; line-height: 1.5; word-wrap: break-word; }
     img { max-width: 100%; height: auto; }
     table { margin-top: 1em; font-size: 11px; }
     @media (min-width: 45em) { body { margin: 1em auto; max-width: 50em; } }
     ul { list-style: none; padding: 0;}
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: auto; font-size: 0.875rem; }
-    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; }
+    pre { background-color: whitesmoke; overflow: auto; font-size: 0.825rem; }
+    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; line-height: initial; }
     p code { background: #f7f7f9; }
     .sourceCode { overflow: auto !important; }
   </style>
@@ -91,8 +91,11 @@ code span.vs { color: #bf0303; } /* VerbatimString */
 code span.wa { color: #bf0303; } /* Warning */</style>
 </head>
 <body>
-  <h1>Traitement de données avec le langage Julia</h1>
-  <em>Publié le 2021-06-05</em>
+  <header>
+    <h1>Traitement de données avec le langage Julia</h1>
+    <em>Publié le 2021-06-05</em>
+  </header>
+  <article>
 <h2 id="installer-des-packages">Installer des packages</h2>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="bu">Pkg; Pkg</span>.<span class="fu">add</span>(<span class="st">&quot;DataFrames&quot;</span>); <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">&quot;CSV&quot;</span>); <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">&quot;Pipe&quot;</span>) </span></code></pre></div>
@@ -194,8 +197,11 @@ href="https://dataframes.juliadata.org/stable/man/missing/">https://dataframes.j
 <li><a
 href="https://jcharistech.wordpress.com/julia-dataframes-cheat-sheets/">https://jcharistech.wordpress.com/julia-dataframes-cheat-sheets/</a></li>
 </ul>
+  </article>
+  <footer>
   <br>
   <hr>
   <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  </footer>
 </body>
 </html>

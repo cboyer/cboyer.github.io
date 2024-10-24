@@ -6,7 +6,7 @@ author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
 category: "Développement"
-keywords: [Kore, FreeBSD, jail, C,serveur web]
+keywords: [Kore, FreeBSD, jail, C, serveur web]
 abstract: "Application web Kore et jail FreeBSD."
 ---
 
@@ -239,10 +239,7 @@ www {
   #ip4.addr = "vtnet0|192.168.122.100/24";
   path = "/usr/local/jail/www";
   sysvshm = "new";
-  exec.start = "/app/daemon -r \
-                -P /var/run/daemon.pid
-                -o /var/log/kore.log \
-                /app/test";
+  exec.start = "/app/daemon -r -P /var/run/daemon.pid -o /var/log/kore.log /app/test";
   exec.stop = "";
 }
 ```

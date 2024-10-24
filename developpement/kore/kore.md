@@ -10,9 +10,9 @@ keywords: [Kore, C, serveur web, embarqué]
 abstract: "Serveur web embarqué avec Kore."
 ---
 
-Kore est un framework web en C intègrant son propre serveur web. Selon la configuration, il est même possible d'obtenir un seul binaire.
-
 [Cet article](../kore-jail-freebsd) plus récent présente l'utilisation de Kore incluant OpenSSL 3.
+
+Kore est un framework web en C intègrant son propre serveur web. Selon la configuration, il est même possible d'obtenir un seul binaire.
 
 ## Installation d'OpenSSL 1.1.1
 Comme indiqué dans la documentation Kore n'est pas encore compatible avec OpenSSL version 3. Pour vérifier la version installé sur le système:

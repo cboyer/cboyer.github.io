@@ -11,22 +11,25 @@ Linux.">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS">
   <style>
-    body { margin: 1em; font-family: sans-serif; font-size: 1rem; }
+    body { margin: 1em; font-family: Arial,sans-serif; line-height: 1.5; word-wrap: break-word; }
     img { max-width: 100%; height: auto; }
     table { margin-top: 1em; font-size: 11px; }
     @media (min-width: 45em) { body { margin: 1em auto; max-width: 50em; } }
     ul { list-style: none; padding: 0;}
     blockquote {margin: 0; }
     figure { text-align: center; font-style: italic; }
-    pre { background-color: whitesmoke; overflow: auto; font-size: 0.875rem; }
-    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; }
+    pre { background-color: whitesmoke; overflow: auto; font-size: 0.825rem; }
+    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; line-height: initial; }
     p code { background: #f7f7f9; }
     .sourceCode { overflow: auto !important; }
   </style>
 </head>
 <body>
-  <h1>Commandes Linux en vrac</h1>
-  <em>Publié le 2017-04-12, dernière mise à jour: 2021-02-16</em>
+  <header>
+    <h1>Commandes Linux en vrac</h1>
+    <em>Publié le 2017-04-12, dernière mise à jour: 2021-02-16</em>
+  </header>
+  <article>
 <p>Tester son débit</p>
 <pre class="console"><code>iperf3 -R -c ping.online.net -p 5206 -P5
 wget http://test-debit.free.fr/10485760.rnd -O /dev/null</code></pre>
@@ -77,6 +80,8 @@ ldconfig</code></pre>
 <p>Ajouter un utilisateur existant à un groupe supplémentaire
 existant</p>
 <pre class="console"><code>usermod -a -G groupe utilisateur</code></pre>
+<p>Serveur web pour servir le fichier du dossier courant avec Python</p>
+<pre class="console"><code>python3 -m http.server 9000</code></pre>
 <p>Serveur web d'urgence avec Netcat</p>
 <pre class="console"><code>while true; do nc -l -p 8080 &lt; index.html; done
 while true; do echo &quot;&lt; pre&gt;$(ps aux)&lt; /pre&gt;&quot; | nc -l -p 8080; done</code></pre>
@@ -181,8 +186,11 @@ compression</p>
 <pre class="console"><code>read -s pass; echo $pass | md5sum | base64 | cut -c -16</code></pre>
 <p>Limite l'utilisation du CPU pour un processus</p>
 <pre class="console"><code>cpulimit -p pid -l 50</code></pre>
+  </article>
+  <footer>
   <br>
   <hr>
   <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  </footer>
 </body>
 </html>

@@ -3,128 +3,108 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2024-06-24T11:03:44-04:00</updated>
+    <updated>2024-10-24T15:00:08+02:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
     </author>
-    <id>urn:uuid:e4dd15ab-27b5-5708-86ee-d0fcdbbb46ae</id>
+    <id>urn:uuid:089bf58b-72c0-318a-aa15-f31ecf902187</id>
     <entry>
-        <title>Application web Kore et jail FreeBSD</title>
+        <title>Afficher des données avec DataTables</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/kore-jail-freebsd/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/datatables/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:231883d4-d811-5d4a-9981-92d6ec3c2fc2</id>
-        <published>2024-04-21T17:13:12-04:00</published>
-        <updated>2024-04-21T17:13:12-04:00</updated>
-        <summary>Application web Kore et jail FreeBSD.</summary>
+        <id>urn:uuid:49dbbb7a-953b-3814-b2a7-fcdd8ab471ac</id>
+        <published>2020-10-09T18:13:11-04:00</published>
+        <updated>2020-10-09T18:13:11-04:00</updated>
+        <summary>Afficher des données avec DataTables.</summary>
     </entry>
     <entry>
-        <title>Partage Samba sur RedHat 9 avec authentification Active Directory</title>
+        <title>Implémentation du protocole Dreamscreen en C</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/rhel9-samba-winbind/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:1991d140-14f9-5856-be37-2adbe9d18dfe</id>
-        <published>2024-04-06T16:29:41-04:00</published>
-        <updated>2024-04-06T16:29:41-04:00</updated>
-        <summary>Partage de fichier Samba avec authentification Active Directory sous RedHat 9</summary>
-    </entry>
-    <entry>
-        <title>Création de jails FreeBSD</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/freebsd-jails/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:8fa67044-3b98-5abe-85d7-6a8ee02d72e8</id>
-        <published>2023-02-01T17:29:14-04:00</published>
-        <updated>2023-03-19T22:28:14-05:00</updated>
-        <summary>Créer une jail sous FreeBSD.</summary>
-    </entry>
-    <entry>
-        <title>Chargement de fichiers Parquet vers PostgreSQL avec Python</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/postgres-parquet/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/dreamscreen-protocole/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:e66fc9b5-5cd5-515d-bb2d-ef544508142b</id>
-        <published>2022-07-11T19:34:12-04:00</published>
-        <updated>2022-07-11T19:34:12-04:00</updated>
-        <summary>Chargement de fichiers Parquet vers PostgreSQL avec Python.</summary>
+        <id>urn:uuid:25f04c58-3b50-36e0-bbd3-ea28dfbb0e6f</id>
+        <published>2018-05-29T19:36:04-04:00</published>
+        <updated>2019-01-10T18:25:32-04:00</updated>
+        <summary>Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen.</summary>
     </entry>
     <entry>
-        <title>Serveur web embarqué avec Kore</title>
+        <title>Exemple d’application Elixir</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/kore/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-application/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:13c45163-870d-5717-b341-5fe5bafd15ce</id>
-        <published>2022-07-02T14:30:12-04:00</published>
-        <updated>2022-07-02T14:30:12-04:00</updated>
-        <summary>Serveur web embarqué avec Kore.</summary>
+        <id>urn:uuid:c37f266f-9cc8-3d14-bb0c-660a0e98ef25</id>
+        <published>2019-06-19T19:04:11-04:00</published>
+        <updated>2019-11-14T21:40:11-05:00</updated>
+        <summary>Exemple d’application Elixir.</summary>
     </entry>
     <entry>
-        <title>Correspondances approximatives (fuzzy matching) avec R</title>
+        <title>Interfacer un programme C avec Elixir grâce aux Ports</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/r-correspondances-approximatives/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-interface-c/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:5479fb0b-de3f-5c71-b300-04228b1a6af4</id>
-        <published>2022-02-03T17:38:04-05:00</published>
-        <updated>2022-02-03T17:38:04-05:00</updated>
-        <summary>Déterminer des correspondances approximatives entre plusieurs chaînes de caractères avec R.</summary>
+        <id>urn:uuid:64c683b6-2d6f-3121-93b6-3e65f2f292f7</id>
+        <published>2020-05-30T14:27:04-04:00</published>
+        <updated>2020-05-30T14:27:04-04:00</updated>
+        <summary>Interfacer un programme C via STDIN/STDOUT avec les Ports Elixir.</summary>
     </entry>
     <entry>
-        <title>Installation de Kodi sous FreeBSD 13</title>
+        <title>Les outils Elixir</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/freebsd-kodi/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:8cd26f2b-d7d4-55ba-aa90-3020753807aa</id>
-        <published>2021-11-12T18:20:14-05:00</published>
-        <updated>2023-06-30T12:52:14-04:00</updated>
-        <summary>Installation de Kodi sous FreeBSD 13.</summary>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-outils/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:e295458b-e2cb-3198-90b9-7d524d630180</id>
+        <published>2019-11-16T13:24:27-05:00</published>
+        <updated>2019-11-16T13:24:27-05:00</updated>
+        <summary>Aide mémoire Elixir: les outils.</summary>
     </entry>
     <entry>
-        <title>Modification de firmware</title>
+        <title>Authentification avec Phoenix</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/firmware-edit/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:e8d5943a-5da0-5ddb-ad26-7614aa987ce5</id>
-        <published>2021-08-24T10:34:14-04:00</published>
-        <updated>2021-08-24T10:34:14-04:00</updated>
-        <summary>Modification de firmware.</summary>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-phoenix-authentification/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:b2fb0bdb-7451-3df4-ba63-4611cfbd2f9b</id>
+        <published>2021-03-13T19:04:11-05:00</published>
+        <updated>2021-03-17T10:28:23-04:00</updated>
+        <summary>Authentification avec Phoenix</summary>
     </entry>
     <entry>
-        <title>Liaison bluetooth ESP32 - Raspberry Pi 3</title>
+        <title>Elixir et framework Phoenix: formulaires et base de données</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-raspberry-esp32-bluetooth/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:a4d24b91-62a3-59ce-9893-90a0167ce50b</id>
-        <published>2021-07-27T17:37:34-04:00</published>
-        <updated>2021-07-27T17:37:34-04:00</updated>
-        <summary>Liaison bluetooth entre ESP32 et Raspberry Pi 3.</summary>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-phoenix-formulaires/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:ca39bbec-16d5-3450-9809-16fc2798090d</id>
+        <published>2020-11-06T18:03:11-05:00</published>
+        <updated>2020-11-06T18:03:11-05:00</updated>
+        <summary>Le web avec Elixir et son framework Phoenix: formulaires et base de données.</summary>
     </entry>
     <entry>
-        <title>Interface graphique avec Buildroot, Qt5 et Raspberry Pi 3</title>
+        <title>Elixir/Phoenix: fenêtre modale avec LiveComponent et hook JavaScript</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-raspberry-qt5/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:58c61b45-aaf7-5c0b-b5cd-3c9f8a1df3eb</id>
-        <published>2021-07-22T11:04:34-04:00</published>
-        <updated>2021-07-23T17:53:00-04:00</updated>
-        <summary>Développement d'une interface graphique Qt5/QML sur Raspberry Pi 3 avec Buildroot.</summary>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-phoenix-modal/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:842fedec-55a7-30d6-a26a-3d29ea3938ee</id>
+        <published>2021-04-25T17:59:11-04:00</published>
+        <updated>2021-04-25T17:59:11-04:00</updated>
+        <summary>Utiliser un LiveComponent et un hook JavaScript pour ouvrir une fenêtre modale.</summary>
     </entry>
     <entry>
-        <title>Écran à contrôleur ILI9341 et Raspberry Pi</title>
+        <title>Elixir et framework Phoenix: page simple</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/raspberry-ili9341/" hreflang="fr"/>
-        <category term="Électronique"/>
-        <id>urn:uuid:74f8fb56-09e3-527b-8060-925814ddf555</id>
-        <published>2021-07-21T10:34:12-04:00</published>
-        <updated>2021-07-21T10:34:12-04:00</updated>
-        <summary>Utiliser un écran à base de contrôleur ILI9341 avec un Raspberry Pi pour dupliquer la sortie HDMI.</summary>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-phoenix/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:9f9b4b60-ce1a-3c1a-8306-15ab58c8cef6</id>
+        <published>2020-10-28T17:13:11-04:00</published>
+        <updated>2020-10-28T17:13:11-04:00</updated>
+        <summary>Le web avec Elixir et son framework Phoenix.</summary>
     </entry>
     <entry>
         <title>Serveur TCP avec Elixir et GenServer</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-serveur-tcp/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:d8962ab7-3d59-5be7-932b-33c4a82b68f2</id>
+        <id>urn:uuid:8bd949de-7091-30b7-bfc4-620024e8e8ae</id>
         <published>2021-06-12T19:53:11-04:00</published>
         <updated>2021-11-12T18:04:11-05:00</updated>
         <summary>Serveur TCP avec Elixir et GenServer.</summary>
@@ -134,137 +114,87 @@
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/julia/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:402a29c0-6b71-5295-b12a-100fc5fac300</id>
+        <id>urn:uuid:aa11068b-91f2-38ae-870d-6e1f0f59373f</id>
         <published>2021-06-05T22:33:11-04:00</published>
         <updated>2021-06-05T22:33:11-04:00</updated>
         <summary>Quelques opérations avec le langage Julia.</summary>
     </entry>
     <entry>
-        <title>Elixir/Phoenix: fenêtre modale avec LiveComponent et hook JavaScript</title>
+        <title>Application web Kore et jail FreeBSD</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-phoenix-modal/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/kore-jail-freebsd/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:b30e715e-6e30-5929-8b54-9eee7b402f14</id>
-        <published>2021-04-25T17:59:11-04:00</published>
-        <updated>2021-04-25T17:59:11-04:00</updated>
-        <summary>Utiliser un LiveComponent et un hook JavaScript pour ouvrir une fenêtre modale.</summary>
+        <id>urn:uuid:d1f3d9de-6b55-3d99-b253-56ea1f0f69b9</id>
+        <published>2024-04-21T17:13:12-04:00</published>
+        <updated>2024-04-21T17:13:12-04:00</updated>
+        <summary>Application web Kore et jail FreeBSD.</summary>
     </entry>
     <entry>
-        <title>Authentification avec Phoenix</title>
+        <title>Serveur web embarqué avec Kore</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-phoenix-authentification/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/kore/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:977a440b-0567-5b44-98da-8e9b04c0c97a</id>
-        <published>2021-03-13T19:04:11-05:00</published>
-        <updated>2021-03-17T10:28:23-04:00</updated>
-        <summary>Authentification avec Phoenix</summary>
-    </entry>
-    <entry>
-        <title>Système embarqué Linux avec Buildroot, Qemu et Raspberry Pi 3</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-raspberry/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:5370d7ed-272c-577d-8eca-af6925947ea6</id>
-        <published>2021-03-07T18:23:00-05:00</published>
-        <updated>2021-03-07T18:23:00-05:00</updated>
-        <summary>Création d'un système embarqué Linux avec Buildroot et Qemu pour Raspberry Pi 3.</summary>
-    </entry>
-    <entry>
-        <title>NGINX: sous-requête d'authentification</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/nginx-subrequest/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:f5f03536-8e47-55cc-9bb7-121f5cf09384</id>
-        <published>2021-02-17T11:18:41-04:00</published>
-        <updated>2021-02-17T11:18:41-04:00</updated>
-        <summary>Autoriser l'accès à une ressource NGINX à l'aide d'une sous-requête d'authentification.</summary>
-    </entry>
-    <entry>
-        <title>Elixir et framework Phoenix: formulaires et base de données</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-phoenix-formulaires/" hreflang="fr"/>
-        <category term="Développement"/>
-        <id>urn:uuid:5f1ccab5-72fe-5176-a99b-0462090ca352</id>
-        <published>2020-11-06T18:03:11-05:00</published>
-        <updated>2020-11-06T18:03:11-05:00</updated>
-        <summary>Le web avec Elixir et son framework Phoenix: formulaires et base de données.</summary>
-    </entry>
-    <entry>
-        <title>Elixir et framework Phoenix: page simple</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-phoenix/" hreflang="fr"/>
-        <category term="Développement"/>
-        <id>urn:uuid:e6f12771-4584-562f-b4e2-761dc6629b00</id>
-        <published>2020-10-28T17:13:11-04:00</published>
-        <updated>2020-10-28T17:13:11-04:00</updated>
-        <summary>Le web avec Elixir et son framework Phoenix.</summary>
-    </entry>
-    <entry>
-        <title>Afficher des données avec DataTables</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/datatables/" hreflang="fr"/>
-        <category term="Développement"/>
-        <id>urn:uuid:60b5c907-fc9e-5dc4-9554-6e1fd7fd8535</id>
-        <published>2020-10-09T18:13:11-04:00</published>
-        <updated>2020-10-09T18:13:11-04:00</updated>
-        <summary>Afficher des données avec DataTables.</summary>
-    </entry>
-    <entry>
-        <title>Interfacer un programme C avec Elixir grâce aux Ports</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-interface-c/" hreflang="fr"/>
-        <category term="Développement"/>
-        <id>urn:uuid:a9ef37ff-7650-599d-9aa0-cb7ee6835e4e</id>
-        <published>2020-05-30T14:27:04-04:00</published>
-        <updated>2020-05-30T14:27:04-04:00</updated>
-        <summary>Interfacer un programme C via STDIN/STDOUT avec les Ports Elixir.</summary>
-    </entry>
-    <entry>
-        <title>Accélération matérielle 2D avec OpenVG sur Raspberry Pi</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/openvg/" hreflang="fr"/>
-        <category term="Développement"/>
-        <id>urn:uuid:f709e798-88ff-58cc-a4ef-5c76970ca102</id>
-        <published>2020-05-03T19:14:27-04:00</published>
-        <updated>2020-05-03T19:14:27-04:00</updated>
-        <summary>Générer des images en 2D avec l'accélération matérielle sur Raspberry Pi via OpenVG.</summary>
-    </entry>
-    <entry>
-        <title>Les outils Elixir</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-outils/" hreflang="fr"/>
-        <category term="Développement"/>
-        <id>urn:uuid:a2b2f868-0a08-5867-95af-4a85d22bf039</id>
-        <published>2019-11-16T13:24:27-05:00</published>
-        <updated>2019-11-16T13:24:27-05:00</updated>
-        <summary>Aide mémoire Elixir: les outils.</summary>
+        <id>urn:uuid:c07c34de-cefa-324f-8a6b-53897754fe1e</id>
+        <published>2022-07-02T14:30:12-04:00</published>
+        <updated>2022-07-02T14:30:12-04:00</updated>
+        <summary>Serveur web embarqué avec Kore.</summary>
     </entry>
     <entry>
         <title>Création d’un web service SOAP avec Mirth</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/mirth-webservice-soap/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:efaf4ae5-1f0e-5bf2-b5b8-de9129cdc406</id>
+        <id>urn:uuid:ddea72a5-7933-3007-a679-c44d644b1c4b</id>
         <published>2019-08-02T19:34:21-04:00</published>
         <updated>2019-08-02T19:34:21-04:00</updated>
         <summary>Création d’un web service SOAP avec Mirth.</summary>
     </entry>
     <entry>
-        <title>Exemple d'application Elixir</title>
+        <title>Implémentation du protocole Zabbix dans Mirth Connect</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/elixir-application/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/mirth-zabbix/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:26f794cb-571b-5b25-a986-cf1d92b5770e</id>
-        <published>2019-06-19T19:04:11-04:00</published>
-        <updated>2019-11-14T21:40:11-05:00</updated>
-        <summary>Exemple d'application Elixir.</summary>
+        <id>urn:uuid:326d3724-7680-31d1-9fb4-f5a98dbd4da9</id>
+        <published>2018-12-08T18:23:15-04:00</published>
+        <updated>2020-06-13T10:36:47-04:00</updated>
+        <summary>Implémenter l’agent Zabbix dans Mirth via un canal de type TCP Listener.</summary>
+    </entry>
+    <entry>
+        <title>Accélération matérielle 2D avec OpenVG sur Raspberry Pi</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/openvg/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:808a9dad-2dce-30fc-aa91-fa82c916515f</id>
+        <published>2020-05-03T19:14:27-04:00</published>
+        <updated>2020-05-03T19:14:27-04:00</updated>
+        <summary>Générer des images en 2D avec l’accélération matérielle sur Raspberry Pi via OpenVG.</summary>
+    </entry>
+    <entry>
+        <title>Chargement de fichiers Parquet vers PostgreSQL avec Python</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/postgres-parquet/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:831aec4e-25ca-304b-a594-afb69e8af124</id>
+        <published>2022-07-11T19:34:12-04:00</published>
+        <updated>2022-07-11T19:34:12-04:00</updated>
+        <summary>Chargement de fichiers Parquet vers PostgreSQL avec Python.</summary>
+    </entry>
+    <entry>
+        <title>Correspondances approximatives (fuzzy matching) avec R</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/r-correspondances-approximatives/" hreflang="fr"/>
+        <category term="Développement"/>
+        <id>urn:uuid:2b8821bf-171f-3905-ba72-25d0028fc0f8</id>
+        <published>2022-02-03T17:38:04-05:00</published>
+        <updated>2022-02-03T17:38:04-05:00</updated>
+        <summary>Déterminer des correspondances approximatives entre plusieurs chaînes de caractères avec R.</summary>
     </entry>
     <entry>
         <title>R: les incontournables</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/r-incontournables/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:48d29d28-f09d-5e23-baed-7073729aeb3d</id>
+        <id>urn:uuid:ceb0e24b-ffc5-3f80-858b-608c46c71738</id>
         <published>2019-05-25T10:09:13-04:00</published>
         <updated>2022-08-02T17:30:29-05:00</updated>
         <summary>Opérations incontournables avec le langage R.</summary>
@@ -274,179 +204,249 @@
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/r-wifi/" hreflang="fr"/>
         <category term="Développement"/>
-        <id>urn:uuid:a65906f6-7502-575f-9311-151bbbdcbc2f</id>
+        <id>urn:uuid:f1c0f202-46eb-3c17-bf8a-4eafba740adc</id>
         <published>2019-03-04T14:22:12-04:00</published>
         <updated>2019-03-04T14:22:12-04:00</updated>
         <summary>Analyse du trafic WiFi avec Airodump-ng et R.</summary>
-    </entry>
-    <entry>
-        <title>Implémentation du protocole Zabbix dans Mirth Connect</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/mirth-zabbix/" hreflang="fr"/>
-        <category term="Développement"/>
-        <id>urn:uuid:a038e9cf-4f07-5fe7-8221-750b15c0eefb</id>
-        <published>2018-12-08T18:23:15-04:00</published>
-        <updated>2020-06-13T10:36:47-04:00</updated>
-        <summary>Implémenter l'agent Zabbix dans Mirth via un canal de type TCP Listener.</summary>
-    </entry>
-    <entry>
-        <title>Confidentialité et paramètres avancés dans Firefox</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/firefox-parametres-confidentialite/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:3fb1dda1-db8b-54e8-9e56-cb4515f0dacc</id>
-        <published>2018-11-17T11:58:22-04:00</published>
-        <updated>2021-01-15T17:02:22-05:00</updated>
-        <summary>Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance.</summary>
     </entry>
     <entry>
         <title>Automobile, bus CAN et norme OBD2</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/automobile-bus-can-obd2/" hreflang="fr"/>
         <category term="Électronique"/>
-        <id>urn:uuid:51d7eac3-665e-5201-9605-43aea61a38f3</id>
+        <id>urn:uuid:5a18ec54-e396-3c35-9ce9-fd7ccfd28319</id>
         <published>2018-11-01T18:08:32-04:00</published>
         <updated>2019-12-14T15:29:32-05:00</updated>
-        <summary>Dialoguer avec l'ordinateur de bord d'un véhicule automobile via OBD2.</summary>
-    </entry>
-    <entry>
-        <title>Système embarqué Linux avec Buildroot</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-systeme-embarque/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:d9c61bc9-be36-5536-a7db-fd7f77ea260a</id>
-        <published>2018-08-09T11:29:00-04:00</published>
-        <updated>2018-11-04T12:42:12-05:00</updated>
-        <summary>Création d'un système embarqué Linux avec Buildroot pour Raspberry Pi 2.</summary>
-    </entry>
-    <entry>
-        <title>Ajouter l'authentification LDAP à NGINX</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/nginx-authentification-ldap/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:120d7776-422d-5f73-8603-0e25425c6bde</id>
-        <published>2018-05-31T19:14:12-04:00</published>
-        <updated>2018-11-01T18:08:32-04:00</updated>
-        <summary>Ajout du support LDAP en compilant le module d'authentification LDAP avec la version open source d'NGINX.</summary>
-    </entry>
-    <entry>
-        <title>Implémentation du protocole Dreamscreen en C</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/developpement/dreamscreen-protocole/" hreflang="fr"/>
-        <category term="Développement"/>
-        <id>urn:uuid:abc901c6-c2e2-5c01-9396-150370cc45f4</id>
-        <published>2018-05-29T19:36:04-04:00</published>
-        <updated>2019-01-10T18:25:32-04:00</updated>
-        <summary>Implémentation en C du protocole utilisé pour commander un équipement Dreamscreen.</summary>
-    </entry>
-    <entry>
-        <title>Page d'authentification personnalisée pour Grafana avec NGINX</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/page-authentification-grafana/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:a0f3108b-795b-5cf9-91e2-0a8b245cb977</id>
-        <published>2018-05-06T21:23:46-04:00</published>
-        <updated>2018-11-01T18:08:32-04:00</updated>
-        <summary>Utilisation de NGINX en reverse proxy pour rediriger vers une page d'authentification personnalisée.</summary>
-    </entry>
-    <entry>
-        <title>Filtrer les publicités avec Unbound</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/filtrer-publicites-dns-unbound/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:c790f5b1-24ff-54d2-a68e-346d7e78ff9f</id>
-        <published>2018-05-04T17:56:14-04:00</published>
-        <updated>2022-02-03T17:42:32-04:00</updated>
-        <summary>Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires.</summary>
-    </entry>
-    <entry>
-        <title>FPGA et afficheur 7 segments: compteur à afficheurs multiples</title>
-        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteurs-multiples/" hreflang="fr"/>
-        <category term="Électronique"/>
-        <id>urn:uuid:39815594-5031-5059-a56c-c38e8d7d931c</id>
-        <published>2018-04-27T20:02:50-04:00</published>
-        <updated>2018-11-01T18:08:32-04:00</updated>
-        <summary>Implémentation en Verilog d'un compteur sur plusieurs afficheurs 7 segments.</summary>
+        <summary>Dialoguer avec l’ordinateur de bord d’un véhicule automobile via OBD2.</summary>
     </entry>
     <entry>
         <title>FPGA et afficheur 7 segments: compteur à afficheur unique</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteur-unique/" hreflang="fr"/>
         <category term="Électronique"/>
-        <id>urn:uuid:3724657b-6ef8-505d-b337-510117cbf789</id>
+        <id>urn:uuid:8a52c16a-cb99-3b39-b3b3-a71e63a7a2b7</id>
         <published>2018-04-25T20:00:50-04:00</published>
         <updated>2018-11-01T18:08:32-04:00</updated>
-        <summary>Implémentation en Verilog d'un compteur sur un afficheur 7 segments.</summary>
+        <summary>Implémentation en Verilog d’un compteur sur un afficheur 7 segments.</summary>
     </entry>
     <entry>
-        <title>Récepteur infrarouge USB avec un ATmega32u4</title>
+        <title>FPGA et afficheur 7 segments: compteur à afficheurs multiples</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/recepteur-infrarouge-usb-atmega32u4/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-compteurs-multiples/" hreflang="fr"/>
         <category term="Électronique"/>
-        <id>urn:uuid:74e08c26-8970-5fe0-b96c-5033173d2ef8</id>
-        <published>2018-04-20T18:45:18-04:00</published>
-        <updated>2023-06-30T19:55:00-04:00</updated>
-        <summary>Utilisation des fonctions HID du microcontrôleur ATmega32u4 et un capteur infrarouge pour contrôler des systèmes/applications avec une télécommande.</summary>
+        <id>urn:uuid:1e607bd1-2db3-324e-8ddc-72b8ddadbf13</id>
+        <published>2018-04-27T20:02:50-04:00</published>
+        <updated>2018-11-01T18:08:32-04:00</updated>
+        <summary>Implémentation en Verilog d’un compteur sur plusieurs afficheurs 7 segments.</summary>
     </entry>
     <entry>
         <title>FPGA et afficheur 7 segments: introduction</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/fpga-afficheur-7-segments-introduction/" hreflang="fr"/>
         <category term="Électronique"/>
-        <id>urn:uuid:b274ea6f-eea9-5ca1-8893-718f430463dc</id>
+        <id>urn:uuid:63ab7251-b873-3de3-bad1-e0007206aa67</id>
         <published>2018-04-20T15:32:12-04:00</published>
         <updated>2019-01-06T15:23:31-04:00</updated>
-        <summary>Pilotage d'un afficheur 7 segments avec un FPGA et Verilog.</summary>
+        <summary>Pilotage d’un afficheur 7 segments avec un FPGA et Verilog.</summary>
     </entry>
     <entry>
-        <title>Tests avec Hadoop</title>
+        <title>Écran à contrôleur ILI9341 et Raspberry Pi</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/hadoop/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:382c3b81-0ee2-548b-b31b-c12721c2218f</id>
-        <published>2017-08-02T13:23:14-04:00</published>
-        <updated>2017-08-02T13:23:14-04:00</updated>
-        <summary>Tests avec Hadoop.</summary>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/raspberry-ili9341/" hreflang="fr"/>
+        <category term="Électronique"/>
+        <id>urn:uuid:c3fbac1a-cd91-3586-9072-cc96d7d2a902</id>
+        <published>2021-07-21T10:34:12-04:00</published>
+        <updated>2021-07-21T10:34:12-04:00</updated>
+        <summary>Utiliser un écran à base de contrôleur ILI9341 avec un Raspberry Pi pour dupliquer la sortie HDMI.</summary>
     </entry>
     <entry>
-        <title>Commandes Linux en vrac</title>
+        <title>Récepteur infrarouge USB avec un ATmega32u4</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/commandes-linux/" hreflang="fr"/>
-        <category term="Linux"/>
-        <id>urn:uuid:cc00aee4-853f-5e6e-85cb-34bc98a7eb6d</id>
-        <published>2017-04-12T13:23:14-04:00</published>
-        <updated>2021-02-16T13:23:14-04:00</updated>
-        <summary>Quelques commandes utiles sous Linux.</summary>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/electronique/recepteur-infrarouge-usb-atmega32u4/" hreflang="fr"/>
+        <category term="Électronique"/>
+        <id>urn:uuid:a56f7c1d-1111-3c81-a9ca-aa746dc18005</id>
+        <published>2018-04-20T18:45:18-04:00</published>
+        <updated>2023-06-30T19:55:00-04:00</updated>
+        <summary>Utilisation des fonctions HID du microcontrôleur ATmega32u4 et un capteur infrarouge pour contrôler des systèmes/applications avec une télécommande.</summary>
     </entry>
     <entry>
-        <title>Système de fichiers distribué GlusterFS</title>
+        <title>Liaison bluetooth ESP32 - Raspberry Pi 3</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
-        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/systeme-fichiers-distribue-glusterfs/" hreflang="fr"/>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-raspberry-esp32-bluetooth/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:50369ec3-e56b-5476-9322-95a7cf25ad6b</id>
-        <published>2016-10-30T14:24:16-04:00</published>
-        <updated>2018-11-04T11:04:32-05:00</updated>
-        <summary>Configuration d'un volume GlusterFS sous CentOS.</summary>
+        <id>urn:uuid:c0aeabfd-6821-3337-a662-b316cc7c4f32</id>
+        <published>2021-07-27T17:37:34-04:00</published>
+        <updated>2021-07-27T17:37:34-04:00</updated>
+        <summary>Liaison bluetooth entre ESP32 et Raspberry Pi 3.</summary>
+    </entry>
+    <entry>
+        <title>Interface graphique avec Buildroot, Qt5 et Raspberry Pi 3</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-raspberry-qt5/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:5bc777aa-7afd-3b4f-9ff2-4f3aaba95918</id>
+        <published>2021-07-22T11:04:34-04:00</published>
+        <updated>2021-07-23T17:53:00-04:00</updated>
+        <summary>Développement d’une interface graphique Qt5/QML sur Raspberry Pi 3 avec Buildroot.</summary>
+    </entry>
+    <entry>
+        <title>Système embarqué Linux avec Buildroot, Qemu et Raspberry Pi 3</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-raspberry/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:8669afd5-8aaa-3658-84f5-fbd8c6d947bb</id>
+        <published>2021-03-07T18:23:00-05:00</published>
+        <updated>2021-03-07T18:23:00-05:00</updated>
+        <summary>Création d’un système embarqué Linux avec Buildroot et Qemu pour Raspberry Pi 3.</summary>
+    </entry>
+    <entry>
+        <title>Système embarqué Linux avec Buildroot</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/buildroot-systeme-embarque/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:5e074baa-81c2-3f3e-ae15-9091c2ce5258</id>
+        <published>2018-08-09T11:29:00-04:00</published>
+        <updated>2018-11-04T12:42:12-05:00</updated>
+        <summary>Création d’un système embarqué Linux avec Buildroot pour Raspberry Pi 2.</summary>
     </entry>
     <entry>
         <title>Cluster Linux avec Pacemaker, Corosync et PCS</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/cluster-linux/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:ed949f51-d160-539c-9b39-d940ffc2ff02</id>
+        <id>urn:uuid:ea680e89-4ccd-3b50-91e2-c22e76d96d6e</id>
         <published>2016-10-30T13:23:14-04:00</published>
         <updated>2016-10-30T13:23:14-04:00</updated>
         <summary>Cluster Linux avec Pacemaker/Corosync/PCS.</summary>
     </entry>
     <entry>
-        <title>Création manuelle d'un LPAR AIX</title>
+        <title>Commandes Linux en vrac</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/commandes-linux/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:b14be6dd-7b93-3062-abeb-56def3e2b7b6</id>
+        <published>2017-04-12T13:23:14-04:00</published>
+        <updated>2021-02-16T13:23:14-04:00</updated>
+        <summary>Quelques commandes utiles sous Linux.</summary>
+    </entry>
+    <entry>
+        <title>Création manuelle d’un LPAR AIX</title>
         <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
         <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/creation-lpar-aix/" hreflang="fr"/>
         <category term="Linux"/>
-        <id>urn:uuid:71fc9f4a-4ed5-592c-9aee-a6e0271a810c</id>
+        <id>urn:uuid:ae13222f-0b41-32d0-8bfe-29eba519a972</id>
         <published>2015-07-09T13:23:14-04:00</published>
         <updated>2018-11-17T13:09:10-04:00</updated>
         <summary>Monter manuellement un LPAR AIX 7.1 depuis le VIOS.</summary>
+    </entry>
+    <entry>
+        <title>Filtrer les publicités avec Unbound</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/filtrer-publicites-dns-unbound/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:94f5d9e6-1a13-3f58-a584-86f101c189e2</id>
+        <published>2018-05-04T17:56:14-04:00</published>
+        <updated>2022-02-03T17:42:32-04:00</updated>
+        <summary>Utiliser un serveur DNS Unbound pour filtrer les noms de domaine de régies publicitaires.</summary>
+    </entry>
+    <entry>
+        <title>Confidentialité et paramètres avancés dans Firefox</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/firefox-parametres-confidentialite/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:8d9e201c-cae7-335c-8ddc-bd57e1e63f78</id>
+        <published>2018-11-17T11:58:22-04:00</published>
+        <updated>2024-10-23T11:53:22+02:00</updated>
+        <summary>Accéder aux paramètres avancés de Firefox avec about:config pour améliorer les paramètres de confidentialité et de performance.</summary>
+    </entry>
+    <entry>
+        <title>Modification de firmware</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/firmware-edit/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:54e612e2-fcf9-37f0-ab54-54a566b4c41e</id>
+        <published>2021-08-24T10:34:14-04:00</published>
+        <updated>2021-08-24T10:34:14-04:00</updated>
+        <summary>Modification de firmware.</summary>
+    </entry>
+    <entry>
+        <title>Création de jails FreeBSD</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/freebsd-jails/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:1716cc66-b4e9-34e4-8260-2bb6b4dd3dfe</id>
+        <published>2023-02-01T17:29:14-04:00</published>
+        <updated>2023-03-19T22:28:14-05:00</updated>
+        <summary>Créer une jail sous FreeBSD.</summary>
+    </entry>
+    <entry>
+        <title>Installation de Kodi sous FreeBSD 13</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/freebsd-kodi/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:5a2a775d-7b49-363b-98c3-2f656356cea0</id>
+        <published>2021-11-12T18:20:14-05:00</published>
+        <updated>2023-06-30T12:52:14-04:00</updated>
+        <summary>Installation de Kodi sous FreeBSD 13.</summary>
+    </entry>
+    <entry>
+        <title>Tests avec Hadoop</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/hadoop/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:0b78ce96-f053-3d9e-8ae7-6fdf7921dbc6</id>
+        <published>2017-08-02T13:23:14-04:00</published>
+        <updated>2017-08-02T13:23:14-04:00</updated>
+        <summary>Tests avec Hadoop.</summary>
+    </entry>
+    <entry>
+        <title>Ajouter l’authentification LDAP à NGINX</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/nginx-authentification-ldap/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:53b472f7-5789-33b5-b5bf-963510ad84cb</id>
+        <published>2018-05-31T19:14:12-04:00</published>
+        <updated>2018-11-01T18:08:32-04:00</updated>
+        <summary>Ajout du support LDAP en compilant le module d’authentification LDAP avec la version open source d’NGINX.</summary>
+    </entry>
+    <entry>
+        <title>NGINX: sous-requête d’authentification</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/nginx-subrequest/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:bfc0f369-f167-3970-bbcd-ba1a98932c2d</id>
+        <published>2021-02-17T11:18:41-04:00</published>
+        <updated>2021-02-17T11:18:41-04:00</updated>
+        <summary>Autoriser l’accès à une ressource NGINX à l’aide d’une sous-requête d’authentification.</summary>
+    </entry>
+    <entry>
+        <title>Page d’authentification personnalisée pour Grafana avec NGINX</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/page-authentification-grafana/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:98a67ab9-c442-3764-89b4-66074afe6c3d</id>
+        <published>2018-05-06T21:23:46-04:00</published>
+        <updated>2018-11-01T18:08:32-04:00</updated>
+        <summary>Utilisation de NGINX en reverse proxy pour rediriger vers une page d’authentification personnalisée.</summary>
+    </entry>
+    <entry>
+        <title>Partage Samba sur RedHat 9 avec authentification Active Directory</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/rhel9-samba-winbind/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:3bc0167d-2705-3148-ba00-e91ed7967c66</id>
+        <published>2024-04-06T16:29:41-04:00</published>
+        <updated>2024-04-06T16:29:41-04:00</updated>
+        <summary>Partage de fichier Samba avec authentification Active Directory sous RedHat 9</summary>
+    </entry>
+    <entry>
+        <title>Système de fichiers distribué GlusterFS</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/systeme-fichiers-distribue-glusterfs/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:78eacd50-660d-3515-94f0-87a3b63eddd1</id>
+        <published>2016-10-30T14:24:16-04:00</published>
+        <updated>2018-11-04T11:04:32-05:00</updated>
+        <summary>Configuration d’un volume GlusterFS sous CentOS.</summary>
     </entry>
 </feed>
