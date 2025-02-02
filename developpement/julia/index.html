@@ -24,7 +24,7 @@ Julia.">
     .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -98,7 +98,7 @@ code span.wa { color: #bf0303; } /* Warning */</style>
   <article>
 <h2 id="installer-des-packages">Installer des packages</h2>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="bu">Pkg; Pkg</span>.<span class="fu">add</span>(<span class="st">&quot;DataFrames&quot;</span>); <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">&quot;CSV&quot;</span>); <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">&quot;Pipe&quot;</span>) </span></code></pre></div>
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="bu">Pkg;</span> Pkg.add(&quot;DataFrames&quot;); Pkg.add(&quot;CSV&quot;); Pkg.add(&quot;Pipe&quot;) </span></code></pre></div>
 <h2 id="charger-un-csv">Charger un CSV</h2>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode julia"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">CSV</span>, <span class="bu">Pipe</span></span>
@@ -201,7 +201,7 @@ href="https://jcharistech.wordpress.com/julia-dataframes-cheat-sheets/">https://
   <footer>
   <br>
   <hr>
-  <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  <em>©2015-2025 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
   </footer>
 </body>
 </html>

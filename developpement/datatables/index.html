@@ -24,7 +24,7 @@ DataTables.">
     .sourceCode { overflow: auto !important; }
   </style>
   <style>pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -166,17 +166,17 @@ class="sourceCode php"><code class="sourceCode php"><span id="cb2-1"><a href="#c
 <h2 id="affichage-des-données-avec-datatables">Affichage des données
 avec DataTables</h2>
 <div class="sourceCode" id="cb3"><pre
-class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!doctype </span>html<span class="dt">&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;fr&quot;</span><span class="dt">&gt;</span></span>
+class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!doctype</span> html<span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">&quot;fr&quot;</span><span class="dt">&gt;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">meta</span> <span class="er">charset</span><span class="ot">=</span><span class="st">&quot;utf-8&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">&quot;utf-8&quot;</span><span class="dt">&gt;</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>Test DataTables<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">meta</span> <span class="er">http-equiv</span><span class="ot">=</span><span class="st">&quot;X-UA-Compatible&quot;</span> <span class="er">content</span><span class="ot">=</span><span class="st">&quot;IE=edge&quot;</span> <span class="dt">/&gt;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">meta</span> <span class="er">name</span><span class="ot">=</span><span class="st">&quot;description&quot;</span> <span class="er">content</span><span class="ot">=</span><span class="st">&quot;Test DataTables&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">meta</span> <span class="er">name</span><span class="ot">=</span><span class="st">&quot;viewport&quot;</span> <span class="er">content</span><span class="ot">=</span><span class="st">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">link</span> <span class="er">rel</span><span class="ot">=</span><span class="st">&quot;stylesheet&quot;</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;css/jquery.dataTables.min.css&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> type=</span><span class="st">&quot;text/javascript&quot;</span> <span class="er">charset</span><span class="ot">=</span><span class="st">&quot;utf8&quot;</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;js/jquery-3.5.1.js&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span>  </span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> type=</span><span class="st">&quot;text/javascript&quot;</span> <span class="er">charset</span><span class="ot">=</span><span class="st">&quot;utf8&quot;</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;js/jquery.dataTables.min.js&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> http-equiv</span><span class="op">=</span><span class="st">&quot;X-UA-Compatible&quot;</span><span class="ot"> content</span><span class="op">=</span><span class="st">&quot;IE=edge&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">&quot;description&quot;</span><span class="ot"> content</span><span class="op">=</span><span class="st">&quot;Test DataTables&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">&quot;viewport&quot;</span><span class="ot"> content</span><span class="op">=</span><span class="st">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> rel</span><span class="op">=</span><span class="st">&quot;stylesheet&quot;</span><span class="ot"> href</span><span class="op">=</span><span class="st">&quot;css/jquery.dataTables.min.css&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> type=</span><span class="st">&quot;text/javascript&quot;</span><span class="ot"> charset</span><span class="op">=</span><span class="st">&quot;utf8&quot;</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;js/jquery-3.5.1.js&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span>  </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> type=</span><span class="st">&quot;text/javascript&quot;</span><span class="ot"> charset</span><span class="op">=</span><span class="st">&quot;utf8&quot;</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;js/jquery.dataTables.min.js&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
@@ -225,15 +225,15 @@ class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="
 <span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
 <span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
 <span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h1</span><span class="dt">&gt;</span>Statistiques<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span> <span class="dt">/&gt;</span></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span> <span class="dt">/&gt;</span></span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">table</span> <span class="er">id</span><span class="ot">=</span><span class="st">&quot;table&quot;</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;display&quot;</span> <span class="er">width</span><span class="ot">=</span><span class="st">&quot;100%&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">table</span><span class="dt">&gt;</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">table</span><span class="ot"> id</span><span class="op">=</span><span class="st">&quot;table&quot;</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;display&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;100%&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">table</span><span class="dt">&gt;</span></span>
 <span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code></pre></div>
   </article>
   <footer>
   <br>
   <hr>
-  <em>©2015-2024 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  <em>©2015-2025 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
   </footer>
 </body>
 </html>
