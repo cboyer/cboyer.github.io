@@ -25,8 +25,9 @@ pi, linux">
     p code { background: #f7f7f9; }
     .sourceCode { overflow: auto !important; }
   </style>
-  <style>pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+  <style>html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -37,7 +38,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -126,39 +127,39 @@ servira de base pour être ajustée selon nos besoins</p>
 <col style="width: 34%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Option</th>
 <th>Emplacement</th>
 <th>Symbole Kconfig</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Enable root login with password</td>
 <td>System configuration</td>
 <td>BR2_TARGET_ENABLE_ROOT_LOGIN</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Root password</td>
 <td>System configuration</td>
 <td>BR2_TARGET_GENERIC_ROOT_PASSWD</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>System hostname</td>
 <td>System configuration</td>
 <td>BR2_TARGET_GENERIC_HOSTNAME</td>
 </tr>
-<tr class="even">
+<tr>
 <td>System banner</td>
 <td>System configuration</td>
 <td>BR2_TARGET_GENERIC_ISSUE</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>remount root filesystem read-write during boot</td>
 <td>System configuration</td>
 <td>BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW</td>
 </tr>
-<tr class="even">
+<tr>
 <td>exact size *</td>
 <td>Filesystem images</td>
 <td>BR2_TARGET_ROOTFS_EXT2_SIZE</td>
@@ -342,34 +343,34 @@ ajustant le dossier cible (non utilisés ici).</p>
 <col style="width: 26%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Option</th>
 <th>Emplacement</th>
 <th>Symbole Kconfig</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Using a custom (def)config file</td>
 <td>Kernel &gt; Linux Kernel &gt; Kernel configuration</td>
 <td>BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Configuration file path</td>
 <td>Kernel &gt; Linux Kernel</td>
 <td>BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>global patch directories</td>
 <td>Build options</td>
 <td>BR2_GLOBAL_PATCH_DIR</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Root filesystem overlay directories</td>
 <td>System configuration</td>
 <td>BR2_ROOTFS_OVERLAY</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Custom scripts to run after creating filesystem images</td>
 <td>System configuration</td>
 <td>BR2_ROOTFS_POST_IMAGE_SCRIPT</td>

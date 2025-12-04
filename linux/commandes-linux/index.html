@@ -27,10 +27,15 @@ Linux.">
 <body>
   <header>
     <h1>Commandes Linux en vrac</h1>
-    <em>Publié le 2017-04-12, dernière mise à jour: 2021-02-16</em>
+    <em>Publié le 2017-04-12, dernière mise à jour: 2025-09-04</em>
   </header>
   <article>
-<p>Tester son débit</p>
+<p>Statistiques CPU lors d'exécution d'un programme</p>
+<pre class="console"><code>perf stat -d ./test</code></pre>
+<p>Rapport d'appels (perf.data) lors de l'exécution d'un programme</p>
+<pre class="console"><code>perf record --call-graph dwarf ./test
+perf report -g</code></pre>
+<p>Tests de débit réseau</p>
 <pre class="console"><code>iperf3 -R -c ping.online.net -p 5206 -P5
 wget http://test-debit.free.fr/10485760.rnd -O /dev/null</code></pre>
 <p>Détacher un programme dans un terminal virtuel</p>
@@ -48,9 +53,6 @@ autre fichier)</p>
 foremost -dv -i file.img
 scalpel file.img -o output
 bulk_extractor file.img -o out_folder</code></pre>
-<p>Trouver fichiers en double</p>
-<pre class="console"><code>find Pictures/  -type f -exec md5sum &#39;{}&#39; &#39;;&#39; | sort | uniq --all-repeated=separate -w 15 &gt; dupes.txt
-fdupes -rSm Pictures/</code></pre>
 <p>Top amélioré</p>
 <pre class="console"><code>htop</code></pre>
 <p>Tentatives de connexions SSH</p>
@@ -59,7 +61,7 @@ fdupes -rSm Pictures/</code></pre>
 <pre class="console"><code>dstat -g -l -m -s --top-mem
 dstat -c -y -l --proc-count --top-cpu</code></pre>
 <p>Sortie CSV pour dstat</p>
-<pre class="console"><code>dstat éoutput /tmp/sampleoutput.csv -cdn</code></pre>
+<pre class="console"><code>dstat -output /tmp/sampleoutput.csv -cdn</code></pre>
 <p>Coloration de texte en console</p>
 <pre class="console"><code>echo &quot;Mon texte&quot; | lolcat</code></pre>
 <p>Restauration TSM</p>
@@ -97,7 +99,7 @@ siege -b -t60S  http://example.com</code></pre>
 <pre class="console"><code>date --date &#39;03/23/2012&#39; +%j</code></pre>
 <p>Calculer le quantiéme du jour dans l'année (aujourd'hui)</p>
 <pre class="console"><code>date &quot;+%j&quot;</code></pre>
-<p>Affecter un dossier /home/toto é l'utilisateur toto (doit exister
+<p>Affecter un dossier /home/toto à l'utilisateur toto (doit exister
 dans /etc/passwd)</p>
 <pre class="console"><code>usermod -d /home/toto toto</code></pre>
 <p>Afficher l'id du groupe toto</p>
@@ -115,11 +117,6 @@ dstat -nN eth0</code></pre>
 <pre class="console"><code>rpm -e nom_paquet</code></pre>
 <p>Vérifier si installé</p>
 <pre class="console"><code>rpm -ql nom_paquet</code></pre>
-<p>Trouver les liens symboliques</p>
-<pre class="console"><code>find /home/ -type l</code></pre>
-<p>Opération sur des critères de fichiers</p>
-<pre class="console"><code>find /home/exploit/ * -type f -exec du -h {} \;
-find /data/entrepot/USER/ -name *.sas7bdat -not -user admpap -type f -mtime +100 -exec gzip -f {} \;</code></pre>
 <p>TreeSize Linux</p>
 <pre class="console"><code>du -h --max-depth=2</code></pre>
 <p>Affiche l'arborescence (dossiers seulements)</p>
@@ -130,16 +127,24 @@ find /data/entrepot/USER/ -name *.sas7bdat -not -user admpap -type f -mtime +100
 <pre class="console"><code>lsof -ni
 lsof -ni tcp:22
 lsof -ni &#39;udp@192.168.66.66:123&#39;</code></pre>
+<p>Trouver les liens symboliques</p>
+<pre class="console"><code>find /home/ -type l</code></pre>
+<p>Trouver fichiers en double</p>
+<pre class="console"><code>find Pictures/  -type f -exec md5sum &#39;{}&#39; &#39;;&#39; | sort | uniq --all-repeated=separate -w 15 &gt; dupes.txt
+fdupes -rSm Pictures/</code></pre>
 <p>Recherche les occurences de "meta" dans tous les fichiers php de
 /var/www/drupal</p>
 <pre class="console"><code>find /var/www/drupal/ -name &quot;*.php&quot; -exec grep -H meta {} \;
 find /var/www/drupal/ -type f -print0 | xargs -0 grep -Ei &quot;*meta*&quot;</code></pre>
+<p>Cherche les fichiers plus lourd que 500Mo et moins d'1 Go</p>
+<pre class="console"><code>find / -type f -size +500M -size -1G</code></pre>
+<p>Opération sur des critères de fichiers</p>
+<pre class="console"><code>find /home/exploit/ * -type f -exec du -h {} \;
+find /data/entrepot/USER/ -name *.sas7bdat -not -user admpap -type f -mtime +100 -exec gzip -f {} \;</code></pre>
 <p>Recherche récursive d'un motif et retourne le fichier</p>
 <pre class="console"><code>grep -rl &#39;chose&#39; ./</code></pre>
 <p>Recherche récursive d'un motif et le remplacer</p>
 <pre class="console"><code>grep -rl &#39;chose&#39; ./ | xargs sed -i &#39;s/chose/truc/g&#39;</code></pre>
-<p>Cherche les fichiers plus lourd que 500Mo et moins d'1 Go</p>
-<pre class="console"><code>find / -type f -size +500M -size -1G</code></pre>
 <p>Rechercher les fichiers plus gros q'une certaine limite</p>
 <pre class="console"><code>find / -type f -size +100000k -printf &quot;%p %s\n&quot;</code></pre>
 <p>Perl shell interactif (débug)</p>

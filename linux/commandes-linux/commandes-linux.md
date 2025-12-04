@@ -1,7 +1,7 @@
 ---
 title: "Commandes Linux en vrac"
 date: "2017-04-12T13:23:14-04:00"
-updated: "2021-02-16T13:23:14-04:00"
+updated: "2025-09-04T18:23:14+01:00"
 author: "C. Boyer"
 license: "Creative Commons BY-SA-NC 4.0"
 website: "https://cboyer.github.io"
@@ -11,7 +11,18 @@ abstract: "Quelques commandes utiles sous Linux."
 ---
 
 
-Tester son débit
+Statistiques CPU lors d'exécution d'un programme
+```console
+perf stat -d ./test
+```
+
+Rapport d'appels (perf.data) lors de l'exécution d'un programme
+```console
+perf record --call-graph dwarf ./test
+perf report -g
+```
+
+Tests de débit réseau
 ```console
 iperf3 -R -c ping.online.net -p 5206 -P5
 wget http://test-debit.free.fr/10485760.rnd -O /dev/null
@@ -46,12 +57,6 @@ scalpel file.img -o output
 bulk_extractor file.img -o out_folder
 ```
 
-Trouver fichiers en double
-```console
-find Pictures/  -type f -exec md5sum '{}' ';' | sort | uniq --all-repeated=separate -w 15 > dupes.txt
-fdupes -rSm Pictures/
-```
-
 Top amélioré
 ```console
 htop
@@ -70,7 +75,7 @@ dstat -c -y -l --proc-count --top-cpu
 
 Sortie CSV pour dstat
 ```console
-dstat éoutput /tmp/sampleoutput.csv -cdn
+dstat -output /tmp/sampleoutput.csv -cdn
 ```
 
 Coloration de texte en console
@@ -153,7 +158,7 @@ Calculer le quantiéme du jour dans l'année (aujourd'hui)
 date "+%j"
 ```
 
-Affecter un dossier /home/toto é l'utilisateur toto (doit exister dans /etc/passwd)
+Affecter un dossier /home/toto à l'utilisateur toto (doit exister dans /etc/passwd)
 ```console
 usermod -d /home/toto toto
 ```
@@ -190,17 +195,6 @@ Vérifier si installé
 rpm -ql nom_paquet
 ```
 
-Trouver les liens symboliques
-```console
-find /home/ -type l
-```
-
-Opération sur des critères de fichiers
-```console
-find /home/exploit/ * -type f -exec du -h {} \;
-find /data/entrepot/USER/ -name *.sas7bdat -not -user admpap -type f -mtime +100 -exec gzip -f {} \;
-```
-
 TreeSize Linux
 ```console
 du -h --max-depth=2
@@ -223,10 +217,32 @@ lsof -ni tcp:22
 lsof -ni 'udp@192.168.66.66:123'
 ```
 
+Trouver les liens symboliques
+```console
+find /home/ -type l
+```
+
+Trouver fichiers en double
+```console
+find Pictures/  -type f -exec md5sum '{}' ';' | sort | uniq --all-repeated=separate -w 15 > dupes.txt
+fdupes -rSm Pictures/
+```
+
 Recherche les occurences de "meta" dans tous les fichiers php de /var/www/drupal
 ```console
 find /var/www/drupal/ -name "*.php" -exec grep -H meta {} \;
 find /var/www/drupal/ -type f -print0 | xargs -0 grep -Ei "*meta*"
+```
+
+Cherche les fichiers plus lourd que 500Mo et moins d'1 Go
+```console
+find / -type f -size +500M -size -1G
+```
+
+Opération sur des critères de fichiers
+```console
+find /home/exploit/ * -type f -exec du -h {} \;
+find /data/entrepot/USER/ -name *.sas7bdat -not -user admpap -type f -mtime +100 -exec gzip -f {} \;
 ```
 
 Recherche récursive d'un motif et retourne le fichier
@@ -237,11 +253,6 @@ grep -rl 'chose' ./
 Recherche récursive d'un motif et le remplacer
 ```console
 grep -rl 'chose' ./ | xargs sed -i 's/chose/truc/g'
-```
-
-Cherche les fichiers plus lourd que 500Mo et moins d'1 Go
-```console
-find / -type f -size +500M -size -1G
 ```
 
 Rechercher les fichiers plus gros q'une certaine limite

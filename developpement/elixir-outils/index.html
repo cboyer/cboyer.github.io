@@ -22,8 +22,9 @@
     p code { background: #f7f7f9; }
     .sourceCode { overflow: auto !important; }
   </style>
-  <style>pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+  <style>html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -34,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -105,62 +106,62 @@ dépendances et la publication de l'application (releases).</p>
 <col style="width: 72%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Commande</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>mix new <code>myapp</code></td>
 <td>Créer une nouvelle application <code>myapp</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>mix new --sup <code>myapp</code></td>
 <td>Créer une nouvelle application <code>myapp</code> avec
 superviseur</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>mix deps.get</td>
 <td>Télécharger les dépendances listées dans mix.exs depuis les dépôts
 Hex</td>
 </tr>
-<tr class="even">
+<tr>
 <td>mix deps.update</td>
 <td>Mettre à jour les dépendances listées dans mix.exs</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>mix deps.clean <code>circuits_uart</code></td>
 <td>Supprimer une dépendance (ici <code>circuits_uart</code>)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>mix deps.clean --all</td>
 <td>Supprimer toutes les dépendances téléchargées/compilées</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>mix deps.compile <code>input_event</code></td>
 <td>Compiler une dépendance particulière (ici
 <code>input_event</code>)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>mix compile</td>
 <td>Compile l'application (les dépendances doivent être téléchargées
 avec <code>mix deps.get</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>MIX_ENV=prod mix release</td>
 <td>Générer une release (disponible à partir de la version 1.9
 d'Elixir)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>mix run</td>
 <td>Exécuter l'application en mode non interactif</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>iex -S mix</td>
 <td>Exécuter l'application en mode interactif avec IEx</td>
 </tr>
-<tr class="even">
+<tr>
 <td>mix clean --deps</td>
 <td>Nettoyage de tous ce qui a été compilé</td>
 </tr>
@@ -175,45 +176,45 @@ d'Elixir)</td>
 <col style="width: 55%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Commande</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>MIX_ENV=prod mix release --path ../my_app_release</td>
 <td>Créer une release de production dans un dossier spécifique</td>
 </tr>
-<tr class="even">
+<tr>
 <td>MIX_ENV=prod mix release <code>name</code> --overwrite --force</td>
 <td>Créer une release de production avec les paramètres défini dans
 <code>mix.exs</code> pour <code>name</code> en écrasant l'existante et
 en forçant la recompilation</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>_build/prod/rel/my_app/bin/my_app start_iex</td>
 <td>Exécuter une release de production avec IEx</td>
 </tr>
-<tr class="even">
+<tr>
 <td>bin/RELEASE_NAME eval <code>"IO.puts(:hello)"</code></td>
 <td>Exécuter un module/fonction de la release sur une nouvelle instance
 de l'application</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>bin/RELEASE_NAME rpc <code>"IO.puts(:hello)"</code></td>
 <td>Exécuter un module/fonction de la release sur une instance en
 fonction de l'applications</td>
 </tr>
-<tr class="even">
+<tr>
 <td>bin/my_app remote</td>
 <td>Se connecter à l'application via un shell distant</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>bin/RELEASE_NAME daemon</td>
 <td>Exécuter une release en mode démon (UNIX)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>bin/RELEASE_NAME install</td>
 <td>Installer un service Windows pour exécuter la release</td>
 </tr>
