@@ -44,6 +44,11 @@ Se connecter à un terminal virtuel
 screen -r Telechargement
 ```
 
+Télécharger la bande son d'une vidéo Youtube au format MP3
+```console
+yt-dlp -x --audio-format mp3 --embed-thumbnail --audio-quality 0 "LIEN YOUTUBE"
+```
+
 Afficher les chaînes de caractère d'un fichier binaire
 ```console
 strings file.bin

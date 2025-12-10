@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Images Docker distroless pour Python, C et Rust - C.
+Boyer</title>
+  <meta name="description" content="Construction d'images Docker
+distroless pour des applicatifs Python, C et Rust.">
+  <meta name="author" content="C. Boyer">
+  <meta name="keywords" content="docker, image, distroless, scratch, C, Python, Rust, pyinstaller, staticx">
+  <meta name="robots" content="index, follow, noimageindex, noarchive, nocache">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS">
+  <style>
+    body { margin: 1em; font-family: Arial,sans-serif; line-height: 1.5; word-wrap: break-word; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 45em) { body { margin: 1em auto; max-width: 50em; } }
+    ul { list-style: none; padding: 0;}
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+    pre { background-color: whitesmoke; overflow: auto; font-size: 0.825rem; }
+    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; line-height: initial; }
+    p code { background: #f7f7f9; }
+    .sourceCode { overflow: auto !important; }
+  </style>
+  <style>html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */</style>
+</head>
+<body>
+  <header>
+    <h1>Images Docker distroless pour Python, C et Rust</h1>
+    <em>Publié le 2025-12-10</em>
+  </header>
+  <article>
+<p>L'utilisation d'images Docker/OCI minimalistes permet non seulement
+de limiter l'espace disque utilisé ainsi que le temps de chargement et
+d'exécution mais réduit également la surface d'attaque. En revanche ces
+images présentent des limites concernant les possibilités de déboguage
+(absence de commandes standards, gestionnaire de paquet, shell, parties
+de l'arborescence, etc.).</p>
+<h2 id="utiliser-limage-distroless-python-fournie-par-google">Utiliser
+l'image distroless Python fournie par Google</h2>
+<p>Google fournit <a
+href="https://github.com/GoogleContainerTools/distroless">un ensemble
+d'image distroless</a> plutôt complet avec des variantes couvrant
+différents cas d'usage (Python, Java, etc.). Bien qu'étant appelées
+"distroless", ces images reposent en fait sur Debian tout en étant
+dégrossies au maximum.</p>
+<p>Penchons-nous sur l'image Python
+<code>gcr.io/distroless/python3-debian12</code> (identique à
+<code>gcr.io/distroless/python3</code>). Cette image contient la version
+3.11 de Python (assez ancienne à l'heure actuelle) sans librairie
+particulière ni la possibilité d'en compiler.</p>
+<pre><code>docker run --rm gcr.io/distroless/python3-debian12:latest -c &#39;import platform; print(platform.python_version())&#39;
+3.11.2</code></pre>
+<p>Pour ajouter les librairies nécessaires au bon fonctionnement de
+l'applicatif, nous allons passer par la méthode de contruction d'image
+multi-stage. Nous ferons appel dans un premier temps à l'image
+<code>python:3.11-slim</code> alignée sur la même version que notre
+image distroless afin de créer un environnement Python virtuel (venv)
+compatible embarquant les librairies énumérées dans le
+<code>requirements.txt</code>.</p>
+<p>Une fois l'environnement virtuel créé, il suffit de le copier dans
+l'image distroless et d'indiquer le chemin dans les variables
+<code>PYTHONPATH</code> et <code>PATH</code>:</p>
+<pre><code>FROM python:3.11-slim AS builder
+
+COPY requirements.txt /opt/app/
+WORKDIR /opt/app
+RUN set -xe; \
+    python3 -m venv /opt/app/venv; \
+    /opt/app/venv/bin/python3 -m pip install --no-cache-dir -r requirements.txt
+
+
+gcr.io/distroless/python3-debian12
+ENV PYTHONPATH=/opt/app/venv/lib/python3.11/site-packages
+ENV PATH=&quot;/opt/app/venv/bin:$PATH&quot;
+
+COPY --from=builder /opt/app/venv /opt/app/venv
+COPY sources/ /opt/app
+WORKDIR /opt/app
+ENTRYPOINT [&quot;python3&quot;, &quot;/opt/app/app.py&quot;]</code></pre>
+<p>Cette méthode n'est pas optimale car elle implique la duplication de
+fichiers amenés avec le venv. D'autre part la version 3.11 de Python
+n'est plus trop d'actualité et les images distroless ne proposent pas
+d'autre version.</p>
+<p>Pour utiliser une version Python de notre choix il faut utiliser
+<code>pyinstaller</code> afin de construire un paquet exécutable
+contenant l'intégralité de l'applicatif, l'interpréteur et les
+librairies. Il est à noter que cet exécutable, bien que plus portable
+qu'un venv, n'est pas compilé statiquement et dépendra toujours de
+librairies externes comme Glibc qui devront être disponibles dans
+l'image distroless.</p>
+<pre><code>FROM python:3.14.2-slim-bookworm AS builder
+WORKDIR /opt/app
+COPY sources/ requirements.txt /opt/app/
+RUN set -xe; \
+    apt-get update; \
+    apt-get install --yes --no-install-suggests --no-install-recommends binutils
+
+RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+RUN pyinstaller --name app_package --strip --optimize 2 --collect-all adbc_driver_manager --collect-all adbc_driver_postgresql --onefile app.py --add-data &quot;logging.yml:.&quot;
+
+
+FROM gcr.io/distroless/python3-debian12
+COPY --from=builder --chmod=755 /opt/app/dist/app_package /app_package
+ENTRYPOINT [&quot;./app_package&quot;]</code></pre>
+<p>Il faut veiller à utiliser une version de Debian (builder) alignée
+sur la version Debian de l'image distroless (ici Debian 12 Bookworm)
+autrement il y aura des disparités sur des librairies système comme
+Glibc ce qui causera des erreurs du type:</p>
+<pre><code>[PYI-7:ERROR] Failed to load Python shared library &#39;/tmp/_MEIS1hqW6/libpython3.14.so.1.0&#39;: /lib/x86_64-linux-gnu/libm.so.6: version `GLIBC_2.38&#39; not found (required by /tmp/_MEIS1hqW6/libpython3.14.so.1.0)</code></pre>
+<p>Le paramètre <code>--collect-all</code> permet de forcer pyinstaller
+à inclure les libraries qu'il ne détecte pas automatiquement. Le
+paramètre <code>--add-data</code> permet d'ajouter un fichier au
+paquet.</p>
+<p>L'incovénient de cette méthode est qu'en utilisant l'image
+<code>gcr.io/distroless/python3-debian12</code> nos obtenons une image
+finale comprenant l'interpréteur Python 3.11. Il faudrait donc veiller à
+supprimer celui-ci avec une image intermédiaire supplémentaire pour en
+copier le contenu en excluant les fichiers Python 3.11 dans une image
+<code>scratch</code>. Pour déterminer l'emplacement des fichier relatif
+à Python:</p>
+<pre><code>docker run --rm gcr.io/distroless/python3-debian12:latest -c &#39;import site; print(site.getsitepackages())&#39;
+[&#39;/usr/local/lib/python3.11/dist-packages&#39;, &#39;/usr/lib/python3/dist-packages&#39;, &#39;/usr/lib/python3.11/dist-packages&#39;]</code></pre>
+<p>Le Dockerfile incluant l'image
+<code>gcr.io/distroless/python3-debian12</code> sans Python 3.11:</p>
+<pre><code>FROM python:3.14.2-slim-bookworm AS builder
+WORKDIR /opt/app
+COPY sources/ requirements.txt /opt/app/
+RUN set -xe; \
+    apt-get update; \
+    apt-get install --yes --no-install-suggests --no-install-recommends binutils
+
+RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+RUN pyinstaller --name app_package --strip --optimize 2 --collect-all adbc_driver_manager --collect-all adbc_driver_postgresql --onefile app.py --add-data &quot;logging.yml:.&quot;
+
+FROM scratch AS base
+COPY --from=gcr.io/distroless/python3-debian12 --exclude=**/python3.11 --exclude=**/python3 / /
+
+FROM base
+COPY --from=builder --chmod=755 /opt/app/dist/app_package /app_package
+ENTRYPOINT [&quot;./app_package&quot;]</code></pre>
+<p>Pour aller plus loin, il existe l'outil <code>staticx</code> qui
+permet l'édition de lien statique sur un exécutable (comme le paquet
+exécutable produit par <code>pyinstaller</code>) pour y inclure les
+librairies système et rendre possible l'utilisation d'image distroless
+plus minimaliste comme <code>scratch</code>. En revanche
+<code>staticx</code> ne semble pas aboutir à coup sûr dès lors que
+l'applicatif comprend certaines/trop de librairies Python.</p>
+<h2 id="utiliser-limage-scratch-et-le-langage-c">Utiliser l'image
+scratch et le langage C</h2>
+<p>L'utilisation du langage C passe par une étape de compilation avec
+édition de lien. Le soin est laissé au lecteur d'utiliser une image
+Docker intermédiaire pour la compilation du projet C. On considère le
+programme C suivant <code>main.c</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;glib.h&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    g_print <span class="op">(</span><span class="st">&quot;OK</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Pour le compiler (nécessite le paquet <code>glib2-devel</code>):</p>
+<pre><code>gcc $(pkgconf --cflags glib-2.0) main.c $(pkgconf --libs glib-2.0) -o test</code></pre>
+<p>L'exécutable produit est dynamiquement lié aux librairies
+suivantes:</p>
+<pre><code>ldd test 
+        linux-vdso.so.1 (0x00007efcb3d04000)
+        libglib-2.0.so.0 =&gt; /lib64/libglib-2.0.so.0 (0x00007efcb3b8b000)
+        libc.so.6 =&gt; /lib64/libc.so.6 (0x00007efcb3997000)
+        libpcre2-8.so.0 =&gt; /lib64/libpcre2-8.so.0 (0x00007efcb38ea000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007efcb3d06000)</code></pre>
+<p>En l'état cet exécutable n'est pas utilisable dans l'image
+<code>scratch</code> qui est dépourvue de ces librairies. Pour les y
+ajouter il faut au préalable les copier dans le dossier courant
+(contexte Docker) puis utiliser la directive COPY dans le
+Dockerfile:</p>
+<pre><code>FROM scratch
+COPY libglib-2.0.so.0 /lib64/libglib-2.0.so.0
+COPY ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2
+COPY libc.so.6 /lib64/libc.so.6
+COPY libpcre2-8.so.0 /lib64/libpcre2-8.so.0
+COPY --chmod=755 test /bin/
+ENTRYPOINT [&quot;test&quot;]</code></pre>
+<p>Allons plus loin dans les options de compilation pour une édition de
+lien statique afin de rendre l'exécutable produit directement utilisable
+dans <code>scratch</code>, la plus minimaliste des images Docker. Pour
+compiler le programme (nécessite les paquets <code>glibc-static</code>
+et <code>glib2-static</code>):</p>
+<pre><code>gcc -s -static $(pkgconf --cflags glib-2.0) main.c $(pkgconf --static --libs glib-2.0) -o test</code></pre>
+<p>L'option <code>-s</code> pour "strip" permet de réduire la taille de
+l'exécutable. Après quelques warnings, on obtient un exécutable non
+dynamique:</p>
+<pre><code>ldd test 
+        n&#39;est pas un exécutable dynamique</code></pre>
+<p>Nous pouvons alors l'inclure dans l'image <code>scratch</code>:</p>
+<pre><code>FROM scratch
+COPY test /opt/app/
+WORKDIR /opt/app
+ENTRYPOINT [&quot;./test&quot;]</code></pre>
+<h2 id="utiliser-limage-scratch-et-le-langage-rust">Utiliser l'image
+scratch et le langage Rust</h2>
+<p>Rust compile ses programmes avec un linking dynamique sur Glibc. Pour
+passer en statique il faut utiliser <code>musl</code>, une librairie C
+alternative qui permet l'édition de liens statique plus facile. Le soin
+est laissé au lecteur d'utiliser une image Docker intermédiaire pour la
+compilation du projet Rust.</p>
+<p>Installer la cible de compilation
+<code>x86_64-unknown-linux-musl</code>:</p>
+<pre><code>rustup target add x86_64-unknown-linux-musl</code></pre>
+<p>Dans le projet, éditer le fichier <code>Cargo.toml</code> pour y
+ajouter l'option <code>strip</code> dans la section
+<code>profile.release</code> afin de rendre l'exécutable produit plus
+léger:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode toml"><code class="sourceCode toml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[package]</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="dt">name</span> <span class="op">=</span> <span class="st">&quot;myapp&quot;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="dt">version</span> <span class="op">=</span> <span class="st">&quot;0.1.0&quot;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="dt">edition</span> <span class="op">=</span> <span class="st">&quot;2025&quot;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[dependencies]</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="dt">rayon</span> <span class="op">=</span> <span class="st">&quot;1.11.0&quot;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="dt">walkdir</span> <span class="op">=</span> <span class="st">&quot;2.5.0&quot;</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="kw">[profile.release]</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="dt">opt-level</span> <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="dt">lto</span> <span class="op">=</span> <span class="cn">true</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="dt">codegen-units</span> <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="dt">strip</span> <span class="op">=</span> <span class="cn">true</span></span></code></pre></div>
+<p>Compiler le projet comme suit:</p>
+<pre><code>cargo build --release --target x86_64-unknown-linux-musl</code></pre>
+<p>Le Dockerfile pour produire une image à partir de
+<code>scratch</code>:</p>
+<pre><code>FROM scratch
+COPY target/x86_64-unknown-linux-musl/release/myapp /opt/app/myapp
+WORKDIR /opt/app
+ENTRYPOINT [&quot;./myapp&quot;]</code></pre>
+<h2
+id="considérations-légales-concernant-les-exécutables-statiques">Considérations
+légales concernant les exécutables statiques</h2>
+<p>L'édition de liens statique est discutable sur le plan technique (non
+abordé ici) mais également légal. En effet la licence de certaines
+librairies peuvent contraindre le développeur à publier son code source
+comme c'est le cas pour la librairie Glibc. Ce problème ne se pose pas
+pour musl qui est publiée sous licence MIT, plus permissive. Cependant
+musl peut amener des problèmes d'incompatibilité avec d'autres
+librairies qui dépendent fortement de Glibc.</p>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
+<ul>
+<li><a
+href="https://labs.iximiuz.com/tutorials/gcr-distroless-container-images">What's
+Inside Distroless Container Images: Taking a Closer Look</a></li>
+<li><a
+href="https://github.com/GoogleContainerTools/distroless">https://github.com/GoogleContainerTools/distroless</a></li>
+</ul>
+  </article>
+  <footer>
+  <br>
+  <hr>
+  <em>©2015-2025 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  </footer>
+</body>
+</html>
