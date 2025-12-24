@@ -3,7 +3,7 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2025-12-10T15:25:14+01:00</updated>
+    <updated>2025-12-24T12:20:58+01:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
@@ -326,7 +326,7 @@
         <category term="Linux"/>
         <id>urn:uuid:b14be6dd-7b93-3062-abeb-56def3e2b7b6</id>
         <published>2017-04-12T13:23:14-04:00</published>
-        <updated>2025-09-04T18:23:14+01:00</updated>
+        <updated>2025-12-24T12:16:14+01:00</updated>
         <summary>Quelques commandes utiles sous Linux.</summary>
     </entry>
     <entry>
