@@ -143,3 +143,4 @@ www.reddit.com##.pointer-events-auto.border-tone-4.border-solid.border.shadow-md
 ## Liens complémentaires
 
  - [https://gist.github.com/0XDE57/fbd302cef7693e62c769](https://gist.github.com/0XDE57/fbd302cef7693e62c769)
+ - [https://github.com/yokoffing/Betterfox](https://github.com/yokoffing/Betterfox)

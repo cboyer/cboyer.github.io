@@ -162,5 +162,7 @@ unbound-control stats_noreset
  - [https://etherarp.net/build-an-adblocking-dns-server/index.html](https://etherarp.net/build-an-adblocking-dns-server/index.html)
  - [https://wiki.archlinux.org/index.php/unbound](https://wiki.archlinux.org/index.php/unbound)
  - [https://www.unbound.net/documentation/unbound-control.html](https://www.unbound.net/documentation/unbound-control.html)
- - [https://github.com/StevenBlasck/hosts](https://github.com/StevenBlasck/hosts)
+ - [https://github.com/StevenBlack/hosts](https://github.com/StevenBlack/hosts)
+ - [https://github.com/hagezi/dns-blocklists](https://github.com/hagezi/dns-blocklists)
  - [Pi-hole blocking lists](https://gist.github.com/VirtuBox/869af93f506f6c9c392afa074f7ee9d4)
+ - [https://dnswarden.com/](https://dnswarden.com)
