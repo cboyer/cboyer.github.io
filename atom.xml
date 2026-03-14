@@ -3,7 +3,7 @@
     <title>cboyer.github.io</title>
     <link rel="alternate" type="text/html" href="https://cboyer.github.io"/>
     <link rel="self" type="application/atom+xml" href="https://cboyer.github.io/atom.xml"/>
-    <updated>2026-03-06T23:52:14+01:00</updated>
+    <updated>2026-03-14T18:11:35+01:00</updated>
     <author>
         <name>C. Boyer</name>
         <uri>https://cboyer.github.io</uri>
@@ -338,6 +338,16 @@
         <published>2015-07-09T13:23:14-04:00</published>
         <updated>2018-11-17T13:09:10-04:00</updated>
         <summary>Monter manuellement un LPAR AIX 7.1 depuis le VIOS.</summary>
+    </entry>
+    <entry>
+        <title>Image Docker scratch avec Python</title>
+        <rights>Creative Commons BY-SA-NC 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr</rights>
+        <link rel="alternate" type="text/html" href="https://cboyer.github.io/linux/docker-scratch-python/" hreflang="fr"/>
+        <category term="Linux"/>
+        <id>urn:uuid:eb5630d1-3c3c-3231-9047-ac289a200ad7</id>
+        <published>2026-03-14T15:06:14+01:00</published>
+        <updated>2026-03-14T15:06:14+01:00</updated>
+        <summary>Créer une image Docker scratch contenant Python.</summary>
     </entry>
     <entry>
         <title>Filtrer les publicités avec Unbound</title>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Image Docker scratch avec Python - C. Boyer</title>
+  <meta name="description" content="Créer une image Docker scratch
+contenant Python.">
+  <meta name="author" content="C. Boyer">
+  <meta name="keywords" content="docker, scratch, python">
+  <meta name="robots" content="index, follow, noimageindex, noarchive, nocache">
+  <link rel="icon" href="data:,">
+  <link href="https://cboyer.github.io/atom.xml" rel="alternate" type="application/atom+xml" title="Flux RSS">
+  <style>
+    body { margin: 1em; font-family: Verdana, sans-serif; line-height: 1.6; word-wrap: break-word; color: #222; }
+    img { max-width: 100%; height: auto; }
+    table { margin-top: 1em; font-size: 11px; }
+    @media (min-width: 45em) { body { margin: 1em auto; max-width: 50em; } }
+    ul { list-style: none; padding: 0;}
+    blockquote {margin: 0; }
+    figure { text-align: center; font-style: italic; }
+    pre { background-color: whitesmoke; overflow: auto; font-size: 0.825rem; }
+    pre code { display: block; padding: 1.5rem; background-color: #f7f7f9; overflow: auto; line-height: initial; }
+    p code { background: #f7f7f9; }
+    .sourceCode { overflow: auto !important; }
+    a { color: #0056b3; cursor: pointer; text-decoration: none; }
+    a:hover { color: #003d80; text-decoration: underline; }
+  </style>
+  <style>html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */</style>
+</head>
+<body>
+  <header>
+    <h1>Image Docker scratch avec Python</h1>
+    <em>Publié le 2026-03-14</em>
+  </header>
+  <article>
+<p>En complément de l'article précédent sur les images "distroless",
+voici comment se passer complètement des images fournies par Google.
+L'idée principale est d'inclure le strict minimum pour obtenir une image
+minimaliste viable afin d'exécuter une application Python. Une
+application de ce type repose sur l'interpréteur Python et des
+librairies tierces (Polars, Flask, etc...). La problématique pourrait
+être facilement résolue avec l'utilisation des venv si ceux-ci étaient
+directement utilisable dans une image <code>scratch</code>.</p>
+<h2 id="python-et-ses-dépendances">Python et ses dépendances</h2>
+<p>Pour visualiser les dépendances de l'interpréteur Python (ici en
+version 3.14):</p>
+<pre><code>ldd /usr/bin/python
+        linux-vdso.so.1 (0x00007fb462031000)
+        libpython3.14.so.1.0 =&gt; /lib64/libpython3.14.so.1.0 (0x00007fb461800000)
+        libc.so.6 =&gt; /lib64/libc.so.6 (0x00007fb46160d000)
+        libm.so.6 =&gt; /lib64/libm.so.6 (0x00007fb461f15000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fb462033000)</code></pre>
+<p>Il est possible de lister les dépendances systèmes des imports en
+utilisant la variable d'environnement <code>LD_DEBUG=libs</code> lors de
+l'exécution d'une simple ligne qui importe les librairies requises:</p>
+<pre><code>LD_DEBUG=libs &quot;/usr/bin/python&quot; -c &quot;import uuid&quot;
+     25207:     find library=libpython3.14.so.1.0 [0]; searching
+     25207:      search cache=/etc/ld.so.cache
+     25207:       trying file=/lib64/libpython3.14.so.1.0
+     25207:
+     25207:     find library=libc.so.6 [0]; searching
+     25207:      search cache=/etc/ld.so.cache
+     25207:       trying file=/lib64/libc.so.6
+     25207:
+     25207:     find library=libm.so.6 [0]; searching
+     25207:      search cache=/etc/ld.so.cache
+     25207:       trying file=/lib64/libm.so.6
+     25207:
+     25207:
+     25207:     calling init: /lib64/ld-linux-x86-64.so.2
+     25207:
+     25207:
+     25207:     calling init: /lib64/libc.so.6
+     25207:
+     25207:
+     25207:     calling init: /lib64/libm.so.6
+     25207:
+     25207:
+     25207:     calling init: /lib64/libpython3.14.so.1.0
+     25207:
+     25207:
+     25207:     initialize program: /usr/bin/python
+     25207:
+     25207:
+     25207:     transferring control: /usr/bin/python
+     25207:
+     25207:     find library=libuuid.so.1 [0]; searching
+     25207:      search cache=/etc/ld.so.cache
+     25207:       trying file=/lib64/libuuid.so.1
+     25207:
+     25207:
+     25207:     calling init: /lib64/libuuid.so.1
+     25207:
+     25207:
+     25207:     calling init: /usr/lib64/python3.14/lib-dynload/_uuid.cpython-314-x86_64-linux-gnu.so
+     25207:
+     25207:
+     25207:     calling fini:  [0]
+     25207:
+     25207:
+     25207:     calling fini: /lib64/libpython3.14.so.1.0 [0]
+     25207:
+     25207:
+     25207:     calling fini: /lib64/libm.so.6 [0]
+     25207:
+     25207:
+     25207:     calling fini: /usr/lib64/python3.14/lib-dynload/_uuid.cpython-314-x86_64-linux-gnu.so [0]
+     25207:
+     25207:
+     25207:     calling fini: /lib64/libuuid.so.1 [0]
+     25207:
+     25207:
+     25207:     calling fini: /lib64/libc.so.6 [0]
+     25207:
+     25207:
+     25207:     calling fini: /lib64/ld-linux-x86-64.so.2 [0]
+     25207:</code></pre>
+<p>Pour obtenir une liste épurée:</p>
+<pre><code>LD_DEBUG=libs &quot;/usr/bin/python&quot; -c &quot;import uuid&quot; 2&gt;&amp;1 | grep &quot;calling init&quot; | awk &#39;{print $NF}&#39;
+/lib64/ld-linux-x86-64.so.2
+/lib64/libc.so.6
+/lib64/libm.so.6
+/lib64/libpython3.14.so.1.0
+/lib64/libuuid.so.1
+/usr/lib64/python3.14/lib-dynload/_uuid.cpython-314-x86_64-linux-gnu.so</code></pre>
+<p>Nous pouvons mettre en évidence les librairies systèmes requise par
+les import (ici uuid) en comparant avec une exécution sans import:</p>
+<pre><code>LD_DEBUG=libs &quot;/usr/bin/python&quot; -c &quot;&quot; 2&gt;&amp;1 | grep &quot;calling init&quot; | awk &#39;{print $NF}&#39;
+/lib64/ld-linux-x86-64.so.2
+/lib64/libc.so.6
+/lib64/libm.so.6
+/lib64/libpython3.14.so.1.0</code></pre>
+<p>Le résultat est identique à la commande
+<code>ldd /usr/bin/python</code> à l'exception de
+<code>linux-vdso.so.1</code> qui un fichier particulier. Il est à noter
+que les librairies systèmes possèdent des dépendances entre elles qui ne
+sont pas visibles avec notre méthode. L'outil <code>libtree</code>
+permet de visualiser ces liens:</p>
+<pre><code>libtree /usr/lib64/python3.14/lib-dynload/_uuid.cpython-314-x86_64-linux-gnu.so -vvv -p
+/usr/lib64/python3.14/lib-dynload/_uuid.cpython-314-x86_64-linux-gnu.so 
+├── /lib64/libuuid.so.1 [default path]
+│   └── /lib64/libc.so.6 [default path]
+│       └── /lib64/ld-linux-x86-64.so.2 [default path]
+└── /lib64/libc.so.6 [default path]
+    └── /lib64/ld-linux-x86-64.so.2 [default path]</code></pre>
+<h2 id="construire-limage">Construire l'image</h2>
+<p>Nous avons maintenant un moyen de déterminer l'ensemble des
+librairies systèmes requises pour l'exécution de notre application. Il
+nous reste désormais à établir un Dockerfile intégrant la récupération
+de ces librairies (script <code>distroclean.sh</code>), notre
+application et ses imports (venv) ainsi que l'interpréteur et ses
+librairies standards.</p>
+<p>L'arborescence de notre projet:</p>
+<pre><code>├── Dockerfile
+├── requirements.txt
+└── sources
+    ├── distroclean.sh
+    └── app.py</code></pre>
+<p>Script app.py:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> uuid</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;OK&quot;</span>)</span></code></pre></div>
+<p>Le script distroclean.sh (qui prend en paramètre le chemin vers le
+venv):</p>
+<pre><code>#!/bin/bash
+set -euo pipefail
+
+OUTPUT=&quot;/tmp/package&quot;
+VENV_PATH=$(realpath &quot;$1&quot;)
+
+# Récupère les librairies appelées lors des imports dans chaque fichier source (en excluant le venv)
+IMPORTS=$(find ~+ -type f -name &quot;*.py&quot; -not -path &quot;$VENV_PATH/*&quot; -print0 | xargs -0 grep import | sort -u | awk &#39;{print $2}&#39; | paste -s -d &#39;,&#39;)
+LD_DEBUG=libs &quot;$VENV_PATH/bin/python3&quot; -c &quot;import $IMPORTS&quot; 2&gt;&amp;1 | grep &quot;calling init&quot; | awk &#39;{print $NF}&#39; | sort -u &gt; /tmp/libs.txt
+
+# Copie des librairies identifiées dans /tmp/package
+while read f; do
+  # Exclusion des librairies du venv car elles seront récupérées avec le venv au complet
+  if [[ ! &quot;$f&quot; =~ ^&quot;$VENV_PATH&quot; ]]; then
+    echo &quot;$f&quot;
+    mkdir -p &quot;$OUTPUT$(dirname $f)&quot;
+    cp $f &quot;$OUTPUT$f&quot;
+  fi
+done &lt;/tmp/libs.txt</code></pre>
+<p>Le Dockerfile:</p>
+<pre><code>FROM python:3.14.3-slim-trixie AS builder
+RUN set -xe; \
+    useradd --uid 10000 --home-dir /opt/app --shell /usr/bin/bash app; \
+    apt-get update; \
+    apt-get upgrade --yes
+
+USER app
+WORKDIR /opt/app
+COPY --chown=app:app sources/ requirements.txt /opt/app/
+
+RUN set -xe; \
+    python3 -m venv /opt/app/venv; \
+    /opt/app/venv/bin/python3 -m pip install --no-cache-dir -r requirements.txt; \
+    bash distroclean.sh /opt/app/venv
+
+
+FROM scratch
+COPY&lt;&lt;EOF /etc/group
+root:x:0:
+app:x:10000:
+EOF
+COPY &lt;&lt;EOF /etc/passwd
+root:x:0:0:root:/root:/sbin/nologin
+app:x:10000:10000:app:/opt/app:/sbin/nologin
+EOF
+
+USER app
+COPY --from=builder --chown=app:app --exclude=**/pip* --exclude=**/activate* --exclude=**/Activate* --exclude=**/distroclean.sh /opt/app /opt/app
+COPY --from=builder --chown=app:app /tmp/package /
+COPY --from=builder --chown=app:app --exclude=**/pip* /usr/local/lib/python3.14 /usr/local/lib/python3.14
+COPY --from=builder --chown=app:app /usr/local/bin/python3 /usr/local/bin/python3
+
+ENTRYPOINT [&quot;/opt/app/venv/bin/python3&quot;, &quot;app.py&quot;]</code></pre>
+<p>Les fichiers <code>/etc/group</code> et <code>/etc/passwd</code> sont
+générés pour avoir un utilisateur autre que root car l'image scratch ne
+contient pas le nécessaire. Par ailleurs il pourrait être nécessaire
+d'ajouter les certificats contenus dans <code>/etc/ssl/certs/</code> si
+votre application utilise SSL et également
+<code>/usr/share/zoneinfo/</code> pour les fuseaux horaires.</p>
+<p>Construction de l'image:</p>
+<pre><code>docker build . -t scratch-python:1.0.0</code></pre>
+<p>Pour lancer l'interpréteur Python interactif depuis l'image générée
+et lancer l'application pour vérifier que tout fonctionne bien:</p>
+<pre><code>docker run --rm -it --entrypoint /opt/app/venv/bin/python3 scratch-python:1.0.0
+exec(open(&quot;/opt/app/app.py&quot;).read())</code></pre>
+<p>L'image résultante occupe 27,3 Mo contre 41,3 Mo pour l'image parente
+<code>python:3.14.3-slim-trixie</code> et ne comprend rien d'autre que
+le nécessaire pour exécuter l'application (plus de gestionnaire Apt,
+Bash, etc.).</p>
+<p>D'autres tests avec des applications plus complexes important des
+librairies comme Polars et Arrow montrent un gain d'espace de 130 Mo.
+Cette méthode reste utilisable pour d'autres exécutables que Python.</p>
+<h2 id="liens-complémentaires">Liens complémentaires</h2>
+<ul>
+<li><a
+href="https://labs.iximiuz.com/tutorials/pitfalls-of-from-scratch-images">Building
+Container Images FROM Scratch: 6 Pitfalls That Are Often
+Overlooked</a></li>
+</ul>
+  </article>
+  <footer>
+  <br>
+  <hr>
+  <em>©2015-2026 C. Boyer, contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">CC BY-SA-NC 4.0</a>, codes sources sous <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL v3</a></em>
+  </footer>
+</body>
+</html>
