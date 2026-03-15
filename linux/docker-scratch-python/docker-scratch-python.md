@@ -28,7 +28,7 @@ ldd /usr/bin/python
 
 Il est possible de lister les dépendances systèmes des imports en utilisant la variable d'environnement `LD_DEBUG=libs` lors de l'exécution d'une simple ligne qui importe les librairies requises:
 ```
-LD_DEBUG=libs "/usr/bin/python" -c "import uuid"
+LD_DEBUG=libs /usr/bin/python -c "import uuid"
      25207:     find library=libpython3.14.so.1.0 [0]; searching
      25207:      search cache=/etc/ld.so.cache
      25207:       trying file=/lib64/libpython3.14.so.1.0
@@ -94,7 +94,7 @@ LD_DEBUG=libs "/usr/bin/python" -c "import uuid"
 
 Pour obtenir une liste épurée:
 ```
-LD_DEBUG=libs "/usr/bin/python" -c "import uuid" 2>&1 | grep "calling init" | awk '{print $NF}'
+LD_DEBUG=libs /usr/bin/python -c "import uuid" 2>&1 | grep "calling init" | awk '{print $NF}'
 /lib64/ld-linux-x86-64.so.2
 /lib64/libc.so.6
 /lib64/libm.so.6
@@ -105,7 +105,7 @@ LD_DEBUG=libs "/usr/bin/python" -c "import uuid" 2>&1 | grep "calling init" | aw
 
 Nous pouvons mettre en évidence les librairies systèmes requise par les import (ici uuid) en comparant avec une exécution sans import:
 ```
-LD_DEBUG=libs "/usr/bin/python" -c "" 2>&1 | grep "calling init" | awk '{print $NF}'
+LD_DEBUG=libs /usr/bin/python -c "" 2>&1 | grep "calling init" | awk '{print $NF}'
 /lib64/ld-linux-x86-64.so.2
 /lib64/libc.so.6
 /lib64/libm.so.6
@@ -153,7 +153,7 @@ OUTPUT="/tmp/package"
 VENV_PATH=$(realpath "$1")
 
 # Récupère les librairies appelées lors des imports dans chaque fichier source (en excluant le venv)
-IMPORTS=$(find ~+ -type f -name "*.py" -not -path "$VENV_PATH/*" -print0 | xargs -0 grep import | sort -u | awk '{print $2}' | paste -s -d ',')
+IMPORTS=$(find ~+ -type f -name "*.py" -not -path "$VENV_PATH/*" -print0 | xargs -0 grep -E "^import | import " | sort -u | awk '{print $2}' | paste -s -d ',')
 LD_DEBUG=libs "$VENV_PATH/bin/python3" -c "import $IMPORTS" 2>&1 | grep "calling init" | awk '{print $NF}' | sort -u > /tmp/libs.txt
 
 # Copie des librairies identifiées dans /tmp/package
@@ -196,7 +196,7 @@ app:x:10000:10000:app:/opt/app:/sbin/nologin
 EOF
 
 USER app
-COPY --from=builder --chown=app:app --exclude=**/pip* --exclude=**/activate* --exclude=**/Activate* --exclude=**/distroclean.sh /opt/app /opt/app
+COPY --from=builder --chown=app:app --exclude=**/pip* --exclude=**/activate* --exclude=**/Activate* --exclude=**/*.sh --exclude=**/*.c --exclude=**/*.h --exclude=**/__pycache__ /opt/app /opt/app
 COPY --from=builder --chown=app:app /tmp/package /
 COPY --from=builder --chown=app:app --exclude=**/pip* /usr/local/lib/python3.14 /usr/local/lib/python3.14
 COPY --from=builder --chown=app:app /usr/local/bin/python3 /usr/local/bin/python3

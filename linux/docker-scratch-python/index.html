@@ -119,7 +119,7 @@ version 3.14):</p>
 <p>Il est possible de lister les dépendances systèmes des imports en
 utilisant la variable d'environnement <code>LD_DEBUG=libs</code> lors de
 l'exécution d'une simple ligne qui importe les librairies requises:</p>
-<pre><code>LD_DEBUG=libs &quot;/usr/bin/python&quot; -c &quot;import uuid&quot;
+<pre><code>LD_DEBUG=libs /usr/bin/python -c &quot;import uuid&quot;
      25207:     find library=libpython3.14.so.1.0 [0]; searching
      25207:      search cache=/etc/ld.so.cache
      25207:       trying file=/lib64/libpython3.14.so.1.0
@@ -182,7 +182,7 @@ l'exécution d'une simple ligne qui importe les librairies requises:</p>
      25207:     calling fini: /lib64/ld-linux-x86-64.so.2 [0]
      25207:</code></pre>
 <p>Pour obtenir une liste épurée:</p>
-<pre><code>LD_DEBUG=libs &quot;/usr/bin/python&quot; -c &quot;import uuid&quot; 2&gt;&amp;1 | grep &quot;calling init&quot; | awk &#39;{print $NF}&#39;
+<pre><code>LD_DEBUG=libs /usr/bin/python -c &quot;import uuid&quot; 2&gt;&amp;1 | grep &quot;calling init&quot; | awk &#39;{print $NF}&#39;
 /lib64/ld-linux-x86-64.so.2
 /lib64/libc.so.6
 /lib64/libm.so.6
@@ -191,7 +191,7 @@ l'exécution d'une simple ligne qui importe les librairies requises:</p>
 /usr/lib64/python3.14/lib-dynload/_uuid.cpython-314-x86_64-linux-gnu.so</code></pre>
 <p>Nous pouvons mettre en évidence les librairies systèmes requise par
 les import (ici uuid) en comparant avec une exécution sans import:</p>
-<pre><code>LD_DEBUG=libs &quot;/usr/bin/python&quot; -c &quot;&quot; 2&gt;&amp;1 | grep &quot;calling init&quot; | awk &#39;{print $NF}&#39;
+<pre><code>LD_DEBUG=libs /usr/bin/python -c &quot;&quot; 2&gt;&amp;1 | grep &quot;calling init&quot; | awk &#39;{print $NF}&#39;
 /lib64/ld-linux-x86-64.so.2
 /lib64/libc.so.6
 /lib64/libm.so.6
@@ -235,7 +235,7 @@ OUTPUT=&quot;/tmp/package&quot;
 VENV_PATH=$(realpath &quot;$1&quot;)
 
 # Récupère les librairies appelées lors des imports dans chaque fichier source (en excluant le venv)
-IMPORTS=$(find ~+ -type f -name &quot;*.py&quot; -not -path &quot;$VENV_PATH/*&quot; -print0 | xargs -0 grep import | sort -u | awk &#39;{print $2}&#39; | paste -s -d &#39;,&#39;)
+IMPORTS=$(find ~+ -type f -name &quot;*.py&quot; -not -path &quot;$VENV_PATH/*&quot; -print0 | xargs -0 grep -E &quot;^import | import &quot; | sort -u | awk &#39;{print $2}&#39; | paste -s -d &#39;,&#39;)
 LD_DEBUG=libs &quot;$VENV_PATH/bin/python3&quot; -c &quot;import $IMPORTS&quot; 2&gt;&amp;1 | grep &quot;calling init&quot; | awk &#39;{print $NF}&#39; | sort -u &gt; /tmp/libs.txt
 
 # Copie des librairies identifiées dans /tmp/package
@@ -275,7 +275,7 @@ app:x:10000:10000:app:/opt/app:/sbin/nologin
 EOF
 
 USER app
-COPY --from=builder --chown=app:app --exclude=**/pip* --exclude=**/activate* --exclude=**/Activate* --exclude=**/distroclean.sh /opt/app /opt/app
+COPY --from=builder --chown=app:app --exclude=**/pip* --exclude=**/activate* --exclude=**/Activate* --exclude=**/*.sh --exclude=**/*.c --exclude=**/*.h --exclude=**/__pycache__ /opt/app /opt/app
 COPY --from=builder --chown=app:app /tmp/package /
 COPY --from=builder --chown=app:app --exclude=**/pip* /usr/local/lib/python3.14 /usr/local/lib/python3.14
 COPY --from=builder --chown=app:app /usr/local/bin/python3 /usr/local/bin/python3
