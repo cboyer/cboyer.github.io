@@ -1,0 +1,6 @@
+Allow-Training: no
+Allow-RAG: no
+Allow-Actions: no
+
+[Agent: *]
+Disallow: /

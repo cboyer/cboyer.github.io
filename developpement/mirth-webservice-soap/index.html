@@ -125,16 +125,16 @@ Cette classe étends la classe interne
 <code>com.mirth.connect.connectors.ws.AcceptMessage</code>.</p>
 <p>Le XSD généré par Mirth:</p>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">xs:schema</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> targetNamespace=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:element</span><span class="ot"> name=</span><span class="st">&quot;acceptMessage&quot;</span><span class="ot"> type=</span><span class="st">&quot;tns:acceptMessage&quot;</span>/&gt;</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:element</span><span class="ot"> name=</span><span class="st">&quot;acceptMessageResponse&quot;</span><span class="ot"> type=</span><span class="st">&quot;tns:acceptMessageResponse&quot;</span>/&gt;</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:complexType</span><span class="ot"> name=</span><span class="st">&quot;acceptMessage&quot;</span>&gt;</span>
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">xs:schema</span> <span class="ot">version=</span><span class="st">&quot;1.0&quot;</span> <span class="ot">targetNamespace=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:element</span> <span class="ot">name=</span><span class="st">&quot;acceptMessage&quot;</span> <span class="ot">type=</span><span class="st">&quot;tns:acceptMessage&quot;</span>/&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:element</span> <span class="ot">name=</span><span class="st">&quot;acceptMessageResponse&quot;</span> <span class="ot">type=</span><span class="st">&quot;tns:acceptMessageResponse&quot;</span>/&gt;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:complexType</span> <span class="ot">name=</span><span class="st">&quot;acceptMessage&quot;</span>&gt;</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">xs:sequence</span>&gt;</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">xs:element</span><span class="ot"> name=</span><span class="st">&quot;arg0&quot;</span><span class="ot"> type=</span><span class="st">&quot;xs:string&quot;</span><span class="ot"> minOccurs=</span><span class="st">&quot;0&quot;</span>/&gt;&lt;/<span class="kw">xs:sequence</span>&gt;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">xs:element</span> <span class="ot">name=</span><span class="st">&quot;arg0&quot;</span> <span class="ot">type=</span><span class="st">&quot;xs:string&quot;</span> <span class="ot">minOccurs=</span><span class="st">&quot;0&quot;</span>/&gt;&lt;/<span class="kw">xs:sequence</span>&gt;</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">xs:complexType</span>&gt;</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:complexType</span><span class="ot"> name=</span><span class="st">&quot;acceptMessageResponse&quot;</span>&gt;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">xs:complexType</span> <span class="ot">name=</span><span class="st">&quot;acceptMessageResponse&quot;</span>&gt;</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">xs:sequence</span>&gt;</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">xs:element</span><span class="ot"> name=</span><span class="st">&quot;return&quot;</span><span class="ot"> type=</span><span class="st">&quot;xs:string&quot;</span><span class="ot"> minOccurs=</span><span class="st">&quot;0&quot;</span>/&gt;</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">xs:element</span> <span class="ot">name=</span><span class="st">&quot;return&quot;</span> <span class="ot">type=</span><span class="st">&quot;xs:string&quot;</span> <span class="ot">minOccurs=</span><span class="st">&quot;0&quot;</span>/&gt;</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">xs:sequence</span>&gt;</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">xs:complexType</span>&gt;</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">xs:schema</span>&gt;</span></code></pre></div>
@@ -161,7 +161,7 @@ Listener":</p>
 méthode <code>AcceptMessage</code> et le paramètre <code>arg0</code>
 (fichier soap.xml):</p>
 <div class="sourceCode" id="cb2"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">soapenv:Envelope</span> <span class="ot">xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span> <span class="ot">xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Header</span>/&gt;</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Body</span>&gt;</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ws:acceptMessage</span>&gt;</span>
@@ -173,12 +173,12 @@ class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#c
 <pre class="console"><code>curl.exe --header &quot;Content-Type: text/xml;charset=UTF-8&quot; --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous retourne alors:</p>
 <div class="sourceCode" id="cb4"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span> <span class="ot">version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span> <span class="ot">xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span> <span class="ot">xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">SOAP-ENV:Header</span>&gt;&lt;/<span class="kw">SOAP-ENV:Header</span>&gt;</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">S:Body</span>&gt;</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ns2:acceptMessageResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span>&gt;test !!&lt;/<span class="kw">return</span>&gt;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ns2:acceptMessageResponse</span> <span class="ot">xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">return</span> <span class="ot">xmlns=</span><span class="st">&quot;&quot;</span>&gt;test !!&lt;/<span class="kw">return</span>&gt;</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">ns2:acceptMessageResponse</span>&gt;</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">S:Body</span>&gt;</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">S:Envelope</span>&gt;</span></code></pre></div>
@@ -286,8 +286,8 @@ http://localhost:8081/services/query?xsd=1</p>
 <h3 id="test-du-canal">Test du canal</h3>
 <p>Le fichier soap.xml à envoyer avec curl:</p>
 <div class="sourceCode" id="cb9"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> encoding=</span><span class="st">&quot;UTF-8&quot;</span><span class="fu">?&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span> <span class="ot">version=</span><span class="st">&quot;1.0&quot;</span> <span class="ot">encoding=</span><span class="st">&quot;UTF-8&quot;</span><span class="fu">?&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">soapenv:Envelope</span> <span class="ot">xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span> <span class="ot">xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Header</span>/&gt;</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Body</span>&gt;</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ws:hello</span>&gt;</span>
@@ -300,12 +300,12 @@ class="sourceCode xml"><code class="sourceCode xml"><span id="cb9-1"><a href="#c
          --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous répond alors:</p>
 <div class="sourceCode" id="cb11"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span> <span class="ot">version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span> <span class="ot">xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span> <span class="ot">xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">SOAP-ENV:Header</span>&gt;&lt;/<span class="kw">SOAP-ENV:Header</span>&gt;</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">S:Body</span>&gt;</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ns2:helloResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span>&gt;Hello Test !&lt;/<span class="kw">return</span>&gt;</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ns2:helloResponse</span> <span class="ot">xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">return</span> <span class="ot">xmlns=</span><span class="st">&quot;&quot;</span>&gt;Hello Test !&lt;/<span class="kw">return</span>&gt;</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">ns2:helloResponse</span>&gt;</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">S:Body</span>&gt;</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">S:Envelope</span>&gt;</span></code></pre></div>
@@ -487,8 +487,8 @@ class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb15
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>logger<span class="op">.</span><span class="fu">info</span>(<span class="st">&quot;OUT: &quot;</span> <span class="op">+</span> msg)<span class="op">;</span></span></code></pre></div>
 <p>La requête SOAP (fichier <code>soap.xml</code>):</p>
 <div class="sourceCode" id="cb16"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> encoding=</span><span class="st">&quot;UTF-8&quot;</span><span class="fu">?&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">soapenv:Envelope</span><span class="ot"> xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span> <span class="ot">version=</span><span class="st">&quot;1.0&quot;</span> <span class="ot">encoding=</span><span class="st">&quot;UTF-8&quot;</span><span class="fu">?&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">soapenv:Envelope</span> <span class="ot">xmlns:soapenv=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span> <span class="ot">xmlns:ws=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Header</span>/&gt;</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">soapenv:Body</span>&gt;</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ws:getPatient</span>&gt;</span>
@@ -505,12 +505,12 @@ class="sourceCode xml"><code class="sourceCode xml"><span id="cb16-1"><a href="#
          --data @soap.xml http://localhost:8081/services/query -u mirth:mirth</code></pre>
 <p>Le canal nous retourne bien les données:</p>
 <div class="sourceCode" id="cb18"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span> <span class="ot">version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span> <span class="ot">xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span> <span class="ot">xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">SOAP-ENV:Header</span>&gt;&lt;/<span class="kw">SOAP-ENV:Header</span>&gt;</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">S:Body</span>&gt;</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ns2:getPatientResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span>&gt;</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ns2:getPatientResponse</span> <span class="ot">xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">return</span> <span class="ot">xmlns=</span><span class="st">&quot;&quot;</span>&gt;</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">patseq</span>&gt;54980498&lt;/<span class="kw">patseq</span>&gt;</span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">name</span>&gt;Bismuth&lt;/<span class="kw">name</span>&gt;</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">firstName</span>&gt;Paul&lt;/<span class="kw">firstName</span>&gt;</span>
@@ -653,12 +653,12 @@ class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb22
 d'entrée n'ayant pas changé), le canal nous retourne les données
 suivantes:</p>
 <div class="sourceCode" id="cb23"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span><span class="ot"> xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span><span class="ot"> xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span> <span class="ot">version=</span><span class="st">&quot;1.0&quot;</span> <span class="fu">?&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">S:Envelope</span> <span class="ot">xmlns:S=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span> <span class="ot">xmlns:SOAP-ENV=</span><span class="st">&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</span>&gt;</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">SOAP-ENV:Header</span>&gt;&lt;/<span class="kw">SOAP-ENV:Header</span>&gt;</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">S:Body</span>&gt;</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ns2:getPatientResponse</span><span class="ot"> xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">return</span><span class="ot"> xmlns=</span><span class="st">&quot;&quot;</span>&gt;</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ns2:getPatientResponse</span> <span class="ot">xmlns:ns2=</span><span class="st">&quot;http://ws.connectors.connect.mirth.com/&quot;</span>&gt;</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">return</span> <span class="ot">xmlns=</span><span class="st">&quot;&quot;</span>&gt;</span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">patient</span>&gt;</span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>          &lt;<span class="kw">patseq</span>&gt;54980498&lt;/<span class="kw">patseq</span>&gt;</span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>          &lt;<span class="kw">name</span>&gt;Bismuth&lt;/<span class="kw">name</span>&gt;</span>
